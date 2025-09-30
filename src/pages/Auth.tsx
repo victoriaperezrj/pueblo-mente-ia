@@ -111,30 +111,43 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 via-background to-success/5 p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader className="space-y-1 text-center">
+    <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Animated Background */}
+      <div className="fixed inset-0 -z-10 bg-background">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-success/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }} />
+        <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-accent/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "2s" }} />
+      </div>
+
+      <Card className="w-full max-w-md border-2 shadow-2xl animate-scale-in">
+        <CardHeader className="space-y-2 text-center pb-6">
           <div className="flex justify-center mb-4">
-            <div className="bg-primary rounded-full p-3">
-              <Building2 className="h-8 w-8 text-primary-foreground" />
+            <div className="bg-gradient-primary rounded-2xl p-4 shadow-lg animate-bounce-subtle">
+              <Building2 className="h-10 w-10 text-white" />
             </div>
           </div>
-          <CardTitle className="text-2xl font-bold">PuebloHub</CardTitle>
-          <CardDescription>
+          <CardTitle className="text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+            PuebloHub
+          </CardTitle>
+          <CardDescription className="text-base">
             Tu plataforma de gestión empresarial con IA
           </CardDescription>
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="signin" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="signin">Iniciar Sesión</TabsTrigger>
-              <TabsTrigger value="signup">Registrarse</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-2 mb-6">
+              <TabsTrigger value="signin" className="text-base">
+                Iniciar Sesión
+              </TabsTrigger>
+              <TabsTrigger value="signup" className="text-base">
+                Registrarse
+              </TabsTrigger>
             </TabsList>
             
             <TabsContent value="signin">
               <form onSubmit={handleSignIn} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="signin-email">Email</Label>
+                  <Label htmlFor="signin-email">Correo Electrónico</Label>
                   <Input
                     id="signin-email"
                     type="email"
@@ -142,6 +155,7 @@ const Auth = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
+                    className="h-11"
                   />
                 </div>
                 <div className="space-y-2">
@@ -149,12 +163,18 @@ const Auth = () => {
                   <Input
                     id="signin-password"
                     type="password"
+                    placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
+                    className="h-11"
                   />
                 </div>
-                <Button type="submit" className="w-full" disabled={loading}>
+                <Button 
+                  type="submit" 
+                  className="w-full h-11 text-base font-semibold shadow-lg hover:shadow-xl transition-all" 
+                  disabled={loading}
+                >
                   {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   Iniciar Sesión
                 </Button>
@@ -172,10 +192,11 @@ const Auth = () => {
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                     required
+                    className="h-11"
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="signup-email">Email</Label>
+                  <Label htmlFor="signup-email">Correo Electrónico</Label>
                   <Input
                     id="signup-email"
                     type="email"
@@ -183,6 +204,7 @@ const Auth = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
+                    className="h-11"
                   />
                 </div>
                 <div className="space-y-2">
@@ -190,15 +212,21 @@ const Auth = () => {
                   <Input
                     id="signup-password"
                     type="password"
+                    placeholder="Mínimo 6 caracteres"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
                     minLength={6}
+                    className="h-11"
                   />
                 </div>
-                <Button type="submit" className="w-full" disabled={loading}>
+                <Button 
+                  type="submit" 
+                  className="w-full h-11 text-base font-semibold shadow-lg hover:shadow-xl transition-all" 
+                  disabled={loading}
+                >
                   {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                  Crear Cuenta
+                  Crear Cuenta Gratis
                 </Button>
               </form>
             </TabsContent>
@@ -209,18 +237,20 @@ const Auth = () => {
               <span className="w-full border-t" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-card px-2 text-muted-foreground">O continuar con</span>
+              <span className="bg-card px-2 text-muted-foreground">
+                O continuar con
+              </span>
             </div>
           </div>
 
           <Button
             type="button"
             variant="outline"
-            className="w-full"
+            className="w-full h-11 border-2 hover:border-primary hover:bg-primary/5 transition-all"
             onClick={handleGoogleSignIn}
             disabled={loading}
           >
-            <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
+            <svg className="mr-2 h-5 w-5" viewBox="0 0 24 24">
               <path
                 d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
                 fill="#4285F4"
@@ -238,8 +268,12 @@ const Auth = () => {
                 fill="#EA4335"
               />
             </svg>
-            Google
+            Continuar con Google
           </Button>
+
+          <p className="text-center text-xs text-muted-foreground mt-6">
+            Al registrarte, aceptás nuestros términos y condiciones
+          </p>
         </CardContent>
       </Card>
     </div>

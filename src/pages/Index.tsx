@@ -17,94 +17,209 @@ const Index = () => {
   }, [navigate]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/10 via-background to-success/10">
+    <div className="min-h-screen bg-background">
+      {/* Animated Background */}
+      <div className="fixed inset-0 -z-10">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-success/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }} />
+        <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-warning/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "2s" }} />
+      </div>
+
       {/* Header */}
-      <header className="container mx-auto px-4 py-6 flex justify-between items-center">
-        <div className="flex items-center gap-2">
-          <div className="bg-primary rounded-lg p-2">
-            <Building2 className="h-6 w-6 text-primary-foreground" />
+      <header className="container mx-auto px-4 py-6 flex justify-between items-center backdrop-blur-sm bg-background/80 sticky top-0 z-50 border-b">
+        <div className="flex items-center gap-3 animate-fade-in">
+          <div className="bg-gradient-primary rounded-xl p-2.5 shadow-lg">
+            <Building2 className="h-6 w-6 text-white" />
           </div>
-          <span className="font-bold text-xl">PuebloHub</span>
+          <span className="font-bold text-2xl bg-gradient-primary bg-clip-text text-transparent">
+            PuebloHub
+          </span>
         </div>
-        <Button onClick={() => navigate("/auth")}>
+        <Button onClick={() => navigate("/auth")} size="lg" className="shadow-lg">
           Iniciar Sesión
         </Button>
       </header>
 
       {/* Hero Section */}
-      <section className="container mx-auto px-4 py-20 text-center">
-        <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-primary to-success bg-clip-text text-transparent">
-          Tu Negocio, Potenciado por IA
+      <section className="container mx-auto px-4 py-20 text-center animate-fade-in">
+        <div className="inline-flex items-center gap-2 bg-primary-light text-primary px-4 py-2 rounded-full text-sm font-medium mb-6 animate-bounce-subtle">
+          <Zap className="h-4 w-4" />
+          <span>Potenciado por Inteligencia Artificial</span>
+        </div>
+        
+        <h1 className="text-5xl md:text-7xl font-extrabold mb-6 leading-tight">
+          Tu Negocio,{" "}
+          <span className="bg-gradient-hero bg-clip-text text-transparent">
+            Transformado
+          </span>
         </h1>
-        <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+        
+        <p className="text-xl md:text-2xl text-muted-foreground mb-10 max-w-3xl mx-auto leading-relaxed">
           Desde validar tu idea hasta gestionar operaciones diarias. 
-          PuebloHub es la plataforma todo-en-uno para emprendedores de San Luis, Argentina.
+          PuebloHub es la plataforma <span className="font-semibold text-foreground">todo-en-uno</span> para 
+          emprendedores de <span className="font-semibold text-foreground">San Luis, Argentina</span>.
         </p>
-        <div className="flex gap-4 justify-center flex-wrap">
-          <Button size="lg" onClick={() => navigate("/auth")}>
+        
+        <div className="flex gap-4 justify-center flex-wrap mb-16 animate-slide-up">
+          <Button 
+            size="lg" 
+            onClick={() => navigate("/auth")}
+            className="text-lg px-8 py-6 shadow-2xl hover:shadow-primary/50 transition-all duration-300 hover:scale-105"
+          >
             Comenzar Gratis
+            <span className="ml-2">→</span>
           </Button>
-          <Button size="lg" variant="outline">
+          <Button 
+            size="lg" 
+            variant="outline"
+            className="text-lg px-8 py-6 border-2 hover:border-primary hover:text-primary transition-all duration-300"
+          >
             Ver Demo
           </Button>
+        </div>
+
+        {/* Stats */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+          {[
+            { value: "100+", label: "Emprendedores" },
+            { value: "8", label: "Rubros" },
+            { value: "24/7", label: "Asistente IA" },
+            { value: "100%", label: "Gratis" },
+          ].map((stat, idx) => (
+            <div 
+              key={idx} 
+              className="bg-card/50 backdrop-blur-sm rounded-xl p-6 border border-primary/20 hover:border-primary/50 transition-all duration-300 hover:scale-105 animate-fade-in"
+              style={{ animationDelay: `${idx * 0.1}s` }}
+            >
+              <div className="text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+                {stat.value}
+              </div>
+              <div className="text-sm text-muted-foreground mt-1">{stat.label}</div>
+            </div>
+          ))}
         </div>
       </section>
 
       {/* Features */}
       <section className="container mx-auto px-4 py-20">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl md:text-5xl font-bold mb-4">
+            Todo lo que necesitás en{" "}
+            <span className="bg-gradient-success bg-clip-text text-transparent">
+              un solo lugar
+            </span>
+          </h2>
+          <p className="text-xl text-muted-foreground">
+            Herramientas poderosas diseñadas para emprendedores argentinos
+          </p>
+        </div>
+
         <div className="grid md:grid-cols-3 gap-8">
-          <div className="bg-card rounded-lg p-6 border">
-            <div className="bg-primary/10 rounded-full w-12 h-12 flex items-center justify-center mb-4">
-              <Zap className="h-6 w-6 text-primary" />
+          {[
+            {
+              icon: Zap,
+              title: "Validación con IA",
+              description: "Validá tu idea de negocio en minutos con análisis inteligente del mercado local",
+              color: "primary",
+              gradient: "from-primary/10 to-primary/5",
+            },
+            {
+              icon: TrendingUp,
+              title: "ERP Completo",
+              description: "Ventas, inventario, clientes y turnos. Todo integrado y fácil de usar",
+              color: "success",
+              gradient: "from-success/10 to-success/5",
+            },
+            {
+              icon: Users,
+              title: "Marketplace B2B",
+              description: "Conectá con proveedores y otros emprendedores de San Luis",
+              color: "warning",
+              gradient: "from-warning/10 to-warning/5",
+            },
+            {
+              icon: Building2,
+              title: "Multi-Negocio",
+              description: "Gestioná múltiples emprendimientos desde una sola cuenta",
+              color: "info",
+              gradient: "from-info/10 to-info/5",
+            },
+            {
+              icon: TrendingUp,
+              title: "Simulador Financiero",
+              description: "Proyectá ventas, costos y rentabilidad antes de invertir",
+              color: "accent",
+              gradient: "from-accent/10 to-accent/5",
+            },
+            {
+              icon: Users,
+              title: "Asistente IA 24/7",
+              description: "Respondemos tus dudas sobre regulaciones, precios y estrategias",
+              color: "secondary",
+              gradient: "from-secondary/10 to-secondary/5",
+            },
+          ].map((feature, idx) => (
+            <div
+              key={idx}
+              className="group bg-card rounded-2xl p-8 border border-border hover:border-primary/50 transition-all duration-300 hover:scale-105 hover:shadow-2xl animate-fade-in"
+              style={{ animationDelay: `${idx * 0.1}s` }}
+            >
+              <div className={`bg-gradient-to-br ${feature.gradient} rounded-xl w-14 h-14 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
+                <feature.icon className={`h-7 w-7 text-${feature.color}`} />
+              </div>
+              <h3 className="text-2xl font-bold mb-3 group-hover:text-primary transition-colors">
+                {feature.title}
+              </h3>
+              <p className="text-muted-foreground leading-relaxed">
+                {feature.description}
+              </p>
             </div>
-            <h3 className="text-xl font-semibold mb-2">Validación con IA</h3>
-            <p className="text-muted-foreground">
-              Validá tu idea de negocio en minutos con análisis inteligente
-            </p>
-          </div>
-
-          <div className="bg-card rounded-lg p-6 border">
-            <div className="bg-success/10 rounded-full w-12 h-12 flex items-center justify-center mb-4">
-              <TrendingUp className="h-6 w-6 text-success" />
-            </div>
-            <h3 className="text-xl font-semibold mb-2">ERP Completo</h3>
-            <p className="text-muted-foreground">
-              Ventas, inventario, clientes y turnos en un solo lugar
-            </p>
-          </div>
-
-          <div className="bg-card rounded-lg p-6 border">
-            <div className="bg-warning/10 rounded-full w-12 h-12 flex items-center justify-center mb-4">
-              <Users className="h-6 w-6 text-warning" />
-            </div>
-            <h3 className="text-xl font-semibold mb-2">Marketplace B2B</h3>
-            <p className="text-muted-foreground">
-              Conectá con proveedores y otros emprendedores locales
-            </p>
-          </div>
+          ))}
         </div>
       </section>
 
       {/* CTA */}
-      <section className="container mx-auto px-4 py-20 text-center">
-        <div className="bg-gradient-to-r from-primary to-success rounded-2xl p-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            ¿Listo para transformar tu negocio?
-          </h2>
-          <p className="text-white/90 mb-6 text-lg">
-            Uníte a los emprendedores que ya están creciendo con PuebloHub
-          </p>
-          <Button size="lg" variant="secondary" onClick={() => navigate("/auth")}>
-            Crear Cuenta Gratuita
-          </Button>
+      <section className="container mx-auto px-4 py-20">
+        <div className="relative overflow-hidden bg-gradient-hero rounded-3xl p-12 md:p-16 text-center shadow-2xl">
+          <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10" />
+          <div className="relative z-10">
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+              ¿Listo para transformar tu negocio?
+            </h2>
+            <p className="text-white/90 mb-8 text-lg md:text-xl max-w-2xl mx-auto">
+              Uníte a los emprendedores que ya están creciendo con PuebloHub. 
+              <span className="font-semibold"> Sin costo, sin compromisos.</span>
+            </p>
+            <Button 
+              size="lg" 
+              variant="secondary"
+              onClick={() => navigate("/auth")}
+              className="text-lg px-10 py-7 font-semibold shadow-2xl hover:scale-105 transition-all duration-300"
+            >
+              Crear Cuenta Gratuita
+              <span className="ml-2 text-xl">🚀</span>
+            </Button>
+          </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="container mx-auto px-4 py-8 border-t">
-        <div className="text-center text-muted-foreground">
-          <p>© 2025 PuebloHub - Plataforma de Gestión Empresarial</p>
-          <p className="text-sm mt-2">San Luis, Argentina</p>
+      <footer className="container mx-auto px-4 py-12 border-t">
+        <div className="text-center">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <div className="bg-gradient-primary rounded-lg p-2">
+              <Building2 className="h-5 w-5 text-white" />
+            </div>
+            <span className="font-bold text-xl bg-gradient-primary bg-clip-text text-transparent">
+              PuebloHub
+            </span>
+          </div>
+          <p className="text-muted-foreground mb-2">
+            © 2025 PuebloHub - Plataforma de Gestión Empresarial con IA
+          </p>
+          <p className="text-sm text-muted-foreground">
+            🇦🇷 Hecho con ❤️ en San Luis, Argentina
+          </p>
         </div>
       </footer>
     </div>

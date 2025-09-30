@@ -35,55 +35,69 @@ const Dashboard = () => {
       value: "$0",
       change: "+0%",
       icon: TrendingUp,
-      color: "text-success",
+      color: "success",
+      bgGradient: "from-success/10 to-success/5",
     },
     {
       title: "Productos",
       value: "0",
       change: "Registrados",
       icon: Package,
-      color: "text-primary",
+      color: "primary",
+      bgGradient: "from-primary/10 to-primary/5",
     },
     {
       title: "Clientes",
       value: "0",
       change: "Activos",
       icon: Users,
-      color: "text-warning",
+      color: "warning",
+      bgGradient: "from-warning/10 to-warning/5",
     },
     {
       title: "Turnos Hoy",
       value: "0",
       change: "Pendientes",
       icon: Calendar,
-      color: "text-destructive",
+      color: "info",
+      bgGradient: "from-info/10 to-info/5",
     },
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-fade-in">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
-        <p className="text-muted-foreground">
-          Bienvenido a tu centro de control empresarial
+        <h1 className="text-4xl font-bold tracking-tight mb-2">
+          ¡Bienvenido de nuevo! 👋
+        </h1>
+        <p className="text-muted-foreground text-lg">
+          Aquí está el resumen de tu negocio
         </p>
       </div>
 
       {/* Stats Grid */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {stats.map((stat) => {
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        {stats.map((stat, idx) => {
           const Icon = stat.icon;
           return (
-            <Card key={stat.title}>
+            <Card 
+              key={stat.title} 
+              className="overflow-hidden border-2 hover:border-primary/50 transition-all duration-300 hover:scale-105 hover:shadow-xl animate-scale-in"
+              style={{ animationDelay: `${idx * 0.1}s` }}
+            >
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">
                   {stat.title}
                 </CardTitle>
-                <Icon className={`h-4 w-4 ${stat.color}`} />
+                <div className={`bg-gradient-to-br ${stat.bgGradient} p-2 rounded-lg`}>
+                  <Icon className={`h-5 w-5 text-${stat.color}`} />
+                </div>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{stat.value}</div>
-                <p className="text-xs text-muted-foreground">{stat.change}</p>
+                <div className="text-3xl font-bold">{stat.value}</div>
+                <p className={`text-xs text-${stat.color} font-medium mt-1`}>
+                  {stat.change}
+                </p>
               </CardContent>
             </Card>
           );
@@ -91,65 +105,103 @@ const Dashboard = () => {
       </div>
 
       {/* Quick Actions & Insights */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        <Card>
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <Card className="border-2 hover:border-success/50 transition-all duration-300 hover:shadow-xl">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <DollarSign className="h-5 w-5 text-success" />
+              <div className="bg-gradient-to-br from-success/10 to-success/5 p-2 rounded-lg">
+                <DollarSign className="h-5 w-5 text-success" />
+              </div>
               Ventas Recientes
             </CardTitle>
-            <CardDescription>Últimas transacciones</CardDescription>
+            <CardDescription>Últimas transacciones del día</CardDescription>
           </CardHeader>
           <CardContent>
-            <p className="text-sm text-muted-foreground">
-              No hay ventas registradas aún
-            </p>
+            <div className="text-center py-8">
+              <div className="bg-muted/50 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-3">
+                <DollarSign className="h-8 w-8 text-muted-foreground" />
+              </div>
+              <p className="text-sm text-muted-foreground">
+                No hay ventas registradas aún
+              </p>
+              <p className="text-xs text-muted-foreground mt-1">
+                Comenzá a registrar tus primeras ventas
+              </p>
+            </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-2 hover:border-warning/50 transition-all duration-300 hover:shadow-xl">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <AlertCircle className="h-5 w-5 text-warning" />
+              <div className="bg-gradient-to-br from-warning/10 to-warning/5 p-2 rounded-lg">
+                <AlertCircle className="h-5 w-5 text-warning" />
+              </div>
               Stock Crítico
             </CardTitle>
             <CardDescription>Productos bajo stock mínimo</CardDescription>
           </CardHeader>
           <CardContent>
-            <p className="text-sm text-muted-foreground">
-              Todos los productos tienen stock suficiente
-            </p>
+            <div className="text-center py-8">
+              <div className="bg-muted/50 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-3">
+                <Package className="h-8 w-8 text-muted-foreground" />
+              </div>
+              <p className="text-sm text-success font-medium">
+                ✓ Todo en orden
+              </p>
+              <p className="text-xs text-muted-foreground mt-1">
+                Todos los productos tienen stock suficiente
+              </p>
+            </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-2 hover:border-primary/50 transition-all duration-300 hover:shadow-xl">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Calendar className="h-5 w-5 text-primary" />
+              <div className="bg-gradient-to-br from-primary/10 to-primary/5 p-2 rounded-lg">
+                <Calendar className="h-5 w-5 text-primary" />
+              </div>
               Próximos Turnos
             </CardTitle>
-            <CardDescription>Agenda de hoy</CardDescription>
+            <CardDescription>Tu agenda de hoy</CardDescription>
           </CardHeader>
           <CardContent>
-            <p className="text-sm text-muted-foreground">
-              No hay turnos programados
-            </p>
+            <div className="text-center py-8">
+              <div className="bg-muted/50 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-3">
+                <Calendar className="h-8 w-8 text-muted-foreground" />
+              </div>
+              <p className="text-sm text-muted-foreground">
+                No hay turnos programados
+              </p>
+              <p className="text-xs text-muted-foreground mt-1">
+                Tu agenda está libre para hoy
+              </p>
+            </div>
           </CardContent>
         </Card>
       </div>
 
       {/* AI Insight Card */}
-      <Card className="border-primary/50 bg-gradient-to-br from-primary/5 to-success/5">
+      <Card className="border-2 border-primary/30 bg-gradient-to-br from-primary/5 via-secondary/5 to-accent/5 hover:shadow-2xl transition-all duration-300">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <span className="text-2xl">🤖</span>
-            Insight del Día
+          <CardTitle className="flex items-center gap-3">
+            <span className="text-3xl animate-bounce-subtle">🤖</span>
+            <span className="bg-gradient-primary bg-clip-text text-transparent">
+              Insight del Día con IA
+            </span>
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-sm">
-            ¡Comenzá a registrar tus ventas y productos para obtener insights personalizados 
-            sobre tu negocio!
+          <p className="text-base leading-relaxed mb-4">
+            ¡Bienvenido a PuebloHub! 🚀 
+          </p>
+          <p className="text-sm text-muted-foreground leading-relaxed">
+            Comenzá a registrar tus ventas y productos para obtener{" "}
+            <span className="font-semibold text-foreground">insights personalizados</span> sobre tu negocio.
+            Nuestro asistente de IA analizará tus datos y te dará recomendaciones inteligentes para{" "}
+            <span className="font-semibold text-foreground">aumentar tus ventas</span> y{" "}
+            <span className="font-semibold text-foreground">optimizar tu inventario</span>.
           </p>
         </CardContent>
       </Card>
