@@ -101,20 +101,44 @@ const Appointments = () => {
     if (!currentBusiness) return;
 
     try {
-      const { error } = await supabase.from("appointments").insert({
-        business_id: currentBusiness,
-        customer_name: customerName,
-        customer_phone: customerPhone,
-        customer_email: customerEmail,
-        appointment_date: appointmentDate,
-        start_time: startTime,
-        end_time: endTime,
-        service,
-        notes,
-        status: "pending"
-      });
+      const { data: appointmentData, error } = await supabase
+        .from("appointments")
+        .insert({
+          business_id: currentBusiness,
+          customer_name: customerName,
+          customer_phone: customerPhone,
+          customer_email: customerEmail,
+          appointment_date: appointmentDate,
+          start_time: startTime,
+          end_time: endTime,
+          service,
+          notes,
+          status: "pending"
+        })
+        .select()
+        .single();
 
       if (error) throw error;
+
+      // 🚀 EVENT-DRIVEN: Register appointment.scheduled event
+      try {
+        await supabase.from("outbox_events").insert({
+          event_type: "appointment.scheduled",
+          aggregate_id: appointmentData.id,
+          aggregate_type: "appointment",
+          business_id: currentBusiness,
+          payload: {
+            appointment_id: appointmentData.id,
+            customer_name: customerName,
+            service,
+            appointment_date: appointmentDate,
+            start_time: startTime,
+            timestamp: new Date().toISOString(),
+          },
+        });
+      } catch (eventError) {
+        console.warn("Event registration failed:", eventError);
+      }
 
       toast({
         title: "✓ Turno agendado",

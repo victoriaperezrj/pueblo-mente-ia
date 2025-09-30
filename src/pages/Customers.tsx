@@ -87,16 +87,39 @@ const Customers = () => {
     if (!currentBusiness) return;
 
     try {
-      const { error } = await supabase.from("customers").insert({
-        business_id: currentBusiness,
-        name,
-        phone,
-        email,
-        address,
-        tags: ["Nuevo"],
-      });
+      const { data: customerData, error } = await supabase
+        .from("customers")
+        .insert({
+          business_id: currentBusiness,
+          name,
+          phone,
+          email,
+          address,
+          tags: ["Nuevo"],
+        })
+        .select()
+        .single();
 
       if (error) throw error;
+
+      // 🚀 EVENT-DRIVEN: Register customer.created event
+      try {
+        await supabase.from("outbox_events").insert({
+          event_type: "customer.created",
+          aggregate_id: customerData.id,
+          aggregate_type: "customer",
+          business_id: currentBusiness,
+          payload: {
+            customer_id: customerData.id,
+            name,
+            phone,
+            email,
+            timestamp: new Date().toISOString(),
+          },
+        });
+      } catch (eventError) {
+        console.warn("Event registration failed:", eventError);
+      }
 
       toast({
         title: "✓ Cliente agregado",

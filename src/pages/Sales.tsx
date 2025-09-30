@@ -125,21 +125,26 @@ const Sales = () => {
       const qty = parseFloat(quantity);
       const totalAmount = product.selling_price * qty;
 
-      const { error } = await supabase.from("sales").insert({
-        business_id: currentBusiness,
-        total_amount: totalAmount,
-        payment_method: paymentMethod,
-        items: [{
-          product_id: product.id,
-          product_name: product.name,
-          quantity: qty,
-          unit_price: product.selling_price,
-          subtotal: totalAmount
-        }],
-        notes,
-      });
+      // Insert sale
+      const { data: saleData, error: saleError } = await supabase
+        .from("sales")
+        .insert({
+          business_id: currentBusiness,
+          total_amount: totalAmount,
+          payment_method: paymentMethod,
+          items: [{
+            product_id: product.id,
+            product_name: product.name,
+            quantity: qty,
+            unit_price: product.selling_price,
+            subtotal: totalAmount
+          }],
+          notes,
+        })
+        .select()
+        .single();
 
-      if (error) throw error;
+      if (saleError) throw saleError;
 
       // Update product stock
       const { error: stockError } = await supabase
@@ -148,6 +153,33 @@ const Sales = () => {
         .eq("id", product.id);
 
       if (stockError) throw stockError;
+
+      // 🚀 EVENT-DRIVEN: Register event in outbox for future integrations
+      const { error: eventError } = await supabase
+        .from("outbox_events")
+        .insert({
+          event_type: "sale.completed",
+          aggregate_id: saleData.id,
+          aggregate_type: "sale",
+          business_id: currentBusiness,
+          payload: {
+            sale_id: saleData.id,
+            total_amount: totalAmount,
+            payment_method: paymentMethod,
+            items: [{
+              product_id: product.id,
+              product_name: product.name,
+              quantity: qty,
+              unit_price: product.selling_price,
+            }],
+            timestamp: new Date().toISOString(),
+          },
+        });
+
+      // Don't fail the sale if event registration fails (fire and forget)
+      if (eventError) {
+        console.warn("Event registration failed:", eventError);
+      }
 
       toast({
         title: "✓ Venta registrada",

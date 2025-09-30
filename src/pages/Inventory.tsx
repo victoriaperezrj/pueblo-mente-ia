@@ -91,19 +91,43 @@ const Inventory = () => {
     if (!currentBusiness) return;
 
     try {
-      const { error } = await supabase.from("products").insert({
-        business_id: currentBusiness,
-        name,
-        description,
-        category,
-        current_stock: parseFloat(currentStock),
-        min_stock: parseFloat(minStock),
-        cost_price: costPrice ? parseFloat(costPrice) : null,
-        selling_price: parseFloat(sellingPrice),
-        unit,
-      });
+      const { data: productData, error } = await supabase
+        .from("products")
+        .insert({
+          business_id: currentBusiness,
+          name,
+          description,
+          category,
+          current_stock: parseFloat(currentStock),
+          min_stock: parseFloat(minStock),
+          cost_price: costPrice ? parseFloat(costPrice) : null,
+          selling_price: parseFloat(sellingPrice),
+          unit,
+        })
+        .select()
+        .single();
 
       if (error) throw error;
+
+      // 🚀 EVENT-DRIVEN: Register product.created event
+      try {
+        await supabase.from("outbox_events").insert({
+          event_type: "product.created",
+          aggregate_id: productData.id,
+          aggregate_type: "product",
+          business_id: currentBusiness,
+          payload: {
+            product_id: productData.id,
+            name,
+            category,
+            initial_stock: parseFloat(currentStock),
+            selling_price: parseFloat(sellingPrice),
+            timestamp: new Date().toISOString(),
+          },
+        });
+      } catch (eventError) {
+        console.warn("Event registration failed:", eventError);
+      }
 
       toast({
         title: "✓ Producto agregado",
