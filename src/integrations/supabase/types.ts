@@ -240,6 +240,94 @@ export type Database = {
           },
         ]
       }
+      marketplace_listings: {
+        Row: {
+          active: boolean | null
+          category: string | null
+          created_at: string | null
+          description: string | null
+          id: string
+          location: string | null
+          min_quantity: number | null
+          price_per_unit: number | null
+          product_name: string
+          seller_business_id: string
+        }
+        Insert: {
+          active?: boolean | null
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          location?: string | null
+          min_quantity?: number | null
+          price_per_unit?: number | null
+          product_name: string
+          seller_business_id: string
+        }
+        Update: {
+          active?: boolean | null
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          location?: string | null
+          min_quantity?: number | null
+          price_per_unit?: number | null
+          product_name?: string
+          seller_business_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketplace_listings_seller_business_id_fkey"
+            columns: ["seller_business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      marketplace_requests: {
+        Row: {
+          buyer_business_id: string
+          created_at: string | null
+          deadline: string | null
+          id: string
+          max_budget: number | null
+          product_needed: string
+          quantity: number | null
+          status: string | null
+        }
+        Insert: {
+          buyer_business_id: string
+          created_at?: string | null
+          deadline?: string | null
+          id?: string
+          max_budget?: number | null
+          product_needed: string
+          quantity?: number | null
+          status?: string | null
+        }
+        Update: {
+          buyer_business_id?: string
+          created_at?: string | null
+          deadline?: string | null
+          id?: string
+          max_budget?: number | null
+          product_needed?: string
+          quantity?: number | null
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketplace_requests_buyer_business_id_fkey"
+            columns: ["buyer_business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       outbox_events: {
         Row: {
           aggregate_id: string
@@ -370,6 +458,45 @@ export type Database = {
           location?: string | null
           phone?: string | null
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      regulatory_info: {
+        Row: {
+          business_type: string | null
+          cost_estimate_ars: number | null
+          description: string | null
+          id: string
+          last_updated: string | null
+          official_link: string | null
+          permit_name: string
+          processing_days: number | null
+          province: string
+          required: boolean | null
+        }
+        Insert: {
+          business_type?: string | null
+          cost_estimate_ars?: number | null
+          description?: string | null
+          id?: string
+          last_updated?: string | null
+          official_link?: string | null
+          permit_name: string
+          processing_days?: number | null
+          province: string
+          required?: boolean | null
+        }
+        Update: {
+          business_type?: string | null
+          cost_estimate_ars?: number | null
+          description?: string | null
+          id?: string
+          last_updated?: string | null
+          official_link?: string | null
+          permit_name?: string
+          processing_days?: number | null
+          province?: string
+          required?: boolean | null
         }
         Relationships: []
       }
