@@ -180,7 +180,7 @@ const Inventory = () => {
         </div>
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
-            <Button size="lg" className="shadow-lg">
+            <Button variant="gradient" size="lg" className="shadow-lg">
               <Plus className="mr-2 h-5 w-5" />
               Nuevo Producto
             </Button>
@@ -291,39 +291,48 @@ const Inventory = () => {
 
       {/* Summary Cards */}
       <div className="grid md:grid-cols-3 gap-6">
-        <Card className="border-2 border-primary/20">
+        <Card className="border-2 border-primary/30 bg-gradient-to-br from-primary/5 to-primary/10 overflow-hidden hover:border-primary/50 transition-all duration-300 hover:shadow-xl">
+          <div className="h-1 bg-gradient-primary" />
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-lg">
-              <Package className="h-5 w-5 text-primary" />
+              <div className="bg-gradient-primary rounded-lg p-2">
+                <Package className="h-5 w-5 text-white" />
+              </div>
               Total Productos
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold">{products.length}</div>
+            <div className="text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent">{products.length}</div>
           </CardContent>
         </Card>
 
-        <Card className="border-2 border-warning/20">
+        <Card className="border-2 border-warning/30 bg-gradient-to-br from-warning/5 to-warning/10 overflow-hidden hover:border-warning/50 transition-all duration-300 hover:shadow-xl">
+          <div className="h-1 bg-gradient-warm" />
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-lg">
-              <AlertCircle className="h-5 w-5 text-warning" />
+              <div className="bg-gradient-warm rounded-lg p-2">
+                <AlertCircle className="h-5 w-5 text-white" />
+              </div>
               Stock Bajo
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-warning">{lowStockProducts.length}</div>
+            <div className="text-3xl font-bold bg-gradient-warm bg-clip-text text-transparent">{lowStockProducts.length}</div>
           </CardContent>
         </Card>
 
-        <Card className="border-2 border-success/20">
+        <Card className="border-2 border-success/30 bg-gradient-to-br from-success/5 to-success/10 overflow-hidden hover:border-success/50 transition-all duration-300 hover:shadow-xl">
+          <div className="h-1 bg-gradient-success" />
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-lg">
-              <TrendingUp className="h-5 w-5 text-success" />
+              <div className="bg-gradient-success rounded-lg p-2">
+                <TrendingUp className="h-5 w-5 text-white" />
+              </div>
               Valor Total
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-success">
+            <div className="text-3xl font-bold bg-gradient-success bg-clip-text text-transparent">
               ${totalValue.toLocaleString("es-AR")}
             </div>
           </CardContent>
@@ -344,7 +353,7 @@ const Inventory = () => {
       ) : (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {products.map((product) => (
-            <Card key={product.id} className="hover:shadow-lg transition-shadow">
+            <Card key={product.id} className="border-2 hover:border-primary/50 hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] overflow-hidden">
               <CardHeader>
                 <div className="flex justify-between items-start">
                   <div className="flex-1">

@@ -8,54 +8,54 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* PuebloHub Design System - Vibrante y Moderno */
+    /* PuebloHub Design System - Ultra Vibrante y Moderno */
     
     /* Base Colors */
     --background: 0 0% 100%;
-    --foreground: 222 47% 11%;
+    --foreground: 222 84% 4.9%;
 
     /* Card System */
     --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
+    --card-foreground: 222 84% 4.9%;
 
     /* Popover System */
     --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
+    --popover-foreground: 222 84% 4.9%;
 
-    /* Primary - Azul Vibrante */
-    --primary: 217 91% 60%;
+    /* Primary - Azul Eléctrico */
+    --primary: 221 83% 53%;
     --primary-foreground: 0 0% 100%;
-    --primary-hover: 217 91% 50%;
-    --primary-light: 217 91% 85%;
+    --primary-hover: 221 83% 43%;
+    --primary-light: 221 83% 90%;
 
-    /* Secondary - Púrpura Suave */
-    --secondary: 262 52% 47%;
+    /* Secondary - Púrpura Vibrante */
+    --secondary: 270 95% 60%;
     --secondary-foreground: 0 0% 100%;
-    --secondary-light: 262 52% 85%;
+    --secondary-light: 270 95% 85%;
 
-    /* Success - Verde Vibrante */
-    --success: 142 76% 36%;
+    /* Success - Verde Esmeralda */
+    --success: 158 64% 52%;
     --success-foreground: 0 0% 100%;
-    --success-light: 142 76% 85%;
+    --success-light: 158 64% 85%;
 
-    /* Warning - Naranja Cálido */
-    --warning: 25 95% 53%;
+    /* Warning - Naranja Brillante */
+    --warning: 32 98% 56%;
     --warning-foreground: 0 0% 100%;
-    --warning-light: 25 95% 85%;
+    --warning-light: 32 98% 85%;
 
-    /* Info - Cyan Brillante */
-    --info: 199 89% 48%;
+    /* Info - Cyan Neón */
+    --info: 188 95% 50%;
     --info-foreground: 0 0% 100%;
-    --info-light: 199 89% 85%;
+    --info-light: 188 95% 85%;
 
     /* Muted System */
     --muted: 220 14% 96%;
-    --muted-foreground: 220 9% 46%;
+    --muted-foreground: 220 8.9% 46.1%;
 
     /* Accent System */
-    --accent: 280 61% 50%;
+    --accent: 340 82% 52%;
     --accent-foreground: 0 0% 100%;
-    --accent-light: 280 61% 85%;
+    --accent-light: 340 82% 85%;
 
     /* Destructive System */
     --destructive: 0 84% 60%;
@@ -64,26 +64,27 @@ All colors MUST be HSL.
     /* Border & Input */
     --border: 220 13% 91%;
     --input: 220 13% 91%;
-    --ring: 217 91% 60%;
+    --ring: 221 83% 53%;
 
     /* Radius */
     --radius: 0.75rem;
 
     /* Sidebar System */
-    --sidebar-background: 222 47% 11%;
-    --sidebar-foreground: 0 0% 100%;
-    --sidebar-primary: 217 91% 60%;
+    --sidebar-background: 222 84% 4.9%;
+    --sidebar-foreground: 0 0% 98%;
+    --sidebar-primary: 221 83% 53%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 222 47% 16%;
-    --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 222 47% 16%;
-    --sidebar-ring: 217 91% 60%;
+    --sidebar-accent: 217 33% 17%;
+    --sidebar-accent-foreground: 0 0% 98%;
+    --sidebar-border: 217 33% 17%;
+    --sidebar-ring: 221 83% 53%;
 
-    /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%), hsl(262 52% 47%));
-    --gradient-success: linear-gradient(135deg, hsl(142 76% 36%), hsl(199 89% 48%));
-    --gradient-warm: linear-gradient(135deg, hsl(25 95% 53%), hsl(0 84% 60%));
-    --gradient-hero: linear-gradient(135deg, hsl(217 91% 60%) 0%, hsl(262 52% 47%) 50%, hsl(280 61% 50%) 100%);
+    /* Gradients - Ultra Vibrantes */
+    --gradient-primary: linear-gradient(135deg, hsl(221 83% 53%) 0%, hsl(270 95% 60%) 100%);
+    --gradient-success: linear-gradient(135deg, hsl(158 64% 52%) 0%, hsl(188 95% 50%) 100%);
+    --gradient-warm: linear-gradient(135deg, hsl(32 98% 56%) 0%, hsl(340 82% 52%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(221 83% 53%) 0%, hsl(270 95% 60%) 50%, hsl(340 82% 52%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(221 83% 53% / 0.05) 0%, hsl(270 95% 60% / 0.05) 100%);
 
     /* Chart Colors */
     --chart-1: 217 91% 60%;
@@ -94,63 +95,64 @@ All colors MUST be HSL.
   }
 
   .dark {
-    --background: 222 47% 11%;
-    --foreground: 0 0% 98%;
+    --background: 222 84% 4.9%;
+    --foreground: 210 40% 98%;
 
-    --card: 222 47% 16%;
-    --card-foreground: 0 0% 98%;
+    --card: 217 33% 17%;
+    --card-foreground: 210 40% 98%;
 
-    --popover: 222 47% 16%;
-    --popover-foreground: 0 0% 98%;
+    --popover: 217 33% 17%;
+    --popover-foreground: 210 40% 98%;
 
-    --primary: 217 91% 60%;
+    --primary: 221 83% 53%;
     --primary-foreground: 0 0% 100%;
-    --primary-hover: 217 91% 70%;
-    --primary-light: 217 91% 30%;
+    --primary-hover: 221 83% 63%;
+    --primary-light: 221 83% 25%;
 
-    --secondary: 262 52% 47%;
+    --secondary: 270 95% 60%;
     --secondary-foreground: 0 0% 100%;
-    --secondary-light: 262 52% 30%;
+    --secondary-light: 270 95% 25%;
 
-    --success: 142 76% 36%;
+    --success: 158 64% 52%;
     --success-foreground: 0 0% 100%;
-    --success-light: 142 76% 30%;
+    --success-light: 158 64% 25%;
 
-    --warning: 25 95% 53%;
+    --warning: 32 98% 56%;
     --warning-foreground: 0 0% 100%;
-    --warning-light: 25 95% 30%;
+    --warning-light: 32 98% 25%;
 
-    --info: 199 89% 48%;
+    --info: 188 95% 50%;
     --info-foreground: 0 0% 100%;
-    --info-light: 199 89% 30%;
+    --info-light: 188 95% 25%;
 
-    --muted: 222 47% 16%;
-    --muted-foreground: 215 20% 65%;
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20.2% 65.1%;
 
-    --accent: 280 61% 50%;
+    --accent: 340 82% 52%;
     --accent-foreground: 0 0% 100%;
-    --accent-light: 280 61% 30%;
+    --accent-light: 340 82% 25%;
 
-    --destructive: 0 63% 31%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
 
-    --border: 222 47% 16%;
-    --input: 222 47% 16%;
-    --ring: 217 91% 60%;
+    --border: 217 33% 17%;
+    --input: 217 33% 17%;
+    --ring: 221 83% 53%;
 
-    --sidebar-background: 222 47% 11%;
-    --sidebar-foreground: 0 0% 98%;
-    --sidebar-primary: 217 91% 60%;
+    --sidebar-background: 222 84% 4.9%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 221 83% 53%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 222 47% 16%;
-    --sidebar-accent-foreground: 0 0% 98%;
-    --sidebar-border: 222 47% 16%;
-    --sidebar-ring: 217 91% 60%;
+    --sidebar-accent: 217 33% 17%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 217 33% 17%;
+    --sidebar-ring: 221 83% 53%;
 
-    --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%), hsl(262 52% 47%));
-    --gradient-success: linear-gradient(135deg, hsl(142 76% 36%), hsl(199 89% 48%));
-    --gradient-warm: linear-gradient(135deg, hsl(25 95% 53%), hsl(0 84% 60%));
-    --gradient-hero: linear-gradient(135deg, hsl(217 91% 60%) 0%, hsl(262 52% 47%) 50%, hsl(280 61% 50%) 100%);
+    --gradient-primary: linear-gradient(135deg, hsl(221 83% 53%) 0%, hsl(270 95% 60%) 100%);
+    --gradient-success: linear-gradient(135deg, hsl(158 64% 52%) 0%, hsl(188 95% 50%) 100%);
+    --gradient-warm: linear-gradient(135deg, hsl(32 98% 56%) 0%, hsl(340 82% 52%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(221 83% 53%) 0%, hsl(270 95% 60%) 50%, hsl(340 82% 52%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(221 83% 53% / 0.1) 0%, hsl(270 95% 60% / 0.1) 100%);
 
     --chart-1: 217 91% 60%;
     --chart-2: 142 76% 36%;
@@ -183,5 +185,21 @@ All colors MUST be HSL.
 
   .gradient-hero {
     background: var(--gradient-hero);
+  }
+
+  .gradient-card {
+    background: var(--gradient-card);
+  }
+
+  .glass-effect {
+    @apply backdrop-blur-md bg-background/80 border border-border/50;
+  }
+
+  .glow-effect {
+    box-shadow: 0 0 20px hsl(var(--primary) / 0.3);
+  }
+
+  .hover-lift {
+    @apply transition-all duration-300 hover:scale-105 hover:shadow-2xl;
   }
 }

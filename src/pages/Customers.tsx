@@ -168,7 +168,7 @@ const Customers = () => {
         </div>
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
-            <Button size="lg" className="shadow-lg">
+            <Button variant="gradient" size="lg" className="shadow-lg">
               <Plus className="mr-2 h-5 w-5" />
               Nuevo Cliente
             </Button>
@@ -231,15 +231,18 @@ const Customers = () => {
       </div>
 
       {/* Summary Card */}
-      <Card className="border-2 border-primary/20">
+      <Card className="border-2 border-primary/30 bg-gradient-to-br from-primary/5 to-secondary/5 overflow-hidden hover:border-primary/50 transition-all duration-300 hover:shadow-2xl">
+        <div className="h-1 bg-gradient-primary" />
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Users className="h-6 w-6 text-primary" />
+            <div className="bg-gradient-primary rounded-lg p-2.5">
+              <Users className="h-6 w-6 text-white" />
+            </div>
             Total de Clientes
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="text-4xl font-bold text-primary">{customers.length}</div>
+          <div className="text-4xl font-bold bg-gradient-primary bg-clip-text text-transparent">{customers.length}</div>
           <p className="text-sm text-muted-foreground mt-1">contactos registrados</p>
         </CardContent>
       </Card>
@@ -258,7 +261,7 @@ const Customers = () => {
       ) : (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {customers.map((customer) => (
-            <Card key={customer.id} className="hover:shadow-lg transition-shadow">
+            <Card key={customer.id} className="border-2 hover:border-primary/50 hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] overflow-hidden">
               <CardHeader>
                 <div className="flex justify-between items-start">
                   <div className="flex-1">

@@ -222,7 +222,7 @@ const Sales = () => {
         </div>
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
-            <Button size="lg" className="shadow-lg">
+            <Button variant="gradient" size="lg" className="shadow-lg">
               <Plus className="mr-2 h-5 w-5" />
               Nueva Venta
             </Button>
@@ -317,15 +317,18 @@ const Sales = () => {
 
       {/* Summary Cards */}
       <div className="grid md:grid-cols-3 gap-6">
-        <Card className="border-2 border-success/20 bg-gradient-to-br from-success/5 to-success/10">
+        <Card className="border-2 border-success/30 bg-gradient-to-br from-success/5 to-success/10 overflow-hidden hover:border-success/50 transition-all duration-300 hover:shadow-2xl">
+          <div className="h-1 bg-gradient-success" />
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <DollarSign className="h-6 w-6 text-success" />
+              <div className="bg-gradient-success rounded-lg p-2.5">
+                <DollarSign className="h-6 w-6 text-white" />
+              </div>
               Ventas de Hoy
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-success">
+            <div className="text-3xl font-bold bg-gradient-success bg-clip-text text-transparent">
               ${todayTotal.toLocaleString("es-AR")}
             </div>
             <p className="text-sm text-muted-foreground mt-1">
@@ -334,15 +337,18 @@ const Sales = () => {
           </CardContent>
         </Card>
 
-        <Card className="border-2 border-primary/20">
+        <Card className="border-2 border-primary/30 bg-gradient-to-br from-primary/5 to-primary/10 overflow-hidden hover:border-primary/50 transition-all duration-300 hover:shadow-2xl">
+          <div className="h-1 bg-gradient-primary" />
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <TrendingUp className="h-6 w-6 text-primary" />
+              <div className="bg-gradient-primary rounded-lg p-2.5">
+                <TrendingUp className="h-6 w-6 text-white" />
+              </div>
               Total Histórico
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold">
+            <div className="text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent">
               ${totalSales.toLocaleString("es-AR")}
             </div>
             <p className="text-sm text-muted-foreground mt-1">
@@ -351,15 +357,18 @@ const Sales = () => {
           </CardContent>
         </Card>
 
-        <Card className="border-2 border-warning/20">
+        <Card className="border-2 border-warning/30 bg-gradient-to-br from-warning/5 to-warning/10 overflow-hidden hover:border-warning/50 transition-all duration-300 hover:shadow-2xl">
+          <div className="h-1 bg-gradient-warm" />
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <ShoppingCart className="h-6 w-6 text-warning" />
+              <div className="bg-gradient-warm rounded-lg p-2">
+                <ShoppingCart className="h-6 w-6 text-white" />
+              </div>
               Promedio
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-warning">
+            <div className="text-3xl font-bold bg-gradient-warm bg-clip-text text-transparent">
               ${sales.length > 0 ? (totalSales / sales.length).toFixed(0) : 0}
             </div>
             <p className="text-sm text-muted-foreground mt-1">por venta</p>

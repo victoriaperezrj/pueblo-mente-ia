@@ -179,7 +179,7 @@ const Expenses = () => {
         </div>
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
-            <Button size="lg" className="shadow-lg">
+            <Button variant="gradient" size="lg" className="shadow-lg">
               <Plus className="mr-2 h-5 w-5" />
               Nuevo Gasto
             </Button>
@@ -261,15 +261,18 @@ const Expenses = () => {
       </div>
 
       {/* Summary Card */}
-      <Card className="border-2 border-destructive/20 bg-gradient-to-br from-destructive/5 to-warning/5">
+      <Card className="border-2 border-warning/30 bg-gradient-to-br from-warning/10 via-destructive/10 to-destructive/5 overflow-hidden hover:border-warning/50 transition-all duration-300 hover:shadow-2xl">
+        <div className="h-1 bg-gradient-warm" />
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <DollarSign className="h-6 w-6 text-destructive" />
+            <div className="bg-gradient-warm rounded-lg p-2.5">
+              <DollarSign className="h-6 w-6 text-white" />
+            </div>
             Total de Gastos
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="text-4xl font-bold text-destructive">
+          <div className="text-4xl font-bold bg-gradient-warm bg-clip-text text-transparent">
             ${totalExpenses.toLocaleString("es-AR", { minimumFractionDigits: 2 })}
           </div>
           <p className="text-sm text-muted-foreground mt-1">
@@ -279,9 +282,15 @@ const Expenses = () => {
       </Card>
 
       {/* Expenses Table */}
-      <Card>
+      <Card className="border-2 overflow-hidden hover:border-primary/50 transition-all duration-300">
+        <div className="h-1 bg-gradient-primary" />
         <CardHeader>
-          <CardTitle>Registro de Gastos</CardTitle>
+          <CardTitle className="flex items-center gap-2">
+            <div className="bg-gradient-primary rounded-lg p-2">
+              <TrendingDown className="h-5 w-5 text-white" />
+            </div>
+            Registro de Gastos
+          </CardTitle>
           <CardDescription>Historial completo de egresos</CardDescription>
         </CardHeader>
         <CardContent>
