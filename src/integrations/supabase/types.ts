@@ -55,6 +55,194 @@ export type Database = {
           },
         ]
       }
+      customers: {
+        Row: {
+          address: string | null
+          business_id: string
+          created_at: string | null
+          email: string | null
+          id: string
+          last_visit: string | null
+          name: string
+          phone: string | null
+          tags: string[] | null
+          total_purchases: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          address?: string | null
+          business_id: string
+          created_at?: string | null
+          email?: string | null
+          id?: string
+          last_visit?: string | null
+          name: string
+          phone?: string | null
+          tags?: string[] | null
+          total_purchases?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          address?: string | null
+          business_id?: string
+          created_at?: string | null
+          email?: string | null
+          id?: string
+          last_visit?: string | null
+          name?: string
+          phone?: string | null
+          tags?: string[] | null
+          total_purchases?: number | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "customers_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      expenses: {
+        Row: {
+          amount: number
+          business_id: string
+          category: string
+          created_at: string | null
+          expense_date: string | null
+          id: string
+          notes: string | null
+          payment_method: string | null
+          vendor_name: string | null
+        }
+        Insert: {
+          amount: number
+          business_id: string
+          category: string
+          created_at?: string | null
+          expense_date?: string | null
+          id?: string
+          notes?: string | null
+          payment_method?: string | null
+          vendor_name?: string | null
+        }
+        Update: {
+          amount?: number
+          business_id?: string
+          category?: string
+          created_at?: string | null
+          expense_date?: string | null
+          id?: string
+          notes?: string | null
+          payment_method?: string | null
+          vendor_name?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "expenses_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      inventory_movements: {
+        Row: {
+          id: string
+          movement_date: string | null
+          movement_type: string
+          notes: string | null
+          product_id: string
+          quantity: number
+        }
+        Insert: {
+          id?: string
+          movement_date?: string | null
+          movement_type: string
+          notes?: string | null
+          product_id: string
+          quantity: number
+        }
+        Update: {
+          id?: string
+          movement_date?: string | null
+          movement_type?: string
+          notes?: string | null
+          product_id?: string
+          quantity?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "inventory_movements_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      products: {
+        Row: {
+          active: boolean | null
+          business_id: string
+          category: string | null
+          cost_price: number | null
+          created_at: string | null
+          current_stock: number | null
+          description: string | null
+          id: string
+          image_url: string | null
+          min_stock: number | null
+          name: string
+          selling_price: number
+          unit: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          active?: boolean | null
+          business_id: string
+          category?: string | null
+          cost_price?: number | null
+          created_at?: string | null
+          current_stock?: number | null
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          min_stock?: number | null
+          name: string
+          selling_price: number
+          unit?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          active?: boolean | null
+          business_id?: string
+          category?: string | null
+          cost_price?: number | null
+          created_at?: string | null
+          current_stock?: number | null
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          min_stock?: number | null
+          name?: string
+          selling_price?: number
+          unit?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "products_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           created_at: string | null
@@ -81,6 +269,57 @@ export type Database = {
           updated_at?: string | null
         }
         Relationships: []
+      }
+      sales: {
+        Row: {
+          business_id: string
+          created_at: string | null
+          customer_id: string | null
+          id: string
+          items: Json
+          notes: string | null
+          payment_method: string
+          sale_date: string | null
+          total_amount: number
+        }
+        Insert: {
+          business_id: string
+          created_at?: string | null
+          customer_id?: string | null
+          id?: string
+          items: Json
+          notes?: string | null
+          payment_method: string
+          sale_date?: string | null
+          total_amount: number
+        }
+        Update: {
+          business_id?: string
+          created_at?: string | null
+          customer_id?: string | null
+          id?: string
+          items?: Json
+          notes?: string | null
+          payment_method?: string
+          sale_date?: string | null
+          total_amount?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sales_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sales_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {

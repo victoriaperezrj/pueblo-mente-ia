@@ -7,6 +7,10 @@ import { ShoppingCart, Package, Users, Calendar, DollarSign, Store, BookOpen, Se
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
+import Expenses from "./pages/Expenses";
+import Inventory from "./pages/Inventory";
+import Sales from "./pages/Sales";
+import Customers from "./pages/Customers";
 import DashboardLayout from "./pages/DashboardLayout";
 import PlaceholderPage from "./pages/PlaceholderPage";
 import NotFound from "./pages/NotFound";
@@ -24,25 +28,13 @@ const App = () => (
           <Route path="/auth" element={<Auth />} />
           <Route element={<DashboardLayout />}>
             <Route path="/dashboard" element={<Dashboard />} />
-            <Route
-              path="/sales"
-              element={<PlaceholderPage title="Ventas" description="Gestión de ventas y transacciones" icon={<ShoppingCart className="h-6 w-6" />} />}
-            />
-            <Route
-              path="/inventory"
-              element={<PlaceholderPage title="Inventario" description="Control de stock y productos" icon={<Package className="h-6 w-6" />} />}
-            />
-            <Route
-              path="/customers"
-              element={<PlaceholderPage title="Clientes" description="Base de datos de clientes" icon={<Users className="h-6 w-6" />} />}
-            />
+            <Route path="/sales" element={<Sales />} />
+            <Route path="/inventory" element={<Inventory />} />
+            <Route path="/customers" element={<Customers />} />
+            <Route path="/expenses" element={<Expenses />} />
             <Route
               path="/appointments"
               element={<PlaceholderPage title="Turnos" description="Gestión de citas y reservas" icon={<Calendar className="h-6 w-6" />} />}
-            />
-            <Route
-              path="/expenses"
-              element={<PlaceholderPage title="Gastos" description="Control de gastos y finanzas" icon={<DollarSign className="h-6 w-6" />} />}
             />
             <Route
               path="/marketplace"

@@ -4,22 +4,15 @@ import { supabase } from "@/integrations/supabase/client";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/layout/AppSidebar";
 import { AppHeader } from "@/components/layout/AppHeader";
+import BusinessOnboarding from "@/components/BusinessOnboarding";
 
 const DashboardLayout = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
+  const [needsOnboarding, setNeedsOnboarding] = useState(false);
 
   useEffect(() => {
-    const checkAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        navigate("/auth");
-      } else {
-        setLoading(false);
-      }
-    };
-
-    checkAuth();
+    checkAuthAndBusiness();
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === "SIGNED_OUT" || !session) {
@@ -30,12 +23,42 @@ const DashboardLayout = () => {
     return () => subscription.unsubscribe();
   }, [navigate]);
 
+  const checkAuthAndBusiness = async () => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        navigate("/auth");
+        return;
+      }
+
+      // Check if user has any businesses
+      const { data: businesses, error } = await supabase
+        .from("businesses")
+        .select("id")
+        .limit(1);
+
+      if (error) throw error;
+
+      if (!businesses || businesses.length === 0) {
+        setNeedsOnboarding(true);
+      }
+    } catch (error) {
+      console.error("Error checking business:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
     );
+  }
+
+  if (needsOnboarding) {
+    return <BusinessOnboarding onComplete={() => setNeedsOnboarding(false)} />;
   }
 
   return (
