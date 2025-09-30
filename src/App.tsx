@@ -21,6 +21,7 @@ import BusinessBlueprint from "./pages/BusinessBlueprint";
 import FinancialSimulator from "./pages/FinancialSimulator";
 import DashboardLayout from "./pages/DashboardLayout";
 import NotFound from "./pages/NotFound";
+import DataBackup from "./pages/DataBackup";
 
 const queryClient = new QueryClient();
 
@@ -47,6 +48,7 @@ const App = () => (
             <Route path="/idea-validator" element={<IdeaValidator />} />
             <Route path="/business-blueprint" element={<BusinessBlueprint />} />
             <Route path="/financial-simulator" element={<FinancialSimulator />} />
+            <Route path="/backup" element={<DataBackup />} />
           </Route>
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />

@@ -1,4 +1,4 @@
-import { LayoutDashboard, ShoppingCart, Package, Users, Calendar, DollarSign, Store, BookOpen, Settings, Plug } from "lucide-react";
+import { LayoutDashboard, ShoppingCart, Package, Users, Calendar, DollarSign, Store, BookOpen, Settings, Plug, Download } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import {
   Sidebar,
@@ -22,6 +22,7 @@ const menuItems = [
   { title: "Marketplace", url: "/marketplace", icon: Store },
   { title: "Integraciones", url: "/integrations", icon: Plug },
   { title: "Recursos", url: "/resources", icon: BookOpen },
+  { title: "Respaldo", url: "/backup", icon: Download },
   { title: "Configuración", url: "/settings", icon: Settings },
 ];
 
