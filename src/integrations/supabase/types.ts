@@ -14,6 +14,62 @@ export type Database = {
   }
   public: {
     Tables: {
+      appointments: {
+        Row: {
+          appointment_date: string
+          business_id: string
+          created_at: string
+          customer_email: string | null
+          customer_name: string
+          customer_phone: string | null
+          end_time: string
+          id: string
+          notes: string | null
+          service: string
+          start_time: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          appointment_date: string
+          business_id: string
+          created_at?: string
+          customer_email?: string | null
+          customer_name: string
+          customer_phone?: string | null
+          end_time: string
+          id?: string
+          notes?: string | null
+          service: string
+          start_time: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          appointment_date?: string
+          business_id?: string
+          created_at?: string
+          customer_email?: string | null
+          customer_name?: string
+          customer_phone?: string | null
+          end_time?: string
+          id?: string
+          notes?: string | null
+          service?: string
+          start_time?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "appointments_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       businesses: {
         Row: {
           business_type: Database["public"]["Enums"]["business_type"]

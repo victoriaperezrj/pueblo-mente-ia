@@ -84,17 +84,20 @@ const BusinessOnboarding = ({ onComplete }: BusinessOnboardingProps) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-primary/5 via-background to-success/5">
-      <Card className="w-full max-w-md border-2 shadow-2xl animate-scale-in">
-        <CardHeader className="text-center">
-          <div className="flex justify-center mb-4">
-            <div className="bg-gradient-primary rounded-2xl p-4 shadow-lg animate-bounce-subtle">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-primary/5 via-background to-success/5 animate-fade-in">
+      <Card className="w-full max-w-md border-2 shadow-2xl overflow-hidden hover:shadow-[0_0_50px_rgba(59,130,246,0.3)] transition-all duration-500">
+        <div className="h-2 bg-gradient-hero" />
+        <CardHeader className="text-center pt-8">
+          <div className="flex justify-center mb-6">
+            <div className="bg-gradient-primary rounded-2xl p-4 shadow-lg hover:scale-110 transition-transform duration-300 animate-scale-in">
               <Building2 className="h-10 w-10 text-white" />
             </div>
           </div>
-          <CardTitle className="text-3xl font-bold">¡Bienvenido a PuebloHub! 👋</CardTitle>
-          <CardDescription className="text-base">
-            Creá tu primer negocio para comenzar
+          <CardTitle className="text-3xl font-bold bg-gradient-hero bg-clip-text text-transparent animate-fade-in">
+            ¡Bienvenido a PuebloHub! 👋
+          </CardTitle>
+          <CardDescription className="text-base mt-2">
+            Creá tu primer negocio para comenzar tu viaje emprendedor
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -144,12 +147,19 @@ const BusinessOnboarding = ({ onComplete }: BusinessOnboardingProps) => {
 
             <Button 
               type="submit" 
-              className="w-full h-12 text-base font-semibold shadow-lg hover:shadow-xl transition-all mt-6" 
+              variant="gradient"
+              className="w-full h-12 text-base font-semibold shadow-lg hover:shadow-2xl hover:scale-[1.02] transition-all mt-6" 
               disabled={loading}
             >
               {loading && <Loader2 className="mr-2 h-5 w-5 animate-spin" />}
-              Crear Mi Negocio
+              {!loading && "🚀 "}Crear Mi Negocio
             </Button>
+            
+            <div className="bg-primary/5 border border-primary/20 rounded-lg p-4 mt-4">
+              <p className="text-sm text-center text-muted-foreground flex items-center justify-center gap-2">
+                ✨ <span>Todo en una sola plataforma: IA, ERP, marketplace y más</span>
+              </p>
+            </div>
           </form>
 
           <p className="text-center text-xs text-muted-foreground mt-6">

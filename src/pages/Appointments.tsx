@@ -77,11 +77,20 @@ const Appointments = () => {
 
   const loadAppointments = async (businessId: string) => {
     try {
-      // For now, we'll use a mock structure since appointments table doesn't exist yet
-      // In production, this would query the appointments table
-      setAppointments([]);
+      const { data, error } = await supabase
+        .from("appointments")
+        .select("*")
+        .eq("business_id", businessId)
+        .order("appointment_date", { ascending: true });
+
+      if (error) throw error;
+      setAppointments(data || []);
     } catch (error: any) {
-      console.error("Error loading appointments:", error);
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
     } finally {
       setLoading(false);
     }
@@ -91,27 +100,79 @@ const Appointments = () => {
     e.preventDefault();
     if (!currentBusiness) return;
 
-    // Mock submission for now
-    toast({
-      title: "✓ Turno agendado",
-      description: "El turno se creó correctamente",
-    });
+    try {
+      const { error } = await supabase.from("appointments").insert({
+        business_id: currentBusiness,
+        customer_name: customerName,
+        customer_phone: customerPhone,
+        customer_email: customerEmail,
+        appointment_date: appointmentDate,
+        start_time: startTime,
+        end_time: endTime,
+        service,
+        notes,
+        status: "pending"
+      });
 
-    setDialogOpen(false);
-    resetForm();
+      if (error) throw error;
+
+      toast({
+        title: "✓ Turno agendado",
+        description: "El turno se creó correctamente",
+      });
+
+      setDialogOpen(false);
+      resetForm();
+      loadAppointments(currentBusiness);
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
   };
 
   const handleStatusChange = async (appointmentId: string, newStatus: string) => {
-    toast({
-      title: "✓ Estado actualizado",
-      description: "El turno se actualizó correctamente",
-    });
+    try {
+      const { error } = await supabase
+        .from("appointments")
+        .update({ status: newStatus })
+        .eq("id", appointmentId);
+
+      if (error) throw error;
+
+      toast({
+        title: "✓ Estado actualizado",
+        description: "El turno se actualizó correctamente",
+      });
+
+      if (currentBusiness) loadAppointments(currentBusiness);
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
   };
 
   const handleDelete = async (id: string) => {
     if (!confirm("¿Cancelar este turno?")) return;
 
-    toast({ title: "✓ Turno cancelado" });
+    try {
+      const { error } = await supabase.from("appointments").delete().eq("id", id);
+      if (error) throw error;
+
+      toast({ title: "✓ Turno cancelado" });
+      if (currentBusiness) loadAppointments(currentBusiness);
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
   };
 
   const resetForm = () => {
@@ -346,53 +407,72 @@ const Appointments = () => {
         </Card>
       ) : (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {appointments.map((appointment) => (
-            <Card key={appointment.id} className="border-2 hover:border-primary/50 hover:shadow-2xl transition-all duration-300 overflow-hidden">
-              <CardHeader>
-                <div className="flex justify-between items-start mb-2">
-                  <Badge variant="secondary">
-                    {STATUS_OPTIONS.find(s => s.value === appointment.status)?.label}
-                  </Badge>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => handleDelete(appointment.id)}
-                    className="text-destructive"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <User className="h-4 w-4" />
-                  {appointment.customer_name}
-                </CardTitle>
-                <CardDescription className="flex items-center gap-1">
-                  <Calendar className="h-3 w-3" />
-                  {format(new Date(appointment.appointment_date), "dd MMM yyyy", { locale: es })}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="flex items-center gap-2 text-sm">
-                  <Clock className="h-4 w-4 text-muted-foreground" />
-                  <span>{appointment.start_time} - {appointment.end_time}</span>
-                </div>
-                <div className="text-sm">
-                  <span className="font-medium">Servicio:</span> {appointment.service}
-                </div>
-                {appointment.customer_phone && (
-                  <div className="flex items-center gap-2 text-sm">
-                    <Phone className="h-4 w-4 text-muted-foreground" />
-                    <span>{appointment.customer_phone}</span>
+          {appointments.map((appointment) => {
+            const statusOption = STATUS_OPTIONS.find(s => s.value === appointment.status);
+            return (
+              <Card key={appointment.id} className="border-2 hover:border-primary/50 hover:shadow-2xl hover:scale-[1.02] transition-all duration-300 overflow-hidden group">
+                <div className={`h-1 bg-gradient-${statusOption?.color || 'primary'}`} />
+                <CardHeader>
+                  <div className="flex justify-between items-start mb-2">
+                    <Select value={appointment.status} onValueChange={(value) => handleStatusChange(appointment.id, value)}>
+                      <SelectTrigger className="w-auto">
+                        <SelectValue>
+                          <Badge variant="secondary">
+                            {statusOption?.label}
+                          </Badge>
+                        </SelectValue>
+                      </SelectTrigger>
+                      <SelectContent>
+                        {STATUS_OPTIONS.map((status) => (
+                          <SelectItem key={status.value} value={status.value}>
+                            <Badge variant="secondary">{status.label}</Badge>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleDelete(appointment.id)}
+                      className="text-destructive hover:text-destructive opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
                   </div>
-                )}
-                {appointment.notes && (
-                  <p className="text-sm text-muted-foreground italic">
-                    {appointment.notes}
-                  </p>
-                )}
-              </CardContent>
-            </Card>
-          ))}
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <div className="bg-gradient-primary rounded-lg p-1.5">
+                      <User className="h-4 w-4 text-white" />
+                    </div>
+                    {appointment.customer_name}
+                  </CardTitle>
+                  <CardDescription className="flex items-center gap-1 text-base">
+                    <Calendar className="h-4 w-4" />
+                    {format(new Date(appointment.appointment_date), "dd MMM yyyy", { locale: es })}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div className="flex items-center gap-2 text-sm bg-primary/5 p-2 rounded-lg">
+                    <Clock className="h-4 w-4 text-primary" />
+                    <span className="font-medium">{appointment.start_time} - {appointment.end_time}</span>
+                  </div>
+                  <div className="text-sm bg-success/5 p-2 rounded-lg">
+                    <span className="font-medium text-success">Servicio:</span> {appointment.service}
+                  </div>
+                  {appointment.customer_phone && (
+                    <div className="flex items-center gap-2 text-sm">
+                      <Phone className="h-4 w-4 text-muted-foreground" />
+                      <span>{appointment.customer_phone}</span>
+                    </div>
+                  )}
+                  {appointment.notes && (
+                    <p className="text-sm text-muted-foreground italic bg-muted/30 p-2 rounded-lg">
+                      {appointment.notes}
+                    </p>
+                  )}
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
       )}
     </div>

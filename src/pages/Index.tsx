@@ -41,41 +41,47 @@ const Index = () => {
       </header>
 
       {/* Hero Section */}
-      <section className="container mx-auto px-4 py-20 text-center animate-fade-in">
-        <div className="inline-flex items-center gap-2 bg-primary-light text-primary px-4 py-2 rounded-full text-sm font-medium mb-6 animate-bounce-subtle">
-          <Zap className="h-4 w-4" />
-          <span>Potenciado por Inteligencia Artificial</span>
-        </div>
+      <section className="container mx-auto px-4 py-20 text-center animate-fade-in relative">
+        <div className="absolute top-10 left-1/4 w-64 h-64 bg-primary/10 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-10 right-1/4 w-64 h-64 bg-success/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }} />
         
-        <h1 className="text-5xl md:text-7xl font-extrabold mb-6 leading-tight">
-          Tu Negocio,{" "}
-          <span className="bg-gradient-hero bg-clip-text text-transparent">
-            Transformado
-          </span>
-        </h1>
-        
-        <p className="text-xl md:text-2xl text-muted-foreground mb-10 max-w-3xl mx-auto leading-relaxed">
-          Desde validar tu idea hasta gestionar operaciones diarias. 
-          PuebloHub es la plataforma <span className="font-semibold text-foreground">todo-en-uno</span> para 
-          emprendedores de <span className="font-semibold text-foreground">San Luis, Argentina</span>.
-        </p>
-        
-        <div className="flex gap-4 justify-center flex-wrap mb-16 animate-slide-up">
-          <Button 
-            size="lg" 
-            onClick={() => navigate("/auth")}
-            className="text-lg px-8 py-6 shadow-2xl hover:shadow-primary/50 transition-all duration-300 hover:scale-105"
-          >
-            Comenzar Gratis
-            <span className="ml-2">→</span>
-          </Button>
-          <Button 
-            size="lg" 
-            variant="outline"
-            className="text-lg px-8 py-6 border-2 hover:border-primary hover:text-primary transition-all duration-300"
-          >
-            Ver Demo
-          </Button>
+        <div className="relative z-10">
+          <div className="inline-flex items-center gap-2 bg-primary-light text-primary px-4 py-2 rounded-full text-sm font-medium mb-6 hover:scale-105 transition-transform shadow-lg animate-scale-in">
+            <Zap className="h-4 w-4 animate-pulse" />
+            <span>Potenciado por Inteligencia Artificial</span>
+          </div>
+          
+          <h1 className="text-5xl md:text-7xl font-extrabold mb-6 leading-tight animate-fade-in" style={{ animationDelay: "0.1s" }}>
+            Tu Negocio,{" "}
+            <span className="bg-gradient-hero bg-clip-text text-transparent inline-block hover:scale-105 transition-transform">
+              Transformado
+            </span>
+          </h1>
+          
+          <p className="text-xl md:text-2xl text-muted-foreground mb-10 max-w-3xl mx-auto leading-relaxed animate-fade-in" style={{ animationDelay: "0.2s" }}>
+            Desde validar tu idea hasta gestionar operaciones diarias. 
+            PuebloHub es la plataforma <span className="font-semibold text-foreground">todo-en-uno</span> para 
+            emprendedores de <span className="font-semibold text-foreground">San Luis, Argentina</span>.
+          </p>
+          
+          <div className="flex gap-4 justify-center flex-wrap mb-16 animate-fade-in" style={{ animationDelay: "0.3s" }}>
+            <Button 
+              size="lg" 
+              variant="gradient"
+              onClick={() => navigate("/auth")}
+              className="text-lg px-8 py-6 shadow-2xl hover:shadow-[0_0_40px_rgba(59,130,246,0.5)] hover:scale-105 transition-all duration-300"
+            >
+              Comenzar Gratis ✨
+              <span className="ml-2">→</span>
+            </Button>
+            <Button 
+              size="lg" 
+              variant="outline"
+              className="text-lg px-8 py-6 border-2 hover:border-primary hover:text-primary hover:scale-105 transition-all duration-300"
+            >
+              Ver Demo
+            </Button>
+          </div>
         </div>
 
         {/* Stats */}
@@ -161,18 +167,21 @@ const Index = () => {
           ].map((feature, idx) => (
             <div
               key={idx}
-              className="group bg-card rounded-2xl p-8 border border-border hover:border-primary/50 transition-all duration-300 hover:scale-105 hover:shadow-2xl animate-fade-in"
+              className="group bg-card rounded-2xl p-8 border-2 border-border hover:border-primary/50 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl animate-fade-in relative overflow-hidden"
               style={{ animationDelay: `${idx * 0.1}s` }}
             >
-              <div className={`bg-gradient-to-br ${feature.gradient} rounded-xl w-14 h-14 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
-                <feature.icon className={`h-7 w-7 ${feature.iconColor}`} />
+              <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${feature.gradient} blur-3xl opacity-0 group-hover:opacity-30 transition-opacity duration-500`} />
+              <div className="relative z-10">
+                <div className={`bg-gradient-to-br ${feature.gradient} rounded-xl w-14 h-14 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg`}>
+                  <feature.icon className={`h-7 w-7 ${feature.iconColor}`} />
+                </div>
+                <h3 className="text-2xl font-bold mb-3 group-hover:text-primary transition-colors">
+                  {feature.title}
+                </h3>
+                <p className="text-muted-foreground leading-relaxed">
+                  {feature.description}
+                </p>
               </div>
-              <h3 className="text-2xl font-bold mb-3 group-hover:text-primary transition-colors">
-                {feature.title}
-              </h3>
-              <p className="text-muted-foreground leading-relaxed">
-                {feature.description}
-              </p>
             </div>
           ))}
         </div>
