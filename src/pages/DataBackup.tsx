@@ -20,6 +20,39 @@ const DataBackup = () => {
     URL.revokeObjectURL(url);
   };
 
+  const downloadSQL = (text: string, filename: string) => {
+    const blob = new Blob([text], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${filename}_${new Date().toISOString().split('T')[0]}.sql`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  const generateSQLInserts = (data: any[], tableName: string): string => {
+    if (!data || data.length === 0) return `-- No data in ${tableName}\n\n`;
+    
+    const columns = Object.keys(data[0]);
+    let sql = `-- Insert data for ${tableName}\n`;
+    
+    data.forEach((row) => {
+      const values = columns.map(col => {
+        const val = row[col];
+        if (val === null) return 'NULL';
+        if (typeof val === 'string') return `'${val.replace(/'/g, "''")}'`;
+        if (typeof val === 'object') return `'${JSON.stringify(val).replace(/'/g, "''")}'`;
+        return val;
+      }).join(', ');
+      
+      sql += `INSERT INTO ${tableName} (${columns.join(', ')}) VALUES (${values});\n`;
+    });
+    
+    return sql + '\n';
+  };
+
   const exportTable = async (tableName: string, displayName: string) => {
     try {
       setLoading(tableName);
@@ -33,6 +66,46 @@ const DataBackup = () => {
       });
     } catch (error: any) {
       toast.error(`Error al exportar ${displayName}`, {
+        description: error.message
+      });
+    } finally {
+      setLoading(null);
+    }
+  };
+
+  const exportAllSQL = async () => {
+    try {
+      setLoading('all-sql');
+      
+      const tables = [
+        { name: 'businesses', display: 'Negocios' },
+        { name: 'products', display: 'Productos' },
+        { name: 'customers', display: 'Clientes' },
+        { name: 'sales', display: 'Ventas' },
+        { name: 'expenses', display: 'Gastos' },
+        { name: 'appointments', display: 'Citas' },
+        { name: 'inventory_movements', display: 'Movimientos de Inventario' },
+        { name: 'marketplace_listings', display: 'Publicaciones del Mercado' },
+        { name: 'marketplace_requests', display: 'Solicitudes del Mercado' },
+      ];
+
+      let allSQL = `-- Respaldo completo generado el ${new Date().toISOString()}\n`;
+      allSQL += `-- IMPORTANTE: Primero ejecuta las migraciones de supabase/migrations/\n`;
+      allSQL += `-- Luego ejecuta este archivo para importar los datos\n\n`;
+
+      for (const table of tables) {
+        const { data, error } = await (supabase as any).from(table.name).select('*');
+        if (!error && data && data.length > 0) {
+          allSQL += generateSQLInserts(data, table.name);
+        }
+      }
+
+      downloadSQL(allSQL, 'respaldo_completo');
+      toast.success('SQL de respaldo generado', {
+        description: 'Listo para copiar en tu nuevo Supabase'
+      });
+    } catch (error: any) {
+      toast.error('Error al generar SQL', {
         description: error.message
       });
     } finally {
@@ -109,17 +182,26 @@ const DataBackup = () => {
             Exportar Todo
           </CardTitle>
           <CardDescription>
-            Descarga un respaldo completo de todas tus tablas en un solo archivo
+            Descarga un respaldo completo de todas tus tablas
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="flex gap-3">
           <Button
             onClick={exportAll}
             disabled={loading !== null}
             size="lg"
-            className="w-full"
+            className="flex-1"
           >
-            {loading === 'all' ? 'Exportando...' : 'Descargar Respaldo Completo'}
+            {loading === 'all' ? 'Exportando...' : 'JSON'}
+          </Button>
+          <Button
+            onClick={exportAllSQL}
+            disabled={loading !== null}
+            size="lg"
+            variant="secondary"
+            className="flex-1"
+          >
+            {loading === 'all-sql' ? 'Generando...' : 'SQL (para migrar)'}
           </Button>
         </CardContent>
       </Card>
@@ -165,10 +247,11 @@ const DataBackup = () => {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-2 text-sm">
+          <p>• <strong>JSON:</strong> Para respaldos locales y portabilidad</p>
+          <p>• <strong>SQL:</strong> Para migrar a tu propio Supabase - copia y pega en SQL Editor</p>
+          <p>• <strong>Importante:</strong> Si vas a migrar, primero ejecuta las migraciones de supabase/migrations/ y luego el SQL generado</p>
           <p>• Realiza respaldos periódicamente (semanalmente o mensualmente)</p>
           <p>• Guarda los archivos en múltiples ubicaciones (nube, disco externo, etc.)</p>
-          <p>• Los archivos JSON se pueden importar fácilmente en otras bases de datos</p>
-          <p>• Verifica que los archivos descargados contengan tus datos correctamente</p>
         </CardContent>
       </Card>
     </div>
