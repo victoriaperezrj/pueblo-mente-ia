@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { Lightbulb, TrendingUp, TrendingDown, AlertCircle, CheckCircle, Loader2, Sparkles, Target, Users, DollarSign } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import { supabase } from "@/integrations/supabase/client";
 
 interface ValidationResult {
   score: number;
@@ -38,54 +39,42 @@ const IdeaValidator = () => {
     e.preventDefault();
     setLoading(true);
 
-    // Simulate AI analysis
-    setTimeout(() => {
-      const mockResult: ValidationResult = {
-        score: 78,
-        strengths: [
-          "Mercado local con demanda comprobada",
-          "Baja barrera de entrada inicial",
-          "Posibilidad de diferenciación por servicio personalizado",
-          "Tendencia creciente en San Luis"
-        ],
-        weaknesses: [
-          "Alta competencia en el rubro",
-          "Márgenes de ganancia ajustados",
-          "Dependencia de proveedores locales",
-          "Requiere inversión en marketing inicial"
-        ],
-        opportunities: [
-          "Expansión a delivery y pedidos online",
-          "Alianzas con comercios cercanos",
-          "Servicios corporativos y eventos",
-          "Programa de fidelización digital"
-        ],
-        threats: [
-          "Competidores establecidos con marca fuerte",
-          "Fluctuaciones en costos de insumos",
-          "Cambios en hábitos de consumo",
-          "Regulaciones sanitarias más estrictas"
-        ],
-        marketSize: "Mercado local estimado en $2.5M anuales, con crecimiento del 15% anual",
-        competition: "Competencia media-alta. Existen 8-12 negocios similares en la zona, pero hay espacio para diferenciación.",
-        recommendation: "✅ IDEA VIABLE - Tu concepto tiene potencial en el mercado de San Luis. Recomendamos validar con un MVP (Producto Mínimo Viable) antes de invertir fuertemente.",
-        nextSteps: [
-          "Hacer encuestas a 50+ clientes potenciales",
-          "Analizar precios de 3-5 competidores directos",
-          "Calcular costos exactos de operación mensual",
-          "Crear prototipo o prueba piloto de 30 días",
-          "Definir propuesta de valor única"
-        ]
-      };
+    try {
+      const { data, error } = await supabase.functions.invoke('validate-idea', {
+        body: {
+          businessIdea,
+          targetMarket,
+          problem,
+          solution,
+          budget
+        }
+      });
 
-      setResult(mockResult);
-      setLoading(false);
+      if (error) {
+        console.error('Error from edge function:', error);
+        throw error;
+      }
+
+      if (!data) {
+        throw new Error('No data received from AI');
+      }
+
+      setResult(data as ValidationResult);
       
       toast({
         title: "✓ Análisis completo",
         description: "Tu idea ha sido evaluada por nuestra IA",
       });
-    }, 3000);
+    } catch (error: any) {
+      console.error('Validation error:', error);
+      toast({
+        title: "Error",
+        description: error.message || "No se pudo completar el análisis. Intentá de nuevo.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const resetForm = () => {

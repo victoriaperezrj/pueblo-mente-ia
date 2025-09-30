@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -6,6 +6,7 @@ import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
 import { FileText, Download, CheckCircle, Loader2, Sparkles, Target, Users, DollarSign, TrendingUp, Package, Calendar } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Blueprint {
   businessModel: {
@@ -42,143 +43,81 @@ const BusinessBlueprint = () => {
   const [loading, setLoading] = useState(false);
   const [blueprint, setBlueprint] = useState<Blueprint | null>(null);
   const [progress, setProgress] = useState(0);
+  const [businessInfo, setBusinessInfo] = useState<any>(null);
 
-  const handleGenerate = () => {
+  useEffect(() => {
+    loadBusinessInfo();
+  }, []);
+
+  const loadBusinessInfo = async () => {
+    try {
+      const { data: businesses } = await supabase
+        .from("businesses")
+        .select("*")
+        .limit(1)
+        .single();
+
+      if (businesses) {
+        setBusinessInfo(businesses);
+      }
+    } catch (error) {
+      console.error("Error loading business:", error);
+    }
+  };
+
+  const handleGenerate = async () => {
     setLoading(true);
     setProgress(0);
 
-    // Simulate AI generation
+    // Progress animation
     const interval = setInterval(() => {
       setProgress((prev) => {
-        if (prev >= 100) {
+        if (prev >= 90) {
           clearInterval(interval);
-          return 100;
+          return 90;
         }
         return prev + 10;
       });
-    }, 300);
+    }, 400);
 
-    setTimeout(() => {
-      const mockBlueprint: Blueprint = {
-        businessModel: {
-          valueProposition: "Productos de panadería artesanal, frescos y saludables, con opciones sin gluten y veganas, entregados el mismo día.",
-          targetCustomers: [
-            "Familias health-conscious de 30-50 años",
-            "Personas con intolerancias alimentarias",
-            "Consumidores de productos premium locales",
-            "Oficinas que buscan catering saludable"
-          ],
-          channels: [
-            "Tienda física en zona céntrica",
-            "Delivery propio (WhatsApp/Web)",
-            "Instagram y Facebook para pedidos",
-            "Acuerdos con cafeterías locales"
-          ],
-          revenueStreams: [
-            "Venta directa de productos al consumidor final",
-            "Pedidos mayoristas a cafeterías",
-            "Catering para eventos corporativos",
-            "Suscripción mensual de productos selectos"
-          ]
-        },
-        operations: {
-          keyActivities: [
-            "Producción diaria de pan y productos",
-            "Control de calidad de materias primas",
-            "Gestión de pedidos y delivery",
-            "Marketing en redes sociales",
-            "Atención al cliente y postventa"
-          ],
-          keyResources: [
-            "Horno industrial profesional",
-            "Local con habilitación comercial",
-            "Maestro panadero con experiencia",
-            "Sistema de pedidos online",
-            "Vehículo para delivery"
-          ],
-          keyPartners: [
-            "Proveedores de harinas especiales",
-            "Distribuidores de insumos locales",
-            "Plataforma de pagos digitales",
-            "Diseñador gráfico para marketing",
-            "Contador para temas impositivos"
-          ]
-        },
-        financial: {
-          initialInvestment: "$800.000 - $1.200.000",
-          monthlyCosts: "$250.000 - $350.000 (alquiler, sueldos, insumos, servicios)",
-          breakEvenPoint: "6-8 meses con ventas de $400.000/mes",
-          projectedRevenue: "Año 1: $4.8M | Año 2: $7.2M | Año 3: $10.5M"
-        },
-        marketing: {
-          strategies: [
-            "Lanzamiento con degustaciones gratuitas",
-            "Contenido en redes (proceso de elaboración)",
-            "Alianzas con influencers locales saludables",
-            "Promociones para primeros clientes",
-            "Programa de referidos con descuentos",
-            "Email marketing con recetas y ofertas"
-          ],
-          budget: "$50.000 mensuales (primeros 6 meses)",
-          kpis: [
-            "Nuevos clientes por mes: 150-200",
-            "Tasa de retención: >60%",
-            "Ticket promedio: $2.500",
-            "Engagement en redes: >5%"
-          ]
-        },
-        timeline: [
-          {
-            phase: "Preparación y Setup",
-            duration: "Mes 1-2",
-            milestones: [
-              "Obtener habilitaciones municipales",
-              "Acondicionar local y comprar equipamiento",
-              "Contratar personal clave",
-              "Desarrollar recetas y hacer pruebas"
-            ]
-          },
-          {
-            phase: "Lanzamiento Soft",
-            duration: "Mes 3",
-            milestones: [
-              "Apertura con familiares y amigos",
-              "Ajustar procesos operativos",
-              "Recopilar feedback inicial",
-              "Activar redes sociales"
-            ]
-          },
-          {
-            phase: "Lanzamiento Público",
-            duration: "Mes 4",
-            milestones: [
-              "Campaña de marketing de apertura",
-              "Activar delivery y pedidos online",
-              "Buscar primeras alianzas B2B",
-              "Medir métricas clave"
-            ]
-          },
-          {
-            phase: "Crecimiento",
-            duration: "Mes 5-12",
-            milestones: [
-              "Optimizar operaciones",
-              "Expandir línea de productos",
-              "Consolidar alianzas estratégicas",
-              "Alcanzar punto de equilibrio"
-            ]
-          }
-        ]
-      };
+    try {
+      const { data, error } = await supabase.functions.invoke('generate-blueprint', {
+        body: {
+          businessType: businessInfo?.business_type || 'general',
+          businessName: businessInfo?.name || 'Mi Negocio',
+          location: businessInfo?.location || 'San Luis, Argentina'
+        }
+      });
 
-      setBlueprint(mockBlueprint);
-      setLoading(false);
+      clearInterval(interval);
+      setProgress(100);
+
+      if (error) {
+        console.error('Error from edge function:', error);
+        throw error;
+      }
+
+      if (!data) {
+        throw new Error('No data received from AI');
+      }
+
+      setBlueprint(data as Blueprint);
       
       toast({
         title: "✓ Blueprint generado",
         description: "Tu plan de negocio está listo",
       });
-    }, 3500);
+    } catch (error: any) {
+      clearInterval(interval);
+      console.error('Blueprint generation error:', error);
+      toast({
+        title: "Error",
+        description: error.message || "No se pudo generar el blueprint. Intentá de nuevo.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
