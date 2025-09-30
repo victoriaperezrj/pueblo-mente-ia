@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { TrendingUp, Package, Users, Calendar, DollarSign, AlertCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { TrendingUp, Package, Users, Calendar, DollarSign, AlertCircle, Lightbulb, FileText, Calculator } from "lucide-react";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -180,6 +181,66 @@ const Dashboard = () => {
             </div>
           </CardContent>
         </Card>
+      </div>
+
+      {/* AI Tools Section */}
+      <div>
+        <h2 className="text-2xl font-bold mb-4">🤖 Herramientas de IA</h2>
+        <div className="grid md:grid-cols-3 gap-6">
+          <Card
+            className="border-2 hover:border-primary/50 transition-all duration-300 hover:shadow-2xl cursor-pointer group overflow-hidden"
+            onClick={() => navigate("/idea-validator")}
+          >
+            <div className="h-1 bg-gradient-primary" />
+            <CardHeader>
+              <div className="bg-gradient-primary rounded-lg p-3 w-fit mb-3 group-hover:scale-110 transition-transform">
+                <Lightbulb className="h-6 w-6 text-white" />
+              </div>
+              <CardTitle className="group-hover:text-primary transition-colors">
+                Validador de Ideas
+              </CardTitle>
+              <CardDescription>
+                Analizá el potencial de tu negocio con IA
+              </CardDescription>
+            </CardHeader>
+          </Card>
+
+          <Card
+            className="border-2 hover:border-success/50 transition-all duration-300 hover:shadow-2xl cursor-pointer group overflow-hidden"
+            onClick={() => navigate("/business-blueprint")}
+          >
+            <div className="h-1 bg-gradient-success" />
+            <CardHeader>
+              <div className="bg-gradient-success rounded-lg p-3 w-fit mb-3 group-hover:scale-110 transition-transform">
+                <FileText className="h-6 w-6 text-white" />
+              </div>
+              <CardTitle className="group-hover:text-success transition-colors">
+                Business Blueprint
+              </CardTitle>
+              <CardDescription>
+                Plan de negocio completo generado con IA
+              </CardDescription>
+            </CardHeader>
+          </Card>
+
+          <Card
+            className="border-2 hover:border-warning/50 transition-all duration-300 hover:shadow-2xl cursor-pointer group overflow-hidden"
+            onClick={() => navigate("/financial-simulator")}
+          >
+            <div className="h-1 bg-gradient-warm" />
+            <CardHeader>
+              <div className="bg-gradient-warm rounded-lg p-3 w-fit mb-3 group-hover:scale-110 transition-transform">
+                <Calculator className="h-6 w-6 text-white" />
+              </div>
+              <CardTitle className="group-hover:text-warning transition-colors">
+                Simulador Financiero
+              </CardTitle>
+              <CardDescription>
+                Proyectá ventas, costos y rentabilidad
+              </CardDescription>
+            </CardHeader>
+          </Card>
+        </div>
       </div>
 
       {/* AI Insight Card */}

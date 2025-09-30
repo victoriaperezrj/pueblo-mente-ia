@@ -15,6 +15,9 @@ import Appointments from "./pages/Appointments";
 import Marketplace from "./pages/Marketplace";
 import Resources from "./pages/Resources";
 import Settings from "./pages/Settings";
+import IdeaValidator from "./pages/IdeaValidator";
+import BusinessBlueprint from "./pages/BusinessBlueprint";
+import FinancialSimulator from "./pages/FinancialSimulator";
 import DashboardLayout from "./pages/DashboardLayout";
 import NotFound from "./pages/NotFound";
 
@@ -39,6 +42,9 @@ const App = () => (
             <Route path="/marketplace" element={<Marketplace />} />
             <Route path="/resources" element={<Resources />} />
             <Route path="/settings" element={<Settings />} />
+            <Route path="/idea-validator" element={<IdeaValidator />} />
+            <Route path="/business-blueprint" element={<BusinessBlueprint />} />
+            <Route path="/financial-simulator" element={<FinancialSimulator />} />
           </Route>
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
