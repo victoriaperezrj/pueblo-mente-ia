@@ -120,42 +120,42 @@ const Index = () => {
               icon: Zap,
               title: "Validación con IA",
               description: "Validá tu idea de negocio en minutos con análisis inteligente del mercado local",
-              color: "primary",
+              iconColor: "text-primary",
               gradient: "from-primary/10 to-primary/5",
             },
             {
               icon: TrendingUp,
               title: "ERP Completo",
               description: "Ventas, inventario, clientes y turnos. Todo integrado y fácil de usar",
-              color: "success",
+              iconColor: "text-success",
               gradient: "from-success/10 to-success/5",
             },
             {
               icon: Users,
               title: "Marketplace B2B",
               description: "Conectá con proveedores y otros emprendedores de San Luis",
-              color: "warning",
+              iconColor: "text-warning",
               gradient: "from-warning/10 to-warning/5",
             },
             {
               icon: Building2,
               title: "Multi-Negocio",
               description: "Gestioná múltiples emprendimientos desde una sola cuenta",
-              color: "info",
+              iconColor: "text-info",
               gradient: "from-info/10 to-info/5",
             },
             {
               icon: TrendingUp,
               title: "Simulador Financiero",
               description: "Proyectá ventas, costos y rentabilidad antes de invertir",
-              color: "accent",
+              iconColor: "text-accent",
               gradient: "from-accent/10 to-accent/5",
             },
             {
               icon: Users,
               title: "Asistente IA 24/7",
               description: "Respondemos tus dudas sobre regulaciones, precios y estrategias",
-              color: "secondary",
+              iconColor: "text-secondary",
               gradient: "from-secondary/10 to-secondary/5",
             },
           ].map((feature, idx) => (
@@ -165,7 +165,7 @@ const Index = () => {
               style={{ animationDelay: `${idx * 0.1}s` }}
             >
               <div className={`bg-gradient-to-br ${feature.gradient} rounded-xl w-14 h-14 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
-                <feature.icon className={`h-7 w-7 text-${feature.color}`} />
+                <feature.icon className={`h-7 w-7 ${feature.iconColor}`} />
               </div>
               <h3 className="text-2xl font-bold mb-3 group-hover:text-primary transition-colors">
                 {feature.title}

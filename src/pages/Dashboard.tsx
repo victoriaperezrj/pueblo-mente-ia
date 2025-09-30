@@ -36,7 +36,8 @@ const Dashboard = () => {
       value: "$0",
       change: "+0%",
       icon: TrendingUp,
-      color: "success",
+      iconColor: "text-success",
+      textColor: "text-success",
       bgGradient: "from-success/10 to-success/5",
     },
     {
@@ -44,7 +45,8 @@ const Dashboard = () => {
       value: "0",
       change: "Registrados",
       icon: Package,
-      color: "primary",
+      iconColor: "text-primary",
+      textColor: "text-primary",
       bgGradient: "from-primary/10 to-primary/5",
     },
     {
@@ -52,7 +54,8 @@ const Dashboard = () => {
       value: "0",
       change: "Activos",
       icon: Users,
-      color: "warning",
+      iconColor: "text-warning",
+      textColor: "text-warning",
       bgGradient: "from-warning/10 to-warning/5",
     },
     {
@@ -60,7 +63,8 @@ const Dashboard = () => {
       value: "0",
       change: "Pendientes",
       icon: Calendar,
-      color: "info",
+      iconColor: "text-info",
+      textColor: "text-info",
       bgGradient: "from-info/10 to-info/5",
     },
   ];
@@ -91,12 +95,12 @@ const Dashboard = () => {
                   {stat.title}
                 </CardTitle>
                 <div className={`bg-gradient-to-br ${stat.bgGradient} p-2 rounded-lg`}>
-                  <Icon className={`h-5 w-5 text-${stat.color}`} />
+                  <Icon className={`h-5 w-5 ${stat.iconColor}`} />
                 </div>
               </CardHeader>
               <CardContent>
                 <div className="text-3xl font-bold">{stat.value}</div>
-                <p className={`text-xs text-${stat.color} font-medium mt-1`}>
+                <p className={`text-xs ${stat.textColor} font-medium mt-1`}>
                   {stat.change}
                 </p>
               </CardContent>
