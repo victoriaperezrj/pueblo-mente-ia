@@ -4,8 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Calculator, TrendingUp, DollarSign, AlertCircle, CheckCircle, Loader2 } from "lucide-react";
+import { Calculator, TrendingUp, DollarSign, AlertCircle, CheckCircle, Loader2, Sparkles, Target } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { supabase } from "@/integrations/supabase/client";
 
 interface SimulationResult {
   monthlyRevenue: number;
@@ -22,10 +23,20 @@ interface SimulationResult {
   paybackPeriod: number;
 }
 
+interface AIAnalysis {
+  analysis: string;
+  recommendations: string[];
+  risks: string[];
+  opportunities: string[];
+  verdict: string;
+}
+
 const FinancialSimulator = () => {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<SimulationResult | null>(null);
+  const [aiAnalysis, setAiAnalysis] = useState<AIAnalysis | null>(null);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
 
   // Form state
   const [initialInvestment, setInitialInvestment] = useState("");
@@ -85,6 +96,62 @@ const FinancialSimulator = () => {
     }, 2000);
   };
 
+  const generateAIAnalysis = async () => {
+    if (!result) return;
+    
+    setIsAnalyzing(true);
+    
+    try {
+      const { data, error } = await supabase.functions.invoke('simulate-financial', {
+        body: {
+          initialInvestment: parseFloat(initialInvestment),
+          productPrice: parseFloat(productPrice),
+          productCost: parseFloat(productCost),
+          unitsPerMonth: parseFloat(unitsPerMonth),
+          fixedCosts: parseFloat(fixedCosts),
+          variableCosts: parseFloat(variableCosts || "0"),
+          results: {
+            monthlyRevenue: result.monthlyRevenue,
+            yearlyRevenue: result.yearlyProjection.revenue,
+            monthlyCost: result.monthlyCosts,
+            yearlyCost: result.yearlyProjection.costs,
+            monthlyProfit: result.monthlyProfit,
+            yearlyProfit: result.yearlyProjection.profit,
+            profitMargin: result.profitMargin,
+            breakEvenUnits: result.breakEvenUnits,
+            roi: result.roi,
+            paybackPeriod: result.paybackPeriod
+          }
+        }
+      });
+
+      if (error) {
+        console.error('Error from edge function:', error);
+        throw error;
+      }
+
+      if (!data) {
+        throw new Error('No data received from AI');
+      }
+
+      setAiAnalysis(data);
+      
+      toast({
+        title: "✓ Análisis completo",
+        description: "La IA ha analizado tu simulación financiera",
+      });
+    } catch (error: any) {
+      console.error('Analysis error:', error);
+      toast({
+        title: "Error",
+        description: error.message || "No se pudo completar el análisis. Intentá de nuevo.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsAnalyzing(false);
+    }
+  };
+
   const resetForm = () => {
     setInitialInvestment("");
     setProductPrice("");
@@ -93,6 +160,7 @@ const FinancialSimulator = () => {
     setFixedCosts("");
     setVariableCosts("");
     setResult(null);
+    setAiAnalysis(null);
   };
 
   const formatCurrency = (value: number) => {
@@ -413,6 +481,124 @@ const FinancialSimulator = () => {
                   )}
                 </CardContent>
               </Card>
+
+              {/* AI Analysis Button */}
+              {!aiAnalysis && (
+                <Button 
+                  variant="gradient" 
+                  size="lg" 
+                  onClick={generateAIAnalysis}
+                  disabled={isAnalyzing}
+                  className="w-full"
+                >
+                  {isAnalyzing ? (
+                    <>
+                      <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                      Analizando con IA...
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="mr-2 h-5 w-5" />
+                      Obtener Análisis de IA
+                    </>
+                  )}
+                </Button>
+              )}
+
+              {/* AI Analysis Results */}
+              {aiAnalysis && (
+                <div className="space-y-6 animate-fade-in">
+                  {/* Verdict */}
+                  <Card className="border-2 border-primary/30 bg-gradient-to-br from-primary/10 to-secondary/5 overflow-hidden">
+                    <div className="h-1 bg-gradient-hero" />
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <div className="bg-gradient-primary rounded-lg p-2">
+                          <Target className="h-5 w-5 text-white" />
+                        </div>
+                        Veredicto de IA
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-lg font-semibold">{aiAnalysis.verdict}</p>
+                    </CardContent>
+                  </Card>
+
+                  {/* Analysis */}
+                  <Card className="border-2 overflow-hidden">
+                    <div className="h-1 bg-gradient-primary" />
+                    <CardHeader>
+                      <CardTitle>Análisis Detallado</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-sm leading-relaxed whitespace-pre-line">{aiAnalysis.analysis}</p>
+                    </CardContent>
+                  </Card>
+
+                  {/* Recommendations, Risks, Opportunities */}
+                  <div className="grid md:grid-cols-3 gap-6">
+                    <Card className="border-2 border-success/30 overflow-hidden">
+                      <div className="h-1 bg-gradient-success" />
+                      <CardHeader>
+                        <CardTitle className="text-lg flex items-center gap-2">
+                          <CheckCircle className="h-5 w-5 text-success" />
+                          Recomendaciones
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <ul className="space-y-2">
+                          {aiAnalysis.recommendations.map((rec, idx) => (
+                            <li key={idx} className="flex items-start gap-2 text-sm">
+                              <CheckCircle className="h-4 w-4 text-success mt-0.5 flex-shrink-0" />
+                              <span>{rec}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </CardContent>
+                    </Card>
+
+                    <Card className="border-2 border-destructive/30 overflow-hidden">
+                      <div className="h-1 bg-gradient-warm" />
+                      <CardHeader>
+                        <CardTitle className="text-lg flex items-center gap-2">
+                          <AlertCircle className="h-5 w-5 text-destructive" />
+                          Riesgos
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <ul className="space-y-2">
+                          {aiAnalysis.risks.map((risk, idx) => (
+                            <li key={idx} className="flex items-start gap-2 text-sm">
+                              <AlertCircle className="h-4 w-4 text-destructive mt-0.5 flex-shrink-0" />
+                              <span>{risk}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </CardContent>
+                    </Card>
+
+                    <Card className="border-2 border-primary/30 overflow-hidden">
+                      <div className="h-1 bg-gradient-primary" />
+                      <CardHeader>
+                        <CardTitle className="text-lg flex items-center gap-2">
+                          <TrendingUp className="h-5 w-5 text-primary" />
+                          Oportunidades
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <ul className="space-y-2">
+                          {aiAnalysis.opportunities.map((opp, idx) => (
+                            <li key={idx} className="flex items-start gap-2 text-sm">
+                              <CheckCircle className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
+                              <span>{opp}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </div>
+              )}
 
               <Button variant="outline" size="lg" onClick={resetForm} className="w-full">
                 <Calculator className="mr-2 h-5 w-5" />
