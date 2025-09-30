@@ -8,83 +8,83 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* PuebloHub Design System - Ultra Vibrante y Moderno */
+    /* PuebloHub Design System - Inspirado en Salesforce */
     
-    /* Base Colors */
-    --background: 0 0% 100%;
-    --foreground: 222 84% 4.9%;
+    /* Base Colors - Salesforce Style */
+    --background: 0 0% 98%;
+    --foreground: 210 15% 20%;
 
     /* Card System */
     --card: 0 0% 100%;
-    --card-foreground: 222 84% 4.9%;
+    --card-foreground: 210 15% 20%;
 
     /* Popover System */
     --popover: 0 0% 100%;
-    --popover-foreground: 222 84% 4.9%;
+    --popover-foreground: 210 15% 20%;
 
-    /* Primary - Azul Eléctrico */
-    --primary: 221 83% 53%;
+    /* Primary - Salesforce Blue */
+    --primary: 205 100% 45%;
     --primary-foreground: 0 0% 100%;
-    --primary-hover: 221 83% 43%;
-    --primary-light: 221 83% 90%;
+    --primary-hover: 205 100% 35%;
+    --primary-light: 205 100% 95%;
 
-    /* Secondary - Púrpura Vibrante */
-    --secondary: 270 95% 60%;
+    /* Secondary - Salesforce Purple */
+    --secondary: 261 73% 53%;
     --secondary-foreground: 0 0% 100%;
-    --secondary-light: 270 95% 85%;
+    --secondary-light: 261 73% 95%;
 
-    /* Success - Verde Esmeralda */
-    --success: 158 64% 52%;
+    /* Success - Salesforce Green */
+    --success: 155 63% 39%;
     --success-foreground: 0 0% 100%;
-    --success-light: 158 64% 85%;
+    --success-light: 155 63% 95%;
 
-    /* Warning - Naranja Brillante */
-    --warning: 32 98% 56%;
+    /* Warning - Salesforce Orange */
+    --warning: 25 95% 53%;
     --warning-foreground: 0 0% 100%;
-    --warning-light: 32 98% 85%;
+    --warning-light: 25 95% 95%;
 
-    /* Info - Cyan Neón */
-    --info: 188 95% 50%;
+    /* Info - Salesforce Cyan */
+    --info: 190 85% 45%;
     --info-foreground: 0 0% 100%;
-    --info-light: 188 95% 85%;
+    --info-light: 190 85% 95%;
 
-    /* Muted System */
-    --muted: 220 14% 96%;
-    --muted-foreground: 220 8.9% 46.1%;
+    /* Muted System - Salesforce Gray */
+    --muted: 210 16% 93%;
+    --muted-foreground: 210 15% 40%;
 
     /* Accent System */
-    --accent: 340 82% 52%;
-    --accent-foreground: 0 0% 100%;
-    --accent-light: 340 82% 85%;
+    --accent: 210 16% 93%;
+    --accent-foreground: 210 15% 20%;
+    --accent-light: 210 16% 98%;
 
-    /* Destructive System */
-    --destructive: 0 84% 60%;
+    /* Destructive System - Salesforce Red */
+    --destructive: 4 90% 58%;
     --destructive-foreground: 0 0% 100%;
 
-    /* Border & Input */
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
-    --ring: 221 83% 53%;
+    /* Border & Input - Salesforce Style */
+    --border: 210 16% 82%;
+    --input: 210 16% 82%;
+    --ring: 205 100% 45%;
 
     /* Radius */
     --radius: 0.75rem;
 
-    /* Sidebar System */
-    --sidebar-background: 222 84% 4.9%;
+    /* Sidebar System - Salesforce Dark */
+    --sidebar-background: 210 25% 12%;
     --sidebar-foreground: 0 0% 98%;
-    --sidebar-primary: 221 83% 53%;
+    --sidebar-primary: 205 100% 45%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 217 33% 17%;
+    --sidebar-accent: 210 25% 18%;
     --sidebar-accent-foreground: 0 0% 98%;
-    --sidebar-border: 217 33% 17%;
-    --sidebar-ring: 221 83% 53%;
+    --sidebar-border: 210 25% 18%;
+    --sidebar-ring: 205 100% 45%;
 
-    /* Gradients - Ultra Vibrantes */
-    --gradient-primary: linear-gradient(135deg, hsl(221 83% 53%) 0%, hsl(270 95% 60%) 100%);
-    --gradient-success: linear-gradient(135deg, hsl(158 64% 52%) 0%, hsl(188 95% 50%) 100%);
-    --gradient-warm: linear-gradient(135deg, hsl(32 98% 56%) 0%, hsl(340 82% 52%) 100%);
-    --gradient-hero: linear-gradient(135deg, hsl(221 83% 53%) 0%, hsl(270 95% 60%) 50%, hsl(340 82% 52%) 100%);
-    --gradient-card: linear-gradient(145deg, hsl(221 83% 53% / 0.05) 0%, hsl(270 95% 60% / 0.05) 100%);
+    /* Gradients - Salesforce Inspired */
+    --gradient-primary: linear-gradient(135deg, hsl(205 100% 45%) 0%, hsl(261 73% 53%) 100%);
+    --gradient-success: linear-gradient(135deg, hsl(155 63% 39%) 0%, hsl(190 85% 45%) 100%);
+    --gradient-warm: linear-gradient(135deg, hsl(25 95% 53%) 0%, hsl(4 90% 58%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(205 100% 45%) 0%, hsl(261 73% 53%) 50%, hsl(190 85% 45%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(205 100% 45% / 0.03) 0%, hsl(261 73% 53% / 0.03) 100%);
 
     /* Chart Colors */
     --chart-1: 217 91% 60%;
@@ -95,64 +95,64 @@ All colors MUST be HSL.
   }
 
   .dark {
-    --background: 222 84% 4.9%;
-    --foreground: 210 40% 98%;
+    --background: 210 25% 12%;
+    --foreground: 0 0% 98%;
 
-    --card: 217 33% 17%;
-    --card-foreground: 210 40% 98%;
+    --card: 210 25% 18%;
+    --card-foreground: 0 0% 98%;
 
-    --popover: 217 33% 17%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 210 25% 18%;
+    --popover-foreground: 0 0% 98%;
 
-    --primary: 221 83% 53%;
+    --primary: 205 100% 50%;
     --primary-foreground: 0 0% 100%;
-    --primary-hover: 221 83% 63%;
-    --primary-light: 221 83% 25%;
+    --primary-hover: 205 100% 60%;
+    --primary-light: 205 100% 25%;
 
-    --secondary: 270 95% 60%;
+    --secondary: 261 73% 60%;
     --secondary-foreground: 0 0% 100%;
-    --secondary-light: 270 95% 25%;
+    --secondary-light: 261 73% 25%;
 
-    --success: 158 64% 52%;
+    --success: 155 63% 45%;
     --success-foreground: 0 0% 100%;
-    --success-light: 158 64% 25%;
+    --success-light: 155 63% 25%;
 
-    --warning: 32 98% 56%;
+    --warning: 25 95% 60%;
     --warning-foreground: 0 0% 100%;
-    --warning-light: 32 98% 25%;
+    --warning-light: 25 95% 25%;
 
-    --info: 188 95% 50%;
+    --info: 190 85% 50%;
     --info-foreground: 0 0% 100%;
-    --info-light: 188 95% 25%;
+    --info-light: 190 85% 25%;
 
-    --muted: 217 33% 17%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 210 25% 18%;
+    --muted-foreground: 210 16% 65%;
 
-    --accent: 340 82% 52%;
-    --accent-foreground: 0 0% 100%;
-    --accent-light: 340 82% 25%;
+    --accent: 210 25% 18%;
+    --accent-foreground: 0 0% 98%;
+    --accent-light: 210 25% 25%;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 4 90% 58%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 217 33% 17%;
-    --input: 217 33% 17%;
-    --ring: 221 83% 53%;
+    --border: 210 25% 25%;
+    --input: 210 25% 25%;
+    --ring: 205 100% 50%;
 
-    --sidebar-background: 222 84% 4.9%;
-    --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 221 83% 53%;
+    --sidebar-background: 210 25% 12%;
+    --sidebar-foreground: 0 0% 98%;
+    --sidebar-primary: 205 100% 50%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 217 33% 17%;
-    --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 217 33% 17%;
-    --sidebar-ring: 221 83% 53%;
+    --sidebar-accent: 210 25% 18%;
+    --sidebar-accent-foreground: 0 0% 98%;
+    --sidebar-border: 210 25% 18%;
+    --sidebar-ring: 205 100% 50%;
 
-    --gradient-primary: linear-gradient(135deg, hsl(221 83% 53%) 0%, hsl(270 95% 60%) 100%);
-    --gradient-success: linear-gradient(135deg, hsl(158 64% 52%) 0%, hsl(188 95% 50%) 100%);
-    --gradient-warm: linear-gradient(135deg, hsl(32 98% 56%) 0%, hsl(340 82% 52%) 100%);
-    --gradient-hero: linear-gradient(135deg, hsl(221 83% 53%) 0%, hsl(270 95% 60%) 50%, hsl(340 82% 52%) 100%);
-    --gradient-card: linear-gradient(145deg, hsl(221 83% 53% / 0.1) 0%, hsl(270 95% 60% / 0.1) 100%);
+    --gradient-primary: linear-gradient(135deg, hsl(205 100% 50%) 0%, hsl(261 73% 60%) 100%);
+    --gradient-success: linear-gradient(135deg, hsl(155 63% 45%) 0%, hsl(190 85% 50%) 100%);
+    --gradient-warm: linear-gradient(135deg, hsl(25 95% 60%) 0%, hsl(4 90% 58%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(205 100% 50%) 0%, hsl(261 73% 60%) 50%, hsl(190 85% 50%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(205 100% 50% / 0.1) 0%, hsl(261 73% 60% / 0.1) 100%);
 
     --chart-1: 217 91% 60%;
     --chart-2: 142 76% 36%;
