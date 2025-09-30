@@ -11,11 +11,91 @@ serve(async (req) => {
   }
 
   try {
-    const { businessType, businessName, location } = await req.json();
+    const { businessType, businessName, location, businessId } = await req.json();
     
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
+    const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
+    const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+    
     if (!LOVABLE_API_KEY) {
       throw new Error("LOVABLE_API_KEY not configured");
+    }
+
+    // Fetch business context if businessId provided
+    let businessContext = "";
+    if (businessId && SUPABASE_URL && SUPABASE_SERVICE_ROLE_KEY) {
+      try {
+        const { createClient } = await import("https://esm.sh/@supabase/supabase-js@2");
+        const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+        
+        // Get business info
+        const { data: business } = await supabase
+          .from("businesses")
+          .select("*")
+          .eq("id", businessId)
+          .single();
+
+        // Get recent sales (last 7 days)
+        const sevenDaysAgo = new Date();
+        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+        
+        const { data: recentSales } = await supabase
+          .from("sales")
+          .select("total_amount, created_at")
+          .eq("business_id", businessId)
+          .gte("created_at", sevenDaysAgo.toISOString());
+
+        // Get products
+        const { data: products } = await supabase
+          .from("products")
+          .select("name, current_stock, selling_price")
+          .eq("business_id", businessId)
+          .order("selling_price", { ascending: false })
+          .limit(5);
+
+        const totalSales = recentSales?.reduce((sum: number, sale: any) => sum + parseFloat(sale.total_amount || 0), 0) || 0;
+        const lowStockProducts = products?.filter((p: any) => (p.current_stock || 0) < 10) || [];
+
+        businessContext = `\n\nCONTEXTO DEL NEGOCIO (últimos 7 días):
+- Ventas totales: $${totalSales.toFixed(2)}
+- Número de transacciones: ${recentSales?.length || 0}
+- Productos top: ${products?.map((p: any) => p.name).join(", ") || "Sin productos"}
+- Productos con stock bajo: ${lowStockProducts.map((p: any) => `${p.name} (${p.current_stock})`).join(", ") || "Ninguno"}`;
+      } catch (error) {
+        console.error("Error fetching business context:", error);
+        // Continue without context
+      }
+    }
+
+    // Fetch regulatory info for the business type and location
+    let regulatoryInfo = "";
+    if (SUPABASE_URL && SUPABASE_SERVICE_ROLE_KEY) {
+      try {
+        const { createClient } = await import("https://esm.sh/@supabase/supabase-js@2");
+        const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+        
+        const province = location?.includes("San Luis") ? "San Luis" : location?.split(",")[0]?.trim() || "San Luis";
+        
+        const { data: permits } = await supabase
+          .from("regulatory_info")
+          .select("*")
+          .eq("province", province)
+          .or(`business_type.eq.${businessType},business_type.is.null`)
+          .eq("required", true);
+
+        if (permits && permits.length > 0) {
+          const totalCost = permits.reduce((sum: number, p: any) => sum + (p.cost_estimate_ars || 0), 0);
+          const maxDays = Math.max(...permits.map((p: any) => p.processing_days || 0));
+          
+          regulatoryInfo = `\n\nREQUISITOS REGULATORIOS PARA ${province}:
+${permits.map((p: any) => `- ${p.permit_name}: $${p.cost_estimate_ars || 0} (${p.processing_days || 0} días de trámite)\n  ${p.description}`).join("\n")}
+TOTAL ESTIMADO EN PERMISOS: $${totalCost}
+TIEMPO TOTAL DE TRAMITACIÓN: ~${maxDays} días`;
+        }
+      } catch (error) {
+        console.error("Error fetching regulatory info:", error);
+        // Continue without regulatory info
+      }
     }
 
     const prompt = `Actúa como un consultor de negocios experto creando un plan de negocio completo.
@@ -23,7 +103,7 @@ serve(async (req) => {
 NEGOCIO:
 Tipo: ${businessType || 'Emprendimiento general'}
 Nombre: ${businessName || 'Mi Negocio'}
-Ubicación: ${location || 'San Luis, Argentina'}
+Ubicación: ${location || 'San Luis, Argentina'}${businessContext}${regulatoryInfo}
 
 INSTRUCCIONES:
 Genera un Business Blueprint completo y detallado para este negocio en formato JSON con la siguiente estructura EXACTA:

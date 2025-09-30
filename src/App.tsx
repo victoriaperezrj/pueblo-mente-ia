@@ -13,6 +13,7 @@ import Sales from "./pages/Sales";
 import Customers from "./pages/Customers";
 import Appointments from "./pages/Appointments";
 import Marketplace from "./pages/Marketplace";
+import Integrations from "./pages/Integrations";
 import Resources from "./pages/Resources";
 import Settings from "./pages/Settings";
 import IdeaValidator from "./pages/IdeaValidator";
@@ -40,6 +41,7 @@ const App = () => (
             <Route path="/expenses" element={<Expenses />} />
             <Route path="/appointments" element={<Appointments />} />
             <Route path="/marketplace" element={<Marketplace />} />
+            <Route path="/integrations" element={<Integrations />} />
             <Route path="/resources" element={<Resources />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/idea-validator" element={<IdeaValidator />} />
