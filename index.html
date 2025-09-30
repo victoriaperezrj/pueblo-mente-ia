@@ -3,6 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="/src/main.tsx" as="script" crossorigin />
+    <link rel="modulepreload" href="/src/App.tsx" />
+    <link rel="preload" href="/src/index.css" as="style" />
+    
     <title>PuebloHub - Plataforma de Gestión Empresarial con IA</title>
     <meta name="description" content="Plataforma integral para emprendedores de San Luis. Validá tu idea, gestioná ventas, inventario y más con inteligencia artificial." />
     <meta name="author" content="PuebloHub" />
