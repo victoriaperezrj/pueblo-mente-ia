@@ -27,6 +27,7 @@ import DataBackup from "./pages/DataBackup";
 import EntrepreneurStep1 from "./pages/onboarding/EntrepreneurStep1";
 import EntrepreneurAnalyzing from "./pages/onboarding/EntrepreneurAnalyzing";
 import EntrepreneurResults from "./pages/onboarding/EntrepreneurResults";
+import EntrepreneurBusinessPlan from "./pages/onboarding/EntrepreneurBusinessPlan";
 
 const queryClient = new QueryClient();
 
@@ -44,6 +45,7 @@ const App = () => (
           <Route path="/onboarding/entrepreneur/step1" element={<EntrepreneurStep1 />} />
           <Route path="/onboarding/entrepreneur/analyzing" element={<EntrepreneurAnalyzing />} />
           <Route path="/onboarding/entrepreneur/results" element={<EntrepreneurResults />} />
+          <Route path="/onboarding/entrepreneur/business-plan" element={<EntrepreneurBusinessPlan />} />
           <Route element={<DashboardLayout />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/sales" element={<Sales />} />
