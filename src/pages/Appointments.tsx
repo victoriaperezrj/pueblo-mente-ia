@@ -12,6 +12,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Calendar, Plus, Clock, User, Phone, Mail, Trash2, CheckCircle } from "lucide-react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
+import { z } from "zod";
 
 interface Appointment {
   id: string;
@@ -33,6 +34,34 @@ const STATUS_OPTIONS = [
   { value: "completed", label: "Completado", color: "primary" },
   { value: "cancelled", label: "Cancelado", color: "destructive" },
 ];
+
+const appointmentSchema = z.object({
+  customerName: z.string()
+    .trim()
+    .min(1, "El nombre del cliente es obligatorio")
+    .max(100, "El nombre no puede exceder 100 caracteres"),
+  customerPhone: z.string()
+    .trim()
+    .regex(/^[\d\s\-\+\(\)]*$/, "Formato de teléfono inválido")
+    .max(20, "El teléfono no puede exceder 20 caracteres")
+    .optional()
+    .or(z.literal("")),
+  customerEmail: z.string()
+    .trim()
+    .email("Email inválido")
+    .max(255, "El email no puede exceder 255 caracteres")
+    .optional()
+    .or(z.literal("")),
+  service: z.string()
+    .trim()
+    .min(1, "El servicio es obligatorio")
+    .max(100, "El servicio no puede exceder 100 caracteres"),
+  notes: z.string()
+    .trim()
+    .max(500, "Las notas no pueden exceder 500 caracteres")
+    .optional()
+    .or(z.literal(""))
+});
 
 const Appointments = () => {
   const { toast } = useToast();
@@ -100,19 +129,39 @@ const Appointments = () => {
     e.preventDefault();
     if (!currentBusiness) return;
 
+    // Validar con Zod
+    const validation = appointmentSchema.safeParse({
+      customerName,
+      customerPhone,
+      customerEmail,
+      service,
+      notes
+    });
+
+    if (!validation.success) {
+      const firstError = validation.error.errors[0];
+      toast({
+        title: "Error de validación",
+        description: firstError.message,
+        variant: "destructive",
+      });
+      return;
+    }
+
     try {
+      const validatedData = validation.data;
       const { data: appointmentData, error } = await supabase
         .from("appointments")
         .insert({
           business_id: currentBusiness,
-          customer_name: customerName,
-          customer_phone: customerPhone,
-          customer_email: customerEmail,
+          customer_name: validatedData.customerName,
+          customer_phone: validatedData.customerPhone || null,
+          customer_email: validatedData.customerEmail || null,
           appointment_date: appointmentDate,
           start_time: startTime,
           end_time: endTime,
-          service,
-          notes,
+          service: validatedData.service,
+          notes: validatedData.notes || null,
           status: "pending"
         })
         .select()
@@ -129,8 +178,8 @@ const Appointments = () => {
           business_id: currentBusiness,
           payload: {
             appointment_id: appointmentData.id,
-            customer_name: customerName,
-            service,
+            customer_name: validatedData.customerName,
+            service: validatedData.service,
             appointment_date: appointmentDate,
             start_time: startTime,
             timestamp: new Date().toISOString(),

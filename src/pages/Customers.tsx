@@ -11,6 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Users, Plus, Mail, Phone, MapPin, Trash2 } from "lucide-react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
+import { z } from "zod";
 
 interface Customer {
   id: string;
@@ -23,6 +24,30 @@ interface Customer {
   last_visit: string | null;
   created_at: string;
 }
+
+const customerSchema = z.object({
+  name: z.string()
+    .trim()
+    .min(1, "El nombre es obligatorio")
+    .max(100, "El nombre no puede exceder 100 caracteres"),
+  phone: z.string()
+    .trim()
+    .regex(/^[\d\s\-\+\(\)]*$/, "Formato de teléfono inválido")
+    .max(20, "El teléfono no puede exceder 20 caracteres")
+    .optional()
+    .or(z.literal("")),
+  email: z.string()
+    .trim()
+    .email("Email inválido")
+    .max(255, "El email no puede exceder 255 caracteres")
+    .optional()
+    .or(z.literal("")),
+  address: z.string()
+    .trim()
+    .max(200, "La dirección no puede exceder 200 caracteres")
+    .optional()
+    .or(z.literal(""))
+});
 
 const Customers = () => {
   const { toast } = useToast();
@@ -86,15 +111,34 @@ const Customers = () => {
     e.preventDefault();
     if (!currentBusiness) return;
 
+    // Validar con Zod
+    const validation = customerSchema.safeParse({
+      name,
+      phone,
+      email,
+      address
+    });
+
+    if (!validation.success) {
+      const firstError = validation.error.errors[0];
+      toast({
+        title: "Error de validación",
+        description: firstError.message,
+        variant: "destructive",
+      });
+      return;
+    }
+
     try {
+      const validatedData = validation.data;
       const { data: customerData, error } = await supabase
         .from("customers")
         .insert({
           business_id: currentBusiness,
-          name,
-          phone,
-          email,
-          address,
+          name: validatedData.name,
+          phone: validatedData.phone || null,
+          email: validatedData.email || null,
+          address: validatedData.address || null,
           tags: ["Nuevo"],
         })
         .select()
@@ -111,9 +155,9 @@ const Customers = () => {
           business_id: currentBusiness,
           payload: {
             customer_id: customerData.id,
-            name,
-            phone,
-            email,
+            name: validatedData.name,
+            phone: validatedData.phone,
+            email: validatedData.email,
             timestamp: new Date().toISOString(),
           },
         });
@@ -158,7 +202,16 @@ const Customers = () => {
 
   const handleWhatsApp = (phone: string) => {
     if (!phone) return;
+    // Sanitizar y validar el teléfono antes de abrir WhatsApp
     const cleanPhone = phone.replace(/\D/g, "");
+    if (cleanPhone.length < 6 || cleanPhone.length > 15) {
+      toast({
+        title: "Error",
+        description: "Número de teléfono inválido",
+        variant: "destructive",
+      });
+      return;
+    }
     window.open(`https://wa.me/549${cleanPhone}`, "_blank");
   };
 

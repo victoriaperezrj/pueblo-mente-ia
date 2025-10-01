@@ -11,6 +11,46 @@ import { Progress } from "@/components/ui/progress";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useToast } from "@/hooks/use-toast";
 import { ArrowLeft, Lightbulb } from "lucide-react";
+import { z } from "zod";
+
+const sanLuisCities = [
+  "San Luis (capital)",
+  "Villa Mercedes",
+  "Merlo",
+  "La Punta",
+  "Juana Koslay",
+  "El Trapiche",
+  "Potrero de los Funes",
+  "Concarán",
+  "Tilisarao",
+  "Otra ciudad"
+];
+
+const industries = [
+  "Gastronomía (panadería, restaurante, café)",
+  "Belleza y Estética (peluquería, spa, barbería)",
+  "Retail (almacén, kiosco, tienda)",
+  "Servicios Profesionales (consultoría, contabilidad)",
+  "Salud y Bienestar (gimnasio, nutrición)",
+  "Educación (instituto, clases particulares)",
+  "Tecnología (desarrollo, diseño, marketing digital)",
+  "Construcción y Mantenimiento",
+  "Otro"
+];
+
+const ideaFormSchema = z.object({
+  ideaDescription: z.string()
+    .trim()
+    .min(50, "La descripción debe tener al menos 50 caracteres")
+    .max(500, "La descripción no puede exceder 500 caracteres"),
+  location: z.enum(sanLuisCities as [string, ...string[]], {
+    errorMap: () => ({ message: "Seleccioná una ubicación válida" })
+  }),
+  industry: z.enum(industries as [string, ...string[]], {
+    errorMap: () => ({ message: "Seleccioná un rubro válido" })
+  }),
+  experience: z.string().optional()
+});
 
 const EntrepreneurStep1 = () => {
   const navigate = useNavigate();
@@ -21,47 +61,22 @@ const EntrepreneurStep1 = () => {
   const [industry, setIndustry] = useState("");
   const [experience, setExperience] = useState("");
 
-  const sanLuisCities = [
-    "San Luis",
-    "Villa Mercedes",
-    "Merlo",
-    "La Punta",
-    "Juana Koslay",
-    "El Trapiche",
-    "Potrero de los Funes",
-    "Concarán",
-    "Tilisarao",
-    "Otra ciudad"
-  ];
-
-  const industries = [
-    "Gastronomía (panadería, restaurante, café)",
-    "Belleza y Estética (peluquería, spa, barbería)",
-    "Retail (almacén, kiosco, tienda)",
-    "Servicios Profesionales (consultoría, contabilidad)",
-    "Salud y Bienestar (gimnasio, nutrición)",
-    "Educación (instituto, clases particulares)",
-    "Tecnología (desarrollo, diseño, marketing digital)",
-    "Construcción y Mantenimiento",
-    "Otro"
-  ];
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (ideaDescription.length < 50) {
-      toast({
-        title: "Descripción muy corta",
-        description: "Por favor, contanos más sobre tu idea (mínimo 50 caracteres)",
-        variant: "destructive",
-      });
-      return;
-    }
 
-    if (!location || !industry) {
+    // Validar con Zod
+    const validation = ideaFormSchema.safeParse({
+      ideaDescription,
+      location,
+      industry,
+      experience
+    });
+
+    if (!validation.success) {
+      const firstError = validation.error.errors[0];
       toast({
-        title: "Faltan datos",
-        description: "Por favor completá todos los campos",
+        title: "Error de validación",
+        description: firstError.message,
         variant: "destructive",
       });
       return;
@@ -69,6 +84,7 @@ const EntrepreneurStep1 = () => {
 
     setLoading(true);
     try {
+      const validatedData = validation.data;
       const { data: { user } } = await supabase.auth.getUser();
       
       if (!user) {
@@ -84,9 +100,10 @@ const EntrepreneurStep1 = () => {
         .from('business_ideas')
         .insert({
           user_id: user.id,
-          idea_description: ideaDescription,
-          location: location,
-          industry: industry,
+          idea_description: validatedData.ideaDescription,
+          location: validatedData.location,
+          industry: validatedData.industry,
+          has_experience: validatedData.experience,
         })
         .select()
         .single();
