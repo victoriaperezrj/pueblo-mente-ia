@@ -58,7 +58,7 @@ const Auth = () => {
       }
 
       // Redirect to onboarding/classify
-      navigate("/onboarding");
+      navigate("/onboarding/classify");
     } catch (error: any) {
       console.error('Error checking/creating profile:', error);
       toast({
