@@ -442,6 +442,7 @@ export type Database = {
           location: string | null
           phone: string | null
           updated_at: string | null
+          user_type: Database["public"]["Enums"]["user_type"] | null
         }
         Insert: {
           created_at?: string | null
@@ -450,6 +451,7 @@ export type Database = {
           location?: string | null
           phone?: string | null
           updated_at?: string | null
+          user_type?: Database["public"]["Enums"]["user_type"] | null
         }
         Update: {
           created_at?: string | null
@@ -458,6 +460,7 @@ export type Database = {
           location?: string | null
           phone?: string | null
           updated_at?: string | null
+          user_type?: Database["public"]["Enums"]["user_type"] | null
         }
         Relationships: []
       }
@@ -567,6 +570,7 @@ export type Database = {
         | "pharmacy"
         | "other"
       setup_stage: "idea_validation" | "blueprint" | "operational"
+      user_type: "entrepreneur" | "business_owner"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -703,6 +707,7 @@ export const Constants = {
         "other",
       ],
       setup_stage: ["idea_validation", "blueprint", "operational"],
+      user_type: ["entrepreneur", "business_owner"],
     },
   },
 } as const

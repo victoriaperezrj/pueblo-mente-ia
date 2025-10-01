@@ -31,16 +31,33 @@ const DashboardLayout = () => {
         return;
       }
 
-      // Check if user has any businesses
-      const { data: businesses, error } = await supabase
-        .from("businesses")
-        .select("id")
-        .limit(1);
+      // Check if user has completed onboarding (selected user_type)
+      const { data: profile, error: profileError } = await supabase
+        .from("profiles")
+        .select("user_type")
+        .eq("id", session.user.id)
+        .single();
 
-      if (error) throw error;
+      if (profileError) throw profileError;
 
-      if (!businesses || businesses.length === 0) {
-        setNeedsOnboarding(true);
+      // If user hasn't selected their type, redirect to onboarding
+      if (!profile?.user_type) {
+        navigate("/onboarding");
+        return;
+      }
+
+      // Check if user has any businesses (only for business_owner)
+      if (profile.user_type === 'business_owner') {
+        const { data: businesses, error } = await supabase
+          .from("businesses")
+          .select("id")
+          .limit(1);
+
+        if (error) throw error;
+
+        if (!businesses || businesses.length === 0) {
+          setNeedsOnboarding(true);
+        }
       }
     } catch (error) {
       console.error("Error checking business:", error);
