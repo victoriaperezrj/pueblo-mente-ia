@@ -8,6 +8,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { Building2, Loader2 } from "lucide-react";
+import { PasswordStrengthIndicator, validatePasswordStrength } from "@/components/PasswordStrengthIndicator";
+import { z } from "zod";
+
+const passwordSchema = z.string()
+  .min(8, "La contraseña debe tener al menos 8 caracteres")
+  .regex(/[A-Z]/, "Debe incluir al menos una letra mayúscula")
+  .regex(/[a-z]/, "Debe incluir al menos una letra minúscula")
+  .regex(/[0-9]/, "Debe incluir al menos un número");
 
 const Auth = () => {
   const navigate = useNavigate();
@@ -71,9 +79,24 @@ const Auth = () => {
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validate password strength before submitting
+    const passwordValidation = validatePasswordStrength(password);
+    if (!passwordValidation.isValid) {
+      toast({
+        title: "Contraseña débil",
+        description: passwordValidation.errors[0],
+        variant: "destructive",
+      });
+      return;
+    }
+
     setLoading(true);
 
     try {
+      // Validate with Zod schema
+      passwordSchema.parse(password);
+
       const { error } = await supabase.auth.signUp({
         email,
         password,
@@ -92,11 +115,19 @@ const Auth = () => {
         description: "Iniciá sesión para comenzar.",
       });
     } catch (error: any) {
-      toast({
-        title: "Error al registrarse",
-        description: error.message,
-        variant: "destructive",
-      });
+      if (error instanceof z.ZodError) {
+        toast({
+          title: "Contraseña inválida",
+          description: error.errors[0].message,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Error al registrarse",
+          description: error.message,
+          variant: "destructive",
+        });
+      }
     } finally {
       setLoading(false);
     }
@@ -278,13 +309,14 @@ const Auth = () => {
                   <Input
                     id="signup-password"
                     type="password"
-                    placeholder="Mínimo 6 caracteres"
+                    placeholder="Mínimo 8 caracteres con mayúscula, minúscula y número"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    minLength={6}
+                    minLength={8}
                     className="h-11"
                   />
+                  <PasswordStrengthIndicator password={password} showRequirements={true} />
                 </div>
                 <Button 
                   type="submit" 
