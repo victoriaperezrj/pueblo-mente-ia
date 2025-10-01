@@ -28,6 +28,7 @@ import EntrepreneurStep1 from "./pages/onboarding/EntrepreneurStep1";
 import EntrepreneurAnalyzing from "./pages/onboarding/EntrepreneurAnalyzing";
 import EntrepreneurResults from "./pages/onboarding/EntrepreneurResults";
 import EntrepreneurBusinessPlan from "./pages/onboarding/EntrepreneurBusinessPlan";
+import EntrepreneurDashboard from "./pages/entrepreneur/Dashboard";
 
 const queryClient = new QueryClient();
 
@@ -47,6 +48,7 @@ const App = () => (
           <Route path="/onboarding/entrepreneur/results" element={<EntrepreneurResults />} />
           <Route path="/onboarding/entrepreneur/business-plan" element={<EntrepreneurBusinessPlan />} />
           <Route path="/onboarding/entrepreneur/financial-simulator" element={<FinancialSimulator />} />
+          <Route path="/entrepreneur/dashboard" element={<EntrepreneurDashboard />} />
           <Route element={<DashboardLayout />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/sales" element={<Sales />} />
