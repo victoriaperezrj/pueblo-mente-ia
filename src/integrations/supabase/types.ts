@@ -70,6 +70,51 @@ export type Database = {
           },
         ]
       }
+      business_connections: {
+        Row: {
+          created_at: string
+          id: string
+          message: string | null
+          requester_business_id: string
+          status: string
+          target_business_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          message?: string | null
+          requester_business_id: string
+          status?: string
+          target_business_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          message?: string | null
+          requester_business_id?: string
+          status?: string
+          target_business_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "business_connections_requester_business_id_fkey"
+            columns: ["requester_business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "business_connections_target_business_id_fkey"
+            columns: ["target_business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       business_ideas: {
         Row: {
           created_at: string | null
@@ -103,9 +148,52 @@ export type Database = {
         }
         Relationships: []
       }
+      business_messages: {
+        Row: {
+          connection_id: string
+          created_at: string
+          id: string
+          message: string
+          read: boolean
+          sender_business_id: string
+        }
+        Insert: {
+          connection_id: string
+          created_at?: string
+          id?: string
+          message: string
+          read?: boolean
+          sender_business_id: string
+        }
+        Update: {
+          connection_id?: string
+          created_at?: string
+          id?: string
+          message?: string
+          read?: boolean
+          sender_business_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "business_messages_connection_id_fkey"
+            columns: ["connection_id"]
+            isOneToOne: false
+            referencedRelation: "business_connections"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "business_messages_sender_business_id_fkey"
+            columns: ["sender_business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       businesses: {
         Row: {
           business_type: Database["public"]["Enums"]["business_type"]
+          contact_visibility: Database["public"]["Enums"]["contact_visibility"]
           created_at: string | null
           id: string
           location: string | null
@@ -116,6 +204,7 @@ export type Database = {
         }
         Insert: {
           business_type: Database["public"]["Enums"]["business_type"]
+          contact_visibility?: Database["public"]["Enums"]["contact_visibility"]
           created_at?: string | null
           id?: string
           location?: string | null
@@ -126,6 +215,7 @@ export type Database = {
         }
         Update: {
           business_type?: Database["public"]["Enums"]["business_type"]
+          contact_visibility?: Database["public"]["Enums"]["contact_visibility"]
           created_at?: string | null
           id?: string
           location?: string | null
@@ -602,6 +692,7 @@ export type Database = {
         | "restaurant"
         | "pharmacy"
         | "other"
+      contact_visibility: "public" | "marketplace_only" | "private"
       setup_stage: "idea_validation" | "blueprint" | "operational"
       user_type: "entrepreneur" | "business_owner"
     }
@@ -739,6 +830,7 @@ export const Constants = {
         "pharmacy",
         "other",
       ],
+      contact_visibility: ["public", "marketplace_only", "private"],
       setup_stage: ["idea_validation", "blueprint", "operational"],
       user_type: ["entrepreneur", "business_owner"],
     },

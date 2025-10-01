@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -7,16 +8,21 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Search, MapPin, Phone, Mail, Star, Package, Plus, ShoppingCart, Store } from "lucide-react";
+import { Search, MapPin, Package, Plus, ShoppingCart, Users, Lock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { ConnectionRequestDialog } from "@/components/ConnectionRequestDialog";
+import { ConnectionsList } from "@/components/ConnectionsList";
 
 const Marketplace = () => {
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [listings, setListings] = useState<any[]>([]);
   const [requests, setRequests] = useState<any[]>([]);
   const [businessId, setBusinessId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [selectedListing, setSelectedListing] = useState<any>(null);
+  const [connectionDialogOpen, setConnectionDialogOpen] = useState(false);
   const [newListing, setNewListing] = useState({
     product_name: "",
     description: "",
@@ -39,24 +45,44 @@ const Marketplace = () => {
 
   const loadData = async () => {
     try {
-      // Get user's business
+      // Check authentication
       const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        const { data: businesses } = await supabase
-          .from("businesses")
-          .select("id")
-          .eq("user_id", user.id)
-          .limit(1);
-        
-        if (businesses && businesses.length > 0) {
-          setBusinessId(businesses[0].id);
-        }
+      
+      if (!user) {
+        toast({
+          title: "Autenticación requerida",
+          description: "Necesitás iniciar sesión para acceder al marketplace",
+          variant: "destructive",
+        });
+        navigate("/auth");
+        return;
       }
 
-      // Load listings
+      // Get user's business
+      const { data: businesses } = await supabase
+        .from("businesses")
+        .select("id")
+        .eq("user_id", user.id)
+        .limit(1);
+      
+      if (businesses && businesses.length > 0) {
+        setBusinessId(businesses[0].id);
+      }
+
+      // Load listings (only for authenticated users now)
       const { data: listingsData } = await supabase
         .from("marketplace_listings")
-        .select("*, businesses(name)")
+        .select(`
+          id,
+          product_name,
+          description,
+          category,
+          price_per_unit,
+          min_quantity,
+          created_at,
+          seller_business_id,
+          businesses!seller_business_id(name)
+        `)
         .eq("active", true)
         .order("created_at", { ascending: false });
       
@@ -185,9 +211,13 @@ const Marketplace = () => {
       </div>
 
       <Tabs defaultValue="listings" className="w-full">
-        <TabsList className="grid w-full grid-cols-2">
+        <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="listings">📦 Publicaciones ({listings.length})</TabsTrigger>
           <TabsTrigger value="requests">🛒 Solicitudes ({requests.length})</TabsTrigger>
+          <TabsTrigger value="connections">
+            <Users className="h-4 w-4 mr-2" />
+            Conexiones
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="listings" className="space-y-4">
@@ -293,21 +323,31 @@ const Marketplace = () => {
                   </CardHeader>
                   <CardContent className="space-y-3">
                     <p className="text-sm text-muted-foreground">{listing.description}</p>
-                    <div className="flex items-center gap-2 text-sm">
-                      <MapPin className="h-4 w-4 text-muted-foreground" />
-                      <span>{listing.location}</span>
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <Lock className="h-3 w-3" />
+                      <span className="italic">Ubicación protegida - Solicita conexión</span>
                     </div>
                     <div className="border-t pt-3 flex justify-between items-center">
-                      <div>
-                        <p className="text-2xl font-bold text-primary">
-                          ${parseFloat(listing.price_per_unit || 0).toFixed(2)}
-                        </p>
-                        <p className="text-xs text-muted-foreground">
-                          Mín: {listing.min_quantity} unidades
-                        </p>
-                      </div>
-                      <Button size="sm">Contactar</Button>
-                    </div>
+                       <div>
+                         <p className="text-2xl font-bold text-primary">
+                           ${parseFloat(listing.price_per_unit || 0).toFixed(2)}
+                         </p>
+                         <p className="text-xs text-muted-foreground">
+                           Mín: {listing.min_quantity} unidades
+                         </p>
+                       </div>
+                       {listing.seller_business_id !== businessId && (
+                         <Button 
+                           size="sm"
+                           onClick={() => {
+                             setSelectedListing(listing);
+                             setConnectionDialogOpen(true);
+                           }}
+                         >
+                           Solicitar Contacto
+                         </Button>
+                       )}
+                     </div>
                   </CardContent>
                 </Card>
               ))}
@@ -422,7 +462,35 @@ const Marketplace = () => {
             </Card>
           )}
         </TabsContent>
+
+        <TabsContent value="connections">
+          {businessId ? (
+            <ConnectionsList currentBusinessId={businessId} />
+          ) : (
+            <Card className="p-8 text-center">
+              <p className="text-muted-foreground">
+                Necesitás crear un negocio primero para gestionar conexiones
+              </p>
+            </Card>
+          )}
+        </TabsContent>
       </Tabs>
+
+      {selectedListing && businessId && (
+        <ConnectionRequestDialog
+          open={connectionDialogOpen}
+          onOpenChange={setConnectionDialogOpen}
+          targetBusinessId={selectedListing.seller_business_id}
+          targetBusinessName={selectedListing.businesses?.name || "Este negocio"}
+          currentBusinessId={businessId}
+          onSuccess={() => {
+            toast({
+              title: "¡Solicitud enviada!",
+              description: "El vendedor recibirá tu solicitud de conexión",
+            });
+          }}
+        />
+      )}
     </div>
   );
 };
