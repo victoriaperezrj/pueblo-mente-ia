@@ -6,9 +6,11 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Progress } from "@/components/ui/progress";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useToast } from "@/hooks/use-toast";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Lightbulb } from "lucide-react";
 
 const EntrepreneurStep1 = () => {
   const navigate = useNavigate();
@@ -17,28 +19,30 @@ const EntrepreneurStep1 = () => {
   const [ideaDescription, setIdeaDescription] = useState("");
   const [location, setLocation] = useState("");
   const [industry, setIndustry] = useState("");
+  const [experience, setExperience] = useState("");
 
   const sanLuisCities = [
     "San Luis",
     "Villa Mercedes",
     "Merlo",
     "La Punta",
-    "Justo Daract",
+    "Juana Koslay",
+    "El Trapiche",
+    "Potrero de los Funes",
     "Concarán",
-    "Santa Rosa del Conlara",
-    "Villa de la Quebrada",
     "Tilisarao",
-    "Quines"
+    "Otra ciudad"
   ];
 
   const industries = [
-    "Gastronomía",
-    "Belleza",
-    "Retail",
-    "Servicios",
-    "Salud",
-    "Educación",
-    "Tecnología",
+    "Gastronomía (panadería, restaurante, café)",
+    "Belleza y Estética (peluquería, spa, barbería)",
+    "Retail (almacén, kiosco, tienda)",
+    "Servicios Profesionales (consultoría, contabilidad)",
+    "Salud y Bienestar (gimnasio, nutrición)",
+    "Educación (instituto, clases particulares)",
+    "Tecnología (desarrollo, diseño, marketing digital)",
+    "Construcción y Mantenimiento",
     "Otro"
   ];
 
@@ -76,18 +80,20 @@ const EntrepreneurStep1 = () => {
         return;
       }
 
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from('business_ideas')
         .insert({
           user_id: user.id,
           idea_description: ideaDescription,
           location: location,
           industry: industry,
-        });
+        })
+        .select()
+        .single();
 
       if (error) throw error;
 
-      navigate('/onboarding/entrepreneur/analyzing');
+      navigate(`/onboarding/entrepreneur/analyzing?ideaId=${data.id}`);
     } catch (error: any) {
       console.error('Error saving idea:', error);
       toast({
@@ -123,19 +129,26 @@ const EntrepreneurStep1 = () => {
           
           <div className="text-center space-y-2">
             <h1 className="text-3xl md:text-4xl font-bold">
-              Cuéntanos tu Idea 💡
+              Paso 1: Contanos tu idea
             </h1>
             <p className="text-muted-foreground">
-              Mientras más detalles nos des, mejor podremos ayudarte
+              Describí tu idea de negocio con la mayor cantidad de detalles posible
             </p>
           </div>
         </div>
 
+        <Alert className="border-primary/20 bg-primary/5">
+          <Lightbulb className="h-4 w-4 text-primary" />
+          <AlertDescription>
+            💡 Cuanto más detallada sea tu idea, mejor será el análisis. Incluí: tipo de productos/servicios, público objetivo, y qué te hace diferente.
+          </AlertDescription>
+        </Alert>
+
         <Card className="border-2">
           <CardHeader>
-            <CardTitle>Paso 1: Cuéntanos tu idea</CardTitle>
+            <CardTitle>Información de tu proyecto</CardTitle>
             <CardDescription>
-              Describi tu proyecto con todos los detalles que puedas
+              Completá todos los campos para validar tu idea
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -144,14 +157,15 @@ const EntrepreneurStep1 = () => {
                 <Label htmlFor="idea">¿Qué negocio querés crear?</Label>
                 <Textarea
                   id="idea"
-                  placeholder="Ejemplo: Quiero abrir una panadería artesanal en Villa Mercedes con foco en productos sin TACC"
-                  className="min-h-[120px] resize-none"
+                  placeholder="Ejemplo: Quiero abrir una panadería artesanal en Villa Mercedes con foco en productos sin TACC y panes de masa madre. El local sería en zona céntrica, cerca de escuelas."
+                  className="min-h-[150px] resize-y"
                   value={ideaDescription}
                   onChange={(e) => setIdeaDescription(e.target.value)}
+                  maxLength={500}
                   required
                 />
                 <p className="text-xs text-muted-foreground">
-                  {ideaDescription.length} / 50 caracteres mínimos
+                  {ideaDescription.length}/500 caracteres {ideaDescription.length < 50 && `(mínimo 50)`}
                 </p>
               </div>
 
@@ -187,6 +201,30 @@ const EntrepreneurStep1 = () => {
                 </Select>
               </div>
 
+              <div className="space-y-3">
+                <Label>¿Tenés experiencia en este rubro?</Label>
+                <RadioGroup value={experience} onValueChange={setExperience}>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="yes" id="exp-yes" />
+                    <Label htmlFor="exp-yes" className="font-normal cursor-pointer">
+                      Sí, trabajé en el rubro
+                    </Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="researched" id="exp-researched" />
+                    <Label htmlFor="exp-researched" className="font-normal cursor-pointer">
+                      No, pero investigué mucho
+                    </Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="no" id="exp-no" />
+                    <Label htmlFor="exp-no" className="font-normal cursor-pointer">
+                      No, es completamente nuevo para mí
+                    </Label>
+                  </div>
+                </RadioGroup>
+              </div>
+
               <div className="flex gap-3 pt-4">
                 <Button
                   type="button"
@@ -198,10 +236,10 @@ const EntrepreneurStep1 = () => {
                 </Button>
                 <Button
                   type="submit"
-                  disabled={loading}
+                  disabled={loading || ideaDescription.length < 50 || !location || !industry}
                   className="flex-1"
                 >
-                  {loading ? "Guardando..." : "Validar mi Idea →"}
+                  {loading ? "Analizando..." : "Validar mi Idea →"}
                 </Button>
               </div>
             </form>
