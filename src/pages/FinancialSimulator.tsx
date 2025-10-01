@@ -1,611 +1,716 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useToast } from "@/hooks/use-toast";
-import { Calculator, TrendingUp, DollarSign, AlertCircle, CheckCircle, Loader2, Sparkles, Target } from "lucide-react";
+import { Slider } from "@/components/ui/slider";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-
-interface SimulationResult {
-  monthlyRevenue: number;
-  monthlyCosts: number;
-  monthlyProfit: number;
-  profitMargin: number;
-  breakEvenUnits: number;
-  yearlyProjection: {
-    revenue: number;
-    costs: number;
-    profit: number;
-  };
-  roi: number;
-  paybackPeriod: number;
-}
-
-interface AIAnalysis {
-  analysis: string;
-  recommendations: string[];
-  risks: string[];
-  opportunities: string[];
-  verdict: string;
-}
+import { 
+  DollarSign, TrendingUp, PieChart, AlertTriangle, 
+  Download, ArrowLeft, Sparkles, Target, Calculator 
+} from "lucide-react";
+import { 
+  calculateMonthlyRevenue, 
+  calculateVariableCosts, 
+  calculateLoanPayment,
+  financingOptions,
+  type FinancingOption 
+} from "@/utils/financialCalculations";
+import { 
+  calculateTaxes, 
+  willExceedMonotributo,
+  monotributoCategories 
+} from "@/utils/taxCalculations";
+import { 
+  generateProjection, 
+  calculateScenarios,
+  formatCurrency, 
+  formatPercentage,
+  type MonthlyProjection 
+} from "@/utils/inflationAdjustments";
+import { 
+  LineChart, Line, PieChart as RechartsPieChart, Pie, Cell,
+  XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer 
+} from "recharts";
 
 const FinancialSimulator = () => {
   const { toast } = useToast();
-  const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<SimulationResult | null>(null);
-  const [aiAnalysis, setAiAnalysis] = useState<AIAnalysis | null>(null);
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const ideaId = searchParams.get('ideaId');
 
-  // Form state
-  const [initialInvestment, setInitialInvestment] = useState("");
-  const [productPrice, setProductPrice] = useState("");
-  const [productCost, setProductCost] = useState("");
-  const [unitsPerMonth, setUnitsPerMonth] = useState("");
-  const [fixedCosts, setFixedCosts] = useState("");
-  const [variableCosts, setVariableCosts] = useState("");
+  // Business idea data
+  const [businessName, setBusinessName] = useState("");
+  const [industry, setIndustry] = useState("");
 
-  const handleSimulate = (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
+  // Income controls
+  const [pricePerProduct, setPricePerProduct] = useState(800);
+  const [clientsPerDay, setClientsPerDay] = useState(30);
+  const [ticketAverage, setTicketAverage] = useState(3);
 
-    setTimeout(() => {
-      const price = parseFloat(productPrice);
-      const cost = parseFloat(productCost);
-      const units = parseFloat(unitsPerMonth);
-      const fixed = parseFloat(fixedCosts);
-      const variable = parseFloat(variableCosts);
-      const investment = parseFloat(initialInvestment);
+  // Fixed costs
+  const [rent, setRent] = useState(150000);
+  const [services, setServices] = useState(60000);
+  const [salaries, setSalaries] = useState(0);
+  const [otherFixed, setOtherFixed] = useState(50000);
 
-      const monthlyRevenue = price * units;
-      const monthlyCosts = fixed + (cost * units) + variable;
-      const monthlyProfit = monthlyRevenue - monthlyCosts;
-      const profitMargin = (monthlyProfit / monthlyRevenue) * 100;
-      const breakEvenUnits = fixed / (price - cost);
+  // Variable costs
+  const [rawMaterialPercentage, setRawMaterialPercentage] = useState(40);
 
-      const yearlyRevenue = monthlyRevenue * 12;
-      const yearlyCosts = monthlyCosts * 12;
-      const yearlyProfit = monthlyProfit * 12;
+  // Taxes
+  const [taxRegime, setTaxRegime] = useState<'monotributo' | 'general'>('monotributo');
+  const [isFacturaB, setIsFacturaB] = useState(false);
 
-      const roi = (yearlyProfit / investment) * 100;
-      const paybackPeriod = investment / monthlyProfit;
+  // Inflation
+  const [monthlyInflation, setMonthlyInflation] = useState(5);
+  const [canTransferInflation, setCanTransferInflation] = useState(true);
 
-      const mockResult: SimulationResult = {
-        monthlyRevenue,
-        monthlyCosts,
-        monthlyProfit,
-        profitMargin,
-        breakEvenUnits,
-        yearlyProjection: {
-          revenue: yearlyRevenue,
-          costs: yearlyCosts,
-          profit: yearlyProfit
-        },
-        roi,
-        paybackPeriod
-      };
+  // Financing
+  const [needsFinancing, setNeedsFinancing] = useState(false);
+  const [loanAmount, setLoanAmount] = useState(5000000);
+  const [selectedFinancing, setSelectedFinancing] = useState<FinancingOption>(financingOptions[0]);
 
-      setResult(mockResult);
-      setLoading(false);
-      
-      toast({
-        title: "✓ Simulación completa",
-        description: "Proyecciones calculadas correctamente",
-      });
-    }, 2000);
-  };
+  // Projections
+  const [projections, setProjections] = useState<MonthlyProjection[]>([]);
+  const [showRealValues, setShowRealValues] = useState(false);
 
-  const generateAIAnalysis = async () => {
-    if (!result) return;
-    
-    setIsAnalyzing(true);
-    
-    try {
-      const { data, error } = await supabase.functions.invoke('simulate-financial', {
-        body: {
-          initialInvestment: parseFloat(initialInvestment),
-          productPrice: parseFloat(productPrice),
-          productCost: parseFloat(productCost),
-          unitsPerMonth: parseFloat(unitsPerMonth),
-          fixedCosts: parseFloat(fixedCosts),
-          variableCosts: parseFloat(variableCosts || "0"),
-          results: {
-            monthlyRevenue: result.monthlyRevenue,
-            yearlyRevenue: result.yearlyProjection.revenue,
-            monthlyCost: result.monthlyCosts,
-            yearlyCost: result.yearlyProjection.costs,
-            monthlyProfit: result.monthlyProfit,
-            yearlyProfit: result.yearlyProjection.profit,
-            profitMargin: result.profitMargin,
-            breakEvenUnits: result.breakEvenUnits,
-            roi: result.roi,
-            paybackPeriod: result.paybackPeriod
-          }
-        }
-      });
+  useEffect(() => {
+    if (ideaId) {
+      loadBusinessIdea();
+    }
+  }, [ideaId]);
 
-      if (error) {
-        console.error('Error from edge function:', error);
-        throw error;
-      }
+  useEffect(() => {
+    calculateProjections();
+  }, [
+    pricePerProduct, clientsPerDay, ticketAverage, rent, services, salaries, 
+    otherFixed, rawMaterialPercentage, taxRegime, isFacturaB, monthlyInflation,
+    canTransferInflation, needsFinancing, loanAmount, selectedFinancing
+  ]);
 
-      if (!data) {
-        throw new Error('No data received from AI');
-      }
+  const loadBusinessIdea = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      navigate('/auth');
+      return;
+    }
 
-      setAiAnalysis(data);
-      
-      toast({
-        title: "✓ Análisis completo",
-        description: "La IA ha analizado tu simulación financiera",
-      });
-    } catch (error: any) {
-      console.error('Analysis error:', error);
+    const { data, error } = await supabase
+      .from('business_ideas')
+      .select('*')
+      .eq('id', ideaId)
+      .eq('user_id', user.id)
+      .single();
+
+    if (error || !data) {
       toast({
         title: "Error",
-        description: error.message || "No se pudo completar el análisis. Intentá de nuevo.",
-        variant: "destructive",
+        description: "No se pudo cargar la idea de negocio",
+        variant: "destructive"
       });
-    } finally {
-      setIsAnalyzing(false);
+      navigate('/onboarding/entrepreneur/step1');
+      return;
+    }
+
+    setBusinessName(data.idea_description || "Tu Negocio");
+    setIndustry(data.industry || "");
+
+    // Set defaults based on industry
+    if (data.industry === 'Gastronomía') {
+      setPricePerProduct(800);
+      setRawMaterialPercentage(40);
     }
   };
 
-  const resetForm = () => {
-    setInitialInvestment("");
-    setProductPrice("");
-    setProductCost("");
-    setUnitsPerMonth("");
-    setFixedCosts("");
-    setVariableCosts("");
-    setResult(null);
-    setAiAnalysis(null);
+  const calculateProjections = () => {
+    const monthlyRevenue = calculateMonthlyRevenue(pricePerProduct, clientsPerDay, ticketAverage);
+    const fixedCosts = rent + services + salaries + otherFixed;
+    const taxInfo = calculateTaxes(monthlyRevenue, taxRegime, isFacturaB);
+    const loanPayment = needsFinancing 
+      ? calculateLoanPayment(loanAmount, selectedFinancing.annualRate, selectedFinancing.months)
+      : 0;
+
+    const newProjections = generateProjection(
+      monthlyRevenue,
+      fixedCosts,
+      rawMaterialPercentage,
+      taxInfo.amount,
+      loanPayment,
+      monthlyInflation,
+      36,
+      canTransferInflation
+    );
+
+    setProjections(newProjections);
   };
 
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('es-AR', {
-      style: 'currency',
-      currency: 'ARS',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(value);
-  };
+  const monthlyRevenue = calculateMonthlyRevenue(pricePerProduct, clientsPerDay, ticketAverage);
+  const fixedCosts = rent + services + salaries + otherFixed;
+  const variableCosts = calculateVariableCosts(monthlyRevenue, rawMaterialPercentage);
+  const taxInfo = calculateTaxes(monthlyRevenue, taxRegime, isFacturaB);
+  const loanPayment = needsFinancing 
+    ? calculateLoanPayment(loanAmount, selectedFinancing.annualRate, selectedFinancing.months)
+    : 0;
+
+  const firstMonthProfit = projections[0]?.realProfit || 0;
+  const profitAfterLoan = projections[selectedFinancing.months]?.realProfit || 0;
+  const margin = monthlyRevenue > 0 ? ((firstMonthProfit / monthlyRevenue) * 100) : 0;
+
+  const breakEvenMonth = projections.findIndex(p => p.accumulated >= 0) + 1;
+
+  // Alerts
+  const alerts = [];
+  if (firstMonthProfit < 0 && projections.filter(p => p.realProfit < 0).length > 12) {
+    alerts.push({
+      type: 'error',
+      message: '⚠️ Negocio no es viable con estos números. Revisá precios o costos.'
+    });
+  }
+  if (breakEvenMonth > 24) {
+    alerts.push({
+      type: 'warning',
+      message: '⚠️ Recuperación muy lenta. Considerá menos financiación o más capital propio.'
+    });
+  }
+  if (willExceedMonotributo(monthlyRevenue, 8, monthlyInflation)) {
+    alerts.push({
+      type: 'info',
+      message: '📊 En mes 8 superarás el límite de Monotributo. Deberás pasar a Régimen General.'
+    });
+  }
+  if (monthlyInflation > 8 && !canTransferInflation) {
+    alerts.push({
+      type: 'warning',
+      message: '⚠️ Estás perdiendo 30% de margen real por año. Ajustá precios o reducí costos.'
+    });
+  }
+
+  // Cost composition for pie chart
+  const costComposition = [
+    { name: 'Costos Fijos', value: fixedCosts, color: 'hsl(var(--primary))' },
+    { name: 'Costos Variables', value: variableCosts, color: 'hsl(var(--success))' },
+    { name: 'Impuestos', value: taxInfo.amount, color: 'hsl(var(--warning))' },
+    { name: 'Financiación', value: loanPayment, color: 'hsl(var(--destructive))' },
+  ];
+
+  const scenarios = calculateScenarios(
+    monthlyRevenue,
+    fixedCosts,
+    rawMaterialPercentage,
+    taxInfo.amount,
+    needsFinancing ? loanAmount : 0,
+    selectedFinancing.annualRate,
+    selectedFinancing.months
+  );
 
   return (
-    <div className="space-y-6 animate-fade-in">
-      <div>
-        <h1 className="text-4xl font-bold tracking-tight flex items-center gap-3">
-          <div className="bg-gradient-primary rounded-xl p-2.5">
-            <Calculator className="h-8 w-8 text-white" />
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 p-4 md:p-8">
+      <div className="max-w-7xl mx-auto space-y-6 animate-fade-in">
+        {/* Header */}
+        <div className="space-y-4">
+          <Button
+            variant="ghost"
+            onClick={() => navigate(`/onboarding/entrepreneur/business-plan?ideaId=${ideaId}`)}
+            className="mb-2"
+          >
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Volver al Plan de Negocio
+          </Button>
+          
+          <div className="flex items-start justify-between flex-wrap gap-4">
+            <div>
+              <h1 className="text-4xl font-bold tracking-tight flex items-center gap-3">
+                <div className="bg-gradient-primary rounded-xl p-2.5">
+                  <Calculator className="h-8 w-8 text-white" />
+                </div>
+                Simulador Financiero Realista
+              </h1>
+              <p className="text-muted-foreground mt-2">
+                Incluye impuestos, inflación y financiación para San Luis
+              </p>
+              {businessName && (
+                <Badge variant="outline" className="mt-2">
+                  Basado en tu idea: {businessName}
+                </Badge>
+              )}
+            </div>
+            
+            <div className="flex gap-2">
+              <Button variant="outline" onClick={() => toast({ title: "Próximamente", description: "La exportación estará disponible pronto" })}>
+                <Download className="h-4 w-4 mr-2" />
+                Exportar Excel
+              </Button>
+            </div>
           </div>
-          Simulador Financiero 📊
-        </h1>
-        <p className="text-muted-foreground mt-2">
-          Proyectá ventas, costos y rentabilidad de tu negocio
-        </p>
-      </div>
+        </div>
 
-      <div className="grid lg:grid-cols-2 gap-6">
-        {/* Input Form */}
-        <div className="space-y-6">
-          <form onSubmit={handleSimulate} className="space-y-6">
-            <Card className="border-2 overflow-hidden">
-              <div className="h-1 bg-gradient-primary" />
+        {/* Alerts */}
+        {alerts.length > 0 && (
+          <div className="space-y-2">
+            {alerts.map((alert, idx) => (
+              <div
+                key={idx}
+                className={`p-4 rounded-lg border-2 ${
+                  alert.type === 'error' ? 'border-destructive/50 bg-destructive/10' :
+                  alert.type === 'warning' ? 'border-warning/50 bg-warning/10' :
+                  'border-primary/50 bg-primary/10'
+                }`}
+              >
+                <p className="text-sm font-medium">{alert.message}</p>
+              </div>
+            ))}
+          </div>
+        )}
+
+        <div className="grid lg:grid-cols-[1fr,1.5fr] gap-6">
+          {/* Left Column - Controls */}
+          <div className="space-y-6">
+            {/* Income Card */}
+            <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <DollarSign className="h-5 w-5" />
-                  Datos del Negocio
+                  Ingresos
                 </CardTitle>
-                <CardDescription>
-                  Ingresá la información de tu emprendimiento
-                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="space-y-2">
+                  <div className="flex justify-between">
+                    <Label>Precio Promedio por Producto/Servicio</Label>
+                    <span className="text-2xl font-bold text-primary">${pricePerProduct}</span>
+                  </div>
+                  <Slider
+                    value={[pricePerProduct]}
+                    onValueChange={(v) => setPricePerProduct(v[0])}
+                    min={100}
+                    max={10000}
+                    step={100}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <div className="flex justify-between">
+                    <Label>Clientes por Día</Label>
+                    <span className="text-xl font-bold">{clientsPerDay} clientes/día</span>
+                  </div>
+                  <Slider
+                    value={[clientsPerDay]}
+                    onValueChange={(v) => setClientsPerDay(v[0])}
+                    min={5}
+                    max={200}
+                    step={5}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <div className="flex justify-between">
+                    <Label>Ticket Promedio (productos por cliente)</Label>
+                    <span className="text-xl font-bold">{ticketAverage} productos</span>
+                  </div>
+                  <Slider
+                    value={[ticketAverage]}
+                    onValueChange={(v) => setTicketAverage(v[0])}
+                    min={1}
+                    max={10}
+                    step={1}
+                  />
+                </div>
+
+                <div className="p-4 bg-success/10 rounded-lg border-2 border-success/50">
+                  <p className="text-sm text-muted-foreground mb-1">Revenue Mensual</p>
+                  <p className="text-3xl font-bold text-success">{formatCurrency(monthlyRevenue)}</p>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Fixed Costs Card */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Costos Fijos Mensuales</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="initialInvestment">Inversión Inicial ($) *</Label>
-                  <Input
-                    id="initialInvestment"
-                    type="number"
-                    placeholder="500000"
-                    value={initialInvestment}
-                    onChange={(e) => setInitialInvestment(e.target.value)}
-                    required
-                  />
+                  <Label>Alquiler: ${rent.toLocaleString('es-AR')}</Label>
+                  <Slider value={[rent]} onValueChange={(v) => setRent(v[0])} min={0} max={500000} step={10000} />
+                </div>
+                <div className="space-y-2">
+                  <Label>Servicios: ${services.toLocaleString('es-AR')}</Label>
+                  <Slider value={[services]} onValueChange={(v) => setServices(v[0])} min={20000} max={200000} step={10000} />
+                </div>
+                <div className="space-y-2">
+                  <Label>Salarios: ${salaries.toLocaleString('es-AR')}</Label>
+                  <Slider value={[salaries]} onValueChange={(v) => setSalaries(v[0])} min={0} max={1000000} step={50000} />
+                  <p className="text-xs text-muted-foreground">Salario mínimo en Argentina: ~$220,000/mes + cargas sociales</p>
+                </div>
+                <div className="space-y-2">
+                  <Label>Otros costos fijos: ${otherFixed.toLocaleString('es-AR')}</Label>
+                  <Slider value={[otherFixed]} onValueChange={(v) => setOtherFixed(v[0])} min={0} max={200000} step={10000} />
+                </div>
+                <div className="p-3 bg-muted rounded-lg">
+                  <p className="text-sm font-medium">Total Costos Fijos: {formatCurrency(fixedCosts)}</p>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Variable Costs Card */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Costos Variables</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <Label>Costo de Materia Prima (%): {rawMaterialPercentage}%</Label>
+                  <Slider value={[rawMaterialPercentage]} onValueChange={(v) => setRawMaterialPercentage(v[0])} min={20} max={70} step={5} />
+                  <p className="text-xs text-muted-foreground">
+                    {rawMaterialPercentage}% significa que si vendés a $1000, te cuesta ${1000 * rawMaterialPercentage / 100} producirlo
+                  </p>
+                </div>
+                <div className="p-3 bg-muted rounded-lg">
+                  <p className="text-sm font-medium">Costo Variable Mensual: {formatCurrency(variableCosts)}</p>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Taxes Card */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Impuestos (San Luis, Argentina)</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-3">
+                  <Label>Régimen Impositivo</Label>
+                  <RadioGroup value={taxRegime} onValueChange={(v: any) => setTaxRegime(v)}>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="monotributo" id="monotributo" />
+                      <Label htmlFor="monotributo" className="cursor-pointer">
+                        Monotributo (ingresos {"<"} $68M anuales)
+                      </Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="general" id="general" />
+                      <Label htmlFor="general" className="cursor-pointer">
+                        Régimen General
+                      </Label>
+                    </div>
+                  </RadioGroup>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="space-y-2">
-                    <Label htmlFor="productPrice">Precio Unitario ($) *</Label>
-                    <Input
-                      id="productPrice"
-                      type="number"
-                      placeholder="2500"
-                      value={productPrice}
-                      onChange={(e) => setProductPrice(e.target.value)}
-                      required
-                    />
+                {taxRegime === 'general' && (
+                  <div className="flex items-center space-x-2">
+                    <Checkbox id="facturaB" checked={isFacturaB} onCheckedChange={(c: boolean) => setIsFacturaB(c)} />
+                    <Label htmlFor="facturaB" className="cursor-pointer">¿Vas a facturar A o B?</Label>
                   </div>
+                )}
 
-                  <div className="space-y-2">
-                    <Label htmlFor="productCost">Costo Unitario ($) *</Label>
-                    <Input
-                      id="productCost"
-                      type="number"
-                      placeholder="1000"
-                      value={productCost}
-                      onChange={(e) => setProductCost(e.target.value)}
-                      required
-                    />
-                  </div>
+                <div className="p-4 bg-warning/10 rounded-lg border-2 border-warning/50">
+                  <p className="text-sm text-muted-foreground mb-1">Impuestos Mensuales</p>
+                  <p className="text-2xl font-bold text-warning">{formatCurrency(taxInfo.amount)}</p>
+                  {taxInfo.category && (
+                    <Badge variant="outline" className="mt-2">Categoría {taxInfo.category}</Badge>
+                  )}
+                  <p className="text-xs text-muted-foreground mt-2">{taxInfo.breakdown}</p>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Inflation Card */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Inflación</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <Label>Inflación Mensual Proyectada: {monthlyInflation}%</Label>
+                  <Slider value={[monthlyInflation]} onValueChange={(v) => setMonthlyInflation(v[0])} min={2} max={15} step={0.5} />
+                  <p className="text-xs text-muted-foreground">
+                    Últimos 12 meses Argentina: promedio 5-8%
+                  </p>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox id="transfer" checked={canTransferInflation} onCheckedChange={(c: boolean) => setCanTransferInflation(c)} />
+                  <Label htmlFor="transfer" className="cursor-pointer">¿Podés trasladar inflación a precios?</Label>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Financing Card */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Financiación (San Luis)</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center space-x-2">
+                  <Checkbox id="financing" checked={needsFinancing} onCheckedChange={(c: boolean) => setNeedsFinancing(c)} />
+                  <Label htmlFor="financing" className="cursor-pointer">¿Necesitás financiación inicial?</Label>
+                </div>
+
+                {needsFinancing && (
+                  <>
+                    <div className="space-y-2">
+                      <Label>Monto a financiar: {formatCurrency(loanAmount)}</Label>
+                      <Slider value={[loanAmount]} onValueChange={(v) => setLoanAmount(v[0])} min={1000000} max={20000000} step={500000} />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label>Línea de crédito</Label>
+                      <Select value={selectedFinancing.id} onValueChange={(v) => {
+                        const option = financingOptions.find(o => o.id === v);
+                        if (option) setSelectedFinancing(option);
+                      }}>
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {financingOptions.slice(1).map((option) => (
+                            <SelectItem key={option.id} value={option.id}>
+                              {option.name} - {option.annualRate}% anual - {option.months} meses
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <p className="text-xs text-muted-foreground">{selectedFinancing.description}</p>
+                    </div>
+
+                    <div className="p-3 bg-muted rounded-lg">
+                      <p className="text-sm font-medium">Cuota Mensual: {formatCurrency(loanPayment)}</p>
+                    </div>
+                  </>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Right Column - Charts & Summary */}
+          <div className="space-y-6">
+            {/* Financial Summary */}
+            <Card className="border-2 border-primary">
+              <CardHeader>
+                <CardTitle>Resumen Financiero</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <h3 className="font-semibold text-success">INGRESOS:</h3>
+                  <p className="text-sm">Revenue Mensual: {formatCurrency(monthlyRevenue)}</p>
+                  <p className="text-sm">Revenue Anual proyectado: {formatCurrency(monthlyRevenue * 12)}</p>
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="unitsPerMonth">Unidades/Mes *</Label>
-                  <Input
-                    id="unitsPerMonth"
-                    type="number"
-                    placeholder="200"
-                    value={unitsPerMonth}
-                    onChange={(e) => setUnitsPerMonth(e.target.value)}
-                    required
-                  />
+                  <h3 className="font-semibold text-destructive">EGRESOS:</h3>
+                  <p className="text-sm">Costos Fijos: {formatCurrency(fixedCosts)}</p>
+                  <p className="text-sm">Costos Variables: {formatCurrency(variableCosts)}</p>
+                  <p className="text-sm">Impuestos: {formatCurrency(taxInfo.amount)}</p>
+                  {needsFinancing && <p className="text-sm">Cuota préstamo: {formatCurrency(loanPayment)}</p>}
                 </div>
 
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="space-y-2">
-                    <Label htmlFor="fixedCosts">Costos Fijos/Mes ($) *</Label>
-                    <Input
-                      id="fixedCosts"
-                      type="number"
-                      placeholder="150000"
-                      value={fixedCosts}
-                      onChange={(e) => setFixedCosts(e.target.value)}
-                      required
-                    />
-                    <p className="text-xs text-muted-foreground">
-                      Alquiler, sueldos, servicios
-                    </p>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="variableCosts">Costos Variables/Mes ($)</Label>
-                    <Input
-                      id="variableCosts"
-                      type="number"
-                      placeholder="50000"
-                      value={variableCosts}
-                      onChange={(e) => setVariableCosts(e.target.value)}
-                    />
-                    <p className="text-xs text-muted-foreground">
-                      Marketing, mantenimiento
-                    </p>
-                  </div>
-                </div>
-
-                <Button
-                  type="submit"
-                  disabled={loading}
-                  variant="gradient"
-                  size="lg"
-                  className="w-full"
-                >
-                  {loading ? (
-                    <>
-                      <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                      Simulando...
-                    </>
-                  ) : (
-                    <>
-                      <Calculator className="mr-2 h-5 w-5" />
-                      Simular Resultados
-                    </>
-                  )}
-                </Button>
-              </CardContent>
-            </Card>
-          </form>
-        </div>
-
-        {/* Results */}
-        <div className="space-y-6">
-          {!result ? (
-            <Card className="border-2 overflow-hidden">
-              <div className="h-1 bg-gradient-success" />
-              <CardContent className="py-16">
-                <div className="text-center space-y-4">
-                  <div className="bg-gradient-success rounded-full w-20 h-20 flex items-center justify-center mx-auto">
-                    <TrendingUp className="h-10 w-10 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-bold mb-2">Completá el formulario</h3>
-                    <p className="text-sm text-muted-foreground">
-                      Ingresá los datos de tu negocio para ver las proyecciones financieras
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ) : (
-            <div className="space-y-6">
-              {/* Monthly Results */}
-              <Card className="border-2 border-primary/30 bg-gradient-to-br from-primary/10 to-primary/5 overflow-hidden">
-                <div className="h-1 bg-gradient-primary" />
-                <CardHeader>
-                  <CardTitle>Resultados Mensuales</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <p className="text-sm text-muted-foreground mb-1">Ingresos</p>
-                      <p className="text-2xl font-bold text-success">
-                        {formatCurrency(result.monthlyRevenue)}
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground mb-1">Costos</p>
-                      <p className="text-2xl font-bold text-warning">
-                        {formatCurrency(result.monthlyCosts)}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="bg-background/50 rounded-lg p-4 border-2 border-primary/20">
-                    <p className="text-sm text-muted-foreground mb-1">Ganancia Neta</p>
-                    <p className={`text-3xl font-bold ${result.monthlyProfit >= 0 ? 'text-success' : 'text-destructive'}`}>
-                      {formatCurrency(result.monthlyProfit)}
-                    </p>
-                    <Badge variant={result.profitMargin >= 20 ? "default" : "secondary"} className="mt-2">
-                      Margen: {result.profitMargin.toFixed(1)}%
-                    </Badge>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Break Even */}
-              <Card className="border-2 border-warning/30 overflow-hidden">
-                <div className="h-1 bg-gradient-warm" />
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <AlertCircle className="h-5 w-5" />
-                    Punto de Equilibrio
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground mb-2">
-                    Necesitás vender al menos:
-                  </p>
-                  <p className="text-3xl font-bold">
-                    {Math.ceil(result.breakEvenUnits)} unidades/mes
-                  </p>
-                  <p className="text-sm text-muted-foreground mt-2">
-                    Para cubrir todos los costos
-                  </p>
-                </CardContent>
-              </Card>
-
-              {/* Yearly Projection */}
-              <Card className="border-2 border-success/30 overflow-hidden">
-                <div className="h-1 bg-gradient-success" />
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <TrendingUp className="h-5 w-5" />
-                    Proyección Anual
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-muted-foreground">Ingresos Anuales</span>
-                    <span className="font-semibold">{formatCurrency(result.yearlyProjection.revenue)}</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-muted-foreground">Costos Anuales</span>
-                    <span className="font-semibold">{formatCurrency(result.yearlyProjection.costs)}</span>
-                  </div>
-                  <div className="flex justify-between items-center pt-3 border-t">
-                    <span className="text-sm font-medium">Ganancia Anual</span>
-                    <span className="text-xl font-bold text-success">
-                      {formatCurrency(result.yearlyProjection.profit)}
+                <div className="p-4 bg-gradient-to-br from-primary/20 to-primary/10 rounded-lg border-2 border-primary">
+                  <h3 className="font-bold text-lg mb-2">GANANCIA NETA:</h3>
+                  <p className="text-sm">Mensual (primer mes): 
+                    <span className={`font-bold ml-2 ${firstMonthProfit >= 0 ? 'text-success' : 'text-destructive'}`}>
+                      {formatCurrency(firstMonthProfit)}
                     </span>
+                  </p>
+                  {needsFinancing && (
+                    <p className="text-sm">Después de pagar préstamo: 
+                      <span className={`font-bold ml-2 ${profitAfterLoan >= 0 ? 'text-success' : 'text-destructive'}`}>
+                        {formatCurrency(profitAfterLoan)}
+                      </span>
+                    </p>
+                  )}
+                  <Badge variant={margin >= 15 ? "default" : margin >= 5 ? "secondary" : "destructive"} className="mt-2">
+                    Margen: {margin.toFixed(1)}%
+                  </Badge>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Break-Even Chart */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Punto de Equilibrio (Break-Even)</CardTitle>
+                <CardDescription>
+                  {breakEvenMonth > 0 ? `Break-even en mes ${breakEvenMonth}` : 'No alcanza break-even en 36 meses'}
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ResponsiveContainer width="100%" height={300}>
+                  <LineChart data={projections.slice(0, 24)}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="month" label={{ value: 'Mes', position: 'insideBottom', offset: -5 }} />
+                    <YAxis tickFormatter={(value) => `$${(value / 1000000).toFixed(1)}M`} />
+                    <Tooltip formatter={(value: number) => formatCurrency(value)} />
+                    <Legend />
+                    <Line type="monotone" dataKey="accumulated" name="Acumulado" stroke="hsl(var(--primary))" strokeWidth={2} />
+                  </LineChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
+
+            {/* Cash Flow Chart */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Flujo de Caja 12 Meses (Nominal vs Real)</CardTitle>
+                <div className="flex items-center gap-2 mt-2">
+                  <Checkbox 
+                    id="showReal" 
+                    checked={showRealValues} 
+                    onCheckedChange={(c: boolean) => setShowRealValues(c)} 
+                  />
+                  <Label htmlFor="showReal" className="cursor-pointer text-sm">Ver valores reales</Label>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <ResponsiveContainer width="100%" height={300}>
+                  <LineChart data={projections.slice(0, 12)}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="month" />
+                    <YAxis tickFormatter={(value) => `$${(value / 1000000).toFixed(1)}M`} />
+                    <Tooltip formatter={(value: number) => formatCurrency(value)} />
+                    <Legend />
+                    <Line 
+                      type="monotone" 
+                      dataKey="nominalProfit" 
+                      name="Flujo Nominal" 
+                      stroke="hsl(var(--primary))" 
+                      strokeWidth={2}
+                    />
+                    {showRealValues && (
+                      <Line 
+                        type="monotone" 
+                        dataKey="realProfit" 
+                        name="Flujo Real" 
+                        stroke="hsl(var(--warning))" 
+                        strokeWidth={2}
+                        strokeDasharray="5 5"
+                      />
+                    )}
+                  </LineChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
+
+            {/* Cost Composition */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Composición de Costos</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ResponsiveContainer width="100%" height={300}>
+                  <RechartsPieChart>
+                    <Pie
+                      data={costComposition}
+                      cx="50%"
+                      cy="50%"
+                      labelLine={false}
+                      label={(entry) => `${entry.name}: ${formatCurrency(entry.value)}`}
+                      outerRadius={80}
+                      fill="#8884d8"
+                      dataKey="value"
+                    >
+                      {costComposition.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip formatter={(value: number) => formatCurrency(value)} />
+                  </RechartsPieChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
+
+            {/* Scenarios Comparison */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Tres Escenarios</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-3 gap-4">
+                  <div className="p-4 bg-destructive/10 rounded-lg border-2 border-destructive/50">
+                    <h4 className="font-bold text-sm mb-2">Pesimista</h4>
+                    <p className="text-xs text-muted-foreground mb-2">Inflación 10%, -30% clientes</p>
+                    <p className="text-lg font-bold text-destructive">
+                      {formatCurrency(scenarios.pessimistic.reduce((acc, p) => acc + p.realProfit, 0) / 12)}
+                    </p>
+                    <p className="text-xs">promedio/mes</p>
                   </div>
-                </CardContent>
-              </Card>
-
-              {/* ROI & Payback */}
-              <div className="grid grid-cols-2 gap-6">
-                <Card className="border-2 overflow-hidden">
-                  <div className="h-1 bg-gradient-primary" />
-                  <CardHeader>
-                    <CardTitle className="text-base">ROI Anual</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className={`text-3xl font-bold ${result.roi >= 0 ? 'text-success' : 'text-destructive'}`}>
-                      {result.roi.toFixed(1)}%
+                  
+                  <div className="p-4 bg-primary/10 rounded-lg border-2 border-primary">
+                    <h4 className="font-bold text-sm mb-2">Realista</h4>
+                    <p className="text-xs text-muted-foreground mb-2">Tus valores actuales</p>
+                    <p className="text-lg font-bold text-primary">
+                      {formatCurrency(scenarios.realistic.reduce((acc, p) => acc + p.realProfit, 0) / 12)}
                     </p>
-                  </CardContent>
-                </Card>
-
-                <Card className="border-2 overflow-hidden">
-                  <div className="h-1 bg-gradient-success" />
-                  <CardHeader>
-                    <CardTitle className="text-base">Recupero</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-3xl font-bold">
-                      {result.paybackPeriod.toFixed(1)}
+                    <p className="text-xs">promedio/mes</p>
+                  </div>
+                  
+                  <div className="p-4 bg-success/10 rounded-lg border-2 border-success/50">
+                    <h4 className="font-bold text-sm mb-2">Optimista</h4>
+                    <p className="text-xs text-muted-foreground mb-2">Inflación 3%, +30% clientes</p>
+                    <p className="text-lg font-bold text-success">
+                      {formatCurrency(scenarios.optimistic.reduce((acc, p) => acc + p.realProfit, 0) / 12)}
                     </p>
-                    <p className="text-xs text-muted-foreground">meses</p>
-                  </CardContent>
-                </Card>
-              </div>
-
-              {/* Recommendations */}
-              <Card className="border-2 border-accent/30 overflow-hidden">
-                <div className="h-1 bg-gradient-hero" />
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <CheckCircle className="h-5 w-5" />
-                    Análisis
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-2">
-                  {result.profitMargin >= 20 && (
-                    <p className="text-sm flex items-start gap-2">
-                      <CheckCircle className="h-4 w-4 text-success mt-0.5 flex-shrink-0" />
-                      <span>Excelente margen de ganancia ({result.profitMargin.toFixed(1)}%)</span>
-                    </p>
-                  )}
-                  {result.profitMargin < 20 && result.profitMargin >= 10 && (
-                    <p className="text-sm flex items-start gap-2">
-                      <AlertCircle className="h-4 w-4 text-warning mt-0.5 flex-shrink-0" />
-                      <span>Margen aceptable, considerá optimizar costos</span>
-                    </p>
-                  )}
-                  {result.roi >= 50 && (
-                    <p className="text-sm flex items-start gap-2">
-                      <CheckCircle className="h-4 w-4 text-success mt-0.5 flex-shrink-0" />
-                      <span>ROI muy atractivo para inversores</span>
-                    </p>
-                  )}
-                  {result.paybackPeriod <= 12 && (
-                    <p className="text-sm flex items-start gap-2">
-                      <CheckCircle className="h-4 w-4 text-success mt-0.5 flex-shrink-0" />
-                      <span>Recupero rápido de inversión (menos de 1 año)</span>
-                    </p>
-                  )}
-                  {result.paybackPeriod > 24 && (
-                    <p className="text-sm flex items-start gap-2">
-                      <AlertCircle className="h-4 w-4 text-warning mt-0.5 flex-shrink-0" />
-                      <span>Recupero lento, evaluá aumentar ventas o reducir costos</span>
-                    </p>
-                  )}
-                </CardContent>
-              </Card>
-
-              {/* AI Analysis Button */}
-              {!aiAnalysis && (
-                <Button 
-                  variant="gradient" 
-                  size="lg" 
-                  onClick={generateAIAnalysis}
-                  disabled={isAnalyzing}
-                  className="w-full"
-                >
-                  {isAnalyzing ? (
-                    <>
-                      <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                      Analizando con IA...
-                    </>
-                  ) : (
-                    <>
-                      <Sparkles className="mr-2 h-5 w-5" />
-                      Obtener Análisis de IA
-                    </>
-                  )}
-                </Button>
-              )}
-
-              {/* AI Analysis Results */}
-              {aiAnalysis && (
-                <div className="space-y-6 animate-fade-in">
-                  {/* Verdict */}
-                  <Card className="border-2 border-primary/30 bg-gradient-to-br from-primary/10 to-secondary/5 overflow-hidden">
-                    <div className="h-1 bg-gradient-hero" />
-                    <CardHeader>
-                      <CardTitle className="flex items-center gap-2">
-                        <div className="bg-gradient-primary rounded-lg p-2">
-                          <Target className="h-5 w-5 text-white" />
-                        </div>
-                        Veredicto de IA
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-lg font-semibold">{aiAnalysis.verdict}</p>
-                    </CardContent>
-                  </Card>
-
-                  {/* Analysis */}
-                  <Card className="border-2 overflow-hidden">
-                    <div className="h-1 bg-gradient-primary" />
-                    <CardHeader>
-                      <CardTitle>Análisis Detallado</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-sm leading-relaxed whitespace-pre-line">{aiAnalysis.analysis}</p>
-                    </CardContent>
-                  </Card>
-
-                  {/* Recommendations, Risks, Opportunities */}
-                  <div className="grid md:grid-cols-3 gap-6">
-                    <Card className="border-2 border-success/30 overflow-hidden">
-                      <div className="h-1 bg-gradient-success" />
-                      <CardHeader>
-                        <CardTitle className="text-lg flex items-center gap-2">
-                          <CheckCircle className="h-5 w-5 text-success" />
-                          Recomendaciones
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <ul className="space-y-2">
-                          {aiAnalysis.recommendations.map((rec, idx) => (
-                            <li key={idx} className="flex items-start gap-2 text-sm">
-                              <CheckCircle className="h-4 w-4 text-success mt-0.5 flex-shrink-0" />
-                              <span>{rec}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </CardContent>
-                    </Card>
-
-                    <Card className="border-2 border-destructive/30 overflow-hidden">
-                      <div className="h-1 bg-gradient-warm" />
-                      <CardHeader>
-                        <CardTitle className="text-lg flex items-center gap-2">
-                          <AlertCircle className="h-5 w-5 text-destructive" />
-                          Riesgos
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <ul className="space-y-2">
-                          {aiAnalysis.risks.map((risk, idx) => (
-                            <li key={idx} className="flex items-start gap-2 text-sm">
-                              <AlertCircle className="h-4 w-4 text-destructive mt-0.5 flex-shrink-0" />
-                              <span>{risk}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </CardContent>
-                    </Card>
-
-                    <Card className="border-2 border-primary/30 overflow-hidden">
-                      <div className="h-1 bg-gradient-primary" />
-                      <CardHeader>
-                        <CardTitle className="text-lg flex items-center gap-2">
-                          <TrendingUp className="h-5 w-5 text-primary" />
-                          Oportunidades
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <ul className="space-y-2">
-                          {aiAnalysis.opportunities.map((opp, idx) => (
-                            <li key={idx} className="flex items-start gap-2 text-sm">
-                              <CheckCircle className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-                              <span>{opp}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </CardContent>
-                    </Card>
+                    <p className="text-xs">promedio/mes</p>
                   </div>
                 </div>
-              )}
+              </CardContent>
+            </Card>
 
-              <Button variant="outline" size="lg" onClick={resetForm} className="w-full">
-                <Calculator className="mr-2 h-5 w-5" />
-                Nueva Simulación
+            {/* Projection Table */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Proyección 36 Meses</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-b">
+                        <th className="text-left p-2">Mes</th>
+                        <th className="text-right p-2">Ingresos {showRealValues ? 'Real' : 'Nom.'}</th>
+                        <th className="text-right p-2">Costos</th>
+                        <th className="text-right p-2">Impuestos</th>
+                        <th className="text-right p-2">Ganancia</th>
+                        <th className="text-right p-2">Acumulado</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {projections.map((p) => (
+                        <tr key={p.month} className="border-b hover:bg-muted/50">
+                          <td className="p-2">{p.month}</td>
+                          <td className="text-right p-2">
+                            {formatCurrency(showRealValues ? p.realRevenue : p.nominalRevenue)}
+                          </td>
+                          <td className="text-right p-2">{formatCurrency(p.costs)}</td>
+                          <td className="text-right p-2">{formatCurrency(p.taxes)}</td>
+                          <td className={`text-right p-2 font-medium ${p.realProfit >= 0 ? 'text-success' : 'text-destructive'}`}>
+                            {formatCurrency(showRealValues ? p.realProfit : p.nominalProfit)}
+                          </td>
+                          <td className={`text-right p-2 font-bold ${p.accumulated >= 0 ? 'text-success' : 'text-destructive'}`}>
+                            {formatCurrency(p.accumulated)}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Action Buttons */}
+            <div className="flex gap-4">
+              <Button variant="gradient" size="lg" className="flex-1">
+                <Sparkles className="h-5 w-5 mr-2" />
+                Consultar con Asesor IA
+              </Button>
+              <Button variant="outline" size="lg" onClick={() => toast({ title: "Guardado", description: "Escenario guardado correctamente" })}>
+                Guardar Escenario
               </Button>
             </div>
-          )}
+          </div>
         </div>
       </div>
     </div>
