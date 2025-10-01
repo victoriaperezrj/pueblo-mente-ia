@@ -70,6 +70,39 @@ export type Database = {
           },
         ]
       }
+      business_ideas: {
+        Row: {
+          created_at: string | null
+          id: string
+          idea_description: string
+          industry: string
+          location: string
+          updated_at: string | null
+          user_id: string
+          validation_result: Json | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          idea_description: string
+          industry: string
+          location: string
+          updated_at?: string | null
+          user_id: string
+          validation_result?: Json | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          idea_description?: string
+          industry?: string
+          location?: string
+          updated_at?: string | null
+          user_id?: string
+          validation_result?: Json | null
+        }
+        Relationships: []
+      }
       businesses: {
         Row: {
           business_type: Database["public"]["Enums"]["business_type"]

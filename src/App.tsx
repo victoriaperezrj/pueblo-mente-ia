@@ -23,6 +23,9 @@ import FinancialSimulator from "./pages/FinancialSimulator";
 import DashboardLayout from "./pages/DashboardLayout";
 import NotFound from "./pages/NotFound";
 import DataBackup from "./pages/DataBackup";
+import EntrepreneurStep1 from "./pages/onboarding/EntrepreneurStep1";
+import EntrepreneurAnalyzing from "./pages/onboarding/EntrepreneurAnalyzing";
+import EntrepreneurResults from "./pages/onboarding/EntrepreneurResults";
 
 const queryClient = new QueryClient();
 
@@ -36,6 +39,9 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/onboarding" element={<Onboarding />} />
+          <Route path="/onboarding/entrepreneur/step1" element={<EntrepreneurStep1 />} />
+          <Route path="/onboarding/entrepreneur/analyzing" element={<EntrepreneurAnalyzing />} />
+          <Route path="/onboarding/entrepreneur/results" element={<EntrepreneurResults />} />
           <Route element={<DashboardLayout />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/sales" element={<Sales />} />

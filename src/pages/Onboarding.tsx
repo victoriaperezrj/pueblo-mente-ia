@@ -40,7 +40,12 @@ const Onboarding = () => {
           : "Te ayudaremos a automatizar tu negocio",
       });
 
-      navigate('/dashboard');
+      // Redirigir según tipo de usuario
+      if (userType === 'entrepreneur') {
+        navigate('/onboarding/entrepreneur/step1');
+      } else {
+        navigate('/onboarding/business/step1');
+      }
     } catch (error: any) {
       console.error('Error updating profile:', error);
       toast({
