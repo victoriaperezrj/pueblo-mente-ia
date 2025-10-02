@@ -224,7 +224,7 @@ const Auth = () => {
             </div>
           </div>
           <CardTitle className="text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-            Emprendu
+            Proyecto Emprendedurismo
           </CardTitle>
           <CardDescription className="text-base">
             Tu plataforma de gestión empresarial con IA

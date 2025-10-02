@@ -94,7 +94,7 @@ const BusinessOnboarding = ({ onComplete }: BusinessOnboardingProps) => {
             </div>
           </div>
           <CardTitle className="text-3xl font-bold bg-gradient-hero bg-clip-text text-transparent animate-fade-in">
-            ¡Bienvenido a Emprendu! 👋
+            ¡Bienvenido! 👋
           </CardTitle>
           <CardDescription className="text-base mt-2">
             Creá tu primer negocio para comenzar tu viaje emprendedor
@@ -157,7 +157,7 @@ const BusinessOnboarding = ({ onComplete }: BusinessOnboardingProps) => {
             
             <div className="bg-primary/5 border border-primary/20 rounded-lg p-4 mt-4">
               <p className="text-sm text-center text-muted-foreground flex items-center justify-center gap-2">
-                ✨ <span>Todo en una sola plataforma: IA, ERP, marketplace y más</span>
+                ✨ <span>Todo en un solo lugar: te ayudamos con todo</span>
               </p>
             </div>
           </form>

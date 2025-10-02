@@ -39,7 +39,7 @@ export function AppHeader() {
             <Building2 className="h-5 w-5 text-white" />
           </div>
           <span className="font-bold text-xl bg-gradient-primary bg-clip-text text-transparent hidden sm:inline">
-            Emprendu
+            Proyecto Emprendedurismo
           </span>
         </div>
       </div>

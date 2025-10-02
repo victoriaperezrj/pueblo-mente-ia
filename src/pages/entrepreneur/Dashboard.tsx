@@ -194,17 +194,18 @@ export default function EntrepreneurDashboard() {
             <div className="mb-6">
               <Lightbulb className="h-24 w-24 mx-auto text-primary animate-pulse" />
             </div>
-            <h1 className="text-4xl font-bold mb-4">¡Comencemos tu viaje emprendedor!</h1>
+            <h1 className="text-4xl font-bold mb-4">¡Empecemos!</h1>
             <p className="text-muted-foreground text-lg mb-8">
-              Validá tu idea de negocio en 10 minutos y descubrí si es viable
+              Te ayudamos a ver si tu idea puede funcionar en 10 minutos
             </p>
             <Button 
-              size="lg" 
-              className="text-lg px-8"
+              size="lg"
+              variant="default"
+              className="text-lg px-8 bg-primary text-primary-foreground hover:bg-primary/90"
               onClick={() => navigate('/idea-validator')}
             >
               <Lightbulb className="mr-2 h-5 w-5" />
-              Validar mi Primera Idea
+              Ver si mi idea funciona
             </Button>
           </CardContent>
         </Card>
@@ -223,7 +224,7 @@ export default function EntrepreneurDashboard() {
       {/* Sidebar */}
       <aside className="fixed left-0 top-0 h-full w-64 bg-card border-r p-6 overflow-y-auto hidden lg:block">
         <h2 className="text-2xl font-bold mb-8 bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-          Emprendu
+          Proyecto Emprendedurismo
         </h2>
         
         <nav className="space-y-2">
@@ -314,17 +315,17 @@ export default function EntrepreneurDashboard() {
               <Separator />
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Inversión:</span>
+                  <span className="text-muted-foreground">Plata para arrancar:</span>
                   <span className="font-semibold">{idea.validation_result?.investment_range || 'N/A'}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Break-even:</span>
+                  <span className="text-muted-foreground">Recuperás inversión en:</span>
                   <span className="font-semibold">{idea.validation_result?.break_even_months || '18'} meses</span>
                 </div>
               </div>
               <Button 
-                variant="outline" 
-                className="w-full"
+                variant="outline"
+                className="w-full border-2 hover:bg-muted"
                 onClick={() => navigate(`/onboarding/entrepreneur/results?ideaId=${idea.id}`)}
               >
                 Ver Análisis Completo
@@ -335,7 +336,7 @@ export default function EntrepreneurDashboard() {
           {/* Business Plan Card */}
           <Card className="hover:shadow-lg transition-all">
             <CardHeader>
-              <CardTitle>Plan de Negocio</CardTitle>
+              <CardTitle>Tu Plan Paso a Paso</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
@@ -357,10 +358,10 @@ export default function EntrepreneurDashboard() {
 
               <Button 
                 variant="default"
-                className="w-full"
+                className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
                 onClick={() => navigate(`/onboarding/entrepreneur/business-plan?ideaId=${idea.id}`)}
               >
-                Ir al Plan →
+                Ver el Plan →
               </Button>
             </CardContent>
           </Card>
@@ -368,13 +369,13 @@ export default function EntrepreneurDashboard() {
           {/* Finances Card */}
           <Card className="hover:shadow-lg transition-all">
             <CardHeader>
-              <CardTitle>Finanzas</CardTitle>
+              <CardTitle>Cuánta Plata Ganás</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <p className="text-sm text-muted-foreground mb-1">Ganancia Proyectada</p>
+                <p className="text-sm text-muted-foreground mb-1">Ganás por mes</p>
                 <p className="text-2xl font-bold">$29,400<span className="text-sm font-normal text-muted-foreground">/mes</span></p>
-                <p className="text-xs text-muted-foreground">(después de pagar préstamo)</p>
+                <p className="text-xs text-muted-foreground">(ya descontando el préstamo)</p>
               </div>
 
               <div className="flex items-center justify-between bg-yellow-500/10 p-3 rounded-lg">
@@ -388,15 +389,15 @@ export default function EntrepreneurDashboard() {
               </div>
 
               <p className="text-sm text-muted-foreground">
-                💡 Recomendación: Revisá costos fijos
+                💡 Consejo: Tratá de gastar menos en cosas fijas
               </p>
 
               <Button 
                 variant="outline"
-                className="w-full"
+                className="w-full border-2 hover:bg-muted"
                 onClick={() => navigate(`/onboarding/entrepreneur/financial-simulator?ideaId=${idea.id}`)}
               >
-                Abrir Simulador
+                Ver Calculadora
               </Button>
             </CardContent>
           </Card>

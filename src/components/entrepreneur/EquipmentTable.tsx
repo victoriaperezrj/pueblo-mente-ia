@@ -103,7 +103,7 @@ export function EquipmentTable({ onToggle, progress }: EquipmentTableProps) {
         <ul className="list-disc list-inside space-y-1">
           <li>Cada fila es expandible para ver especificaciones técnicas</li>
           <li>Alternativas de proveedores disponibles al hacer clic</li>
-          <li>Reviews de otros usuarios de Emprendu</li>
+          <li>Opiniones de otros emprendedores</li>
         </ul>
       </div>
     </Card>

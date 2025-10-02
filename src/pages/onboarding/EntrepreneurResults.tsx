@@ -214,7 +214,7 @@ const EntrepreneurResults = () => {
               </div>
               <div>
                 <CardTitle className="text-sm font-medium text-muted-foreground mb-1">
-                  Inversión Inicial
+                  Plata que necesitás para arrancar
                 </CardTitle>
                 <p className="text-2xl font-bold">
                   {formatCurrency(result.investment_range.min)} - {formatCurrency(result.investment_range.max)}
@@ -245,7 +245,7 @@ const EntrepreneurResults = () => {
               </div>
               <div>
                 <CardTitle className="text-sm font-medium text-muted-foreground mb-1">
-                  Ingresos Mensuales Proyectados
+                  Cuánta plata vas a ganar por mes
                 </CardTitle>
                 <p className="text-2xl font-bold">
                   {formatCurrency(result.monthly_revenue.realistic)}/mes
@@ -267,7 +267,7 @@ const EntrepreneurResults = () => {
                   <span>{formatCurrency(result.monthly_revenue.optimistic)}</span>
                 </div>
                 <Badge variant="secondary" className="mt-2">
-                  Break-even: {result.timeframe.break_even_months} meses
+                  Recuperás tu inversión en: {result.timeframe.break_even_months} meses
                 </Badge>
               </div>
             </CardContent>
@@ -284,7 +284,7 @@ const EntrepreneurResults = () => {
               </div>
               <div>
                 <CardTitle className="text-sm font-medium text-muted-foreground mb-1">
-                  Análisis de Competencia
+                  Cuántos negocios parecidos hay
                 </CardTitle>
                 <p className="text-2xl font-bold">
                   {result.competitors_count} negocios similares
@@ -400,25 +400,25 @@ const EntrepreneurResults = () => {
             <div className="flex items-center space-x-2">
               <Checkbox id="step1" />
               <label htmlFor="step1" className="text-sm font-medium cursor-pointer">
-                Revisar Plan de Negocio Completo
+                Revisar todo el Plan paso a paso
               </label>
             </div>
             <div className="flex items-center space-x-2">
               <Checkbox id="step2" />
               <label htmlFor="step2" className="text-sm font-medium cursor-pointer">
-                Simular Escenarios Financieros
+                Calcular cuánta plata necesito
               </label>
             </div>
             <div className="flex items-center space-x-2">
               <Checkbox id="step3" />
               <label htmlFor="step3" className="text-sm font-medium cursor-pointer">
-                Contactar Proveedores Recomendados
+                Ver proveedores recomendados
               </label>
             </div>
             <div className="flex items-center space-x-2">
               <Checkbox id="step4" />
               <label htmlFor="step4" className="text-sm font-medium cursor-pointer">
-                Completar Trámites Regulatorios
+                Hacer trámites que necesito
               </label>
             </div>
           </CardContent>
@@ -427,26 +427,27 @@ const EntrepreneurResults = () => {
         <div className="flex flex-col sm:flex-row gap-4 pt-4">
           <Button
             size="lg"
-            className="flex-1 bg-gradient-to-r from-primary to-primary/80"
+            variant="default"
+            className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90"
             onClick={() => navigate('/business-blueprint')}
           >
-            Ver Plan de Negocio Completo →
+            Ver Plan Completo →
           </Button>
           <Button
             size="lg"
             variant="outline"
-            className="flex-1"
+            className="flex-1 border-2 hover:bg-muted"
             onClick={() => navigate('/onboarding/entrepreneur/step1')}
           >
-            Ajustar mi Idea
+            Cambiar mi Idea
           </Button>
           <Button
             size="lg"
             variant="outline"
-            className="flex-1"
+            className="flex-1 border-2 hover:bg-muted"
             onClick={() => navigate('/financial-simulator')}
           >
-            Simular Finanzas
+            Calcular Finanzas
           </Button>
         </div>
       </div>

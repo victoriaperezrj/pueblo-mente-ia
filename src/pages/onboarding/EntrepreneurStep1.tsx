@@ -228,10 +228,10 @@ const EntrepreneurStep1 = () => {
         <div className="max-w-4xl mx-auto space-y-8">
           <div className="text-center space-y-3 animate-fade-in">
             <h1 className="text-3xl md:text-4xl font-bold">
-              Contanos tu idea
+              Contanos tu idea de negocio
             </h1>
             <p className="text-lg text-muted-foreground">
-              Describí tu proyecto con la mayor cantidad de detalles posible
+              Con tus propias palabras, como se la contarías a un amigo
             </p>
           </div>
 
@@ -241,7 +241,7 @@ const EntrepreneurStep1 = () => {
               <Alert className="border-primary/20 bg-primary/5">
                 <Lightbulb className="h-4 w-4 text-primary" />
                 <AlertDescription>
-                  💡 Cuanto más detalles, mejor será el análisis. Incluí: qué ofrecés, para quién, y qué te hace diferente.
+                  💡 Escribí tranquilo, como le contarías a un amigo. Cuanto más detalles, mejor te podemos ayudar.
                 </AlertDescription>
               </Alert>
 
@@ -371,16 +371,17 @@ const EntrepreneurStep1 = () => {
                         variant="outline"
                         onClick={() => navigate('/onboarding/classify')}
                         disabled={isLoading}
-                        className="flex-1"
+                        className="flex-1 border-2 hover:bg-muted"
                       >
                         ← Volver
                       </Button>
                       <Button
                         type="submit"
+                        variant="default"
                         disabled={isLoading || !isFormValid}
-                        className="flex-1 bg-gradient-primary"
+                        className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90"
                       >
-                        {isLoading ? "Guardando..." : "Validar mi Idea →"}
+                        {isLoading ? "Guardando..." : "Ver si mi idea funciona →"}
                       </Button>
                     </div>
                   </form>

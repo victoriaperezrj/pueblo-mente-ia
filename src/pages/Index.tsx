@@ -32,10 +32,10 @@ const Index = () => {
             <Building2 className="h-6 w-6 text-white" />
           </div>
           <span className="font-bold text-2xl bg-gradient-primary bg-clip-text text-transparent">
-            Emprendu
+            Proyecto Emprendedurismo
           </span>
         </div>
-        <Button onClick={() => navigate("/auth")} size="lg" className="shadow-lg">
+        <Button onClick={() => navigate("/auth")} size="lg" variant="default" className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg">
           Iniciar Sesión
         </Button>
       </header>
@@ -52,34 +52,34 @@ const Index = () => {
           </div>
           
           <h1 className="text-5xl md:text-7xl font-extrabold mb-6 leading-tight animate-fade-in" style={{ animationDelay: "0.1s" }}>
-            Tu Negocio,{" "}
+            Arrancá{" "}
             <span className="bg-gradient-hero bg-clip-text text-transparent inline-block hover:scale-105 transition-transform">
-              Transformado
+              Tu Negocio
             </span>
           </h1>
           
           <p className="text-xl md:text-2xl text-muted-foreground mb-10 max-w-3xl mx-auto leading-relaxed animate-fade-in" style={{ animationDelay: "0.2s" }}>
-            Desde validar tu idea hasta gestionar operaciones diarias. 
-            Emprendu es la plataforma <span className="font-semibold text-foreground">todo-en-uno</span> para 
+            Te ayudamos paso a paso, desde tu idea hasta vender todos los días. 
+            Todo <span className="font-semibold text-foreground">en palabras simples</span>, pensado para 
             emprendedores de <span className="font-semibold text-foreground">San Luis, Argentina</span>.
           </p>
           
           <div className="flex gap-4 justify-center flex-wrap mb-16 animate-fade-in" style={{ animationDelay: "0.3s" }}>
             <Button 
               size="lg" 
-              variant="gradient"
+              variant="default"
               onClick={() => navigate("/auth")}
-              className="text-lg px-8 py-6 shadow-2xl hover:shadow-[0_0_40px_rgba(59,130,246,0.5)] hover:scale-105 transition-all duration-300"
+              className="text-lg px-8 py-6 bg-primary text-primary-foreground hover:bg-primary/90 shadow-2xl hover:shadow-[0_0_40px_rgba(59,130,246,0.5)] hover:scale-105 transition-all duration-300"
             >
-              Comenzar Gratis ✨
+              Empezar Ahora ✨
               <span className="ml-2">→</span>
             </Button>
             <Button 
               size="lg" 
               variant="outline"
-              className="text-lg px-8 py-6 border-2 hover:border-primary hover:text-primary hover:scale-105 transition-all duration-300"
+              className="text-lg px-8 py-6 border-2 border-primary hover:bg-primary/10 hover:scale-105 transition-all duration-300"
             >
-              Ver Demo
+              Ver Cómo Funciona
             </Button>
           </div>
         </div>
@@ -110,13 +110,13 @@ const Index = () => {
       <section className="container mx-auto px-4 py-20">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            Todo lo que necesitás en{" "}
+            Todo lo que necesitás{" "}
             <span className="bg-gradient-success bg-clip-text text-transparent">
-              un solo lugar
+              en un solo lugar
             </span>
           </h2>
           <p className="text-xl text-muted-foreground">
-            Herramientas poderosas diseñadas para emprendedores argentinos
+            Herramientas fáciles de usar, pensadas para vos
           </p>
         </div>
 
@@ -124,43 +124,43 @@ const Index = () => {
           {[
             {
               icon: Zap,
-              title: "Validación con IA",
-              description: "Validá tu idea de negocio en minutos con análisis inteligente del mercado local",
+              title: "Te decimos si tu idea funciona",
+              description: "En 10 minutos sabés si tu negocio puede andar bien",
               iconColor: "text-primary",
               gradient: "from-primary/10 to-primary/5",
             },
             {
               icon: TrendingUp,
-              title: "ERP Completo",
-              description: "Ventas, inventario, clientes y turnos. Todo integrado y fácil de usar",
+              title: "Todo lo que necesitás para vender",
+              description: "Llevá cuenta de ventas, productos, clientes y turnos en un solo lugar",
               iconColor: "text-success",
               gradient: "from-success/10 to-success/5",
             },
             {
               icon: Users,
-              title: "Marketplace B2B",
-              description: "Conectá con proveedores y otros emprendedores de San Luis",
+              title: "Comprá más barato en grupo",
+              description: "Juntate con otros emprendedores de San Luis para ahorrar",
               iconColor: "text-warning",
               gradient: "from-warning/10 to-warning/5",
             },
             {
               icon: Building2,
-              title: "Multi-Negocio",
-              description: "Gestioná múltiples emprendimientos desde una sola cuenta",
+              title: "Varios negocios a la vez",
+              description: "¿Tenés más de un emprendimiento? Manejá todo desde acá",
               iconColor: "text-info",
               gradient: "from-info/10 to-info/5",
             },
             {
               icon: TrendingUp,
-              title: "Simulador Financiero",
-              description: "Proyectá ventas, costos y rentabilidad antes de invertir",
+              title: "Calculá cuánta plata vas a ganar",
+              description: "Sabé cuánto ganás antes de empezar, sin sorpresas",
               iconColor: "text-accent",
               gradient: "from-accent/10 to-accent/5",
             },
             {
               icon: Users,
-              title: "Asistente IA 24/7",
-              description: "Respondemos tus dudas sobre regulaciones, precios y estrategias",
+              title: "Preguntá lo que necesites",
+              description: "Tu asistente responde tus dudas las 24 horas",
               iconColor: "text-secondary",
               gradient: "from-secondary/10 to-secondary/5",
             },
@@ -193,19 +193,18 @@ const Index = () => {
           <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10" />
           <div className="relative z-10">
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-              ¿Listo para transformar tu negocio?
+              ¿Listo para arrancar?
             </h2>
             <p className="text-white/90 mb-8 text-lg md:text-xl max-w-2xl mx-auto">
-              Uníte a los emprendedores que ya están creciendo con Emprendu. 
-              <span className="font-semibold"> Sin costo, sin compromisos.</span>
+              Empezá hoy mismo. Es gratis y no necesitás tarjeta de crédito.
             </p>
             <Button 
               size="lg" 
               variant="secondary"
               onClick={() => navigate("/auth")}
-              className="text-lg px-10 py-7 font-semibold shadow-2xl hover:scale-105 transition-all duration-300"
+              className="text-lg px-10 py-7 font-semibold bg-white text-primary hover:bg-white/90 shadow-2xl hover:scale-105 transition-all duration-300"
             >
-              Crear Cuenta Gratuita
+              Crear Cuenta Gratis
               <span className="ml-2 text-xl">🚀</span>
             </Button>
           </div>
@@ -220,11 +219,11 @@ const Index = () => {
               <Building2 className="h-5 w-5 text-white" />
             </div>
             <span className="font-bold text-xl bg-gradient-primary bg-clip-text text-transparent">
-              Emprendu
+              Proyecto Emprendedurismo
             </span>
           </div>
           <p className="text-muted-foreground mb-2">
-            © 2025 Emprendu - Plataforma de Gestión Empresarial con IA
+            © 2025 Proyecto Emprendedurismo - Tu negocio paso a paso
           </p>
           <p className="text-sm text-muted-foreground">
             🇦🇷 Hecho con ❤️ en San Luis, Argentina

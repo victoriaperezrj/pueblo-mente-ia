@@ -13,16 +13,16 @@ import {
 } from "@/components/ui/sidebar";
 
 const menuItems = [
-  { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
+  { title: "Mi Negocio", url: "/dashboard", icon: LayoutDashboard },
   { title: "Ventas", url: "/sales", icon: ShoppingCart },
-  { title: "Inventario", url: "/inventory", icon: Package },
+  { title: "Productos", url: "/inventory", icon: Package },
   { title: "Clientes", url: "/customers", icon: Users },
   { title: "Turnos", url: "/appointments", icon: Calendar },
   { title: "Gastos", url: "/expenses", icon: DollarSign },
-  { title: "Marketplace", url: "/marketplace", icon: Store },
-  { title: "Integraciones", url: "/integrations", icon: Plug },
-  { title: "Recursos", url: "/resources", icon: BookOpen },
-  { title: "Respaldo", url: "/backup", icon: Download },
+  { title: "Compras en Grupo", url: "/marketplace", icon: Store },
+  { title: "Conectar", url: "/integrations", icon: Plug },
+  { title: "Aprender", url: "/resources", icon: BookOpen },
+  { title: "Respaldar", url: "/backup", icon: Download },
   { title: "Configuración", url: "/settings", icon: Settings },
 ];
 

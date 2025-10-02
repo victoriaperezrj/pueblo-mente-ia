@@ -225,15 +225,15 @@ const FinancialSimulator = () => {
           
           <div className="flex items-start justify-between flex-wrap gap-4">
             <div>
-              <h1 className="text-4xl font-bold tracking-tight flex items-center gap-3">
-                <div className="bg-gradient-primary rounded-xl p-2.5">
-                  <Calculator className="h-8 w-8 text-white" />
-                </div>
-                Simulador Financiero Realista
-              </h1>
-              <p className="text-muted-foreground mt-2">
-                Incluye impuestos, inflación y financiación para San Luis
-              </p>
+                <h1 className="text-4xl font-bold tracking-tight flex items-center gap-3">
+                  <div className="bg-gradient-primary rounded-xl p-2.5">
+                    <Calculator className="h-8 w-8 text-white" />
+                  </div>
+                  Calculá cuánta plata vas a ganar
+                </h1>
+                <p className="text-muted-foreground mt-2">
+                  Con impuestos reales, inflación y préstamos de San Luis
+                </p>
               {businessName && (
                 <Badge variant="outline" className="mt-2">
                   Basado en tu idea: {businessName}
@@ -242,9 +242,9 @@ const FinancialSimulator = () => {
             </div>
             
             <div className="flex gap-2">
-              <Button variant="outline" onClick={() => toast({ title: "Próximamente", description: "La exportación estará disponible pronto" })}>
+              <Button variant="outline" className="border-2" onClick={() => toast({ title: "Próximamente", description: "La exportación estará disponible pronto" })}>
                 <Download className="h-4 w-4 mr-2" />
-                Exportar Excel
+                Descargar en Excel
               </Button>
             </div>
           </div>
@@ -276,7 +276,7 @@ const FinancialSimulator = () => {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <DollarSign className="h-5 w-5" />
-                  Ingresos
+                  ¿Cuánto vas a vender?
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
@@ -597,7 +597,7 @@ const FinancialSimulator = () => {
             {/* Cost Composition */}
             <Card>
               <CardHeader>
-                <CardTitle>Composición de Costos</CardTitle>
+                <CardTitle>Qué porcentaje de tu dinero va a cada cosa</CardTitle>
               </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={300}>
@@ -625,35 +625,35 @@ const FinancialSimulator = () => {
             {/* Scenarios Comparison */}
             <Card>
               <CardHeader>
-                <CardTitle>Tres Escenarios</CardTitle>
+                <CardTitle>Tres posibilidades: Mal / Normal / Bien</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-3 gap-4">
                   <div className="p-4 bg-destructive/10 rounded-lg border-2 border-destructive/50">
-                    <h4 className="font-bold text-sm mb-2">Pesimista</h4>
-                    <p className="text-xs text-muted-foreground mb-2">Inflación 10%, -30% clientes</p>
+                    <h4 className="font-bold text-sm mb-2">Si las cosas van mal</h4>
+                    <p className="text-xs text-muted-foreground mb-2">Muchos precios subiendo, pocos clientes</p>
                     <p className="text-lg font-bold text-destructive">
                       {formatCurrency(scenarios.pessimistic.reduce((acc, p) => acc + p.realProfit, 0) / 12)}
                     </p>
-                    <p className="text-xs">promedio/mes</p>
+                    <p className="text-xs">por mes</p>
                   </div>
                   
                   <div className="p-4 bg-primary/10 rounded-lg border-2 border-primary">
-                    <h4 className="font-bold text-sm mb-2">Realista</h4>
-                    <p className="text-xs text-muted-foreground mb-2">Tus valores actuales</p>
+                    <h4 className="font-bold text-sm mb-2">Normal</h4>
+                    <p className="text-xs text-muted-foreground mb-2">Con lo que pusiste arriba</p>
                     <p className="text-lg font-bold text-primary">
                       {formatCurrency(scenarios.realistic.reduce((acc, p) => acc + p.realProfit, 0) / 12)}
                     </p>
-                    <p className="text-xs">promedio/mes</p>
+                    <p className="text-xs">por mes</p>
                   </div>
                   
                   <div className="p-4 bg-success/10 rounded-lg border-2 border-success/50">
-                    <h4 className="font-bold text-sm mb-2">Optimista</h4>
-                    <p className="text-xs text-muted-foreground mb-2">Inflación 3%, +30% clientes</p>
+                    <h4 className="font-bold text-sm mb-2">Si las cosas van bien</h4>
+                    <p className="text-xs text-muted-foreground mb-2">Precios estables, muchos clientes</p>
                     <p className="text-lg font-bold text-success">
                       {formatCurrency(scenarios.optimistic.reduce((acc, p) => acc + p.realProfit, 0) / 12)}
                     </p>
-                    <p className="text-xs">promedio/mes</p>
+                    <p className="text-xs">por mes</p>
                   </div>
                 </div>
               </CardContent>
@@ -662,7 +662,7 @@ const FinancialSimulator = () => {
             {/* Projection Table */}
             <Card>
               <CardHeader>
-                <CardTitle>Proyección 36 Meses</CardTitle>
+                <CardTitle>Cómo va a estar tu negocio los próximos 3 años</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="overflow-x-auto">
@@ -670,11 +670,11 @@ const FinancialSimulator = () => {
                     <thead>
                       <tr className="border-b">
                         <th className="text-left p-2">Mes</th>
-                        <th className="text-right p-2">Ingresos {showRealValues ? 'Real' : 'Nom.'}</th>
-                        <th className="text-right p-2">Costos</th>
+                        <th className="text-right p-2">Ventas {showRealValues ? 'Real' : 'Nom.'}</th>
+                        <th className="text-right p-2">Gastos</th>
                         <th className="text-right p-2">Impuestos</th>
                         <th className="text-right p-2">Ganancia</th>
-                        <th className="text-right p-2">Acumulado</th>
+                        <th className="text-right p-2">Total</th>
                       </tr>
                     </thead>
                     <tbody>

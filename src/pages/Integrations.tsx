@@ -39,7 +39,7 @@ const Integrations = () => {
     },
     {
       name: "APIs Personalizadas",
-      description: "Conecta Emprendu con tus sistemas propietarios mediante APIs REST",
+      description: "Conectá tu sistema con nosotros usando tecnología REST",
       icon: LinkIcon,
       category: "Integración Custom",
       status: "business",
@@ -70,7 +70,7 @@ const Integrations = () => {
           🔌 Integraciones Enterprise
         </h1>
         <p className="text-muted-foreground">
-          Conecta Emprendu con tus sistemas empresariales existentes. 
+          Conectá con otros programas que ya usás. 
           <span className="font-semibold text-foreground"> Disponible en planes Business y Enterprise.</span>
         </p>
       </div>
@@ -167,7 +167,7 @@ const Integrations = () => {
                         <div className="bg-muted p-4 rounded-lg">
                           <p className="text-sm font-semibold mb-2">Contacto Enterprise</p>
                           <p className="text-sm text-muted-foreground">
-                            📧 enterprise@emprendu.com<br />
+                            📧 contacto@proyectoemprendedurismo.ar<br />
                             📞 +54 9 266 XXX-XXXX
                           </p>
                         </div>
@@ -188,8 +188,7 @@ const Integrations = () => {
         </CardHeader>
         <CardContent className="space-y-4">
           <p className="text-sm text-muted-foreground">
-            Las integraciones enterprise permiten que Emprendu se convierta en el hub central 
-            de tu ecosistema empresarial, conectando sistemas legacy con tecnología moderna.
+            Las integraciones enterprise te permiten conectar todos tus sistemas en un solo lugar.
           </p>
           <div className="grid md:grid-cols-3 gap-4">
             <div className="space-y-2">
