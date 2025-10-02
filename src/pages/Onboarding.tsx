@@ -63,7 +63,7 @@ const Onboarding = () => {
       <div className="w-full max-w-5xl space-y-8 animate-fade-in">
         <div className="text-center space-y-2">
           <h1 className="text-4xl md:text-5xl font-bold">
-            ¡Bienvenido a PuebloHub! 🚀
+            ¡Bienvenido a Emprendu! 🚀
           </h1>
           <p className="text-lg text-muted-foreground">
             Contanos en qué etapa estás para personalizar tu experiencia

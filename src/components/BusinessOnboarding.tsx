@@ -94,7 +94,7 @@ const BusinessOnboarding = ({ onComplete }: BusinessOnboardingProps) => {
             </div>
           </div>
           <CardTitle className="text-3xl font-bold bg-gradient-hero bg-clip-text text-transparent animate-fade-in">
-            ¡Bienvenido a PuebloHub! 👋
+            ¡Bienvenido a Emprendu! 👋
           </CardTitle>
           <CardDescription className="text-base mt-2">
             Creá tu primer negocio para comenzar tu viaje emprendedor

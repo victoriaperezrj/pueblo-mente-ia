@@ -259,7 +259,7 @@ const Dashboard = () => {
         </CardHeader>
         <CardContent>
           <p className="text-base leading-relaxed mb-4">
-            ¡Bienvenido a PuebloHub! 🚀 
+            ¡Bienvenido a Emprendu! 🚀 
           </p>
           <p className="text-sm text-muted-foreground leading-relaxed">
             Comenzá a registrar tus ventas y productos para obtener{" "}

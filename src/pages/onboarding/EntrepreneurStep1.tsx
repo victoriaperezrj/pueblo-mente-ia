@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,8 +10,8 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Progress } from "@/components/ui/progress";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useToast } from "@/hooks/use-toast";
-import { ArrowLeft, Lightbulb } from "lucide-react";
-import { z } from "zod";
+import { ArrowLeft, Lightbulb, CheckCircle, Info, Loader2 } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const sanLuisCities = [
   "San Luis (capital)",
@@ -38,53 +38,119 @@ const industries = [
   "Otro"
 ];
 
-const ideaFormSchema = z.object({
-  ideaDescription: z.string()
-    .trim()
-    .min(50, "La descripción debe tener al menos 50 caracteres")
-    .max(500, "La descripción no puede exceder 500 caracteres"),
-  location: z.enum(sanLuisCities as [string, ...string[]], {
-    errorMap: () => ({ message: "Seleccioná una ubicación válida" })
-  }),
-  industry: z.enum(industries as [string, ...string[]], {
-    errorMap: () => ({ message: "Seleccioná un rubro válido" })
-  }),
-  experience: z.string().optional()
-});
-
 const EntrepreneurStep1 = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [loading, setLoading] = useState(false);
-  const [ideaDescription, setIdeaDescription] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [loadingMessage, setLoadingMessage] = useState("Guardando tu idea...");
+  const [ideaText, setIdeaText] = useState("");
   const [location, setLocation] = useState("");
   const [industry, setIndustry] = useState("");
   const [experience, setExperience] = useState("");
+  const [suggestedIndustry, setSuggestedIndustry] = useState("");
+  const [showSuccess, setShowSuccess] = useState(false);
+
+  // Auto-guardado de borrador
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (ideaText.length > 0) {
+        localStorage.setItem('idea_draft', JSON.stringify({
+          text: ideaText,
+          location,
+          industry,
+          experience,
+          timestamp: Date.now()
+        }));
+      }
+    }, 30000); // 30 segundos
+    return () => clearInterval(interval);
+  }, [ideaText, location, industry, experience]);
+
+  // Recuperar borrador al montar
+  useEffect(() => {
+    const draft = localStorage.getItem('idea_draft');
+    if (draft) {
+      const parsed = JSON.parse(draft);
+      const dayInMs = 86400000;
+      if (Date.now() - parsed.timestamp < dayInMs) {
+        setIdeaText(parsed.text || "");
+        setLocation(parsed.location || "");
+        setIndustry(parsed.industry || "");
+        setExperience(parsed.experience || "");
+      }
+    }
+  }, []);
+
+  // Sugerencia automática de rubro
+  useEffect(() => {
+    const text = ideaText.toLowerCase();
+    
+    const rubroSuggestions: Record<string, string> = {
+      'empanada|comida|restau|cocina|delivery comida|morfar|panadería|pan': 'Gastronomía (panadería, restaurante, café)',
+      'pelo|corte|barber|peluqu|uñas|maquilla': 'Belleza y Estética (peluquería, spa, barbería)',
+      'gym|entrena|fitness|depor': 'Salud y Bienestar (gimnasio, nutrición)',
+      'kiosco|almacén|tienda|venta|boliche': 'Retail (almacén, kiosco, tienda)',
+    };
+    
+    for (const [pattern, rubro] of Object.entries(rubroSuggestions)) {
+      if (new RegExp(pattern).test(text)) {
+        setSuggestedIndustry(rubro);
+        break;
+      }
+    }
+  }, [ideaText]);
+
+  // Animación al completar 30 caracteres
+  useEffect(() => {
+    if (ideaText.length === 30) {
+      setShowSuccess(true);
+      setTimeout(() => setShowSuccess(false), 3000);
+    }
+  }, [ideaText.length]);
+
+  // Loading messages rotativos
+  useEffect(() => {
+    if (isLoading) {
+      const messages = [
+        "Guardando tu idea...",
+        "Preparando análisis...",
+        "Casi listo..."
+      ];
+      let index = 0;
+      const interval = setInterval(() => {
+        setLoadingMessage(messages[index % messages.length]);
+        index++;
+      }, 2000);
+      return () => clearInterval(interval);
+    }
+  }, [isLoading]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    // Validar con Zod
-    const validation = ideaFormSchema.safeParse({
-      ideaDescription,
-      location,
-      industry,
-      experience
-    });
-
-    if (!validation.success) {
-      const firstError = validation.error.errors[0];
+    
+    console.log('Submit iniciado:', { ideaText, location, industry });
+    
+    if (!ideaText || ideaText.trim().length < 30) {
       toast({
-        title: "Error de validación",
-        description: firstError.message,
+        title: "Texto muy corto",
+        description: "Contanos un poco más sobre tu idea (mínimo 30 caracteres)",
         variant: "destructive",
       });
       return;
     }
-
-    setLoading(true);
+    
+    if (!location || !industry) {
+      toast({
+        title: "Datos incompletos",
+        description: "Elegí ubicación y rubro",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    setIsLoading(true);
+    
     try {
-      const validatedData = validation.data;
       const { data: { user } } = await supabase.auth.getUser();
       
       if (!user) {
@@ -95,174 +161,279 @@ const EntrepreneurStep1 = () => {
         });
         return;
       }
-
+      
       const { data, error } = await supabase
         .from('business_ideas')
         .insert({
           user_id: user.id,
-          idea_description: validatedData.ideaDescription,
-          location: validatedData.location,
-          industry: validatedData.industry,
-          has_experience: validatedData.experience,
+          idea_description: ideaText.trim(),
+          location: location,
+          industry: industry,
         })
         .select()
         .single();
-
-      if (error) throw error;
-
+      
+      if (error) {
+        console.error('Supabase error:', error);
+        throw error;
+      }
+      
+      console.log('Idea guardada:', data);
+      
+      // Limpiar borrador
+      localStorage.removeItem('idea_draft');
+      
+      toast({
+        title: "¡Idea guardada!",
+        description: "Ahora vamos a analizarla",
+      });
+      
       navigate(`/onboarding/entrepreneur/analyzing?ideaId=${data.id}`);
+      
     } catch (error: any) {
-      console.error('Error saving idea:', error);
+      console.error('Error completo:', error);
       toast({
         title: "Error",
-        description: error.message || "No se pudo guardar tu idea",
+        description: 'Hubo un problema guardando tu idea. Probá de nuevo.',
         variant: "destructive",
       });
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
+  const isFormValid = ideaText.trim().length >= 30 && location && industry;
+
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-background via-background to-primary/5">
-      <div className="w-full max-w-3xl space-y-6 animate-fade-in">
-        <div className="space-y-4">
-          <div className="flex items-center gap-4">
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => navigate('/onboarding')}
-            >
-              <ArrowLeft className="w-4 h-4" />
-            </Button>
-            <div className="flex-1">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-medium text-muted-foreground">Paso 1 de 5</span>
-                <span className="text-sm font-medium">20%</span>
-              </div>
-              <Progress value={20} className="h-2" />
-            </div>
-          </div>
-          
-          <div className="text-center space-y-2">
-            <h1 className="text-3xl md:text-4xl font-bold">
-              Paso 1: Contanos tu idea
-            </h1>
-            <p className="text-muted-foreground">
-              Describí tu idea de negocio con la mayor cantidad de detalles posible
-            </p>
+    <div className="min-h-screen bg-background">
+      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="container flex h-16 items-center justify-between px-4">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => navigate('/onboarding/classify')}
+            disabled={isLoading}
+          >
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Volver
+          </Button>
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-muted-foreground">Paso 1 de 5</span>
+            <Progress value={20} className="h-2 w-24" />
           </div>
         </div>
+      </header>
 
-        <Alert className="border-primary/20 bg-primary/5">
-          <Lightbulb className="h-4 w-4 text-primary" />
-          <AlertDescription>
-            💡 Cuanto más detallada sea tu idea, mejor será el análisis. Incluí: tipo de productos/servicios, público objetivo, y qué te hace diferente.
-          </AlertDescription>
-        </Alert>
+      <main className="container mx-auto px-4 py-8 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto space-y-8">
+          <div className="text-center space-y-3 animate-fade-in">
+            <h1 className="text-3xl md:text-4xl font-bold">
+              Contanos tu idea
+            </h1>
+            <p className="text-lg text-muted-foreground">
+              Describí tu proyecto con la mayor cantidad de detalles posible
+            </p>
+          </div>
 
-        <Card className="border-2">
-          <CardHeader>
-            <CardTitle>Información de tu proyecto</CardTitle>
-            <CardDescription>
-              Completá todos los campos para validar tu idea
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="space-y-2">
-                <Label htmlFor="idea">¿Qué negocio querés crear?</Label>
-                <Textarea
-                  id="idea"
-                  placeholder="Ejemplo: Quiero abrir una panadería artesanal en Villa Mercedes con foco en productos sin TACC y panes de masa madre. El local sería en zona céntrica, cerca de escuelas."
-                  className="min-h-[150px] resize-y"
-                  value={ideaDescription}
-                  onChange={(e) => setIdeaDescription(e.target.value)}
-                  maxLength={500}
-                  required
-                />
-                <p className="text-xs text-muted-foreground">
-                  {ideaDescription.length}/500 caracteres {ideaDescription.length < 50 && `(mínimo 50)`}
-                </p>
-              </div>
+          <div className="grid lg:grid-cols-3 gap-6">
+            {/* Columna principal */}
+            <div className="lg:col-span-2 space-y-6">
+              <Alert className="border-primary/20 bg-primary/5">
+                <Lightbulb className="h-4 w-4 text-primary" />
+                <AlertDescription>
+                  💡 Cuanto más detalles, mejor será el análisis. Incluí: qué ofrecés, para quién, y qué te hace diferente.
+                </AlertDescription>
+              </Alert>
 
-              <div className="space-y-2">
-                <Label htmlFor="location">¿En qué ciudad?</Label>
-                <Select value={location} onValueChange={setLocation} required>
-                  <SelectTrigger id="location">
-                    <SelectValue placeholder="Seleccioná tu ciudad" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {sanLuisCities.map((city) => (
-                      <SelectItem key={city} value={city}>
-                        {city}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+              <Card className="w-full border-2 transition-all hover:border-primary hover:shadow-xl">
+                <CardHeader>
+                  <CardTitle>Tu Proyecto</CardTitle>
+                  <CardDescription>
+                    Completá todos los campos. Usá lenguaje informal, sin problema.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <form onSubmit={handleSubmit} className="space-y-6">
+                    <div className="space-y-2">
+                      <Label htmlFor="idea">¿Qué negocio querés crear?</Label>
+                      <Textarea
+                        id="idea"
+                        placeholder="Ejemplo: Quiero poner un delivery de empanadas. Mi vieja cocina re bien y todos me dicen que las venda. Arrancaría con mi moto haciendo pedidos por WhatsApp, después ver de un local."
+                        className="min-h-[180px] resize-y"
+                        value={ideaText}
+                        onChange={(e) => setIdeaText(e.target.value)}
+                        maxLength={1000}
+                        required
+                      />
+                      <div className="flex items-center justify-between">
+                        <p className={cn(
+                          "text-sm transition-colors",
+                          ideaText.length >= 30 ? "text-green-600 font-medium" : "text-muted-foreground"
+                        )}>
+                          {ideaText.length}/1000 caracteres
+                          {ideaText.length < 30 && " (mínimo 30)"}
+                        </p>
+                        {showSuccess && (
+                          <div className="text-green-600 text-sm flex items-center gap-2 animate-fade-in">
+                            <CheckCircle className="h-4 w-4" />
+                            ¡Perfecto! Ya podés validar
+                          </div>
+                        )}
+                      </div>
+                      
+                      {/* Preview */}
+                      {ideaText.length > 0 && (
+                        <Card className="p-4 bg-muted/50 mt-4">
+                          <p className="text-xs text-muted-foreground mb-2">Preview:</p>
+                          <p className="text-sm">{ideaText}</p>
+                        </Card>
+                      )}
+                    </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="industry">¿Qué rubro?</Label>
-                <Select value={industry} onValueChange={setIndustry} required>
-                  <SelectTrigger id="industry">
-                    <SelectValue placeholder="Seleccioná el rubro" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {industries.map((ind) => (
-                      <SelectItem key={ind} value={ind}>
-                        {ind}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+                    {/* Sugerencia automática */}
+                    {suggestedIndustry && !industry && (
+                      <Alert className="border-primary/50 bg-primary/5">
+                        <Info className="h-4 w-4" />
+                        <AlertDescription className="flex items-center justify-between">
+                          <span>¿Tu rubro es <strong>{suggestedIndustry}</strong>?</span>
+                          <Button 
+                            type="button"
+                            size="sm" 
+                            variant="link" 
+                            onClick={() => setIndustry(suggestedIndustry)}
+                            className="h-auto p-0"
+                          >
+                            Sí, elegir
+                          </Button>
+                        </AlertDescription>
+                      </Alert>
+                    )}
 
-              <div className="space-y-3">
-                <Label>¿Tenés experiencia en este rubro?</Label>
-                <RadioGroup value={experience} onValueChange={setExperience}>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="yes" id="exp-yes" />
-                    <Label htmlFor="exp-yes" className="font-normal cursor-pointer">
-                      Sí, trabajé en el rubro
-                    </Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="researched" id="exp-researched" />
-                    <Label htmlFor="exp-researched" className="font-normal cursor-pointer">
-                      No, pero investigué mucho
-                    </Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="no" id="exp-no" />
-                    <Label htmlFor="exp-no" className="font-normal cursor-pointer">
-                      No, es completamente nuevo para mí
-                    </Label>
-                  </div>
-                </RadioGroup>
-              </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="location">¿En qué ciudad?</Label>
+                      <Select value={location} onValueChange={setLocation} required>
+                        <SelectTrigger id="location">
+                          <SelectValue placeholder="Seleccioná tu ciudad" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {sanLuisCities.map((city) => (
+                            <SelectItem key={city} value={city}>
+                              {city}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
 
-              <div className="flex gap-3 pt-4">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => navigate('/onboarding')}
-                  className="flex-1"
-                >
-                  Volver
-                </Button>
-                <Button
-                  type="submit"
-                  disabled={loading || ideaDescription.length < 50 || !location || !industry}
-                  className="flex-1"
-                >
-                  {loading ? "Analizando..." : "Validar mi Idea →"}
-                </Button>
-              </div>
-            </form>
-          </CardContent>
-        </Card>
-      </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="industry">¿Qué rubro?</Label>
+                      <Select value={industry} onValueChange={setIndustry} required>
+                        <SelectTrigger id="industry">
+                          <SelectValue placeholder="Seleccioná el rubro" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {industries.map((ind) => (
+                            <SelectItem key={ind} value={ind}>
+                              {ind}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-3">
+                      <Label>¿Tenés experiencia en este rubro?</Label>
+                      <RadioGroup value={experience} onValueChange={setExperience}>
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem value="yes" id="exp-yes" />
+                          <Label htmlFor="exp-yes" className="font-normal cursor-pointer">
+                            Sí, trabajé en el rubro
+                          </Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem value="researched" id="exp-researched" />
+                          <Label htmlFor="exp-researched" className="font-normal cursor-pointer">
+                            No, pero investigué mucho
+                          </Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem value="no" id="exp-no" />
+                          <Label htmlFor="exp-no" className="font-normal cursor-pointer">
+                            No, es completamente nuevo para mí
+                          </Label>
+                        </div>
+                      </RadioGroup>
+                    </div>
+
+                    <div className="flex gap-3 pt-4">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => navigate('/onboarding/classify')}
+                        disabled={isLoading}
+                        className="flex-1"
+                      >
+                        ← Volver
+                      </Button>
+                      <Button
+                        type="submit"
+                        disabled={isLoading || !isFormValid}
+                        className="flex-1 bg-gradient-primary"
+                      >
+                        {isLoading ? "Guardando..." : "Validar mi Idea →"}
+                      </Button>
+                    </div>
+                  </form>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Tips laterales */}
+            <div className="space-y-6">
+              <Card className="p-6 bg-primary/5 border-primary/20">
+                <h3 className="font-semibold mb-3 flex items-center gap-2">
+                  <Lightbulb className="h-5 w-5 text-primary" />
+                  Tips para tu idea
+                </h3>
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                  <li>• Contá QUÉ querés hacer</li>
+                  <li>• DÓNDE sería (barrio, zona)</li>
+                  <li>• PARA QUIÉN es</li>
+                  <li>• QUÉ te hace diferente</li>
+                </ul>
+              </Card>
+
+              <Card className="p-6 bg-muted/50">
+                <h3 className="font-semibold mb-3 text-sm">Ejemplos válidos:</h3>
+                <ul className="space-y-3 text-xs text-muted-foreground">
+                  <li className="p-3 bg-background rounded-lg border">
+                    "Laburo en un taller mecánico pero quiero el mío, tengo las herramientas ya"
+                  </li>
+                  <li className="p-3 bg-background rounded-lg border">
+                    "Soy bueno cortando pelo, quiero una barbería piola en mi barrio"
+                  </li>
+                  <li className="p-3 bg-background rounded-lg border">
+                    "Tengo ganas de un gimnasio funcional, acá no hay ninguno"
+                  </li>
+                </ul>
+              </Card>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      {/* Loading Overlay */}
+      {isLoading && (
+        <div className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-50">
+          <Card className="p-8 text-center max-w-sm">
+            <Loader2 className="h-12 w-12 animate-spin mx-auto mb-4 text-primary" />
+            <p className="text-lg font-medium mb-2">{loadingMessage}</p>
+            <p className="text-sm text-muted-foreground">
+              No cierres esta ventana
+            </p>
+          </Card>
+        </div>
+      )}
     </div>
   );
 };

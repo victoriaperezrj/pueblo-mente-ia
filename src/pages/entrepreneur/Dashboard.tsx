@@ -223,7 +223,7 @@ export default function EntrepreneurDashboard() {
       {/* Sidebar */}
       <aside className="fixed left-0 top-0 h-full w-64 bg-card border-r p-6 overflow-y-auto hidden lg:block">
         <h2 className="text-2xl font-bold mb-8 bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-          PuebloHub
+          Emprendu
         </h2>
         
         <nav className="space-y-2">

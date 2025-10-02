@@ -157,7 +157,7 @@ const EntrepreneurAnalyzing = () => {
         {/* Logo */}
         <div className="text-center">
           <h1 className="text-4xl md:text-5xl font-bold gradient-primary bg-clip-text text-transparent">
-            PuebloHub
+            Emprendu
           </h1>
         </div>
 

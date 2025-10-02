@@ -39,7 +39,7 @@ const Integrations = () => {
     },
     {
       name: "APIs Personalizadas",
-      description: "Conecta PuebloHub con tus sistemas propietarios mediante APIs REST",
+      description: "Conecta Emprendu con tus sistemas propietarios mediante APIs REST",
       icon: LinkIcon,
       category: "Integración Custom",
       status: "business",
@@ -70,7 +70,7 @@ const Integrations = () => {
           🔌 Integraciones Enterprise
         </h1>
         <p className="text-muted-foreground">
-          Conecta PuebloHub con tus sistemas empresariales existentes. 
+          Conecta Emprendu con tus sistemas empresariales existentes. 
           <span className="font-semibold text-foreground"> Disponible en planes Business y Enterprise.</span>
         </p>
       </div>
@@ -167,7 +167,7 @@ const Integrations = () => {
                         <div className="bg-muted p-4 rounded-lg">
                           <p className="text-sm font-semibold mb-2">Contacto Enterprise</p>
                           <p className="text-sm text-muted-foreground">
-                            📧 enterprise@pueblohub.com<br />
+                            📧 enterprise@emprendu.com<br />
                             📞 +54 9 266 XXX-XXXX
                           </p>
                         </div>
@@ -188,7 +188,7 @@ const Integrations = () => {
         </CardHeader>
         <CardContent className="space-y-4">
           <p className="text-sm text-muted-foreground">
-            Las integraciones enterprise permiten que PuebloHub se convierta en el hub central 
+            Las integraciones enterprise permiten que Emprendu se convierta en el hub central 
             de tu ecosistema empresarial, conectando sistemas legacy con tecnología moderna.
           </p>
           <div className="grid md:grid-cols-3 gap-4">

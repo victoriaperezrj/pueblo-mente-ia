@@ -32,7 +32,7 @@ const Index = () => {
             <Building2 className="h-6 w-6 text-white" />
           </div>
           <span className="font-bold text-2xl bg-gradient-primary bg-clip-text text-transparent">
-            PuebloHub
+            Emprendu
           </span>
         </div>
         <Button onClick={() => navigate("/auth")} size="lg" className="shadow-lg">
@@ -60,7 +60,7 @@ const Index = () => {
           
           <p className="text-xl md:text-2xl text-muted-foreground mb-10 max-w-3xl mx-auto leading-relaxed animate-fade-in" style={{ animationDelay: "0.2s" }}>
             Desde validar tu idea hasta gestionar operaciones diarias. 
-            PuebloHub es la plataforma <span className="font-semibold text-foreground">todo-en-uno</span> para 
+            Emprendu es la plataforma <span className="font-semibold text-foreground">todo-en-uno</span> para 
             emprendedores de <span className="font-semibold text-foreground">San Luis, Argentina</span>.
           </p>
           
@@ -196,7 +196,7 @@ const Index = () => {
               ¿Listo para transformar tu negocio?
             </h2>
             <p className="text-white/90 mb-8 text-lg md:text-xl max-w-2xl mx-auto">
-              Uníte a los emprendedores que ya están creciendo con PuebloHub. 
+              Uníte a los emprendedores que ya están creciendo con Emprendu. 
               <span className="font-semibold"> Sin costo, sin compromisos.</span>
             </p>
             <Button 
@@ -220,11 +220,11 @@ const Index = () => {
               <Building2 className="h-5 w-5 text-white" />
             </div>
             <span className="font-bold text-xl bg-gradient-primary bg-clip-text text-transparent">
-              PuebloHub
+              Emprendu
             </span>
           </div>
           <p className="text-muted-foreground mb-2">
-            © 2025 PuebloHub - Plataforma de Gestión Empresarial con IA
+            © 2025 Emprendu - Plataforma de Gestión Empresarial con IA
           </p>
           <p className="text-sm text-muted-foreground">
             🇦🇷 Hecho con ❤️ en San Luis, Argentina

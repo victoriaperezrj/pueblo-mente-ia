@@ -116,14 +116,14 @@ const Classify = () => {
         {/* Logo */}
         <div className="text-center mb-8">
           <h1 className="text-2xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-            PuebloHub
+            Emprendu
           </h1>
         </div>
 
         {/* Header */}
         <div className="text-center space-y-3 mb-12">
           <h1 className="text-4xl md:text-5xl font-bold">
-            ¡Bienvenido a PuebloHub! 🚀
+            ¡Bienvenido a Emprendu! 🚀
           </h1>
           <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
             Contanos en qué etapa estás para personalizar tu experiencia
