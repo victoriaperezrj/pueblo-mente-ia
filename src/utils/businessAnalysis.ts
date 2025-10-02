@@ -17,10 +17,35 @@ interface SimulatedAnalysis {
   key_factors: string[];
   warnings: string[];
   opportunities: string[];
+  risks: string[];
+  recommendations: string[];
+  margin: number;
   timeframe: {
     setup_months: number;
     break_even_months: number;
   };
+}
+
+export function getViabilityMessage(viability: string) {
+  if (viability === 'viable') {
+    return {
+      title: "Tu idea tiene buen potencial",
+      description: "Los números dan positivo, pero igual prestá atención a los detalles. Todo negocio tiene riesgos.",
+      color: "green"
+    };
+  } else if (viability === 'caution') {
+    return {
+      title: "Tu idea puede funcionar, pero con ajustes",
+      description: "Hay algunos puntos que tenés que resolver antes de meter plata. No es imposible, pero requiere trabajo.",
+      color: "yellow"
+    };
+  } else {
+    return {
+      title: "Tu idea necesita cambios importantes",
+      description: "Con estos números, el riesgo de perder plata es alto. No significa que abandones, pero replanteá el enfoque.",
+      color: "red"
+    };
+  }
 }
 
 const nichosPorRubro: Record<string, string[]> = {
@@ -207,6 +232,46 @@ function generarOportunidades(industry: string, location: string): string[] {
   return oportunidades.slice(0, 4);
 }
 
+function generarRiesgos(viability: string, competidores: number, margin: number, breakEvenMonths: number): string[] {
+  const risks: string[] = [];
+  
+  if (competidores > 6) {
+    risks.push("Mercado muy saturado. Vas a tener que competir fuerte por precio, lo que baja tu margen.");
+  }
+  
+  if (margin < 20) {
+    risks.push("Margen muy ajustado. Con 5% de inflación mensual, en 6 meses estás perdiendo plata si no subís precios.");
+  }
+  
+  if (breakEvenMonths > 18) {
+    risks.push("Recuperás la inversión muy tarde (más de 18 meses). Si algo sale mal, perdés mucho.");
+  }
+  
+  return risks;
+}
+
+function generarRecomendaciones(competidores: number, margin: number, breakEvenMonths: number, investment: number): string[] {
+  const recommendations: string[] = [];
+  
+  if (competidores > 5) {
+    recommendations.push("Buscá un nicho específico: productos premium, atención personalizada, o un servicio que nadie más ofrece.");
+  }
+  
+  if (margin < 30) {
+    recommendations.push("Reducí costos fijos: empezá desde casa o buscá un local más barato. Cada peso cuenta.");
+  }
+  
+  if (breakEvenMonths > 12) {
+    recommendations.push("Arrancá más chico: menos inversión inicial, probá el mercado primero, después escalás.");
+  }
+  
+  if (investment > 8000000) {
+    recommendations.push("Considerá financiación: buscá créditos a tasa baja (Banco Nación, programas provinciales) antes de meter tus ahorros.");
+  }
+  
+  return recommendations;
+}
+
 export function generateSimulatedAnalysis(
   industry: string,
   location: string,
@@ -236,6 +301,17 @@ export function generateSimulatedAnalysis(
     realistic: Math.floor(baseRevenue),
     optimistic: Math.floor(baseRevenue * 1.5)
   };
+  
+  // Calcular margen
+  const costPercentage = 0.3 + (Math.random() * 0.3); // 30-60% de costos
+  const margin = Math.round((1 - costPercentage) * 100);
+  
+  // Calcular break-even
+  const monthlyCosts = investmentMin * 0.05; // 5% de inversión por mes
+  const breakEvenMonths = Math.ceil(investmentMin / (monthlyRevenue.realistic - monthlyCosts));
+
+  const risks = generarRiesgos(viability, competidores, margin, breakEvenMonths);
+  const recommendations = generarRecomendaciones(competidores, margin, breakEvenMonths, investmentMin);
 
   return {
     viability,
@@ -250,9 +326,12 @@ export function generateSimulatedAnalysis(
     key_factors: generarFactoresClave(industry, location),
     warnings: generarAdvertencias(viability, competidores),
     opportunities: generarOportunidades(industry, location),
+    risks,
+    recommendations,
+    margin,
     timeframe: {
       setup_months: randomBetween(2, 4),
-      break_even_months: randomBetween(8, 18)
+      break_even_months: breakEvenMonths
     }
   };
 }

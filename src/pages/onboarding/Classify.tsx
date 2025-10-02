@@ -1,15 +1,16 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Zap, Building2, Check, Loader2 } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+import { Lightbulb, Store, Building2, Check, Loader2, ArrowLeft } from "lucide-react";
+import { toast } from "sonner";
+
+type UserType = 'entrepreneur' | 'business_owner' | 'enterprise';
 
 const Classify = () => {
   const navigate = useNavigate();
-  const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [checkingAuth, setCheckingAuth] = useState(true);
 
@@ -26,7 +27,6 @@ const Classify = () => {
         return;
       }
 
-      // Check if user already has a user_type set
       const { data: profile } = await supabase
         .from('profiles')
         .select('user_type')
@@ -34,7 +34,6 @@ const Classify = () => {
         .maybeSingle();
 
       if (profile?.user_type) {
-        // User already classified, redirect to appropriate flow
         if (profile.user_type === 'entrepreneur') {
           navigate('/onboarding/entrepreneur/step1');
         } else {
@@ -48,48 +47,36 @@ const Classify = () => {
     }
   };
 
-  const handleSelection = async (userType: 'entrepreneur' | 'business_owner') => {
+  const handleSelect = async (type: UserType) => {
     setLoading(true);
     try {
       const { data: { user } } = await supabase.auth.getUser();
       
       if (!user) {
-        toast({
-          title: "Error",
-          description: "No se encontró usuario autenticado",
-          variant: "destructive",
-        });
+        toast.error("No se encontró usuario autenticado");
         navigate("/auth");
         return;
       }
 
+      // Map enterprise to business_owner for now (both go to dashboard)
+      const dbUserType: 'entrepreneur' | 'business_owner' = 
+        type === 'entrepreneur' ? 'entrepreneur' : 'business_owner';
+
       const { error } = await supabase
         .from('profiles')
-        .update({ user_type: userType })
+        .update({ user_type: dbUserType })
         .eq('id', user.id);
 
       if (error) throw error;
 
-      toast({
-        title: "¡Perfecto!",
-        description: userType === 'entrepreneur' 
-          ? "Comenzaremos validando tu idea" 
-          : "Te ayudaremos a automatizar tu negocio",
-      });
-
-      // Redirect based on user type
-      if (userType === 'entrepreneur') {
+      if (type === 'entrepreneur') {
         navigate('/onboarding/entrepreneur/step1');
       } else {
         navigate('/dashboard');
       }
     } catch (error: any) {
       console.error('Error updating profile:', error);
-      toast({
-        title: "Error",
-        description: error.message || "No se pudo guardar tu selección",
-        variant: "destructive",
-      });
+      toast.error(error.message || "No se pudo guardar tu selección");
     } finally {
       setLoading(false);
     }
@@ -97,142 +84,187 @@ const Classify = () => {
 
   if (checkingAuth) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-background to-primary/5">
+      <div className="min-h-screen flex items-center justify-center bg-background">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 relative overflow-hidden">
-      {/* Animated Background */}
-      <div className="fixed inset-0 -z-10 bg-background">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-success/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }} />
-        <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-accent/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "2s" }} />
-      </div>
-
-      <div className="w-full max-w-6xl space-y-8 animate-fade-in">
-        {/* Logo */}
-        <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-            Proyecto Emprendedurismo
+    <div className="min-h-screen bg-background p-4">
+      <div className="container mx-auto max-w-7xl py-12">
+        <div className="text-center mb-12">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">
+            ¿En qué etapa estás?
           </h1>
-        </div>
-
-        {/* Header */}
-        <div className="text-center space-y-3 mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold">
-            ¡Bienvenido! 🚀
-          </h1>
-          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-            Contanos en qué etapa estás para personalizar tu experiencia
+          <p className="text-xl text-muted-foreground">
+            Elegí la opción que mejor te describa
           </p>
         </div>
 
-        {/* Cards Grid */}
-        <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-          {/* EMPRENDEDOR CARD */}
-          <Card 
-            className="hover:scale-105 hover:shadow-2xl transition-all duration-300 cursor-pointer group border-2 hover:border-primary animate-fade-in"
-            onClick={() => !loading && handleSelection('entrepreneur')}
-            style={{ animationDelay: "0.1s" }}
-          >
-            <CardHeader className="text-center space-y-4 pb-4">
-              <div className="mx-auto w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                <Zap className="h-16 w-16 text-primary" />
-              </div>
-              <div className="space-y-2">
-                <Badge variant="secondary" className="bg-primary/10 text-primary text-xs">
-                  Desde cero
-                </Badge>
-                <CardTitle className="text-3xl">Soy Emprendedor</CardTitle>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <CardDescription className="text-center text-base leading-relaxed">
-                Tengo una idea pero aún no la bajé a tierra. Necesito validación, plan de negocio y guía paso a paso.
-              </CardDescription>
-              
-              <div className="space-y-3">
-                {[
-                  "Validar tu idea con IA",
-                  "Plan de negocio personalizado",
-                  "Simulador financiero",
-                  "Checklist de permisos y regulaciones"
-                ].map((benefit, index) => (
-                  <div key={index} className="flex items-start gap-3">
-                    <Check className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
-                    <span className="text-sm">{benefit}</span>
-                  </div>
-                ))}
-              </div>
-
-              <Button 
-                className="w-full h-12 text-base font-semibold shadow-lg hover:shadow-xl transition-all" 
-                size="lg"
-                disabled={loading}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleSelection('entrepreneur');
-                }}
-              >
-                {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Comenzar como Emprendedor
-              </Button>
-            </CardContent>
+        <div className="grid md:grid-cols-3 gap-6">
+          
+          {/* OPCIÓN 1: EMPRENDEDOR */}
+          <Card className="p-8 hover:shadow-2xl transition-all border-2 hover:border-purple-500 cursor-pointer group">
+            <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl w-16 h-16 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+              <Lightbulb className="h-8 w-8 text-white" />
+            </div>
+            
+            <Badge className="mb-4 bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-100">
+              Desde Cero
+            </Badge>
+            
+            <h3 className="text-2xl font-bold mb-3">
+              Tengo una Idea
+            </h3>
+            
+            <p className="text-muted-foreground mb-6 leading-relaxed">
+              Todavía no arranqué. Quiero validar si mi idea funciona, armar el plan y calcular los números antes de invertir.
+            </p>
+            
+            <ul className="space-y-3 mb-8 text-sm">
+              <li className="flex items-start gap-2">
+                <Check className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                <span>Validación de viabilidad realista</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <Check className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                <span>Plan de negocio paso a paso</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <Check className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                <span>Simulador financiero con inflación</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <Check className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                <span>Calculadora de producción</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <Check className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                <span>Regulaciones y permisos</span>
+              </li>
+            </ul>
+            
+            <Button 
+              className="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:opacity-90 text-white"
+              onClick={() => handleSelect('entrepreneur')}
+              disabled={loading}
+            >
+              {loading ? "Guardando..." : "Empezar Validación →"}
+            </Button>
           </Card>
 
-          {/* EMPRESARIO CARD */}
-          <Card 
-            className="hover:scale-105 hover:shadow-2xl transition-all duration-300 cursor-pointer group border-2 hover:border-green-500 animate-fade-in"
-            onClick={() => !loading && handleSelection('business_owner')}
-            style={{ animationDelay: "0.2s" }}
-          >
-            <CardHeader className="text-center space-y-4 pb-4">
-              <div className="mx-auto w-24 h-24 rounded-full bg-green-500/10 flex items-center justify-center group-hover:bg-green-500/20 transition-colors">
-                <Building2 className="h-16 w-16 text-green-500" />
-              </div>
-              <div className="space-y-2">
-                <Badge variant="secondary" className="bg-green-500/10 text-green-700 dark:text-green-400 text-xs">
-                  Negocio activo
-                </Badge>
-                <CardTitle className="text-3xl">Soy Empresario</CardTitle>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <CardDescription className="text-center text-base leading-relaxed">
-                Ya tengo un negocio funcionando y quiero automatizar operaciones, gestionar ventas, inventario y turnos.
-              </CardDescription>
-              
-              <div className="space-y-3">
-                {[
-                  "ERP completo (ventas, inventario, turnos)",
-                  "Gestión de clientes y gastos",
-                  "Marketplace B2B",
-                  "Asistente de IA para tu negocio"
-                ].map((benefit, index) => (
-                  <div key={index} className="flex items-start gap-3">
-                    <Check className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
-                    <span className="text-sm">{benefit}</span>
-                  </div>
-                ))}
-              </div>
-
-              <Button 
-                className="w-full h-12 text-base font-semibold shadow-lg hover:shadow-xl transition-all bg-green-600 hover:bg-green-700" 
-                size="lg"
-                disabled={loading}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleSelection('business_owner');
-                }}
-              >
-                {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Comenzar como Empresario
-              </Button>
-            </CardContent>
+          {/* OPCIÓN 2: NEGOCIO ACTIVO */}
+          <Card className="p-8 hover:shadow-2xl transition-all border-2 hover:border-blue-500 cursor-pointer group">
+            <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl w-16 h-16 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+              <Store className="h-8 w-8 text-white" />
+            </div>
+            
+            <Badge className="mb-4 bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-100">
+              1 a 3 Años
+            </Badge>
+            
+            <h3 className="text-2xl font-bold mb-3">
+              Ya Tengo mi Negocio
+            </h3>
+            
+            <p className="text-muted-foreground mb-6 leading-relaxed">
+              Mi emprendimiento está funcionando pero llevo todo a mano o en Excel. Quiero organizarme mejor y crecer.
+            </p>
+            
+            <ul className="space-y-3 mb-8 text-sm">
+              <li className="flex items-start gap-2">
+                <Check className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                <span>Registrar ventas y gastos fácil</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <Check className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                <span>Controlar inventario en tiempo real</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <Check className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                <span>Gestionar clientes y agenda</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <Check className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                <span>Ver reportes y números claros</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <Check className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                <span>Compras en grupo (ahorrá)</span>
+              </li>
+            </ul>
+            
+            <Button 
+              className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:opacity-90 text-white"
+              onClick={() => handleSelect('business_owner')}
+              disabled={loading}
+            >
+              {loading ? "Guardando..." : "Organizar mi Negocio →"}
+            </Button>
           </Card>
+
+          {/* OPCIÓN 3: PYME/EMPRESA */}
+          <Card className="p-8 hover:shadow-2xl transition-all border-2 hover:border-emerald-500 cursor-pointer group">
+            <div className="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl w-16 h-16 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+              <Building2 className="h-8 w-8 text-white" />
+            </div>
+            
+            <Badge className="mb-4 bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-100">
+              +3 Años
+            </Badge>
+            
+            <h3 className="text-2xl font-bold mb-3">
+              Soy PYME/Empresa
+            </h3>
+            
+            <p className="text-muted-foreground mb-6 leading-relaxed">
+              Tengo un negocio establecido con equipo y procesos. Quiero automatizar, innovar y escalar con IA.
+            </p>
+            
+            <ul className="space-y-3 mb-8 text-sm">
+              <li className="flex items-start gap-2">
+                <Check className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                <span>Automatización de workflows</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <Check className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                <span>IA predictiva y análisis avanzado</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <Check className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                <span>Gestión multi-sucursal</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <Check className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                <span>Integraciones con sistemas existentes</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <Check className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                <span>Business Intelligence</span>
+              </li>
+            </ul>
+            
+            <Button 
+              className="w-full bg-gradient-to-r from-emerald-600 to-emerald-700 hover:opacity-90 text-white"
+              onClick={() => handleSelect('enterprise')}
+              disabled={loading}
+            >
+              {loading ? "Guardando..." : "Innovar y Automatizar →"}
+            </Button>
+          </Card>
+
+        </div>
+        
+        <div className="text-center mt-8">
+          <Button 
+            variant="ghost" 
+            onClick={() => navigate('/')}
+            className="gap-2"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Volver al Inicio
+          </Button>
         </div>
       </div>
     </div>
