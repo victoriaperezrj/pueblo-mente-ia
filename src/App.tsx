@@ -30,6 +30,13 @@ import EntrepreneurResults from "./pages/onboarding/EntrepreneurResults";
 import EntrepreneurBusinessPlan from "./pages/onboarding/EntrepreneurBusinessPlan";
 import EntrepreneurDashboard from "./pages/entrepreneur/Dashboard";
 
+// Demo pages
+import DemoIntro from "./pages/demo/DemoIntro";
+import DemoIdeaCapture from "./pages/demo/DemoIdeaCapture";
+import DemoAnalyzing from "./pages/demo/DemoAnalyzing";
+import DemoResults from "./pages/demo/DemoResults";
+import DemoFinancialSimulator from "./pages/demo/DemoFinancialSimulator";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -49,6 +56,14 @@ const App = () => (
           <Route path="/onboarding/entrepreneur/business-plan" element={<EntrepreneurBusinessPlan />} />
           <Route path="/onboarding/entrepreneur/financial-simulator" element={<FinancialSimulator />} />
           <Route path="/entrepreneur/dashboard" element={<EntrepreneurDashboard />} />
+          
+          {/* Demo routes */}
+          <Route path="/demo/intro" element={<DemoIntro />} />
+          <Route path="/demo/idea-capture" element={<DemoIdeaCapture />} />
+          <Route path="/demo/analyzing" element={<DemoAnalyzing />} />
+          <Route path="/demo/results" element={<DemoResults />} />
+          <Route path="/demo/financial-simulator" element={<DemoFinancialSimulator />} />
+          
           <Route element={<DashboardLayout />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/sales" element={<Sales />} />
