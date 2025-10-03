@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { Button } from "@/components/ui/button";
 import { Building2, Loader2 } from "lucide-react";
 import { demoIdeaResult } from "@/utils/demoData";
 
@@ -93,6 +94,16 @@ export default function DemoAnalyzing() {
           <p className="text-sm text-muted-foreground mt-6">
             Esto toma unos segundos...
           </p>
+          
+          <div className="mt-8 pt-6 border-t">
+            <Button
+              variant="outline"
+              onClick={() => navigate('/demo/idea-capture')}
+              className="w-full border-2"
+            >
+              Cancelar y Volver
+            </Button>
+          </div>
         </Card>
       </div>
     </div>

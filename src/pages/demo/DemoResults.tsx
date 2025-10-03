@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Building2, TrendingUp, Users, DollarSign, Target, AlertTriangle, Lightbulb, AlertCircle } from "lucide-react";
+import { NavigationButtons } from "@/components/NavigationButtons";
 
 export default function DemoResults() {
   const navigate = useNavigate();
@@ -249,19 +250,17 @@ export default function DemoResults() {
           </CardContent>
         </Card>
 
-        {/* Botones de acción */}
-        <div className="grid sm:grid-cols-2 gap-4">
+        <NavigationButtons
+          onBack={() => navigate('/demo/idea-capture')}
+          onNext={() => navigate('/demo/financial-simulator')}
+          nextLabel="Ver Simulador Financiero"
+          backLabel="Cambiar mi Idea"
+        />
+        
+        <div className="text-center mt-6">
           <Button 
             size="lg"
-            variant="outline"
-            onClick={() => navigate('/demo/financial-simulator')}
-            className="border-2"
-          >
-            Ver Simulador Financiero →
-          </Button>
-          <Button 
-            size="lg"
-            className="bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:opacity-90"
+            className="bg-gradient-to-r from-purple-600 to-blue-500 text-white hover:opacity-90"
             onClick={() => navigate('/auth')}
           >
             Crear Cuenta Gratis 🚀

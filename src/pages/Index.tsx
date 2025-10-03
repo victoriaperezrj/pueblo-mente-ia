@@ -51,14 +51,14 @@ const Index = () => {
           </div>
           
           <h1 className="text-4xl md:text-6xl font-bold mb-6 text-gray-900 leading-tight">
-            Arrancá tu negocio con{" "}
-            <span className="bg-gradient-to-r from-violet-600 to-blue-600 bg-clip-text text-transparent">
-              confianza y datos reales
+            <span className="bg-gradient-to-r from-purple-600 via-blue-500 to-purple-600 bg-clip-text text-transparent">
+              Arrancá, crecé o innová
             </span>
+            {" "}tu negocio con datos reales
           </h1>
           
           <p className="text-xl text-gray-600 mb-10 max-w-2xl mx-auto leading-relaxed">
-            Validamos tu idea, calculamos números, te guiamos en trámites y te ayudamos a gestionar tu negocio. Todo en un solo lugar.
+            Validamos ideas, calculamos números, ayudamos en trámites y potenciamos tu negocio ya funcionando. Todo en un solo lugar.
           </p>
           
           <div className="flex gap-4 justify-center flex-wrap mb-12">

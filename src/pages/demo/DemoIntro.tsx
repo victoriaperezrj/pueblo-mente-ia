@@ -73,13 +73,23 @@ export default function DemoIntro() {
             </div>
           </div>
           
-          <Button 
-            size="lg" 
-            className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:opacity-90"
-            onClick={() => navigate('/demo/idea-capture')}
-          >
-            Empezar Demo →
-          </Button>
+          <div className="flex gap-3">
+            <Button 
+              size="lg"
+              variant="outline"
+              onClick={() => navigate('/')}
+              className="flex-1 border-2"
+            >
+              Volver al Inicio
+            </Button>
+            <Button 
+              size="lg" 
+              className="flex-1 bg-gradient-to-r from-purple-600 to-blue-500 text-white hover:opacity-90"
+              onClick={() => navigate('/demo/idea-capture')}
+            >
+              Empezar Demo →
+            </Button>
+          </div>
           
           <p className="text-center text-sm text-muted-foreground mt-4">
             Después podés crear tu cuenta si te gusta

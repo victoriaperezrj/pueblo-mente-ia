@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Building2, DollarSign, TrendingUp, AlertCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { NavigationButtons } from "@/components/NavigationButtons";
 
 export default function DemoFinancialSimulator() {
   const navigate = useNavigate();
@@ -201,24 +202,12 @@ export default function DemoFinancialSimulator() {
           </div>
         </div>
 
-        {/* Botones */}
-        <div className="grid sm:grid-cols-2 gap-4 mt-8">
-          <Button 
-            size="lg"
-            variant="outline"
-            onClick={() => navigate('/demo/results')}
-            className="border-2"
-          >
-            ← Volver al Análisis
-          </Button>
-          <Button 
-            size="lg"
-            className="bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:opacity-90"
-            onClick={() => navigate('/auth')}
-          >
-            Crear Cuenta Gratis 🚀
-          </Button>
-        </div>
+        <NavigationButtons
+          onBack={() => navigate('/demo/results')}
+          onNext={() => navigate('/auth')}
+          nextLabel="Crear Cuenta Gratis 🚀"
+          backLabel="Volver al Análisis"
+        />
       </div>
     </div>
   );

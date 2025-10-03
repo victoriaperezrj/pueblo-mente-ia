@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Building2, Lightbulb, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { NavigationButtons } from "@/components/NavigationButtons";
 
 const INDUSTRIES = [
   "Gastronomía",
@@ -160,26 +161,16 @@ export default function DemoIdeaCapture() {
                     </div>
                   </div>
 
-                  <div className="flex gap-3">
-                    <Button 
-                      type="button"
-                      variant="outline" 
-                      onClick={() => navigate('/demo/intro')}
-                      className="border-2"
-                    >
-                      ← Volver
-                    </Button>
-                    <Button 
-                      type="submit"
-                      disabled={!isValid}
-                      className="flex-1 bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:opacity-90"
-                    >
-                      Validar mi Idea →
-                    </Button>
-                  </div>
                 </form>
               </CardContent>
             </Card>
+            
+            <NavigationButtons
+              onBack={() => navigate('/demo/intro')}
+              onNext={() => handleSubmit({ preventDefault: () => {} } as React.FormEvent)}
+              nextLabel="Validar mi Idea"
+              nextDisabled={!isValid}
+            />
           </div>
 
           <div className="space-y-4">
