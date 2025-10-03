@@ -8,25 +8,25 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* PuebloHub Design System - Ultra Vibrante y Alegre */
+    /* Modern SaaS Design System - Clean & Professional */
     
-    /* Base Colors - Luminosos */
-    --background: 240 100% 99%;
-    --foreground: 220 20% 10%;
+    /* Base Colors - Clean White Background */
+    --background: 0 0% 100%;
+    --foreground: 222 47% 11%;
 
-    /* Card System - Alto Contraste */
+    /* Card System - Soft Shadows & Rounded */
     --card: 0 0% 100%;
-    --card-foreground: 220 20% 10%;
+    --card-foreground: 222 47% 11%;
 
     /* Popover System */
     --popover: 0 0% 100%;
     --popover-foreground: 220 20% 10%;
 
-    /* Primary - Morado Intenso y Vibrante */
-    --primary: 270 95% 58%;
+    /* Primary - Elegant Violet */
+    --primary: 263 70% 50%;
     --primary-foreground: 0 0% 100%;
-    --primary-hover: 270 95% 50%;
-    --primary-light: 270 95% 96%;
+    --primary-hover: 263 70% 45%;
+    --primary-light: 263 70% 97%;
 
     /* Secondary - Turquesa Neón */
     --secondary: 170 90% 45%;
@@ -62,12 +62,12 @@ All colors MUST be HSL.
     --destructive-foreground: 0 0% 100%;
 
     /* Border & Input */
-    --border: 240 25% 85%;
-    --input: 240 25% 85%;
-    --ring: 270 95% 58%;
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 263 70% 50%;
 
     /* Radius */
-    --radius: 0.75rem;
+    --radius: 0.5rem;
 
     /* Sidebar System */
     --sidebar-background: 260 60% 8%;
@@ -79,12 +79,12 @@ All colors MUST be HSL.
     --sidebar-border: 260 60% 15%;
     --sidebar-ring: 270 95% 58%;
 
-    /* Gradients - Ultra Vibrantes y Energéticos */
-    --gradient-primary: linear-gradient(135deg, hsl(270 95% 58%) 0%, hsl(195 100% 50%) 100%);
-    --gradient-success: linear-gradient(135deg, hsl(145 95% 42%) 0%, hsl(170 90% 45%) 100%);
-    --gradient-warm: linear-gradient(135deg, hsl(30 100% 55%) 0%, hsl(345 95% 58%) 100%);
-    --gradient-hero: linear-gradient(135deg, hsl(270 95% 58%) 0%, hsl(170 90% 45%) 50%, hsl(50 100% 55%) 100%);
-    --gradient-card: linear-gradient(145deg, hsl(270 95% 58% / 0.08) 0%, hsl(170 90% 45% / 0.08) 100%);
+    /* Gradients - Soft & Professional */
+    --gradient-primary: linear-gradient(135deg, hsl(263 70% 50%) 0%, hsl(217 91% 60%) 100%);
+    --gradient-success: linear-gradient(135deg, hsl(142 71% 45%) 0%, hsl(158 64% 52%) 100%);
+    --gradient-warm: linear-gradient(135deg, hsl(24 74% 58%) 0%, hsl(341 90% 65%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(263 70% 50%) 0%, hsl(217 91% 60%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(263 70% 50% / 0.03) 0%, hsl(217 91% 60% / 0.03) 100%);
 
     /* Chart Colors - Ultra Saturados */
     --chart-1: 270 95% 58%;

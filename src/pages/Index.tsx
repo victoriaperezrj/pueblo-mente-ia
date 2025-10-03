@@ -17,68 +17,64 @@ const Index = () => {
   }, [navigate]);
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Animated Background */}
-      <div className="fixed inset-0 -z-10">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-success/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }} />
-        <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-warning/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "2s" }} />
-      </div>
+    <div className="min-h-screen bg-white">
+      {/* Subtle Background Pattern */}
+      <div className="fixed inset-0 -z-10 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] opacity-40" />
 
       {/* Header */}
-      <header className="container mx-auto px-4 py-6 flex justify-between items-center backdrop-blur-sm bg-background/80 sticky top-0 z-50 border-b">
-        <div className="flex items-center gap-3 animate-fade-in">
-          <div className="bg-gradient-primary rounded-xl p-2.5 shadow-lg">
-            <Building2 className="h-6 w-6 text-white" />
+      <header className="bg-white border-b border-gray-200 sticky top-0 z-50 backdrop-blur-md bg-white/80">
+        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+          <div className="flex items-center gap-3">
+            <div className="bg-gradient-to-br from-violet-600 to-blue-600 rounded-xl p-2 shadow-sm">
+              <Building2 className="h-5 w-5 text-white" />
+            </div>
+            <span className="font-bold text-xl text-gray-900">
+              Proyecto Emprendedurismo
+            </span>
           </div>
-          <span className="font-bold text-2xl bg-gradient-primary bg-clip-text text-transparent">
-            Proyecto Emprendedurismo
-          </span>
+          <Button 
+            onClick={() => navigate("/auth")} 
+            size="lg" 
+            className="bg-violet-600 hover:bg-violet-700 text-white shadow-sm"
+          >
+            Iniciar Sesión
+          </Button>
         </div>
-        <Button onClick={() => navigate("/auth")} size="lg" variant="default" className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg">
-          Iniciar Sesión
-        </Button>
       </header>
 
       {/* Hero Section */}
-      <section className="container mx-auto px-4 py-20 text-center animate-fade-in relative">
-        <div className="absolute top-10 left-1/4 w-64 h-64 bg-primary/10 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-10 right-1/4 w-64 h-64 bg-success/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }} />
-        
-        <div className="relative z-10">
-          <div className="inline-flex items-center gap-2 bg-primary-light text-primary px-4 py-2 rounded-full text-sm font-medium mb-6 hover:scale-105 transition-transform shadow-lg animate-scale-in">
-            <Zap className="h-4 w-4 animate-pulse" />
-            <span>Potenciado por Inteligencia Artificial</span>
+      <section className="container mx-auto px-4 py-16 md:py-24">
+        <div className="max-w-4xl mx-auto text-center">
+          <div className="inline-flex items-center gap-2 bg-violet-50 text-violet-700 px-4 py-2 rounded-full text-sm font-medium mb-6 border border-violet-200">
+            <Zap className="h-4 w-4" />
+            <span>Validación con Inteligencia Artificial</span>
           </div>
           
-          <h1 className="text-5xl md:text-7xl font-extrabold mb-6 leading-tight animate-fade-in" style={{ animationDelay: "0.1s" }}>
-            Arrancá{" "}
-            <span className="bg-gradient-hero bg-clip-text text-transparent inline-block hover:scale-105 transition-transform">
-              Tu Negocio
+          <h1 className="text-4xl md:text-6xl font-bold mb-6 text-gray-900 leading-tight">
+            Arrancá tu negocio con{" "}
+            <span className="bg-gradient-to-r from-violet-600 to-blue-600 bg-clip-text text-transparent">
+              confianza y datos reales
             </span>
           </h1>
           
-          <p className="text-xl md:text-2xl text-muted-foreground mb-10 max-w-3xl mx-auto leading-relaxed animate-fade-in" style={{ animationDelay: "0.2s" }}>
-            Te ayudamos paso a paso, desde tu idea hasta vender todos los días. 
-            Todo <span className="font-semibold text-foreground">en palabras simples</span>, pensado para 
-            emprendedores de <span className="font-semibold text-foreground">San Luis, Argentina</span>.
+          <p className="text-xl text-gray-600 mb-10 max-w-2xl mx-auto leading-relaxed">
+            Validamos tu idea, calculamos números, te guiamos en trámites y te ayudamos a gestionar tu negocio. Todo en un solo lugar.
           </p>
           
-          <div className="flex gap-4 justify-center flex-wrap mb-16 animate-fade-in" style={{ animationDelay: "0.3s" }}>
+          <div className="flex gap-4 justify-center flex-wrap mb-12">
             <Button 
               size="lg" 
-              variant="default"
               onClick={() => navigate("/auth")}
-              className="text-lg px-8 py-6 bg-primary text-primary-foreground hover:bg-primary/90 shadow-2xl hover:shadow-[0_0_40px_rgba(59,130,246,0.5)] hover:scale-105 transition-all duration-300"
+              className="text-lg px-8 py-6 bg-violet-600 hover:bg-violet-700 text-white shadow-lg hover:shadow-xl transition-all"
             >
-              Empezar Ahora ✨
+              Empezar Ahora
               <span className="ml-2">→</span>
             </Button>
             <Button 
               size="lg" 
               variant="outline"
               onClick={() => navigate("/demo/intro")}
-              className="text-lg px-8 py-6 border-2 border-primary hover:bg-primary/10 hover:scale-105 transition-all duration-300"
+              className="text-lg px-8 py-6 border-2 border-gray-300 hover:bg-gray-50 text-gray-700"
             >
               Ver Demo
             </Button>
@@ -86,149 +82,127 @@ const Index = () => {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
           {[
-            { value: "100+", label: "Emprendedores" },
-            { value: "8", label: "Rubros" },
-            { value: "24/7", label: "Asistente IA" },
+            { value: "500+", label: "Emprendedores" },
+            { value: "20+", label: "Rubros" },
+            { value: "24/7", label: "Asistencia" },
             { value: "100%", label: "Gratis" },
           ].map((stat, idx) => (
             <div 
               key={idx} 
-              className="bg-card/50 backdrop-blur-sm rounded-xl p-6 border border-primary/20 hover:border-primary/50 transition-all duration-300 hover:scale-105 animate-fade-in"
-              style={{ animationDelay: `${idx * 0.1}s` }}
+              className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm hover:shadow-md transition-shadow"
             >
-              <div className="text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+              <div className="text-3xl font-bold text-violet-600 mb-1">
                 {stat.value}
               </div>
-              <div className="text-sm text-muted-foreground mt-1">{stat.label}</div>
+              <div className="text-sm text-gray-600">{stat.label}</div>
             </div>
           ))}
         </div>
       </section>
 
       {/* Features */}
-      <section className="container mx-auto px-4 py-20">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            Todo lo que necesitás{" "}
-            <span className="bg-gradient-success bg-clip-text text-transparent">
-              en un solo lugar
-            </span>
+      <section className="container mx-auto px-4 py-16 bg-gray-50">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">
+            Todo lo que necesitás en un solo lugar
           </h2>
-          <p className="text-xl text-muted-foreground">
-            Herramientas fáciles de usar, pensadas para vos
+          <p className="text-lg text-gray-600">
+            Herramientas simples y poderosas para tu negocio
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
           {[
             {
               icon: Zap,
-              title: "Te decimos si tu idea funciona",
-              description: "En 10 minutos sabés si tu negocio puede andar bien",
-              iconColor: "text-primary",
-              gradient: "from-primary/10 to-primary/5",
+              title: "Validación de Ideas",
+              description: "Analizamos tu idea con datos reales del mercado y te decimos si puede funcionar",
             },
             {
               icon: TrendingUp,
-              title: "Todo lo que necesitás para vender",
-              description: "Llevá cuenta de ventas, productos, clientes y turnos en un solo lugar",
-              iconColor: "text-success",
-              gradient: "from-success/10 to-success/5",
+              title: "Simulador Financiero",
+              description: "Calculá cuánta plata necesitás y cuánto vas a ganar con números realistas",
             },
             {
               icon: Users,
-              title: "Comprá más barato en grupo",
-              description: "Juntate con otros emprendedores de San Luis para ahorrar",
-              iconColor: "text-warning",
-              gradient: "from-warning/10 to-warning/5",
+              title: "Gestión Completa",
+              description: "Llevá ventas, productos, clientes y turnos todo desde un solo lugar",
             },
             {
               icon: Building2,
-              title: "Varios negocios a la vez",
-              description: "¿Tenés más de un emprendimiento? Manejá todo desde acá",
-              iconColor: "text-info",
-              gradient: "from-info/10 to-info/5",
+              title: "Multi-negocios",
+              description: "Gestioná varios emprendimientos desde una sola cuenta",
             },
             {
               icon: TrendingUp,
-              title: "Calculá cuánta plata vas a ganar",
-              description: "Sabé cuánto ganás antes de empezar, sin sorpresas",
-              iconColor: "text-accent",
-              gradient: "from-accent/10 to-accent/5",
+              title: "Compras en Grupo",
+              description: "Ahorrá comprando con otros emprendedores de tu zona",
             },
             {
               icon: Users,
-              title: "Preguntá lo que necesites",
-              description: "Tu asistente responde tus dudas las 24 horas",
-              iconColor: "text-secondary",
-              gradient: "from-secondary/10 to-secondary/5",
+              title: "Asistente 24/7",
+              description: "Preguntá lo que necesites, cuando lo necesites",
             },
           ].map((feature, idx) => (
             <div
               key={idx}
-              className="group bg-card rounded-2xl p-8 border-2 border-border hover:border-primary/50 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl animate-fade-in relative overflow-hidden"
-              style={{ animationDelay: `${idx * 0.1}s` }}
+              className="bg-white rounded-xl p-8 border border-gray-200 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
             >
-              <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${feature.gradient} blur-3xl opacity-0 group-hover:opacity-30 transition-opacity duration-500`} />
-              <div className="relative z-10">
-                <div className={`bg-gradient-to-br ${feature.gradient} rounded-xl w-14 h-14 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg`}>
-                  <feature.icon className={`h-7 w-7 ${feature.iconColor}`} />
-                </div>
-                <h3 className="text-2xl font-bold mb-3 group-hover:text-primary transition-colors">
-                  {feature.title}
-                </h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  {feature.description}
-                </p>
+              <div className="w-12 h-12 bg-gradient-to-br from-violet-100 to-blue-100 rounded-lg flex items-center justify-center mb-4">
+                <feature.icon className="h-6 w-6 text-violet-600" />
               </div>
+              <h3 className="text-xl font-bold mb-2 text-gray-900">
+                {feature.title}
+              </h3>
+              <p className="text-gray-600 leading-relaxed">
+                {feature.description}
+              </p>
             </div>
           ))}
         </div>
       </section>
 
       {/* CTA */}
-      <section className="container mx-auto px-4 py-20">
-        <div className="relative overflow-hidden bg-gradient-hero rounded-3xl p-12 md:p-16 text-center shadow-2xl">
-          <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10" />
-          <div className="relative z-10">
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-              ¿Listo para arrancar?
-            </h2>
-            <p className="text-white/90 mb-8 text-lg md:text-xl max-w-2xl mx-auto">
-              Empezá hoy mismo. Es gratis y no necesitás tarjeta de crédito.
-            </p>
-            <Button 
-              size="lg" 
-              variant="secondary"
-              onClick={() => navigate("/auth")}
-              className="text-lg px-10 py-7 font-semibold bg-white text-primary hover:bg-white/90 shadow-2xl hover:scale-105 transition-all duration-300"
-            >
-              Crear Cuenta Gratis
-              <span className="ml-2 text-xl">🚀</span>
-            </Button>
-          </div>
+      <section className="container mx-auto px-4 py-16">
+        <div className="bg-gradient-to-r from-violet-600 to-blue-600 rounded-2xl p-12 md:p-16 text-center shadow-xl">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            ¿Listo para arrancar tu negocio?
+          </h2>
+          <p className="text-white/90 mb-8 text-lg max-w-2xl mx-auto">
+            Empezá hoy mismo. Es 100% gratis y no necesitás tarjeta de crédito.
+          </p>
+          <Button 
+            size="lg" 
+            onClick={() => navigate("/auth")}
+            className="text-lg px-10 py-6 bg-white text-violet-600 hover:bg-gray-100 shadow-lg font-semibold"
+          >
+            Crear Cuenta Gratis
+            <span className="ml-2">🚀</span>
+          </Button>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="container mx-auto px-4 py-12 border-t">
-        <div className="text-center">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="bg-gradient-primary rounded-lg p-2">
-              <Building2 className="h-5 w-5 text-white" />
+      <footer className="border-t border-gray-200 bg-gray-50">
+        <div className="container mx-auto px-4 py-8">
+          <div className="text-center">
+            <div className="flex items-center justify-center gap-2 mb-3">
+              <div className="bg-gradient-to-br from-violet-600 to-blue-600 rounded-lg p-1.5">
+                <Building2 className="h-4 w-4 text-white" />
+              </div>
+              <span className="font-semibold text-gray-900">
+                Proyecto Emprendedurismo
+              </span>
             </div>
-            <span className="font-bold text-xl bg-gradient-primary bg-clip-text text-transparent">
-              Proyecto Emprendedurismo
-            </span>
+            <p className="text-sm text-gray-600 mb-1">
+              © 2025 Proyecto Emprendedurismo - Tu negocio paso a paso
+            </p>
+            <p className="text-xs text-gray-500">
+              🇦🇷 Hecho en Argentina
+            </p>
           </div>
-          <p className="text-muted-foreground mb-2">
-            © 2025 Proyecto Emprendedurismo - Tu negocio paso a paso
-          </p>
-          <p className="text-sm text-muted-foreground">
-            🇦🇷 Hecho con ❤️ en San Luis, Argentina
-          </p>
         </div>
       </footer>
     </div>

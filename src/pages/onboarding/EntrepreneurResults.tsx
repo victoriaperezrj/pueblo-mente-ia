@@ -171,32 +171,36 @@ const EntrepreneurResults = () => {
   ];
 
   return (
-    <div className="min-h-screen p-4 bg-gradient-to-br from-background via-background to-primary/5">
-      <div className="w-full max-w-6xl mx-auto space-y-6 py-8 animate-fade-in">
-        <div className="flex items-center gap-4 mb-4">
+    <div className="min-h-screen bg-white">
+      <div className="w-full max-w-6xl mx-auto px-4 py-8 pb-24">
+        <div className="flex items-center gap-4 mb-6">
           <Button
             variant="outline"
             size="icon"
             onClick={() => navigate('/dashboard')}
+            className="border-2 border-gray-300 hover:bg-gray-50"
           >
             <ArrowLeft className="w-4 h-4" />
           </Button>
           <div>
-            <h1 className="text-2xl font-bold">Análisis: {idea.industry} en {idea.location}</h1>
-            <p className="text-sm text-muted-foreground">{idea.idea_description}</p>
+            <h1 className="text-2xl font-bold text-gray-900">Análisis: {idea.industry} en {idea.location}</h1>
+            <p className="text-sm text-gray-600">{idea.idea_description}</p>
           </div>
         </div>
 
-        <Card className="border-2 overflow-hidden">
-          <div className={`h-2 ${config.color}`} />
-          <CardHeader className="text-center space-y-4 pb-4">
+        <Card className="border-2 overflow-hidden shadow-sm">
+          <div className={`h-2 ${config.color === 'green' ? 'bg-green-500' : config.color === 'yellow' ? 'bg-yellow-500' : 'bg-orange-500'}`} />
+          <CardHeader className="text-center space-y-4 pb-4 bg-white">
             <div className="flex justify-center">
-              <Badge variant={config.variant} className="text-lg py-2 px-4">
+              <Badge 
+                variant={config.variant} 
+                className="text-lg py-2 px-4"
+              >
                 {config.badge}
               </Badge>
             </div>
-            <CardTitle className="text-3xl">{config.title}</CardTitle>
-            <CardDescription className="text-base">
+            <CardTitle className="text-3xl text-gray-900">{config.title}</CardTitle>
+            <CardDescription className="text-base text-gray-600">
               Analizamos tu idea con datos del mercado en {idea.location}
             </CardDescription>
           </CardHeader>
@@ -204,19 +208,19 @@ const EntrepreneurResults = () => {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
           {/* TARJETA 1: INVERSIÓN INICIAL */}
-          <Card className="hover:scale-[1.02] hover:shadow-2xl transition-all duration-300 group border-2">
+          <Card className="hover:shadow-lg transition-all duration-300 border-2 border-gray-200 bg-white">
             <CardHeader className="space-y-3">
               <div className="flex items-start justify-between">
-                <div className="p-3 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 text-white">
+                <div className="p-3 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-sm">
                   <DollarSign className="w-6 h-6" />
                 </div>
-                <CheckCircle2 className="w-5 h-5 text-green-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <CheckCircle2 className="w-5 h-5 text-green-500" />
               </div>
               <div>
-                <CardTitle className="text-sm font-medium text-muted-foreground mb-1">
+                <CardTitle className="text-sm font-medium text-gray-600 mb-1">
                   Plata que necesitás para arrancar
                 </CardTitle>
-                <p className="text-2xl font-bold">
+                <p className="text-2xl font-bold text-gray-900">
                   {formatCurrency(result.investment_range.min)} - {formatCurrency(result.investment_range.max)}
                 </p>
               </div>
@@ -235,19 +239,19 @@ const EntrepreneurResults = () => {
           </Card>
 
           {/* TARJETA 2: REVENUE PROYECTADO */}
-          <Card className="hover:scale-[1.02] hover:shadow-2xl transition-all duration-300 group border-2">
+          <Card className="hover:shadow-lg transition-all duration-300 border-2 border-gray-200 bg-white">
             <CardHeader className="space-y-3">
               <div className="flex items-start justify-between">
-                <div className="p-3 rounded-lg bg-gradient-to-br from-green-500 to-green-600 text-white">
+                <div className="p-3 rounded-lg bg-gradient-to-br from-green-500 to-green-600 text-white shadow-sm">
                   <TrendingUp className="w-6 h-6" />
                 </div>
-                <CheckCircle2 className="w-5 h-5 text-green-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <CheckCircle2 className="w-5 h-5 text-green-500" />
               </div>
               <div>
-                <CardTitle className="text-sm font-medium text-muted-foreground mb-1">
+                <CardTitle className="text-sm font-medium text-gray-600 mb-1">
                   Cuánta plata vas a ganar por mes
                 </CardTitle>
-                <p className="text-2xl font-bold">
+                <p className="text-2xl font-bold text-gray-900">
                   {formatCurrency(result.monthly_revenue.realistic)}/mes
                 </p>
               </div>
@@ -391,10 +395,10 @@ const EntrepreneurResults = () => {
         </div>
 
         {/* PRÓXIMOS PASOS */}
-        <Card className="border-2">
+        <Card className="border-2 border-gray-200 bg-white shadow-sm">
           <CardHeader>
-            <CardTitle className="text-xl">Próximos Pasos</CardTitle>
-            <CardDescription>Continúa desarrollando tu negocio</CardDescription>
+            <CardTitle className="text-xl text-gray-900">Próximos Pasos</CardTitle>
+            <CardDescription className="text-gray-600">Continúa desarrollando tu negocio</CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
             <div className="flex items-center space-x-2">
@@ -423,32 +427,36 @@ const EntrepreneurResults = () => {
             </div>
           </CardContent>
         </Card>
-
-        <div className="flex flex-col sm:flex-row gap-4 pt-4">
-          <Button
-            size="lg"
-            variant="default"
-            className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90"
-            onClick={() => navigate('/business-blueprint')}
-          >
-            Ver Plan Completo →
-          </Button>
-          <Button
-            size="lg"
-            variant="outline"
-            className="flex-1 border-2 hover:bg-muted"
-            onClick={() => navigate('/onboarding/entrepreneur/step1')}
-          >
-            Cambiar mi Idea
-          </Button>
-          <Button
-            size="lg"
-            variant="outline"
-            className="flex-1 border-2 hover:bg-muted"
-            onClick={() => navigate('/financial-simulator')}
-          >
-            Calcular Finanzas
-          </Button>
+      </div>
+      
+      {/* Sticky Navigation Bar */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-40">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex flex-col sm:flex-row gap-3 max-w-4xl mx-auto">
+            <Button
+              size="lg"
+              className="flex-1 bg-violet-600 hover:bg-violet-700 text-white"
+              onClick={() => navigate('/business-blueprint')}
+            >
+              Ver Plan Completo →
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              className="flex-1 border-2 border-gray-300 hover:bg-gray-50 text-gray-700"
+              onClick={() => navigate('/financial-simulator')}
+            >
+              Calcular Finanzas
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              className="flex-1 border-2 border-gray-300 hover:bg-gray-50 text-gray-700"
+              onClick={() => navigate('/onboarding/entrepreneur/step1')}
+            >
+              Cambiar Idea
+            </Button>
+          </div>
         </div>
       </div>
     </div>

@@ -294,21 +294,44 @@ export function generateSimulatedAnalysis(
   
   const viability = calcularViabilidad(competidores, marketSize, description);
   
-  // Calcular ingresos mensuales estimados
-  const baseRevenue = investmentMax * 0.15; // 15% de la inversión
+  // Calcular ingresos mensuales DINÁMICOS según rubro y tamaño del mercado
+  let baseRevenueMultiplier = 0.15; // Default 15% de la inversión
+  
+  // Ajustar según el rubro
+  const industryText = industry.toLowerCase();
+  if (industryText.includes('gastronom') || industryText.includes('pan')) baseRevenueMultiplier = 0.20;
+  if (industryText.includes('retail') || industryText.includes('kiosco')) baseRevenueMultiplier = 0.25;
+  if (industryText.includes('tecnolog')) baseRevenueMultiplier = 0.30;
+  if (industryText.includes('belleza')) baseRevenueMultiplier = 0.18;
+  if (industryText.includes('gym') || industryText.includes('fitness')) baseRevenueMultiplier = 0.12;
+  
+  // Ajustar según tamaño del mercado
+  const marketMultiplier = marketSize > 100000 ? 1.2 : marketSize > 50000 ? 1.1 : 1.0;
+  
+  const baseRevenue = investmentMax * baseRevenueMultiplier * marketMultiplier;
   const monthlyRevenue = {
     pessimistic: Math.floor(baseRevenue * 0.6),
     realistic: Math.floor(baseRevenue),
     optimistic: Math.floor(baseRevenue * 1.5)
   };
   
-  // Calcular margen
-  const costPercentage = 0.3 + (Math.random() * 0.3); // 30-60% de costos
+  // Calcular margen DINÁMICO según tipo de negocio
+  let baseCostPercentage = 0.40; // 40% default
+  
+  if (industryText.includes('gastronom')) baseCostPercentage = 0.55; // Costos altos
+  if (industryText.includes('belleza') || industryText.includes('servicio')) baseCostPercentage = 0.25; // Costos bajos
+  if (industryText.includes('retail')) baseCostPercentage = 0.65; // Costos muy altos
+  if (industryText.includes('tecnolog')) baseCostPercentage = 0.15; // Costos mínimos
+  if (industryText.includes('gym')) baseCostPercentage = 0.50; // Costos medios-altos
+  
+  const costPercentage = baseCostPercentage + (Math.random() * 0.1 - 0.05); // ±5% variación
   const margin = Math.round((1 - costPercentage) * 100);
   
-  // Calcular break-even
-  const monthlyCosts = investmentMin * 0.05; // 5% de inversión por mes
-  const breakEvenMonths = Math.ceil(investmentMin / (monthlyRevenue.realistic - monthlyCosts));
+  // Calcular break-even DINÁMICO
+  const fixedCostsPercentage = industryText.includes('retail') || industryText.includes('gastronom') ? 0.06 : 0.05;
+  const monthlyCosts = investmentMin * fixedCostsPercentage;
+  const monthlyProfit = monthlyRevenue.realistic * (margin / 100) - monthlyCosts;
+  const breakEvenMonths = Math.ceil(investmentMin / Math.max(monthlyProfit, investmentMin * 0.02));
 
   const risks = generarRiesgos(viability, competidores, margin, breakEvenMonths);
   const recommendations = generarRecomendaciones(competidores, margin, breakEvenMonths, investmentMin);

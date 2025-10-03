@@ -365,7 +365,7 @@ const EntrepreneurStep1 = () => {
                       </RadioGroup>
                     </div>
 
-                    <div className="flex gap-3 pt-4">
+                    <div className="flex gap-3 pt-4 pb-20">
                       <Button
                         type="button"
                         variant="outline"
@@ -379,9 +379,16 @@ const EntrepreneurStep1 = () => {
                         type="submit"
                         variant="default"
                         disabled={isLoading || !isFormValid}
-                        className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90"
+                        className="flex-1 bg-violet-600 hover:bg-violet-700 text-white"
                       >
-                        {isLoading ? "Guardando..." : "Ver si mi idea funciona →"}
+                        {isLoading ? (
+                          <>
+                            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                            Guardando...
+                          </>
+                        ) : (
+                          "Validar mi idea →"
+                        )}
                       </Button>
                     </div>
                   </form>
