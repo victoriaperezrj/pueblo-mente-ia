@@ -10,9 +10,9 @@ import { DemoProvider } from "@/contexts/DemoContext";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
-import DemoStart from "./pages/DemoStart";
 
 // Lazy-loaded pages
+const DemoStart = lazy(() => import("./pages/DemoStart"));
 const Onboarding = lazy(() => import("./pages/Onboarding"));
 const Classify = lazy(() => import("./pages/onboarding/Classify"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
