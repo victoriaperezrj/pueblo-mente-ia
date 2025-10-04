@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { CheckCircle, Building2 } from "lucide-react";
+import { DemoBottomBar } from "@/components/DemoBottomBar";
 
 export default function DemoIntro() {
   const navigate = useNavigate();
@@ -75,27 +76,27 @@ export default function DemoIntro() {
           
           <div className="flex gap-3">
             <Button 
-              size="lg"
               variant="outline"
-              onClick={() => navigate('/')}
-              className="flex-1 border-2"
+              onClick={() => navigate('/auth')}
+              className="border-2"
             >
-              Volver al Inicio
-            </Button>
-            <Button 
-              size="lg" 
-              className="flex-1 bg-gradient-to-r from-purple-600 to-blue-500 text-white hover:opacity-90"
-              onClick={() => navigate('/demo/idea-capture')}
-            >
-              Empezar Demo →
+              ¿Ya tenés cuenta? Iniciá sesión
             </Button>
           </div>
           
-          <p className="text-center text-sm text-muted-foreground mt-4">
+          <p className="text-center text-sm text-muted-foreground mt-4 mb-20">
             Después podés crear tu cuenta si te gusta
           </p>
         </Card>
       </div>
+
+      <DemoBottomBar
+        onBack={() => navigate('/')}
+        onNext={() => navigate('/demo/idea-capture')}
+        backLabel="Volver al Inicio"
+        nextLabel="Empezar Demo"
+        hideSkip
+      />
     </div>
   );
 }

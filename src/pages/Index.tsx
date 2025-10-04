@@ -68,11 +68,11 @@ const Index = () => {
                 // Entrar en modo demo y ir directo al dashboard
                 localStorage.setItem('demoMode', 'true');
                 localStorage.setItem('demoItemCount', '0');
-                navigate("/dashboard");
+                navigate("/demo/intro");
               }}
-              className="text-xl px-12 py-8 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white shadow-2xl hover:shadow-3xl transition-all transform hover:scale-105 font-bold"
+              className="text-xl px-12 py-8 bg-gradient-to-r from-purple-600 to-blue-500 hover:opacity-90 text-white shadow-2xl hover:shadow-3xl transition-all transform hover:scale-105 font-bold"
             >
-              🎯 EMPEZAR DEMO GRATIS
+              👉 Explorar demo
             </Button>
             <Button 
               size="sm" 

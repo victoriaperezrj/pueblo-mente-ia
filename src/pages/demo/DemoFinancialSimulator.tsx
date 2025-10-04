@@ -7,7 +7,8 @@ import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Building2, DollarSign, TrendingUp, AlertCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { NavigationButtons } from "@/components/NavigationButtons";
+import { DemoBottomBar } from "@/components/DemoBottomBar";
+import { formatCurrency } from "@/lib/finance";
 
 export default function DemoFinancialSimulator() {
   const navigate = useNavigate();
@@ -17,15 +18,11 @@ export default function DemoFinancialSimulator() {
 
   const profit = revenue - fixedCosts - variableCosts;
   const profitMargin = revenue > 0 ? ((profit / revenue) * 100).toFixed(1) : 0;
-  const breakEvenRevenue = fixedCosts / (1 - (variableCosts / revenue));
-
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('es-AR', {
-      style: 'currency',
-      currency: 'ARS',
-      minimumFractionDigits: 0
-    }).format(amount);
-  };
+  
+  // Calcular punto de equilibrio correctamente
+  const contributionMargin = revenue > 0 ? revenue - variableCosts : 0;
+  const contributionMarginRate = revenue > 0 ? contributionMargin / revenue : 0;
+  const breakEvenRevenue = contributionMarginRate > 0 ? fixedCosts / contributionMarginRate : 0;
 
   return (
     <div className="min-h-screen bg-background">
@@ -161,16 +158,31 @@ export default function DemoFinancialSimulator() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <TrendingUp className="h-5 w-5 text-blue-600" />
-                  Para no perder plata
+                  Punto de equilibrio
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-muted-foreground mb-2">
-                  Tenés que vender por lo menos:
-                </p>
-                <p className="text-2xl font-bold">
-                  {formatCurrency(breakEvenRevenue)}
-                </p>
+                {revenue > 0 && variableCosts < revenue ? (
+                  <>
+                    <p className="text-sm text-muted-foreground mb-2">
+                      Tenés que vender por lo menos:
+                    </p>
+                    <p className="text-2xl font-bold">
+                      {formatCurrency(breakEvenRevenue)}
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-2">
+                      Fórmula: Costos Fijos ÷ (1 − Costos Variables ÷ Ingresos)
+                    </p>
+                  </>
+                ) : (
+                  <Alert variant="destructive">
+                    <AlertDescription>
+                      {revenue === 0 
+                        ? "Ingresá un valor de ingresos mayor a 0 para calcular el punto de equilibrio"
+                        : "Los costos variables no pueden ser mayores o iguales a los ingresos"}
+                    </AlertDescription>
+                  </Alert>
+                )}
               </CardContent>
             </Card>
 
@@ -202,11 +214,12 @@ export default function DemoFinancialSimulator() {
           </div>
         </div>
 
-        <NavigationButtons
+        <DemoBottomBar
           onBack={() => navigate('/demo/results')}
           onNext={() => navigate('/auth')}
           nextLabel="Crear Cuenta Gratis 🚀"
           backLabel="Volver al Análisis"
+          hideSkip
         />
       </div>
     </div>

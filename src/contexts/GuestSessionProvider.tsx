@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 
 const DEMO_SESSION_KEY = 'pe_demo_session';
 const DEMO_EVENT_COUNT_KEY = 'pe_demo_event_count';
-const MAX_DEMO_EVENTS = 20;
+const MAX_DEMO_EVENTS = 50;
 
 interface DemoSession {
   isDemo: boolean;

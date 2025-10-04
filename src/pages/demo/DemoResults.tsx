@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Building2, TrendingUp, Users, DollarSign, Target, AlertTriangle, Lightbulb, AlertCircle } from "lucide-react";
-import { NavigationButtons } from "@/components/NavigationButtons";
+import { DemoBottomBar } from "@/components/DemoBottomBar";
 
 export default function DemoResults() {
   const navigate = useNavigate();
@@ -250,14 +250,15 @@ export default function DemoResults() {
           </CardContent>
         </Card>
 
-        <NavigationButtons
+        <DemoBottomBar
           onBack={() => navigate('/demo/idea-capture')}
           onNext={() => navigate('/demo/financial-simulator')}
           nextLabel="Ver Simulador Financiero"
           backLabel="Cambiar mi Idea"
+          hideSkip
         />
         
-        <div className="text-center mt-6">
+        <div className="text-center mt-6 mb-20">
           <Button 
             size="lg"
             className="bg-gradient-to-r from-purple-600 to-blue-500 text-white hover:opacity-90"
