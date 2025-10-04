@@ -1,41 +1,52 @@
-import React from "react";
+import React, { lazy, Suspense } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+// Critical pages (loaded immediately)
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
-import Onboarding from "./pages/Onboarding";
-import Classify from "./pages/onboarding/Classify";
-import Dashboard from "./pages/Dashboard";
-import Expenses from "./pages/Expenses";
-import Inventory from "./pages/Inventory";
-import Sales from "./pages/Sales";
-import Customers from "./pages/Customers";
-import Appointments from "./pages/Appointments";
-import Marketplace from "./pages/Marketplace";
-import Integrations from "./pages/Integrations";
-import Resources from "./pages/Resources";
-import Settings from "./pages/Settings";
-import IdeaValidator from "./pages/IdeaValidator";
-import BusinessBlueprint from "./pages/BusinessBlueprint";
-import FinancialSimulator from "./pages/FinancialSimulator";
-import DashboardLayout from "./pages/DashboardLayout";
 import NotFound from "./pages/NotFound";
-import DataBackup from "./pages/DataBackup";
-import EntrepreneurStep1 from "./pages/onboarding/EntrepreneurStep1";
-import EntrepreneurAnalyzing from "./pages/onboarding/EntrepreneurAnalyzing";
-import EntrepreneurResults from "./pages/onboarding/EntrepreneurResults";
-import EntrepreneurBusinessPlan from "./pages/onboarding/EntrepreneurBusinessPlan";
-import EntrepreneurDashboard from "./pages/entrepreneur/Dashboard";
+
+// Lazy-loaded pages
+const Onboarding = lazy(() => import("./pages/Onboarding"));
+const Classify = lazy(() => import("./pages/onboarding/Classify"));
+const Dashboard = lazy(() => import("./pages/Dashboard"));
+const Expenses = lazy(() => import("./pages/Expenses"));
+const Inventory = lazy(() => import("./pages/Inventory"));
+const Sales = lazy(() => import("./pages/Sales"));
+const Customers = lazy(() => import("./pages/Customers"));
+const Appointments = lazy(() => import("./pages/Appointments"));
+const Marketplace = lazy(() => import("./pages/Marketplace"));
+const Integrations = lazy(() => import("./pages/Integrations"));
+const Resources = lazy(() => import("./pages/Resources"));
+const Settings = lazy(() => import("./pages/Settings"));
+const IdeaValidator = lazy(() => import("./pages/IdeaValidator"));
+const BusinessBlueprint = lazy(() => import("./pages/BusinessBlueprint"));
+const FinancialSimulator = lazy(() => import("./pages/FinancialSimulator"));
+const DashboardLayout = lazy(() => import("./pages/DashboardLayout"));
+const DataBackup = lazy(() => import("./pages/DataBackup"));
+const EntrepreneurStep1 = lazy(() => import("./pages/onboarding/EntrepreneurStep1"));
+const EntrepreneurAnalyzing = lazy(() => import("./pages/onboarding/EntrepreneurAnalyzing"));
+const EntrepreneurResults = lazy(() => import("./pages/onboarding/EntrepreneurResults"));
+const EntrepreneurBusinessPlan = lazy(() => import("./pages/onboarding/EntrepreneurBusinessPlan"));
+const EntrepreneurDashboard = lazy(() => import("./pages/entrepreneur/Dashboard"));
 
 // Demo pages
-import DemoIntro from "./pages/demo/DemoIntro";
-import DemoIdeaCapture from "./pages/demo/DemoIdeaCapture";
-import DemoAnalyzing from "./pages/demo/DemoAnalyzing";
-import DemoResults from "./pages/demo/DemoResults";
-import DemoFinancialSimulator from "./pages/demo/DemoFinancialSimulator";
+const DemoIntro = lazy(() => import("./pages/demo/DemoIntro"));
+const DemoIdeaCapture = lazy(() => import("./pages/demo/DemoIdeaCapture"));
+const DemoAnalyzing = lazy(() => import("./pages/demo/DemoAnalyzing"));
+const DemoResults = lazy(() => import("./pages/demo/DemoResults"));
+const DemoFinancialSimulator = lazy(() => import("./pages/demo/DemoFinancialSimulator"));
+
+// Loading fallback component
+const PageLoader = () => (
+  <div className="flex items-center justify-center min-h-screen">
+    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+  </div>
+);
 
 const queryClient = new QueryClient();
 
@@ -45,9 +56,10 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/auth" element={<Auth />} />
+        <Suspense fallback={<PageLoader />}>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/auth" element={<Auth />} />
           <Route path="/onboarding" element={<Onboarding />} />
           <Route path="/onboarding/classify" element={<Classify />} />
           <Route path="/onboarding/entrepreneur/step1" element={<EntrepreneurStep1 />} />
@@ -80,9 +92,10 @@ const App = () => (
             <Route path="/financial-simulator" element={<FinancialSimulator />} />
             <Route path="/backup" element={<DataBackup />} />
           </Route>
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
