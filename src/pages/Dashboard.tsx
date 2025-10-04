@@ -4,18 +4,19 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { TrendingUp, Package, Users, Calendar, DollarSign, AlertCircle, Lightbulb, FileText, Calculator } from "lucide-react";
-import { useDemo } from "@/contexts/DemoContext";
 import { DemoBanner } from "@/components/DemoBanner";
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const { isDemoMode } = useDemo();
+  const [isDemoMode, setIsDemoMode] = useState(false);
 
   useEffect(() => {
     const checkAuth = async () => {
       // Si está en modo demo, no verificar autenticación
-      if (isDemoMode) {
+      const demoMode = localStorage.getItem('demoMode');
+      if (demoMode === 'true') {
+        setIsDemoMode(true);
         setLoading(false);
         return;
       }
@@ -29,7 +30,7 @@ const Dashboard = () => {
     };
 
     checkAuth();
-  }, [navigate, isDemoMode]);
+  }, [navigate]);
 
   if (loading) {
     return (

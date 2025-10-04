@@ -376,9 +376,18 @@ const EntrepreneurStep1 = () => {
                         ← Volver
                       </Button>
                       <Button
+                        type="button"
+                        variant="ghost"
+                        onClick={() => navigate('/dashboard')}
+                        disabled={isLoading}
+                        className="flex-1"
+                      >
+                        Saltar
+                      </Button>
+                      <Button
                         type="submit"
                         variant="default"
-                        disabled={isLoading || !isFormValid}
+                        disabled={isLoading}
                         className="flex-1 bg-violet-600 hover:bg-violet-700 text-white"
                       >
                         {isLoading ? (
@@ -387,7 +396,7 @@ const EntrepreneurStep1 = () => {
                             Guardando...
                           </>
                         ) : (
-                          "Validar mi idea →"
+                          "Siguiente →"
                         )}
                       </Button>
                     </div>

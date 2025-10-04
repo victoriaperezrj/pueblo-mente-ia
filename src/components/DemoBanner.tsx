@@ -1,30 +1,31 @@
-import { AlertCircle, X } from "lucide-react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { useDemo } from "@/contexts/DemoContext";
-import { useNavigate } from "react-router-dom";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { useState } from "react";
 
 export function DemoBanner() {
-  const { itemCount, maxItems, resetDemo, exitDemoMode } = useDemo();
+  const itemCount = parseInt(localStorage.getItem('demoItemCount') || '0', 10);
+  const maxItems = 20;
   const navigate = useNavigate();
   const [showLimitModal, setShowLimitModal] = useState(false);
-  const isNearLimit = itemCount >= maxItems * 0.8; // 80% del límite
+  const isNearLimit = itemCount >= maxItems * 0.8;
   const isAtLimit = itemCount >= maxItems;
 
   const handleCreateAccount = () => {
-    exitDemoMode();
+    localStorage.removeItem('demoMode');
+    localStorage.removeItem('demoItemCount');
     navigate("/auth");
   };
 
   const handleResetDemo = () => {
-    resetDemo();
+    localStorage.setItem('demoItemCount', '0');
+    localStorage.removeItem('demoData');
     setShowLimitModal(false);
-    window.location.reload(); // Recargar para limpiar estado
+    window.location.reload();
   };
 
-  // Si llegó al límite, mostrar el modal
   if (isAtLimit && !showLimitModal) {
     setShowLimitModal(true);
   }
@@ -35,7 +36,7 @@ export function DemoBanner() {
         <AlertCircle className={`h-5 w-5 ${isNearLimit ? 'text-orange-600' : 'text-yellow-600'}`} />
         <AlertDescription className="flex items-center justify-between gap-4 font-medium">
           <div className="flex-1">
-            <span className="font-bold">Modo Demo</span> - Los datos no se guardan. 
+            <span className="font-bold">Modo Demo</span> - Cargá hasta 20 items gratis. 
             <span className={`ml-2 ${isNearLimit ? 'font-bold text-orange-700' : ''}`}>
               {itemCount}/{maxItems} items cargados
             </span>

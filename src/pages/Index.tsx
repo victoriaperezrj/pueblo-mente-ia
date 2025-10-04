@@ -64,7 +64,12 @@ const Index = () => {
           <div className="flex flex-col gap-4 justify-center items-center mb-12">
             <Button 
               size="lg" 
-              onClick={() => navigate("/demo-start")}
+              onClick={() => {
+                // Entrar en modo demo y ir directo al dashboard
+                localStorage.setItem('demoMode', 'true');
+                localStorage.setItem('demoItemCount', '0');
+                navigate("/dashboard");
+              }}
               className="text-xl px-12 py-8 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white shadow-2xl hover:shadow-3xl transition-all transform hover:scale-105 font-bold"
             >
               🎯 EMPEZAR DEMO GRATIS
