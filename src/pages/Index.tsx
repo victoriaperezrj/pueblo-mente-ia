@@ -61,22 +61,21 @@ const Index = () => {
             Validamos ideas, calculamos números, ayudamos en trámites y potenciamos tu negocio ya funcionando. Todo en un solo lugar.
           </p>
           
-          <div className="flex gap-4 justify-center flex-wrap mb-12">
+          <div className="flex flex-col gap-4 justify-center items-center mb-12">
             <Button 
               size="lg" 
-              onClick={() => navigate("/auth")}
-              className="text-lg px-8 py-6 bg-violet-600 hover:bg-violet-700 text-white shadow-lg hover:shadow-xl transition-all"
+              onClick={() => navigate("/demo-start")}
+              className="text-xl px-12 py-8 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white shadow-2xl hover:shadow-3xl transition-all transform hover:scale-105 font-bold"
             >
-              Empezar Ahora
-              <span className="ml-2">→</span>
+              🎯 EMPEZAR DEMO GRATIS
             </Button>
             <Button 
-              size="lg" 
-              variant="outline"
-              onClick={() => navigate("/demo/intro")}
-              className="text-lg px-8 py-6 border-2 border-gray-300 hover:bg-gray-50 text-gray-700"
+              size="sm" 
+              variant="ghost"
+              onClick={() => navigate("/auth")}
+              className="text-sm text-gray-600 hover:text-gray-900 underline-offset-4 hover:underline"
             >
-              Ver Demo
+              Ya tengo cuenta
             </Button>
           </div>
         </div>

@@ -4,13 +4,22 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { TrendingUp, Package, Users, Calendar, DollarSign, AlertCircle, Lightbulb, FileText, Calculator } from "lucide-react";
+import { useDemo } from "@/contexts/DemoContext";
+import { DemoBanner } from "@/components/DemoBanner";
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
+  const { isDemoMode } = useDemo();
 
   useEffect(() => {
     const checkAuth = async () => {
+      // Si está en modo demo, no verificar autenticación
+      if (isDemoMode) {
+        setLoading(false);
+        return;
+      }
+      
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
         navigate("/auth");
@@ -20,7 +29,7 @@ const Dashboard = () => {
     };
 
     checkAuth();
-  }, [navigate]);
+  }, [navigate, isDemoMode]);
 
   if (loading) {
     return (
@@ -71,12 +80,14 @@ const Dashboard = () => {
 
   return (
     <div className="space-y-6 animate-fade-in">
+      {isDemoMode && <DemoBanner />}
+      
       <div>
         <h1 className="text-4xl font-bold tracking-tight mb-2">
-          ¡Bienvenido de nuevo! 👋
+          ¡Bienvenido{isDemoMode ? ' al Demo' : ' de nuevo'}! 👋
         </h1>
         <p className="text-muted-foreground text-lg">
-          Aquí está el resumen de tu negocio
+          {isDemoMode ? 'Explorá todas las funcionalidades sin límites' : 'Aquí está el resumen de tu negocio'}
         </p>
       </div>
 

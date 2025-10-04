@@ -4,11 +4,13 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { DemoProvider } from "@/contexts/DemoContext";
 
 // Critical pages (loaded immediately)
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
+import DemoStart from "./pages/DemoStart";
 
 // Lazy-loaded pages
 const Onboarding = lazy(() => import("./pages/Onboarding"));
@@ -52,52 +54,55 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Suspense fallback={<PageLoader />}>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/auth" element={<Auth />} />
-          <Route path="/onboarding" element={<Onboarding />} />
-          <Route path="/onboarding/classify" element={<Classify />} />
-          <Route path="/onboarding/entrepreneur/step1" element={<EntrepreneurStep1 />} />
-          <Route path="/onboarding/entrepreneur/analyzing" element={<EntrepreneurAnalyzing />} />
-          <Route path="/onboarding/entrepreneur/results" element={<EntrepreneurResults />} />
-          <Route path="/onboarding/entrepreneur/business-plan" element={<EntrepreneurBusinessPlan />} />
-          <Route path="/onboarding/entrepreneur/financial-simulator" element={<FinancialSimulator />} />
-          <Route path="/entrepreneur/dashboard" element={<EntrepreneurDashboard />} />
-          
-          {/* Demo routes */}
-          <Route path="/demo/intro" element={<DemoIntro />} />
-          <Route path="/demo/idea-capture" element={<DemoIdeaCapture />} />
-          <Route path="/demo/analyzing" element={<DemoAnalyzing />} />
-          <Route path="/demo/results" element={<DemoResults />} />
-          <Route path="/demo/financial-simulator" element={<DemoFinancialSimulator />} />
-          
-          <Route element={<DashboardLayout />}>
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/sales" element={<Sales />} />
-            <Route path="/inventory" element={<Inventory />} />
-            <Route path="/customers" element={<Customers />} />
-            <Route path="/expenses" element={<Expenses />} />
-            <Route path="/appointments" element={<Appointments />} />
-            <Route path="/marketplace" element={<Marketplace />} />
-            <Route path="/integrations" element={<Integrations />} />
-            <Route path="/resources" element={<Resources />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="/idea-validator" element={<IdeaValidator />} />
-            <Route path="/business-blueprint" element={<BusinessBlueprint />} />
-            <Route path="/financial-simulator" element={<FinancialSimulator />} />
-            <Route path="/backup" element={<DataBackup />} />
-          </Route>
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Suspense>
-      </BrowserRouter>
-    </TooltipProvider>
+    <DemoProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Suspense fallback={<PageLoader />}>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/auth" element={<Auth />} />
+              <Route path="/demo-start" element={<DemoStart />} />
+              <Route path="/onboarding" element={<Onboarding />} />
+              <Route path="/onboarding/classify" element={<Classify />} />
+              <Route path="/onboarding/entrepreneur/step1" element={<EntrepreneurStep1 />} />
+              <Route path="/onboarding/entrepreneur/analyzing" element={<EntrepreneurAnalyzing />} />
+              <Route path="/onboarding/entrepreneur/results" element={<EntrepreneurResults />} />
+              <Route path="/onboarding/entrepreneur/business-plan" element={<EntrepreneurBusinessPlan />} />
+              <Route path="/onboarding/entrepreneur/financial-simulator" element={<FinancialSimulator />} />
+              <Route path="/entrepreneur/dashboard" element={<EntrepreneurDashboard />} />
+              
+              {/* Demo routes */}
+              <Route path="/demo/intro" element={<DemoIntro />} />
+              <Route path="/demo/idea-capture" element={<DemoIdeaCapture />} />
+              <Route path="/demo/analyzing" element={<DemoAnalyzing />} />
+              <Route path="/demo/results" element={<DemoResults />} />
+              <Route path="/demo/financial-simulator" element={<DemoFinancialSimulator />} />
+              
+              <Route element={<DashboardLayout />}>
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/sales" element={<Sales />} />
+                <Route path="/inventory" element={<Inventory />} />
+                <Route path="/customers" element={<Customers />} />
+                <Route path="/expenses" element={<Expenses />} />
+                <Route path="/appointments" element={<Appointments />} />
+                <Route path="/marketplace" element={<Marketplace />} />
+                <Route path="/integrations" element={<Integrations />} />
+                <Route path="/resources" element={<Resources />} />
+                <Route path="/settings" element={<Settings />} />
+                <Route path="/idea-validator" element={<IdeaValidator />} />
+                <Route path="/business-blueprint" element={<BusinessBlueprint />} />
+                <Route path="/financial-simulator" element={<FinancialSimulator />} />
+                <Route path="/backup" element={<DataBackup />} />
+              </Route>
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Suspense>
+        </BrowserRouter>
+      </TooltipProvider>
+    </DemoProvider>
   </QueryClientProvider>
 );
 

@@ -93,13 +93,26 @@ const Classify = () => {
   return (
     <div className="min-h-screen bg-background p-4">
       <div className="container mx-auto max-w-7xl py-12">
-        <div className="text-center mb-12">
+        <div className="text-center mb-8">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
             ¿En qué etapa estás?
           </h1>
-          <p className="text-xl text-muted-foreground">
+          <p className="text-xl text-muted-foreground mb-2">
             Elegí la opción que mejor te describa
           </p>
+          <p className="text-sm text-muted-foreground">
+            (opcional - podés saltar este paso)
+          </p>
+        </div>
+        
+        <div className="flex justify-end mb-6">
+          <Button
+            variant="ghost"
+            onClick={() => navigate('/dashboard')}
+            className="gap-2"
+          >
+            Saltar todo e ir al dashboard →
+          </Button>
         </div>
 
         <div className="grid md:grid-cols-3 gap-6">
