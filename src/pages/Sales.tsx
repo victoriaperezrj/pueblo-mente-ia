@@ -13,6 +13,7 @@ import { useToast } from "@/hooks/use-toast";
 import { ShoppingCart, Plus, TrendingUp, DollarSign, Trash2 } from "lucide-react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
+import { LoadingCards, LoadingTable } from "@/components/LoadingCards";
 
 interface Sale {
   id: string;
@@ -40,6 +41,7 @@ const Sales = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [currentBusiness, setCurrentBusiness] = useState<string | null>(null);
 
   // Form state
@@ -54,11 +56,13 @@ const Sales = () => {
 
   const loadData = async () => {
     try {
-      const { data: businesses } = await supabase
+      const { data: businesses, error } = await supabase
         .from("businesses")
         .select("id")
         .limit(1)
         .single();
+
+      if (error) throw error;
 
       if (businesses) {
         setCurrentBusiness(businesses.id);
@@ -67,8 +71,13 @@ const Sales = () => {
       } else {
         setLoading(false);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error loading data:", error);
+      toast({
+        title: "Error",
+        description: "No se pudo cargar la información. Intentá de nuevo.",
+        variant: "destructive",
+      });
       setLoading(false);
     }
   };
@@ -118,12 +127,33 @@ const Sales = () => {
     e.preventDefault();
     if (!currentBusiness || !selectedProduct) return;
 
+    setSubmitting(true);
     try {
       const product = products.find(p => p.id === selectedProduct);
       if (!product) return;
 
       const qty = parseFloat(quantity);
-      const totalAmount = product.selling_price * qty;
+      
+      // Validaciones
+      if (qty <= 0) {
+        toast({
+          title: "Cantidad inválida",
+          description: "La cantidad debe ser mayor a 0",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      if (qty > product.current_stock) {
+        toast({
+          title: "Stock insuficiente",
+          description: `Solo hay ${product.current_stock} ${product.unit} disponibles`,
+          variant: "destructive",
+        });
+        return;
+      }
+
+      const totalAmount = parseFloat((product.selling_price * qty).toFixed(2));
 
       // Insert sale
       const { data: saleData, error: saleError } = await supabase
@@ -192,26 +222,34 @@ const Sales = () => {
       loadProducts(currentBusiness);
     } catch (error: any) {
       toast({
-        title: "Error",
-        description: error.message,
+        title: "Error al registrar",
+        description: "No se pudo completar la acción. Intentá de nuevo.",
         variant: "destructive",
       });
+    } finally {
+      setSubmitting(false);
     }
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("¿Eliminar esta venta?")) return;
+    if (!confirm("¿Eliminar esta venta? Esta acción no se puede deshacer.")) return;
 
     try {
       const { error } = await supabase.from("sales").delete().eq("id", id);
       if (error) throw error;
 
-      toast({ title: "✓ Venta eliminada" });
-      if (currentBusiness) loadSales(currentBusiness);
+      toast({ 
+        title: "✓ Venta eliminada",
+        description: "La transacción fue eliminada exitosamente",
+      });
+      if (currentBusiness) {
+        loadSales(currentBusiness);
+        loadProducts(currentBusiness); // Recargar para actualizar stock disponible
+      }
     } catch (error: any) {
       toast({
-        title: "Error",
-        description: error.message,
+        title: "Error al eliminar",
+        description: "No se pudo completar la acción. Intentá de nuevo.",
         variant: "destructive",
       });
     }
@@ -224,16 +262,35 @@ const Sales = () => {
     setNotes("");
   };
 
-  const totalSales = sales.reduce((sum, sale) => sum + sale.total_amount, 0);
+  const totalSales = parseFloat(sales.reduce((sum, sale) => sum + sale.total_amount, 0).toFixed(2));
   const todaySales = sales.filter(s => {
     const saleDate = new Date(s.sale_date);
     const today = new Date();
     return saleDate.toDateString() === today.toDateString();
   });
-  const todayTotal = todaySales.reduce((sum, sale) => sum + sale.total_amount, 0);
+  const todayTotal = parseFloat(todaySales.reduce((sum, sale) => sum + sale.total_amount, 0).toFixed(2));
 
   if (loading) {
-    return <div className="flex justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div></div>;
+    return (
+      <div className="space-y-6 animate-fade-in">
+        <div className="flex justify-between items-center">
+          <div>
+            <h1 className="text-4xl font-bold">Ventas 🛒</h1>
+            <p className="text-muted-foreground mt-1">Registro de transacciones</p>
+          </div>
+        </div>
+        <LoadingCards count={3} />
+        <Card>
+          <CardHeader>
+            <CardTitle>Historial de Ventas</CardTitle>
+            <CardDescription>Cargando transacciones...</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <LoadingTable rows={5} />
+          </CardContent>
+        </Card>
+      </div>
+    );
   }
 
   if (!currentBusiness) {
@@ -266,7 +323,9 @@ const Sales = () => {
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
-                <Label>Producto *</Label>
+                <Label>
+                  Producto <span className="text-red-500">*</span>
+                </Label>
                 <Select value={selectedProduct} onValueChange={setSelectedProduct} required>
                   <SelectTrigger>
                     <SelectValue placeholder="Seleccioná un producto" />
@@ -288,15 +347,23 @@ const Sales = () => {
               </div>
 
               <div className="space-y-2">
-                <Label>Cantidad *</Label>
+                <Label>
+                  Cantidad <span className="text-red-500">*</span>
+                </Label>
                 <Input
                   type="number"
                   step="0.01"
+                  min="0.01"
                   placeholder="0"
                   value={quantity}
                   onChange={(e) => setQuantity(e.target.value)}
                   required
                 />
+                {selectedProduct && products.find(p => p.id === selectedProduct) && (
+                  <p className="text-xs text-muted-foreground">
+                    Disponible: {products.find(p => p.id === selectedProduct)?.current_stock} {products.find(p => p.id === selectedProduct)?.unit}
+                  </p>
+                )}
               </div>
 
               {selectedProduct && quantity && (
@@ -304,14 +371,16 @@ const Sales = () => {
                   <div className="flex justify-between items-center">
                     <span className="text-sm font-medium">Total:</span>
                     <span className="text-2xl font-bold text-primary">
-                      ${(products.find(p => p.id === selectedProduct)?.selling_price || 0) * parseFloat(quantity || "0")}
+                      ${((products.find(p => p.id === selectedProduct)?.selling_price || 0) * parseFloat(quantity || "0")).toFixed(2)}
                     </span>
                   </div>
                 </div>
               )}
 
               <div className="space-y-2">
-                <Label>Método de Pago *</Label>
+                <Label>
+                  Método de Pago <span className="text-red-500">*</span>
+                </Label>
                 <Select value={paymentMethod} onValueChange={setPaymentMethod} required>
                   <SelectTrigger>
                     <SelectValue />
@@ -325,9 +394,9 @@ const Sales = () => {
               </div>
 
               <div className="space-y-2">
-                <Label>Notas</Label>
+                <Label>Notas (opcional)</Label>
                 <Textarea
-                  placeholder="Notas opcionales"
+                  placeholder="Notas opcionales sobre esta venta"
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
                   rows={2}
@@ -335,11 +404,21 @@ const Sales = () => {
               </div>
 
               <div className="flex gap-3 pt-4">
-                <Button type="button" variant="outline" onClick={() => setDialogOpen(false)} className="flex-1">
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  onClick={() => setDialogOpen(false)} 
+                  className="flex-1"
+                  disabled={submitting}
+                >
                   Cancelar
                 </Button>
-                <Button type="submit" className="flex-1" disabled={products.length === 0}>
-                  Registrar Venta
+                <Button 
+                  type="submit" 
+                  className="flex-1" 
+                  disabled={products.length === 0 || !selectedProduct || !quantity || submitting}
+                >
+                  {submitting ? "Guardando..." : "Registrar Venta"}
                 </Button>
               </div>
             </form>

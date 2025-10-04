@@ -207,6 +207,11 @@ const Auth = () => {
     }
   };
 
+  const handleDemoMode = () => {
+    // Navigate directly to demo without authentication
+    navigate("/demo/intro");
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
       {/* Animated Background */}
@@ -231,6 +236,28 @@ const Auth = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
+          {/* Demo Mode Button */}
+          <Button
+            type="button"
+            variant="outline"
+            size="lg"
+            onClick={handleDemoMode}
+            className="w-full mb-6 h-14 text-lg font-semibold border-2 border-yellow-400 bg-yellow-50 hover:bg-yellow-100 text-yellow-900 shadow-md hover:shadow-lg transition-all"
+          >
+            🎯 PROBAR MODO DEMO
+          </Button>
+
+          <div className="relative mb-6">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-card px-2 text-muted-foreground">
+                O crear cuenta
+              </span>
+            </div>
+          </div>
+
           <Tabs defaultValue="signin" className="w-full">
             <TabsList className="grid w-full grid-cols-2 mb-6">
               <TabsTrigger value="signin" className="text-base">

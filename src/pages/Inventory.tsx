@@ -9,6 +9,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { Package, Plus, AlertCircle, TrendingUp, Edit2, Trash2 } from "lucide-react";
+import { LoadingCards } from "@/components/LoadingCards";
 
 interface Product {
   id: string;
@@ -28,6 +29,7 @@ const Inventory = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [currentBusiness, setCurrentBusiness] = useState<string | null>(null);
 
   // Form state
@@ -46,11 +48,13 @@ const Inventory = () => {
 
   const loadData = async () => {
     try {
-      const { data: businesses } = await supabase
+      const { data: businesses, error } = await supabase
         .from("businesses")
         .select("id")
         .limit(1)
         .single();
+
+      if (error) throw error;
 
       if (businesses) {
         setCurrentBusiness(businesses.id);
@@ -58,8 +62,13 @@ const Inventory = () => {
       } else {
         setLoading(false);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error loading data:", error);
+      toast({
+        title: "Error",
+        description: "No se pudo cargar la información. Intentá de nuevo.",
+        variant: "destructive",
+      });
       setLoading(false);
     }
   };
@@ -90,18 +99,43 @@ const Inventory = () => {
     e.preventDefault();
     if (!currentBusiness) return;
 
+    setSubmitting(true);
     try {
+      // Validaciones
+      if (!name.trim()) {
+        toast({
+          title: "Nombre requerido",
+          description: "El producto debe tener un nombre",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      const stock = parseFloat(currentStock);
+      const minStockNum = parseFloat(minStock);
+      const costPriceNum = costPrice ? parseFloat(costPrice) : null;
+      const sellingPriceNum = parseFloat(sellingPrice);
+
+      if (stock < 0 || minStockNum < 0 || (costPriceNum !== null && costPriceNum < 0) || sellingPriceNum <= 0) {
+        toast({
+          title: "Valores inválidos",
+          description: "Los precios y cantidades no pueden ser negativos",
+          variant: "destructive",
+        });
+        return;
+      }
+
       const { data: productData, error } = await supabase
         .from("products")
         .insert({
           business_id: currentBusiness,
-          name,
+          name: name.trim(),
           description,
           category,
-          current_stock: parseFloat(currentStock),
-          min_stock: parseFloat(minStock),
-          cost_price: costPrice ? parseFloat(costPrice) : null,
-          selling_price: parseFloat(sellingPrice),
+          current_stock: stock,
+          min_stock: minStockNum,
+          cost_price: costPriceNum,
+          selling_price: sellingPriceNum,
           unit,
         })
         .select()
@@ -139,15 +173,17 @@ const Inventory = () => {
       loadProducts(currentBusiness);
     } catch (error: any) {
       toast({
-        title: "Error",
-        description: error.message,
+        title: "Error al guardar",
+        description: "No se pudo completar la acción. Intentá de nuevo.",
         variant: "destructive",
       });
+    } finally {
+      setSubmitting(false);
     }
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("¿Eliminar este producto?")) return;
+    if (!confirm("¿Eliminar este producto? Esta acción no se puede deshacer.")) return;
 
     try {
       const { error } = await supabase
@@ -157,12 +193,15 @@ const Inventory = () => {
 
       if (error) throw error;
 
-      toast({ title: "✓ Producto eliminado" });
+      toast({ 
+        title: "✓ Producto eliminado",
+        description: "El producto fue eliminado del inventario",
+      });
       if (currentBusiness) loadProducts(currentBusiness);
     } catch (error: any) {
       toast({
-        title: "Error",
-        description: error.message,
+        title: "Error al eliminar",
+        description: "No se pudo completar la acción. Intentá de nuevo.",
         variant: "destructive",
       });
     }
@@ -180,10 +219,20 @@ const Inventory = () => {
   };
 
   const lowStockProducts = products.filter(p => p.current_stock <= p.min_stock);
-  const totalValue = products.reduce((sum, p) => sum + (p.current_stock * p.selling_price), 0);
+  const totalValue = parseFloat(products.reduce((sum, p) => sum + (p.current_stock * p.selling_price), 0).toFixed(2));
 
   if (loading) {
-    return <div className="flex justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div></div>;
+    return (
+      <div className="space-y-6 animate-fade-in">
+        <div className="flex justify-between items-center">
+          <div>
+            <h1 className="text-4xl font-bold">Inventario 📦</h1>
+            <p className="text-muted-foreground mt-1">Gestión de productos y stock</p>
+          </div>
+        </div>
+        <LoadingCards count={3} />
+      </div>
+    );
   }
 
   if (!currentBusiness) {
@@ -215,98 +264,122 @@ const Inventory = () => {
               <DialogDescription>Registrá un nuevo producto en tu inventario</DialogDescription>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="space-y-2">
-                <Label>Nombre del Producto *</Label>
-                <Input
-                  placeholder="Ej: Pan francés"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  required
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label>Categoría</Label>
-                <Input
-                  placeholder="Ej: Panadería"
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value)}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label>Descripción</Label>
-                <Textarea
-                  placeholder="Descripción opcional"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  rows={2}
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label>Stock Actual *</Label>
+                  <Label>
+                    Nombre del Producto <span className="text-red-500">*</span>
+                  </Label>
                   <Input
-                    type="number"
-                    step="0.01"
-                    placeholder="0"
-                    value={currentStock}
-                    onChange={(e) => setCurrentStock(e.target.value)}
+                    placeholder="Ej: Pan francés"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
                     required
                   />
                 </div>
-                <div className="space-y-2">
-                  <Label>Stock Mínimo *</Label>
-                  <Input
-                    type="number"
-                    step="0.01"
-                    placeholder="0"
-                    value={minStock}
-                    onChange={(e) => setMinStock(e.target.value)}
-                    required
-                  />
-                </div>
-              </div>
 
-              <div className="space-y-2">
-                <Label>Unidad</Label>
-                <Input
-                  placeholder="Ej: unidad, kg, litro"
-                  value={unit}
-                  onChange={(e) => setUnit(e.target.value)}
-                />
-              </div>
+                <div className="space-y-2">
+                  <Label>Categoría</Label>
+                  <Input
+                    placeholder="Ej: Panadería"
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
+                  />
+                </div>
 
-              <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label>Precio Costo</Label>
-                  <Input
-                    type="number"
-                    step="0.01"
-                    placeholder="0.00"
-                    value={costPrice}
-                    onChange={(e) => setCostPrice(e.target.value)}
+                  <Label>Descripción</Label>
+                  <Textarea
+                    placeholder="Descripción opcional"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    rows={2}
                   />
                 </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>
+                      Stock Actual <span className="text-red-500">*</span>
+                    </Label>
+                    <Input
+                      type="number"
+                      step="0.01"
+                      min="0"
+                      placeholder="0"
+                      value={currentStock}
+                      onChange={(e) => setCurrentStock(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>
+                      Stock Mínimo <span className="text-red-500">*</span>
+                    </Label>
+                    <Input
+                      type="number"
+                      step="0.01"
+                      min="0"
+                      placeholder="0"
+                      value={minStock}
+                      onChange={(e) => setMinStock(e.target.value)}
+                      required
+                    />
+                  </div>
+                </div>
+
                 <div className="space-y-2">
-                  <Label>Precio Venta *</Label>
+                  <Label>Unidad de Medida</Label>
                   <Input
-                    type="number"
-                    step="0.01"
-                    placeholder="0.00"
-                    value={sellingPrice}
-                    onChange={(e) => setSellingPrice(e.target.value)}
-                    required
+                    placeholder="Ej: unidad, kg, litro"
+                    value={unit}
+                    onChange={(e) => setUnit(e.target.value)}
                   />
                 </div>
-              </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Precio Costo (¿Cuánto te costó?)</Label>
+                    <Input
+                      type="number"
+                      step="0.01"
+                      min="0"
+                      placeholder="0.00"
+                      value={costPrice}
+                      onChange={(e) => setCostPrice(e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>
+                      Precio Venta <span className="text-red-500">*</span>
+                    </Label>
+                    <Input
+                      type="number"
+                      step="0.01"
+                      min="0"
+                      placeholder="0.00"
+                      value={sellingPrice}
+                      onChange={(e) => setSellingPrice(e.target.value)}
+                      required
+                    />
+                  </div>
+                </div>
 
               <div className="flex gap-3 pt-4">
-                <Button type="button" variant="outline" onClick={() => setDialogOpen(false)} className="flex-1">
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  onClick={() => setDialogOpen(false)} 
+                  className="flex-1"
+                  disabled={submitting}
+                >
                   Cancelar
                 </Button>
-                <Button type="submit" className="flex-1">Guardar</Button>
+                <Button 
+                  type="submit" 
+                  className="flex-1"
+                  disabled={submitting}
+                >
+                  {submitting ? "Guardando..." : "Guardar"}
+                </Button>
               </div>
             </form>
           </DialogContent>

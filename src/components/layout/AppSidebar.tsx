@@ -1,4 +1,4 @@
-import { LayoutDashboard, ShoppingCart, Package, Users, Calendar, DollarSign, Store, BookOpen, Settings, Plug, Download } from "lucide-react";
+import { Home, ShoppingCart, Package, Users, Calendar, DollarSign, ShoppingBag, Link, BookOpen, Download, Settings } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import {
   Sidebar,
@@ -13,17 +13,17 @@ import {
 } from "@/components/ui/sidebar";
 
 const menuItems = [
-  { title: "Mi Negocio", url: "/dashboard", icon: LayoutDashboard },
-  { title: "Ventas", url: "/sales", icon: ShoppingCart },
-  { title: "Productos", url: "/inventory", icon: Package },
-  { title: "Clientes", url: "/customers", icon: Users },
-  { title: "Turnos", url: "/appointments", icon: Calendar },
-  { title: "Gastos", url: "/expenses", icon: DollarSign },
-  { title: "Compras en Grupo", url: "/marketplace", icon: Store },
-  { title: "Conectar", url: "/integrations", icon: Plug },
-  { title: "Aprender", url: "/resources", icon: BookOpen },
-  { title: "Respaldar", url: "/backup", icon: Download },
-  { title: "Configuración", url: "/settings", icon: Settings },
+  { title: "Mi Negocio", url: "/dashboard", icon: Home, color: "#60A5FA" },
+  { title: "Ventas", url: "/sales", icon: ShoppingCart, color: "#34D399" },
+  { title: "Productos", url: "/inventory", icon: Package, color: "#F59E0B" },
+  { title: "Clientes", url: "/customers", icon: Users, color: "#A78BFA" },
+  { title: "Turnos", url: "/appointments", icon: Calendar, color: "#FB923C" },
+  { title: "Gastos", url: "/expenses", icon: DollarSign, color: "#EF4444" },
+  { title: "Compras en Grupo", url: "/marketplace", icon: ShoppingBag, color: "#EC4899" },
+  { title: "Conectar", url: "/integrations", icon: Link, color: "#06B6D4" },
+  { title: "Aprender", url: "/resources", icon: BookOpen, color: "#10B981" },
+  { title: "Respaldar", url: "/backup", icon: Download, color: "#8B5CF6" },
+  { title: "Configuración", url: "/settings", icon: Settings, color: "#6B7280" },
 ];
 
 export function AppSidebar() {
@@ -49,7 +49,7 @@ export function AppSidebar() {
                           : "hover:bg-sidebar-accent/50"
                       }
                     >
-                      <item.icon className="h-4 w-4" />
+                      <item.icon className="h-5 w-5" style={{ color: item.color }} />
                       <span>{item.title}</span>
                     </NavLink>
                   </SidebarMenuButton>
