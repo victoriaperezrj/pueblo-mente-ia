@@ -8,7 +8,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Building2, Lightbulb, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { NavigationButtons } from "@/components/NavigationButtons";
+import { DemoBottomBar } from "@/components/DemoBottomBar";
+import { useGuestSession } from "@/contexts/GuestSessionProvider";
+import { DemoUpgradePrompt } from "@/components/DemoUpgradePrompt";
 
 const INDUSTRIES = [
   "Gastronomía",
@@ -33,22 +35,22 @@ const LOCATIONS = [
 
 export default function DemoIdeaCapture() {
   const navigate = useNavigate();
-  const [ideaText, setIdeaText] = useState("");
-  const [location, setLocation] = useState("");
-  const [industry, setIndustry] = useState("");
+  const { incrementEventCount, shouldShowUpgradePrompt, migrateToSupabase, clearDemoSession, setDemoData, getDemoData } = useGuestSession();
+  
+  const [ideaText, setIdeaText] = useState(getDemoData('ideaText') || "");
+  const [location, setLocation] = useState(getDemoData('location') || "");
+  const [industry, setIndustry] = useState(getDemoData('industry') || "");
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = () => {
+    // Track event
+    incrementEventCount();
     
-    if (!ideaText || ideaText.trim().length < 30) {
-      return;
-    }
+    // Save to demo session
+    setDemoData('ideaText', ideaText.trim());
+    setDemoData('location', location);
+    setDemoData('industry', industry);
     
-    if (!location || !industry) {
-      return;
-    }
-    
-    // Guardar en localStorage para el demo
+    // Also save to localStorage for compatibility
     localStorage.setItem('demo_idea', JSON.stringify({
       description: ideaText.trim(),
       location,
@@ -59,7 +61,17 @@ export default function DemoIdeaCapture() {
     navigate('/demo/analyzing');
   };
 
-  const isValid = ideaText.trim().length >= 30 && location && industry;
+  const handleSkip = () => {
+    setDemoData('ideaSkipped', true);
+    navigate('/demo/analyzing');
+  };
+
+  const handleInputChange = (value: string, field: string) => {
+    if (field === 'ideaText') setIdeaText(value);
+    if (field === 'location') setLocation(value);
+    if (field === 'industry') setIndustry(value);
+    incrementEventCount();
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -82,15 +94,7 @@ export default function DemoIdeaCapture() {
         <Alert className="mb-6 border-yellow-500 bg-yellow-500/10">
           <AlertCircle className="h-4 w-4" />
           <AlertDescription>
-            Estás en MODO DEMO. Nada se guardará. 
-            <Button 
-              variant="link" 
-              onClick={() => navigate('/auth')}
-              className="p-0 h-auto ml-1 text-yellow-700 dark:text-yellow-400"
-            >
-              Crear cuenta
-            </Button> 
-            {" "}para guardar tus datos.
+            Estás en MODO DEMO. Podés avanzar y saltar pasos libremente.
           </AlertDescription>
         </Alert>
 
@@ -107,15 +111,15 @@ export default function DemoIdeaCapture() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="space-y-6">
                   <div className="space-y-2">
-                    <Label htmlFor="idea">Tu idea de negocio</Label>
+                    <Label htmlFor="idea">Tu idea de negocio (opcional)</Label>
                     <Textarea
                       id="idea"
                       placeholder="Ejemplo: Quiero poner un delivery de empanadas. Mi vieja cocina re bien y todos me dicen que las venda. Arrancaría con mi moto haciendo pedidos por WhatsApp, después ver de un local."
                       className="min-h-[200px] text-base"
                       value={ideaText}
-                      onChange={(e) => setIdeaText(e.target.value)}
+                      onChange={(e) => handleInputChange(e.target.value, 'ideaText')}
                       maxLength={1000}
                     />
                     <p className={cn(
@@ -129,8 +133,8 @@ export default function DemoIdeaCapture() {
 
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="location">¿Dónde sería?</Label>
-                      <Select value={location} onValueChange={setLocation}>
+                      <Label htmlFor="location">¿Dónde sería? (opcional)</Label>
+                      <Select value={location} onValueChange={(val) => handleInputChange(val, 'location')}>
                         <SelectTrigger id="location">
                           <SelectValue placeholder="Elegí ubicación" />
                         </SelectTrigger>
@@ -145,8 +149,8 @@ export default function DemoIdeaCapture() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="industry">¿Qué tipo de negocio?</Label>
-                      <Select value={industry} onValueChange={setIndustry}>
+                      <Label htmlFor="industry">¿Qué tipo de negocio? (opcional)</Label>
+                      <Select value={industry} onValueChange={(val) => handleInputChange(val, 'industry')}>
                         <SelectTrigger id="industry">
                           <SelectValue placeholder="Elegí rubro" />
                         </SelectTrigger>
@@ -160,17 +164,9 @@ export default function DemoIdeaCapture() {
                       </Select>
                     </div>
                   </div>
-
-                </form>
+                </div>
               </CardContent>
             </Card>
-            
-            <NavigationButtons
-              onBack={() => navigate('/demo/intro')}
-              onNext={() => handleSubmit({ preventDefault: () => {} } as React.FormEvent)}
-              nextLabel="Validar mi Idea"
-              nextDisabled={!isValid}
-            />
           </div>
 
           <div className="space-y-4">
@@ -188,7 +184,28 @@ export default function DemoIdeaCapture() {
             </Card>
           </div>
         </div>
+
+        {/* Bottom navigation - with padding to account for fixed bar */}
+        <div className="h-24" />
       </div>
+
+      {/* Fixed Bottom Navigation */}
+      <DemoBottomBar
+        onBack={() => navigate('/demo/intro')}
+        onSkip={handleSkip}
+        onNext={handleSubmit}
+        nextLabel="Validar mi Idea"
+      />
+
+      {/* Upgrade Prompt */}
+      <DemoUpgradePrompt
+        open={shouldShowUpgradePrompt}
+        onCreateAccount={migrateToSupabase}
+        onReset={() => {
+          clearDemoSession();
+          navigate('/demo/intro');
+        }}
+      />
     </div>
   );
 }
