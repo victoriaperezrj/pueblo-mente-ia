@@ -3,7 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Loader2, CheckCircle, TrendingUp, DollarSign, Lightbulb, AlertTriangle, ArrowRight, LayoutDashboard, Calculator, ClipboardCheck, FileText, BookOpen, Settings, Menu, X } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Loader2, CheckCircle, TrendingUp, DollarSign, Lightbulb, AlertTriangle, ArrowRight, ArrowLeft, LayoutDashboard, Calculator, ClipboardCheck, FileText, BookOpen, Settings, Menu, X, Info } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
@@ -307,23 +309,35 @@ export default function ValidationIdea() {
             </Card>
             
             <div className="flex flex-col md:flex-row gap-4">
-              <button
+              <Button
+                variant="outline"
+                onClick={() => navigate('/demo/emprendedor/dashboard')}
+                size="lg"
+                className="flex-1"
+              >
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Volver al Dashboard
+              </Button>
+              <Button
                 onClick={() => {
                   setShowResults(false);
                   setIdea('');
                   setAnalysis(null);
                 }}
-                className="flex-1 border-2 border-purple-600 text-purple-600 py-3 rounded-lg font-semibold hover:bg-purple-50 transition"
+                variant="outline"
+                size="lg"
+                className="flex-1 border-2 border-purple-600 text-purple-600 hover:bg-purple-50"
               >
                 Editar Mi Idea
-              </button>
-              <button
-                onClick={() => toast.info('Próximo paso: Lean Canvas (en construcción)')}
-                className="flex-1 bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition flex items-center justify-center gap-2"
+              </Button>
+              <Button
+                onClick={() => navigate('/demo/emprendedor/simulador')}
+                size="lg"
+                className="flex-1 bg-purple-600 hover:bg-purple-700"
               >
-                Continuar al Lean Canvas
-                <ArrowRight className="w-5 h-5" />
-              </button>
+                Continuar al Simulador
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
             </div>
           </div>
         </div>
@@ -349,19 +363,36 @@ export default function ValidationIdea() {
         </button>
 
         <div className="max-w-3xl mx-auto">
+          {/* Botón de navegación */}
+          <Button
+            variant="ghost"
+            onClick={() => navigate('/demo/emprendedor/dashboard')}
+            className="mb-4 flex items-center gap-2"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Volver al Dashboard
+          </Button>
+
           <div className="mb-8">
-            <h1 className="text-3xl font-bold mb-2 flex items-center gap-3">
+            <div className="flex items-center gap-2 mb-2">
               <Lightbulb className="w-8 h-8 text-purple-600" />
-              Validación de Idea - Paso 1 de 4
+              <Badge variant="outline">Paso 1 de 4</Badge>
+            </div>
+            <h1 className="text-3xl font-bold mb-2">
+              Validación de Idea
             </h1>
             <p className="text-gray-600">Contanos tu idea de negocio</p>
           </div>
 
+          <Alert className="mb-6 bg-blue-50 border-blue-200">
+            <Info className="h-4 w-4 text-blue-600" />
+            <AlertDescription className="text-blue-800 text-sm">
+              Este paso es opcional. Si querés, podés completarlo después para obtener análisis personalizado con IA.
+            </AlertDescription>
+          </Alert>
+
           <Card className="p-6 md:p-8">
             <div className="mb-6">
-              <p className="text-sm text-gray-600 mb-4">
-                Este paso es opcional. Si querés, podés completarlo después para obtener análisis personalizado con IA.
-              </p>
               
               <Textarea
                 value={idea}
@@ -375,28 +406,30 @@ export default function ValidationIdea() {
               </p>
             </div>
 
-            <div className="flex flex-col md:flex-row gap-4">
-              <Button
-                onClick={handleSkip}
-                variant="outline"
-                className="flex-1 border-2"
-                size="lg"
-              >
-                OMITIR ESTE PASO
-              </Button>
-              <Button
-                onClick={handleAnalyzeClick}
-                disabled={wordCount < 20}
-                className="flex-1 bg-purple-600 hover:bg-purple-700"
-                size="lg"
-              >
-                ANALIZAR CON IA →
-              </Button>
-            </div>
+            <div className="flex flex-col gap-4">
+              <div className="flex flex-col md:flex-row gap-4">
+                <Button
+                  onClick={handleSkip}
+                  variant="outline"
+                  className="flex-1 border-2"
+                  size="lg"
+                >
+                  OMITIR ESTE PASO
+                </Button>
+                <Button
+                  onClick={handleAnalyzeClick}
+                  disabled={wordCount < 20}
+                  className="flex-1 bg-purple-600 hover:bg-purple-700"
+                  size="lg"
+                >
+                  ANALIZAR CON IA →
+                </Button>
+              </div>
 
-            <p className="text-xs text-gray-500 mt-4 text-center">
-              Nota: Si omitís este paso, irás directo al Lean Canvas para completar manualmente.
-            </p>
+              <p className="text-xs text-gray-500 text-center">
+                Nota: Si omitís este paso, irás directo al Lean Canvas para completar manualmente.
+              </p>
+            </div>
           </Card>
         </div>
       </div>
