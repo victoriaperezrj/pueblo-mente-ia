@@ -50,33 +50,19 @@ const Classify = () => {
   const handleSelect = async (type: UserType) => {
     setLoading(true);
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      
-      if (!user) {
-        toast.error("No se encontró usuario autenticado");
-        navigate("/auth");
+      // For entrepreneur, use guest mode
+      if (type === 'entrepreneur') {
+        localStorage.setItem('user_profile', 'emprendedor');
+        localStorage.setItem('is_guest_mode', 'true');
+        navigate('/demo/emprendedor/dashboard');
         return;
       }
 
-      // Map enterprise to business_owner for now (both go to dashboard)
-      const dbUserType: 'entrepreneur' | 'business_owner' = 
-        type === 'entrepreneur' ? 'entrepreneur' : 'business_owner';
-
-      const { error } = await supabase
-        .from('profiles')
-        .update({ user_type: dbUserType })
-        .eq('id', user.id);
-
-      if (error) throw error;
-
-      if (type === 'entrepreneur') {
-        navigate('/onboarding/entrepreneur/step1');
-      } else {
-        navigate('/dashboard');
-      }
+      // For other types, show "coming soon" message
+      toast.info("Esta sección estará disponible pronto. Enfócate en validar tu idea primero 🚀");
     } catch (error: any) {
-      console.error('Error updating profile:', error);
-      toast.error(error.message || "No se pudo guardar tu selección");
+      console.error('Error:', error);
+      toast.error("Ocurrió un error");
     } finally {
       setLoading(false);
     }
