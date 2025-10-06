@@ -46,6 +46,7 @@ const DemoResults = lazy(() => import("./pages/demo/DemoResults"));
 const DemoFinancialSimulator = lazy(() => import("./pages/demo/DemoFinancialSimulator"));
 const DemoEntrepreneurDashboard = lazy(() => import("./pages/demo/entrepreneur/Dashboard"));
 const DemoEntrepreneurPlaceholder = lazy(() => import("./pages/demo/entrepreneur/Placeholder"));
+const DemoEntrepreneurValidation = lazy(() => import("./pages/demo/entrepreneur/ValidationIdea"));
 
 // Loading fallback component
 const PageLoader = () => (
@@ -88,7 +89,7 @@ const App = () => (
               
               {/* Demo Entrepreneur routes */}
               <Route path="/demo/emprendedor/dashboard" element={<DemoEntrepreneurDashboard />} />
-              <Route path="/demo/emprendedor/validacion-idea" element={<DemoEntrepreneurPlaceholder />} />
+              <Route path="/demo/emprendedor/validacion-idea" element={<DemoEntrepreneurValidation />} />
               <Route path="/demo/emprendedor/simulador" element={<DemoEntrepreneurPlaceholder />} />
               <Route path="/demo/emprendedor/checklist" element={<DemoEntrepreneurPlaceholder />} />
               <Route path="/demo/emprendedor/documentacion" element={<DemoEntrepreneurPlaceholder />} />
