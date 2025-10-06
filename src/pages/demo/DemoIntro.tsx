@@ -93,8 +93,8 @@ export default function DemoIntro() {
       <DemoBottomBar
         onBack={() => navigate('/')}
         onNext={() => navigate('/demo/idea-capture')}
-        backLabel="Volver al Inicio"
-        nextLabel="Empezar Demo"
+        backLabel="← VOLVER AL INICIO"
+        nextLabel="SIGUIENTE PASO →"
         hideSkip
       />
     </div>

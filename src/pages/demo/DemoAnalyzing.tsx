@@ -102,7 +102,7 @@ export default function DemoAnalyzing() {
         onBack={() => navigate('/demo/idea-capture')}
         onSkip={() => navigate('/demo/results')}
         hideNext
-        backLabel="Cancelar"
+        backLabel="← CANCELAR"
       />
     </div>
   );

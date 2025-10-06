@@ -20,8 +20,11 @@ serve(async (req) => {
 
     const prompt = `Actúa como un experto en análisis de negocios y validación de emprendimientos en Argentina, específicamente San Luis.
 
-IDEA DE NEGOCIO:
+CONTEXTO DE NEGOCIO PRINCIPAL (CRÍTICO - USAR EXCLUSIVAMENTE ESTE CONTEXTO):
 ${businessIdea}
+
+IMPORTANTE: TODOS los cálculos, análisis, costos, ingresos y proyecciones DEBEN basarse EXCLUSIVAMENTE en el contexto de negocio descrito arriba. 
+NO inventes datos de otros rubros ni uses suposiciones de negocios diferentes.
 
 MERCADO OBJETIVO:
 ${targetMarket}
@@ -35,7 +38,9 @@ ${solution}
 PRESUPUESTO ESTIMADO: ${budget ? `$${budget}` : 'No especificado'}
 
 INSTRUCCIONES:
-Analiza esta idea de negocio y proporciona un análisis FODA completo con una puntuación de viabilidad (0-100). Responde en formato JSON con esta estructura EXACTA:
+Analiza esta idea de negocio y proporciona un análisis FODA completo con una puntuación de viabilidad (0-100). 
+CRÍTICO: Todo tu análisis debe estar alineado con el CONTEXTO DE NEGOCIO PRINCIPAL. Si es un "local de uñas", analiza costos de manicura, productos de belleza, etc. Si es "venta de bebidas", analiza costos de licores, logística, etc.
+Responde en formato JSON con esta estructura EXACTA:
 
 {
   "score": [número entre 0-100],

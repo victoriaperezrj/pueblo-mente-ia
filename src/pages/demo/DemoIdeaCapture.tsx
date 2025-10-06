@@ -194,7 +194,7 @@ export default function DemoIdeaCapture() {
         onBack={() => navigate('/demo/intro')}
         onSkip={handleSkip}
         onNext={handleSubmit}
-        nextLabel="Validar mi Idea"
+        nextLabel="SIGUIENTE PASO →"
       />
 
       {/* Upgrade Prompt */}

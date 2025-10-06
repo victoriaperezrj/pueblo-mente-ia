@@ -253,8 +253,8 @@ export default function DemoResults() {
         <DemoBottomBar
           onBack={() => navigate('/demo/idea-capture')}
           onNext={() => navigate('/demo/financial-simulator')}
-          nextLabel="Ver Simulador Financiero"
-          backLabel="Cambiar mi Idea"
+          nextLabel="SIGUIENTE PASO →"
+          backLabel="← CAMBIAR MI IDEA"
           hideSkip
         />
         

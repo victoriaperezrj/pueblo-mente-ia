@@ -20,8 +20,8 @@ export function DemoBottomBar({
   onBack,
   onSkip,
   onNext,
-  backLabel = "Atrás",
-  nextLabel = "Continuar",
+  backLabel = "← ANTERIOR PASO",
+  nextLabel = "SIGUIENTE PASO →",
   skipLabel = "Saltar",
   hideBack = false,
   hideSkip = false,
@@ -45,9 +45,8 @@ export function DemoBottomBar({
             <Button
               variant="outline"
               onClick={onBack}
-              className="flex-1 sm:flex-initial border-2"
+              className="flex-1 sm:flex-initial border-2 font-semibold"
             >
-              <ArrowLeft className="h-4 w-4 mr-2" />
               {backLabel}
             </Button>
           ) : (
@@ -59,9 +58,9 @@ export function DemoBottomBar({
             <Button
               variant="ghost"
               onClick={onSkip}
-              className="flex-1 sm:flex-initial text-muted-foreground"
+              className="flex-1 sm:flex-initial text-muted-foreground hover:text-foreground font-medium"
             >
-              <SkipForward className="h-4 w-4 mr-2" />
+              <SkipForward className="h-4 w-4 mr-1" />
               {skipLabel}
             </Button>
           )}
@@ -71,10 +70,9 @@ export function DemoBottomBar({
             <Button
               onClick={onNext}
               disabled={nextDisabled}
-              className="flex-1 sm:flex-initial bg-gradient-to-r from-purple-600 to-blue-500 text-white hover:opacity-90"
+              className="flex-1 sm:flex-initial bg-gradient-to-r from-purple-600 to-blue-500 text-white hover:opacity-90 shadow-lg font-semibold"
             >
               {nextLabel}
-              <ArrowRight className="h-4 w-4 ml-2" />
             </Button>
           ) : (
             <div className="flex-1 sm:flex-initial" />

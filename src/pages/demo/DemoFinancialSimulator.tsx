@@ -218,7 +218,7 @@ export default function DemoFinancialSimulator() {
           onBack={() => navigate('/demo/results')}
           onNext={() => navigate('/auth')}
           nextLabel="Crear Cuenta Gratis 🚀"
-          backLabel="Volver al Análisis"
+          backLabel="← ANTERIOR PASO"
           hideSkip
         />
       </div>

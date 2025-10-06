@@ -236,24 +236,23 @@ const Auth = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          {/* Demo Mode Button */}
+          {/* Demo Mode Button - Primary CTA */}
           <Button
             type="button"
-            variant="outline"
             size="lg"
             onClick={handleDemoMode}
-            className="w-full mb-6 h-14 text-lg font-semibold border-2 border-yellow-400 bg-yellow-50 hover:bg-yellow-100 text-yellow-900 shadow-md hover:shadow-lg transition-all"
+            className="w-full mb-8 h-16 text-xl font-bold bg-gradient-to-r from-purple-600 to-blue-500 hover:opacity-90 text-white shadow-2xl hover:shadow-3xl transition-all transform hover:scale-105"
           >
-            🎯 PROBAR MODO DEMO
+            👉 PROBAR MODO DEMO
           </Button>
 
           <div className="relative mb-6">
             <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t" />
+              <span className="w-full border-t-2" />
             </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-card px-2 text-muted-foreground">
-                O crear cuenta
+            <div className="relative flex justify-center text-sm uppercase">
+              <span className="bg-card px-3 text-muted-foreground font-medium">
+                O iniciá sesión
               </span>
             </div>
           </div>
