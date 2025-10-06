@@ -70,6 +70,41 @@ const Auth = () => {
 
         if (insertError) throw insertError;
         
+        // Migrar datos del demo a Supabase si existen
+        const pendingMigration = localStorage.getItem('pe_pending_migration');
+        if (pendingMigration) {
+          try {
+            const migrationData = JSON.parse(pendingMigration);
+            console.log('Migrating demo data to Supabase:', migrationData);
+            
+            // Si hay una idea de negocio, guardarla
+            if (migrationData.demoData?.businessContext || migrationData.demoData?.ideaText) {
+              const businessContext = migrationData.demoData.businessContext || migrationData.demoData.ideaText;
+              await supabase.from('business_ideas').insert({
+                user_id: userId,
+                idea_description: businessContext,
+                business_context: businessContext,
+                location: migrationData.demoData.location || 'No especificado',
+                industry: migrationData.demoData.industry || 'No especificado',
+              });
+              console.log('Business idea migrated successfully');
+              
+              toast({
+                title: "¡Datos guardados!",
+                description: "Tus datos del demo han sido guardados correctamente.",
+              });
+            }
+            
+            // Limpiar datos de migración
+            localStorage.removeItem('pe_pending_migration');
+            localStorage.removeItem('pe_demo_session');
+            localStorage.removeItem('pe_demo_event_count');
+          } catch (migrationError) {
+            console.error('Migration error:', migrationError);
+            // No bloquear el flujo si falla la migración
+          }
+        }
+        
         // Clear pending role
         localStorage.removeItem('pending_role');
         

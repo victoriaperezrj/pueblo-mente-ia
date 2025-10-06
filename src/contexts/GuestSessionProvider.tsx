@@ -95,9 +95,14 @@ export function GuestSessionProvider({ children }: { children: ReactNode }) {
   };
 
   const migrateToSupabase = async () => {
-    // This will be called when user creates account
-    // For now, just store the intention
-    localStorage.setItem('pe_pending_migration', JSON.stringify(demoData));
+    // Store all demo data for migration after auth
+    const migrationData = {
+      demoData,
+      eventCount,
+      timestamp: Date.now()
+    };
+    localStorage.setItem('pe_pending_migration', JSON.stringify(migrationData));
+    console.log('Migration data prepared:', migrationData);
     navigate('/auth');
   };
 

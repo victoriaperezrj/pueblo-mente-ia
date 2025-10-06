@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,12 +9,30 @@ import { Building2, DollarSign, TrendingUp, AlertCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { DemoBottomBar } from "@/components/DemoBottomBar";
 import { formatCurrency } from "@/lib/finance";
+import { useGuestSession } from "@/contexts/GuestSessionProvider";
+import { DemoUpgradePrompt } from "@/components/DemoUpgradePrompt";
 
 export default function DemoFinancialSimulator() {
   const navigate = useNavigate();
-  const [revenue, setRevenue] = useState(2500000);
-  const [fixedCosts, setFixedCosts] = useState(745000);
-  const [variableCosts, setVariableCosts] = useState(1050000);
+  const { incrementEventCount, shouldShowUpgradePrompt, migrateToSupabase, clearDemoSession, setDemoData, getDemoData } = useGuestSession();
+  
+  const [revenue, setRevenue] = useState(getDemoData('simulator_revenue') || 2500000);
+  const [fixedCosts, setFixedCosts] = useState(getDemoData('simulator_fixedCosts') || 745000);
+  const [variableCosts, setVariableCosts] = useState(getDemoData('simulator_variableCosts') || 1050000);
+
+  // Guardar datos en demo session cuando cambien
+  useEffect(() => {
+    setDemoData('simulator_revenue', revenue);
+    setDemoData('simulator_fixedCosts', fixedCosts);
+    setDemoData('simulator_variableCosts', variableCosts);
+  }, [revenue, fixedCosts, variableCosts]);
+
+  const handleInputChange = (value: number, field: string) => {
+    incrementEventCount();
+    if (field === 'revenue') setRevenue(value);
+    if (field === 'fixedCosts') setFixedCosts(value);
+    if (field === 'variableCosts') setVariableCosts(value);
+  };
 
   const profit = revenue - fixedCosts - variableCosts;
   const profitMargin = revenue > 0 ? ((profit / revenue) * 100).toFixed(1) : 0;
@@ -92,7 +110,7 @@ export default function DemoFinancialSimulator() {
                     id="revenue"
                     type="number"
                     value={revenue}
-                    onChange={(e) => setRevenue(Number(e.target.value))}
+                    onChange={(e) => handleInputChange(Number(e.target.value), 'revenue')}
                     className="text-lg"
                   />
                   <p className="text-sm text-muted-foreground">
@@ -108,7 +126,7 @@ export default function DemoFinancialSimulator() {
                     id="fixedCosts"
                     type="number"
                     value={fixedCosts}
-                    onChange={(e) => setFixedCosts(Number(e.target.value))}
+                    onChange={(e) => handleInputChange(Number(e.target.value), 'fixedCosts')}
                     className="text-lg"
                   />
                   <p className="text-sm text-muted-foreground">
@@ -124,7 +142,7 @@ export default function DemoFinancialSimulator() {
                     id="variableCosts"
                     type="number"
                     value={variableCosts}
-                    onChange={(e) => setVariableCosts(Number(e.target.value))}
+                    onChange={(e) => handleInputChange(Number(e.target.value), 'variableCosts')}
                     className="text-lg"
                   />
                   <p className="text-sm text-muted-foreground">
@@ -216,12 +234,22 @@ export default function DemoFinancialSimulator() {
 
         <DemoBottomBar
           onBack={() => navigate('/demo/results')}
-          onNext={() => navigate('/auth')}
+          onNext={migrateToSupabase}
           nextLabel="Crear Cuenta Gratis 🚀"
           backLabel="← ANTERIOR PASO"
           hideSkip
         />
       </div>
+
+      {/* Upgrade Prompt */}
+      <DemoUpgradePrompt
+        open={shouldShowUpgradePrompt}
+        onCreateAccount={migrateToSupabase}
+        onReset={() => {
+          clearDemoSession();
+          navigate('/demo/intro');
+        }}
+      />
     </div>
   );
 }
