@@ -18,7 +18,8 @@ serve(async (req) => {
       unitsPerMonth, 
       fixedCosts, 
       variableCosts,
-      results 
+      results,
+      businessContext // CRITICAL: Main business context for AI alignment
     } = await req.json();
     
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
@@ -26,7 +27,25 @@ serve(async (req) => {
       throw new Error("LOVABLE_API_KEY not configured");
     }
 
+    const businessContextSection = businessContext 
+      ? `
+⚠️ CONTEXTO DE NEGOCIO PRINCIPAL (ANCLA TODO TU ANÁLISIS EN ESTO):
+"""
+${businessContext}
+"""
+
+🚨 REGLA ABSOLUTA - ANTI-ALUCINACIÓN:
+- TODOS tus comentarios financieros deben reflejar el sector/tipo de negocio descrito arriba.
+- Los márgenes, costos y proyecciones que menciones deben ser típicos de ESE negocio específico.
+- NO uses benchmarks de otros rubros.
+- Si el contexto dice "local de uñas", habla de costos de manicura, productos de belleza, etc.
+- Si el contexto dice "panadería", habla de harina, energía de hornos, etc.
+      `
+      : '';
+
     const prompt = `Actúa como un asesor financiero experto analizando una simulación de negocio.
+    
+${businessContextSection}
 
 DATOS DEL NEGOCIO:
 - Inversión inicial: $${initialInvestment}

@@ -53,20 +53,44 @@ const Auth = () => {
 
       if (fetchError) throw fetchError;
 
+      // Check for pending role selection
+      const pendingRole = localStorage.getItem('pending_role');
+      
       // If profile doesn't exist, create it
       if (!profile) {
+        const userType = pendingRole as 'entrepreneur' | 'business_owner' | null;
+        
         const { error: insertError } = await supabase
           .from('profiles')
           .insert({
             id: userId,
             full_name: email?.split('@')[0] || 'Usuario',
+            user_type: userType,
           });
 
         if (insertError) throw insertError;
+        
+        // Clear pending role
+        localStorage.removeItem('pending_role');
+        
+        // Navigate based on role
+        if (userType === 'entrepreneur') {
+          navigate('/onboarding/entrepreneur/step1');
+        } else if (userType) {
+          navigate('/dashboard');
+        } else {
+          navigate("/onboarding/classify");
+        }
+      } else {
+        // Profile exists, navigate based on existing user_type
+        if (profile.user_type === 'entrepreneur') {
+          navigate('/onboarding/entrepreneur/step1');
+        } else if (profile.user_type) {
+          navigate('/dashboard');
+        } else {
+          navigate("/onboarding/classify");
+        }
       }
-
-      // Redirect to onboarding/classify
-      navigate("/onboarding/classify");
     } catch (error: any) {
       console.error('Error checking/creating profile:', error);
       toast({

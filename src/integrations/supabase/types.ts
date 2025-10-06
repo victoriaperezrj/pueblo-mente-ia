@@ -117,6 +117,7 @@ export type Database = {
       }
       business_ideas: {
         Row: {
+          business_context: string | null
           created_at: string | null
           id: string
           idea_description: string
@@ -127,6 +128,7 @@ export type Database = {
           validation_result: Json | null
         }
         Insert: {
+          business_context?: string | null
           created_at?: string | null
           id?: string
           idea_description: string
@@ -137,6 +139,7 @@ export type Database = {
           validation_result?: Json | null
         }
         Update: {
+          business_context?: string | null
           created_at?: string | null
           id?: string
           idea_description?: string

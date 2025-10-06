@@ -75,6 +75,14 @@ const Index = () => {
               👉 Explorar demo
             </Button>
             <Button 
+              size="lg"
+              variant="outline"
+              onClick={() => navigate("/select-role")}
+              className="text-lg px-10 py-6 border-2 font-semibold"
+            >
+              Comenzar
+            </Button>
+            <Button 
               size="sm" 
               variant="ghost"
               onClick={() => navigate("/auth")}

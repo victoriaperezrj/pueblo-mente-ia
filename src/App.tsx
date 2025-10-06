@@ -11,6 +11,7 @@ import { GuestSessionProvider } from "@/contexts/GuestSessionProvider";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
+import SelectRole from "./pages/SelectRole";
 
 // Lazy-loaded pages
 const DemoStart = lazy(() => import("./pages/DemoStart"));
@@ -64,6 +65,7 @@ const App = () => (
             <Suspense fallback={<PageLoader />}>
             <Routes>
               <Route path="/" element={<Index />} />
+              <Route path="/select-role" element={<SelectRole />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/demo-start" element={<DemoStart />} />
               <Route path="/onboarding" element={<Onboarding />} />

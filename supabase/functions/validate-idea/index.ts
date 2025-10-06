@@ -20,11 +20,18 @@ serve(async (req) => {
 
     const prompt = `Actúa como un experto en análisis de negocios y validación de emprendimientos en Argentina, específicamente San Luis.
 
-CONTEXTO DE NEGOCIO PRINCIPAL (CRÍTICO - USAR EXCLUSIVAMENTE ESTE CONTEXTO):
+⚠️ CONTEXTO DE NEGOCIO PRINCIPAL (CRÍTICO - ANCLA TODA TU RESPUESTA EN ESTO):
+"""
 ${businessIdea}
+"""
 
-IMPORTANTE: TODOS los cálculos, análisis, costos, ingresos y proyecciones DEBEN basarse EXCLUSIVAMENTE en el contexto de negocio descrito arriba. 
-NO inventes datos de otros rubros ni uses suposiciones de negocios diferentes.
+🚨 REGLA ABSOLUTA - ANTI-ALUCINACIÓN:
+- TODOS los cálculos financieros (costos, ingresos, márgenes, punto de equilibrio) DEBEN reflejar EXCLUSIVAMENTE el tipo de negocio descrito arriba.
+- Si el contexto menciona "local de uñas", NO uses costos de panadería, restaurante o cualquier otro rubro.
+- Si el contexto menciona "venta de bebidas alcohólicas", usa SOLO costos y márgenes de ese sector específico.
+- NO inventes datos de rubros diferentes al descrito.
+- Todos tus números deben ser justificables para ESE negocio específico.
+- Si hay ambigüedad en la descripción, haz suposiciones CONSERVADORAS pero siempre dentro del mismo sector.
 
 MERCADO OBJETIVO:
 ${targetMarket}

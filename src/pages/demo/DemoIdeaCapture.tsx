@@ -45,14 +45,17 @@ export default function DemoIdeaCapture() {
     // Track event
     incrementEventCount();
     
-    // Save to demo session
-    setDemoData('ideaText', ideaText.trim());
+    // Save to demo session - CRITICAL: Store as business_context
+    const businessContext = ideaText.trim();
+    setDemoData('businessContext', businessContext);
+    setDemoData('ideaText', businessContext);
     setDemoData('location', location);
     setDemoData('industry', industry);
     
     // Also save to localStorage for compatibility
     localStorage.setItem('demo_idea', JSON.stringify({
-      description: ideaText.trim(),
+      description: businessContext,
+      businessContext: businessContext, // CRITICAL: Add this for AI context
       location,
       industry,
       timestamp: Date.now()
