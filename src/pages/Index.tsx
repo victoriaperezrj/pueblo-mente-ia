@@ -1,17 +1,34 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Building2, TrendingUp, Users, Zap } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { LoginModal } from "@/components/LoginModal";
 
 const Index = () => {
   const navigate = useNavigate();
+  const [loginModalOpen, setLoginModalOpen] = useState(false);
 
   useEffect(() => {
     // Check if user is already logged in
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
       if (session) {
-        navigate("/dashboard");
+        // Get user profile to redirect to correct dashboard
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('user_type')
+          .eq('id', session.user.id)
+          .single();
+
+        if (profile?.user_type === 'entrepreneur') {
+          navigate('/entrepreneur/dashboard');
+        } else {
+          navigate('/dashboard');
+        }
+      } else {
+        // No session - activate guest mode automatically
+        localStorage.setItem('is_guest_mode', 'true');
+        localStorage.setItem('guest_session_id', crypto.randomUUID());
       }
     });
   }, [navigate]);
@@ -63,32 +80,23 @@ const Index = () => {
           
           <div className="flex flex-col gap-4 justify-center items-center mb-12">
             <Button 
-              size="lg" 
-              onClick={() => {
-                // Entrar en modo demo y ir directo al dashboard
-                localStorage.setItem('demoMode', 'true');
-                localStorage.setItem('demoItemCount', '0');
-                navigate("/demo/intro");
-              }}
-              className="text-xl px-12 py-8 bg-gradient-to-r from-purple-600 to-blue-500 hover:opacity-90 text-white shadow-2xl hover:shadow-3xl transition-all transform hover:scale-105 font-bold"
-            >
-              👉 Explorar demo
-            </Button>
-            <Button 
               size="lg"
               variant="outline"
-              onClick={() => navigate("/select-role")}
-              className="text-lg px-10 py-6 border-2 font-semibold"
+              onClick={() => {
+                localStorage.setItem('is_guest_mode', 'true');
+                localStorage.setItem('guest_session_id', crypto.randomUUID());
+                navigate("/demo/intro");
+              }}
+              className="text-lg px-10 py-6 border-2 font-semibold transition-all hover:scale-102"
             >
-              Comenzar
+              👉 Explorar Demo
             </Button>
             <Button 
-              size="sm" 
-              variant="ghost"
-              onClick={() => navigate("/auth")}
-              className="text-sm text-gray-600 hover:text-gray-900 underline-offset-4 hover:underline"
+              size="lg" 
+              onClick={() => setLoginModalOpen(true)}
+              className="text-xl px-12 py-8 bg-gradient-to-r from-purple-600 to-blue-500 hover:opacity-90 text-white shadow-2xl hover:shadow-3xl transition-all transform hover:scale-105 font-bold"
             >
-              Ya tengo cuenta
+              Comenzar
             </Button>
           </div>
         </div>
@@ -217,6 +225,8 @@ const Index = () => {
           </div>
         </div>
       </footer>
+
+      <LoginModal open={loginModalOpen} onOpenChange={setLoginModalOpen} />
     </div>
   );
 };

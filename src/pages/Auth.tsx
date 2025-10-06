@@ -77,7 +77,20 @@ const Auth = () => {
             const migrationData = JSON.parse(pendingMigration);
             console.log('Migrating demo data to Supabase:', migrationData);
             
-            // Si hay una idea de negocio, guardarla
+            // Crear un negocio primero
+            const { data: business, error: businessError } = await supabase
+              .from('businesses')
+              .insert([{
+                name: 'Mi Negocio',
+                business_type: (userType || 'entrepreneur') as any,
+                user_id: userId,
+              }])
+              .select()
+              .single();
+
+            if (businessError) throw businessError;
+            
+            // Migrar idea de negocio si existe
             if (migrationData.demoData?.businessContext || migrationData.demoData?.ideaText) {
               const businessContext = migrationData.demoData.businessContext || migrationData.demoData.ideaText;
               await supabase.from('business_ideas').insert({
@@ -88,20 +101,52 @@ const Auth = () => {
                 industry: migrationData.demoData.industry || 'No especificado',
               });
               console.log('Business idea migrated successfully');
-              
-              toast({
-                title: "¡Datos guardados!",
-                description: "Tus datos del demo han sido guardados correctamente.",
-              });
+            }
+
+            // Migrar productos del modo invitado
+            if (migrationData.guestSessionData?.products?.length > 0) {
+              const products = migrationData.guestSessionData.products.map((p: any) => ({
+                ...p,
+                business_id: business.id,
+              }));
+              await supabase.from('products').insert(products);
+              console.log(`Migrated ${products.length} products`);
+            }
+
+            // Migrar gastos del modo invitado
+            if (migrationData.guestSessionData?.expenses?.length > 0) {
+              const expenses = migrationData.guestSessionData.expenses.map((e: any) => ({
+                ...e,
+                business_id: business.id,
+              }));
+              await supabase.from('expenses').insert(expenses);
+              console.log(`Migrated ${expenses.length} expenses`);
+            }
+
+            // Migrar clientes del modo invitado
+            if (migrationData.guestSessionData?.customers?.length > 0) {
+              const customers = migrationData.guestSessionData.customers.map((c: any) => ({
+                ...c,
+                business_id: business.id,
+              }));
+              await supabase.from('customers').insert(customers);
+              console.log(`Migrated ${customers.length} customers`);
             }
             
             // Limpiar datos de migración
             localStorage.removeItem('pe_pending_migration');
-            localStorage.removeItem('pe_demo_session');
-            localStorage.removeItem('pe_demo_event_count');
+            localStorage.removeItem('guest_session_data');
+            localStorage.removeItem('guest_session_id');
+            localStorage.removeItem('is_guest_mode');
+            console.log('Migration completed and localStorage cleaned');
           } catch (migrationError) {
-            console.error('Migration error:', migrationError);
-            // No bloquear el flujo si falla la migración
+            console.error('Error migrating demo data:', migrationError);
+            // No borrar los datos si falla la migración
+            toast({
+              title: "Aviso",
+              description: "Tus datos temporales están seguros. Intenta nuevamente o contacta soporte.",
+              variant: "default",
+            });
           }
         }
         

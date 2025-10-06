@@ -36,8 +36,8 @@ const Onboarding = () => {
       toast({
         title: "¡Perfecto!",
         description: userType === 'entrepreneur' 
-          ? "Comenzaremos validando tu idea" 
-          : "Te ayudaremos a automatizar tu negocio",
+          ? "Comenzaremos con tu análisis de negocio" 
+          : "Te ayudaremos a gestionar tu negocio",
       });
 
       // Redirigir según tipo de usuario
