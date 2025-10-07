@@ -15,37 +15,9 @@ const Classify = () => {
   const [checkingAuth, setCheckingAuth] = useState(true);
 
   useEffect(() => {
-    checkAuthAndProfile();
+    // No authentication check - allow guest mode
+    setCheckingAuth(false);
   }, []);
-
-  const checkAuthAndProfile = async () => {
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      
-      if (!user) {
-        navigate("/auth");
-        return;
-      }
-
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('user_type')
-        .eq('id', user.id)
-        .maybeSingle();
-
-      if (profile?.user_type) {
-        if (profile.user_type === 'entrepreneur') {
-          navigate('/onboarding/entrepreneur/step1');
-        } else {
-          navigate('/dashboard');
-        }
-      }
-    } catch (error) {
-      console.error('Error checking auth:', error);
-    } finally {
-      setCheckingAuth(false);
-    }
-  };
 
   const handleSelect = async (type: UserType) => {
     setLoading(true);

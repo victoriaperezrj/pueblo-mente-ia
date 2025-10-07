@@ -47,6 +47,10 @@ const DemoFinancialSimulator = lazy(() => import("./pages/demo/DemoFinancialSimu
 const DemoEntrepreneurDashboard = lazy(() => import("./pages/demo/entrepreneur/Dashboard"));
 const DemoEntrepreneurPlaceholder = lazy(() => import("./pages/demo/entrepreneur/Placeholder"));
 const DemoEntrepreneurValidation = lazy(() => import("./pages/demo/entrepreneur/ValidationIdea"));
+const DemoLeanCanvas = lazy(() => import("./pages/demo/entrepreneur/LeanCanvas"));
+const DemoChecklist = lazy(() => import("./pages/demo/entrepreneur/Checklist"));
+const DemoRecursos = lazy(() => import("./pages/demo/entrepreneur/Recursos"));
+const DemoConfiguracion = lazy(() => import("./pages/demo/entrepreneur/Configuracion"));
 
 // Loading fallback component
 const PageLoader = () => (
@@ -90,11 +94,12 @@ const App = () => (
               {/* Demo Entrepreneur routes */}
               <Route path="/demo/emprendedor/dashboard" element={<DemoEntrepreneurDashboard />} />
               <Route path="/demo/emprendedor/validacion-idea" element={<DemoEntrepreneurValidation />} />
-              <Route path="/demo/emprendedor/simulador" element={<DemoEntrepreneurPlaceholder />} />
-              <Route path="/demo/emprendedor/checklist" element={<DemoEntrepreneurPlaceholder />} />
+              <Route path="/demo/emprendedor/simulador" element={<DemoFinancialSimulator />} />
+              <Route path="/demo/emprendedor/lean-canvas" element={<DemoLeanCanvas />} />
+              <Route path="/demo/emprendedor/checklist" element={<DemoChecklist />} />
+              <Route path="/demo/emprendedor/recursos" element={<DemoRecursos />} />
+              <Route path="/demo/emprendedor/configuracion" element={<DemoConfiguracion />} />
               <Route path="/demo/emprendedor/documentacion" element={<DemoEntrepreneurPlaceholder />} />
-              <Route path="/demo/emprendedor/recursos" element={<DemoEntrepreneurPlaceholder />} />
-              <Route path="/demo/emprendedor/configuracion" element={<DemoEntrepreneurPlaceholder />} />
               
               <Route element={<DashboardLayout />}>
                 <Route path="/dashboard" element={<Dashboard />} />

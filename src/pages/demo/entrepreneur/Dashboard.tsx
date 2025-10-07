@@ -87,9 +87,9 @@ const EntrepreneurDashboard = () => {
   const menuItems = [
     { icon: LayoutDashboard, label: "Dashboard", path: "/demo/emprendedor/dashboard", active: true },
     { icon: Lightbulb, label: "Validación de Idea", path: "/demo/emprendedor/validacion-idea" },
+    { icon: FileText, label: "Lean Canvas", path: "/demo/emprendedor/lean-canvas" },
     { icon: Calculator, label: "Simulador Financiero", path: "/demo/emprendedor/simulador" },
     { icon: ClipboardCheck, label: "Checklist de Trámites", path: "/demo/emprendedor/checklist" },
-    { icon: FileText, label: "Mi Documentación", path: "/demo/emprendedor/documentacion" },
     { icon: BookOpen, label: "Recursos y Guías", path: "/demo/emprendedor/recursos" },
     { icon: Settings, label: "Configuración", path: "/demo/emprendedor/configuracion" },
   ];
