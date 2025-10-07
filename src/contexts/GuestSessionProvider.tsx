@@ -83,6 +83,10 @@ export function GuestSessionProvider({ children }: { children: ReactNode }) {
         setShouldShowUpgradePrompt(true);
       }
     }
+    
+    // SECURITY FIX: Remove any role data from localStorage
+    // Roles should ONLY be managed server-side to prevent privilege escalation
+    localStorage.removeItem('pending_role');
   }, []);
 
   // Save to localStorage whenever demoData or guestSessionData changes

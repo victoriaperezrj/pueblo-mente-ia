@@ -14,6 +14,27 @@ export type Database = {
   }
   public: {
     Tables: {
+      api_rate_limits: {
+        Row: {
+          created_at: string | null
+          endpoint: string | null
+          id: string
+          ip_address: string
+        }
+        Insert: {
+          created_at?: string | null
+          endpoint?: string | null
+          id?: string
+          ip_address: string
+        }
+        Update: {
+          created_at?: string | null
+          endpoint?: string | null
+          id?: string
+          ip_address?: string
+        }
+        Relationships: []
+      }
       appointments: {
         Row: {
           appointment_date: string
@@ -723,10 +744,65 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      appointments_safe: {
+        Row: {
+          appointment_date: string | null
+          business_id: string | null
+          created_at: string | null
+          customer_email: string | null
+          customer_name: string | null
+          customer_phone: string | null
+          end_time: string | null
+          id: string | null
+          notes: string | null
+          start_time: string | null
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          appointment_date?: string | null
+          business_id?: string | null
+          created_at?: string | null
+          customer_email?: string | null
+          customer_name?: string | null
+          customer_phone?: string | null
+          end_time?: string | null
+          id?: string | null
+          notes?: string | null
+          start_time?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          appointment_date?: string | null
+          business_id?: string | null
+          created_at?: string | null
+          customer_email?: string | null
+          customer_name?: string | null
+          customer_phone?: string | null
+          end_time?: string | null
+          id?: string | null
+          notes?: string | null
+          start_time?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "appointments_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
-      [_ in never]: never
+      cleanup_old_rate_limits: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
     }
     Enums: {
       business_type:

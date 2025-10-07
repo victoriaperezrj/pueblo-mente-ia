@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,9 +7,10 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { Building2, Loader2 } from "lucide-react";
+import { Building2, Loader2, Mail, Lock, User, ArrowLeft, Sparkles } from "lucide-react";
 import { PasswordStrengthIndicator, validatePasswordStrength } from "@/components/PasswordStrengthIndicator";
 import { z } from "zod";
+import { logger } from "@/lib/logger";
 
 const passwordSchema = z.string()
   .min(8, "La contraseña debe tener al menos 8 caracteres")
@@ -20,6 +21,10 @@ const passwordSchema = z.string()
 const Auth = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [searchParams] = useSearchParams();
+  const initialMode = searchParams.get('mode') === 'signup' ? 'signup' : 'signin';
+  
+  const [mode, setMode] = useState<'signin' | 'signup'>(initialMode);
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -44,7 +49,6 @@ const Auth = () => {
 
   const checkAndCreateProfile = async (userId: string, email: string | undefined) => {
     try {
-      // Check if profile exists
       const { data: profile, error: fetchError } = await supabase
         .from('profiles')
         .select('*')
@@ -53,116 +57,19 @@ const Auth = () => {
 
       if (fetchError) throw fetchError;
 
-      // Check for pending role selection
-      const pendingRole = localStorage.getItem('pending_role');
-      
-      // If profile doesn't exist, create it
       if (!profile) {
-        const userType = pendingRole as 'entrepreneur' | 'business_owner' | null;
-        
         const { error: insertError } = await supabase
           .from('profiles')
           .insert({
             id: userId,
-            full_name: email?.split('@')[0] || 'Usuario',
-            user_type: userType,
+            full_name: fullName || email?.split('@')[0] || 'Usuario',
+            user_type: 'entrepreneur',
           });
 
         if (insertError) throw insertError;
         
-        // Migrar datos del demo a Supabase si existen
-        const pendingMigration = localStorage.getItem('pe_pending_migration');
-        if (pendingMigration) {
-          try {
-            const migrationData = JSON.parse(pendingMigration);
-            console.log('Migrating demo data to Supabase:', migrationData);
-            
-            // Crear un negocio primero
-            const { data: business, error: businessError } = await supabase
-              .from('businesses')
-              .insert([{
-                name: 'Mi Negocio',
-                business_type: (userType || 'entrepreneur') as any,
-                user_id: userId,
-              }])
-              .select()
-              .single();
-
-            if (businessError) throw businessError;
-            
-            // Migrar idea de negocio si existe
-            if (migrationData.demoData?.businessContext || migrationData.demoData?.ideaText) {
-              const businessContext = migrationData.demoData.businessContext || migrationData.demoData.ideaText;
-              await supabase.from('business_ideas').insert({
-                user_id: userId,
-                idea_description: businessContext,
-                business_context: businessContext,
-                location: migrationData.demoData.location || 'No especificado',
-                industry: migrationData.demoData.industry || 'No especificado',
-              });
-              console.log('Business idea migrated successfully');
-            }
-
-            // Migrar productos del modo invitado
-            if (migrationData.guestSessionData?.products?.length > 0) {
-              const products = migrationData.guestSessionData.products.map((p: any) => ({
-                ...p,
-                business_id: business.id,
-              }));
-              await supabase.from('products').insert(products);
-              console.log(`Migrated ${products.length} products`);
-            }
-
-            // Migrar gastos del modo invitado
-            if (migrationData.guestSessionData?.expenses?.length > 0) {
-              const expenses = migrationData.guestSessionData.expenses.map((e: any) => ({
-                ...e,
-                business_id: business.id,
-              }));
-              await supabase.from('expenses').insert(expenses);
-              console.log(`Migrated ${expenses.length} expenses`);
-            }
-
-            // Migrar clientes del modo invitado
-            if (migrationData.guestSessionData?.customers?.length > 0) {
-              const customers = migrationData.guestSessionData.customers.map((c: any) => ({
-                ...c,
-                business_id: business.id,
-              }));
-              await supabase.from('customers').insert(customers);
-              console.log(`Migrated ${customers.length} customers`);
-            }
-            
-            // Limpiar datos de migración
-            localStorage.removeItem('pe_pending_migration');
-            localStorage.removeItem('guest_session_data');
-            localStorage.removeItem('guest_session_id');
-            localStorage.removeItem('is_guest_mode');
-            console.log('Migration completed and localStorage cleaned');
-          } catch (migrationError) {
-            console.error('Error migrating demo data:', migrationError);
-            // No borrar los datos si falla la migración
-            toast({
-              title: "Aviso",
-              description: "Tus datos temporales están seguros. Intenta nuevamente o contacta soporte.",
-              variant: "default",
-            });
-          }
-        }
-        
-        // Clear pending role
-        localStorage.removeItem('pending_role');
-        
-        // Navigate based on role
-        if (userType === 'entrepreneur') {
-          navigate('/onboarding/entrepreneur/step1');
-        } else if (userType) {
-          navigate('/dashboard');
-        } else {
-          navigate("/onboarding/classify");
-        }
+        navigate('/onboarding/entrepreneur/step1');
       } else {
-        // Profile exists, navigate based on existing user_type
         if (profile.user_type === 'entrepreneur') {
           navigate('/onboarding/entrepreneur/step1');
         } else if (profile.user_type) {
@@ -172,7 +79,7 @@ const Auth = () => {
         }
       }
     } catch (error: any) {
-      console.error('Error checking/creating profile:', error);
+      logger.error('Error checking/creating profile:', error);
       toast({
         title: "Error",
         description: "Hubo un problema al configurar tu perfil. Por favor intenta de nuevo.",
@@ -184,7 +91,6 @@ const Auth = () => {
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Validate password strength before submitting
     const passwordValidation = validatePasswordStrength(password);
     if (!passwordValidation.isValid) {
       toast({
@@ -198,7 +104,6 @@ const Auth = () => {
     setLoading(true);
 
     try {
-      // Validate with Zod schema
       passwordSchema.parse(password);
 
       const { error } = await supabase.auth.signUp({
@@ -218,6 +123,8 @@ const Auth = () => {
         title: "¡Cuenta creada!",
         description: "Iniciá sesión para comenzar.",
       });
+      
+      setMode('signin');
     } catch (error: any) {
       if (error instanceof z.ZodError) {
         toast({
@@ -270,11 +177,6 @@ const Auth = () => {
       });
 
       if (error) throw error;
-
-      toast({
-        title: "Redirigiendo...",
-        description: "Serás redirigido a Google para autenticarte.",
-      });
     } catch (error: any) {
       toast({
         title: "Error al conectar con Google",
@@ -285,248 +187,211 @@ const Auth = () => {
     }
   };
 
-  const handleAppleSignIn = async () => {
-    setLoading(true);
-    try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: "apple",
-        options: {
-          redirectTo: `${window.location.origin}/auth`,
-        },
-      });
-
-      if (error) throw error;
-
-      toast({
-        title: "Redirigiendo...",
-        description: "Serás redirigido a Apple para autenticarte.",
-      });
-    } catch (error: any) {
-      toast({
-        title: "Error al conectar con Apple",
-        description: error.message || "No se pudo iniciar sesión con Apple. Intenta de nuevo.",
-        variant: "destructive",
-      });
-      setLoading(false);
-    }
-  };
-
-  const handleDemoMode = () => {
-    // Navigate directly to demo without authentication
-    navigate("/demo/intro");
-  };
-
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Animated Background */}
-      <div className="fixed inset-0 -z-10 bg-background">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-success/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }} />
-        <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-accent/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "2s" }} />
+    <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4">
+      {/* Background */}
+      <div className="fixed inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-20" />
+      
+      <div className="relative z-10 w-full max-w-md">
+        {/* Back button */}
+        <button
+          onClick={() => navigate('/')}
+          className="flex items-center gap-2 text-slate-400 hover:text-white mb-8 transition"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          <span className="text-sm">Volver al inicio</span>
+        </button>
+        
+        {/* Card */}
+        <Card className="bg-slate-800/50 backdrop-blur-xl border-slate-700 shadow-2xl">
+          <CardHeader className="space-y-2 text-center pb-6">
+            <div className="flex items-center gap-3 justify-center mb-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-sky-500 to-cyan-500 rounded-xl flex items-center justify-center">
+                <Building2 className="w-6 h-6 text-white" />
+              </div>
+              <div className="text-left">
+                <CardTitle className="text-2xl font-bold text-white">
+                  {mode === 'signin' ? 'Iniciar Sesión' : 'Crear Cuenta'}
+                </CardTitle>
+                <CardDescription className="text-slate-400">
+                  Proyecto Emprendedurismo
+                </CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+          
+          <CardContent className="space-y-6">
+            {/* Demo Button - DESTACADO */}
+            <Button
+              type="button"
+              size="lg"
+              onClick={() => navigate('/onboarding/classify')}
+              className="w-full h-14 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold text-lg shadow-lg shadow-amber-500/20"
+            >
+              <Sparkles className="w-5 h-5 mr-2" />
+              PROBAR MODO DEMO
+            </Button>
+            
+            {/* Divider */}
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-slate-700" />
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-4 bg-slate-800/50 text-slate-400">
+                  O {mode === 'signin' ? 'inicia sesión' : 'regístrate'}
+                </span>
+              </div>
+            </div>
+            
+            {/* Forms */}
+            <Tabs value={mode} onValueChange={(v) => setMode(v as 'signin' | 'signup')} className="w-full">
+              <TabsList className="grid w-full grid-cols-2 bg-slate-900/50">
+                <TabsTrigger value="signin">Iniciar Sesión</TabsTrigger>
+                <TabsTrigger value="signup">Registrarse</TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="signin">
+                <form onSubmit={handleSignIn} className="space-y-4 mt-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="signin-email" className="text-slate-300">Correo Electrónico</Label>
+                    <div className="relative">
+                      <Mail className="absolute left-3 top-3 w-5 h-5 text-slate-500" />
+                      <Input
+                        id="signin-email"
+                        type="email"
+                        placeholder="tu@email.com"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                        className="pl-10 bg-slate-900/50 border-slate-700 text-white"
+                      />
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="signin-password" className="text-slate-300">Contraseña</Label>
+                    <div className="relative">
+                      <Lock className="absolute left-3 top-3 w-5 h-5 text-slate-500" />
+                      <Input
+                        id="signin-password"
+                        type="password"
+                        placeholder="••••••••"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                        className="pl-10 bg-slate-900/50 border-slate-700 text-white"
+                      />
+                    </div>
+                  </div>
+                  <Button 
+                    type="submit" 
+                    className="w-full bg-sky-500 hover:bg-sky-600" 
+                    disabled={loading}
+                  >
+                    {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                    Iniciar Sesión
+                  </Button>
+                </form>
+              </TabsContent>
+              
+              <TabsContent value="signup">
+                <form onSubmit={handleSignUp} className="space-y-4 mt-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="signup-name" className="text-slate-300">Nombre Completo</Label>
+                    <div className="relative">
+                      <User className="absolute left-3 top-3 w-5 h-5 text-slate-500" />
+                      <Input
+                        id="signup-name"
+                        type="text"
+                        placeholder="Juan Pérez"
+                        value={fullName}
+                        onChange={(e) => setFullName(e.target.value)}
+                        required
+                        className="pl-10 bg-slate-900/50 border-slate-700 text-white"
+                      />
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="signup-email" className="text-slate-300">Correo Electrónico</Label>
+                    <div className="relative">
+                      <Mail className="absolute left-3 top-3 w-5 h-5 text-slate-500" />
+                      <Input
+                        id="signup-email"
+                        type="email"
+                        placeholder="tu@email.com"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                        className="pl-10 bg-slate-900/50 border-slate-700 text-white"
+                      />
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="signup-password" className="text-slate-300">Contraseña</Label>
+                    <div className="relative">
+                      <Lock className="absolute left-3 top-3 w-5 h-5 text-slate-500" />
+                      <Input
+                        id="signup-password"
+                        type="password"
+                        placeholder="Mínimo 8 caracteres"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                        minLength={8}
+                        className="pl-10 bg-slate-900/50 border-slate-700 text-white"
+                      />
+                    </div>
+                    <PasswordStrengthIndicator password={password} showRequirements={true} />
+                  </div>
+                  <Button 
+                    type="submit" 
+                    className="w-full bg-sky-500 hover:bg-sky-600" 
+                    disabled={loading}
+                  >
+                    {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                    Crear Cuenta Gratis
+                  </Button>
+                </form>
+              </TabsContent>
+            </Tabs>
+
+            {/* Google Sign In */}
+            <div className="space-y-3">
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-slate-700" />
+                </div>
+                <div className="relative flex justify-center text-xs">
+                  <span className="px-2 bg-slate-800/50 text-slate-400">
+                    O continuar con
+                  </span>
+                </div>
+              </div>
+              
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full border-slate-700 hover:bg-slate-700 text-white"
+                onClick={handleGoogleSignIn}
+                disabled={loading}
+              >
+                <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
+                  <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                  <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                  <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                  <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                </svg>
+                Continuar con Google
+              </Button>
+            </div>
+            
+            {/* Footer */}
+            <p className="text-center text-xs text-slate-500">
+              Al registrarte, aceptás nuestros términos y condiciones
+            </p>
+          </CardContent>
+        </Card>
       </div>
-
-      <Card className="w-full max-w-md border-2 shadow-2xl animate-scale-in">
-        <CardHeader className="space-y-2 text-center pb-6">
-          <div className="flex justify-center mb-4">
-            <div className="bg-gradient-primary rounded-2xl p-4 shadow-lg animate-bounce-subtle">
-              <Building2 className="h-10 w-10 text-white" />
-            </div>
-          </div>
-          <CardTitle className="text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-            Proyecto Emprendedurismo
-          </CardTitle>
-          <CardDescription className="text-base">
-            Tu plataforma de gestión empresarial con IA
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          {/* Demo Mode Button - Primary CTA */}
-          <Button
-            type="button"
-            size="lg"
-            onClick={handleDemoMode}
-            className="w-full mb-8 h-16 text-xl font-bold bg-gradient-to-r from-purple-600 to-blue-500 hover:opacity-90 text-white shadow-2xl hover:shadow-3xl transition-all transform hover:scale-105"
-          >
-            👉 PROBAR MODO DEMO
-          </Button>
-
-          <div className="relative mb-6">
-            <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t-2" />
-            </div>
-            <div className="relative flex justify-center text-sm uppercase">
-              <span className="bg-card px-3 text-muted-foreground font-medium">
-                O iniciá sesión
-              </span>
-            </div>
-          </div>
-
-          <Tabs defaultValue="signin" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 mb-6">
-              <TabsTrigger value="signin" className="text-base">
-                Iniciar Sesión
-              </TabsTrigger>
-              <TabsTrigger value="signup" className="text-base">
-                Registrarse
-              </TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="signin">
-              <form onSubmit={handleSignIn} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="signin-email">Correo Electrónico</Label>
-                  <Input
-                    id="signin-email"
-                    type="email"
-                    placeholder="tu@email.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    className="h-11"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="signin-password">Contraseña</Label>
-                  <Input
-                    id="signin-password"
-                    type="password"
-                    placeholder="••••••••"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    className="h-11"
-                  />
-                </div>
-                <Button 
-                  type="submit" 
-                  className="w-full h-11 text-base font-semibold shadow-lg hover:shadow-xl transition-all" 
-                  disabled={loading}
-                >
-                  {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                  Iniciar Sesión
-                </Button>
-              </form>
-            </TabsContent>
-            
-            <TabsContent value="signup">
-              <form onSubmit={handleSignUp} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="signup-name">Nombre Completo</Label>
-                  <Input
-                    id="signup-name"
-                    type="text"
-                    placeholder="Juan Pérez"
-                    value={fullName}
-                    onChange={(e) => setFullName(e.target.value)}
-                    required
-                    className="h-11"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="signup-email">Correo Electrónico</Label>
-                  <Input
-                    id="signup-email"
-                    type="email"
-                    placeholder="tu@email.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    className="h-11"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="signup-password">Contraseña</Label>
-                  <Input
-                    id="signup-password"
-                    type="password"
-                    placeholder="Mínimo 8 caracteres con mayúscula, minúscula y número"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    minLength={8}
-                    className="h-11"
-                  />
-                  <PasswordStrengthIndicator password={password} showRequirements={true} />
-                </div>
-                <Button 
-                  type="submit" 
-                  className="w-full h-11 text-base font-semibold shadow-lg hover:shadow-xl transition-all" 
-                  disabled={loading}
-                >
-                  {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                  Crear Cuenta Gratis
-                </Button>
-              </form>
-            </TabsContent>
-          </Tabs>
-
-          <div className="relative my-6">
-            <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t" />
-            </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-card px-2 text-muted-foreground">
-                O continuar con
-              </span>
-            </div>
-          </div>
-
-          <div className="space-y-3">
-            <Button
-              type="button"
-              variant="outline"
-              className="w-full h-11 border-2 hover:border-primary hover:bg-primary/5 transition-all"
-              onClick={handleGoogleSignIn}
-              disabled={loading}
-            >
-              {loading ? (
-                <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-              ) : (
-                <svg className="mr-2 h-5 w-5" viewBox="0 0 24 24">
-                  <path
-                    d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                    fill="#4285F4"
-                  />
-                  <path
-                    d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                    fill="#34A853"
-                  />
-                  <path
-                    d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-                    fill="#FBBC05"
-                  />
-                  <path
-                    d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                    fill="#EA4335"
-                  />
-                </svg>
-              )}
-              Continuar con Google
-            </Button>
-
-            <Button
-              type="button"
-              variant="outline"
-              className="w-full h-11 border-2 hover:border-primary hover:bg-primary/5 transition-all"
-              onClick={handleAppleSignIn}
-              disabled={loading}
-            >
-              {loading ? (
-                <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-              ) : (
-                <svg className="mr-2 h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z" />
-                </svg>
-              )}
-              Continuar con Apple
-            </Button>
-          </div>
-
-          <p className="text-center text-xs text-muted-foreground mt-6">
-            Al registrarte, aceptás nuestros términos y condiciones
-          </p>
-        </CardContent>
-      </Card>
     </div>
   );
 };
