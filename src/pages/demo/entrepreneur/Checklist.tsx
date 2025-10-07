@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CheckCircle2, Circle, ExternalLink, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { safeJSONParse } from '@/lib/safe-json';
 
 const TRAMITES = [
   {
@@ -72,9 +73,8 @@ export default function Checklist() {
   
   useEffect(() => {
     const saved = localStorage.getItem('checklist_progress');
-    if (saved) {
-      setCompletedSteps(JSON.parse(saved));
-    }
+    const savedData = safeJSONParse(saved, {});
+    setCompletedSteps(savedData);
   }, []);
   
   const toggleStep = (tramiteId: number, stepIndex: number) => {
@@ -115,11 +115,11 @@ export default function Checklist() {
         <div className="bg-white rounded-lg p-6 shadow-sm">
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm font-semibold text-gray-600">Progreso Total</span>
-            <span className="text-2xl font-bold text-purple-600">{getProgress()}%</span>
+            <span className="text-2xl font-bold text-primary-600">{getProgress()}%</span>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-3">
             <div 
-              className="bg-gradient-to-r from-purple-600 to-blue-500 h-3 rounded-full transition-all"
+              className="bg-gradient-to-r from-primary-500 to-cyan-500 h-3 rounded-full transition-all"
               style={{ width: `${getProgress()}%` }}
             />
           </div>
@@ -141,7 +141,7 @@ export default function Checklist() {
                   href={tramite.link} 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="text-purple-600 hover:text-purple-700 flex items-center gap-1 text-sm"
+                  className="text-primary-600 hover:text-primary-700 flex items-center gap-1 text-sm"
                 >
                   <ExternalLink className="w-4 h-4" />
                   Ir al sitio

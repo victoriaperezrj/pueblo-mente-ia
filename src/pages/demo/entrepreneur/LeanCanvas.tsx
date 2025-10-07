@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Save, ArrowRight, CheckCircle2, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { safeJSONParse } from '@/lib/safe-json';
 
 export default function LeanCanvas() {
   const navigate = useNavigate();
@@ -19,13 +20,14 @@ export default function LeanCanvas() {
   
   useEffect(() => {
     const saved = localStorage.getItem('lean_canvas_data');
-    if (saved) {
-      setCanvasData(JSON.parse(saved));
+    const savedData = safeJSONParse(saved, null);
+    if (savedData) {
+      setCanvasData(savedData);
     }
     
     const aiAnalysis = localStorage.getItem('ai_analysis');
-    if (aiAnalysis && !saved) {
-      const analysis = JSON.parse(aiAnalysis);
+    const analysis = safeJSONParse(aiAnalysis, null);
+    if (analysis && !savedData) {
       setCanvasData(prev => ({
         ...prev,
         problema: `${analysis.analisis_mercado?.desafios || ''}`,
@@ -61,7 +63,7 @@ export default function LeanCanvas() {
             <p className="text-gray-600">Estructura tu idea de negocio en 9 bloques</p>
           </div>
           <div className="text-right">
-            <div className="text-3xl font-bold text-purple-600">{percentage}%</div>
+            <div className="text-3xl font-bold text-primary-600">{percentage}%</div>
             <div className="text-sm text-gray-600">{progress}/{total} completados</div>
           </div>
         </div>
@@ -69,7 +71,7 @@ export default function LeanCanvas() {
         {/* Barra de progreso */}
         <div className="w-full bg-gray-200 rounded-full h-3">
           <div 
-            className="bg-gradient-to-r from-purple-600 to-blue-500 h-3 rounded-full transition-all duration-500"
+            className="bg-gradient-to-r from-primary-500 to-cyan-500 h-3 rounded-full transition-all duration-500"
             style={{ width: `${percentage}%` }}
           />
         </div>
@@ -176,7 +178,7 @@ export default function LeanCanvas() {
         </Button>
         
         <Button
-          className="flex-1 bg-purple-600 hover:bg-purple-700"
+          className="flex-1 bg-primary-500 hover:bg-primary-600"
           onClick={() => navigate('/demo/emprendedor/dashboard')}
         >
           Volver al Dashboard
@@ -203,7 +205,7 @@ function CanvasBlock({
   large?: boolean;
 }) {
   return (
-    <div className="bg-white rounded-lg border-2 border-gray-200 p-4 hover:border-purple-400 transition">
+    <div className="bg-white rounded-lg border-2 border-gray-200 p-4 hover:border-primary-400 transition">
       <div className="mb-2">
         <h3 className="font-bold text-gray-900">{title}</h3>
         <p className="text-xs text-gray-500">{subtitle}</p>

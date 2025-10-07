@@ -22,6 +22,8 @@ import {
   FileCheck,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { safeJSONParse } from "@/lib/safe-json";
+import { logger } from "@/lib/logger";
 
 const EntrepreneurDashboard = () => {
   const navigate = useNavigate();
@@ -45,34 +47,28 @@ const EntrepreneurDashboard = () => {
   }, []);
 
   const loadProgressData = () => {
-    try {
-      const leanCanvas = localStorage.getItem('lean_canvas_data');
-      const financial = localStorage.getItem('financial_simulation');
-      const checklist = localStorage.getItem('checklist_progress');
+    const leanCanvas = localStorage.getItem('lean_canvas_data');
+    const financial = localStorage.getItem('financial_simulation');
+    const checklist = localStorage.getItem('checklist_progress');
 
-      let leanCanvasProgress = 0;
-      if (leanCanvas) {
-        const data = JSON.parse(leanCanvas);
-        const totalBlocks = 9;
-        const completedBlocks = Object.values(data).filter(v => v && String(v).trim() !== '').length;
-        leanCanvasProgress = Math.round((completedBlocks / totalBlocks) * 100);
-      }
-
-      let checklistProgress = 0;
-      if (checklist) {
-        const data = JSON.parse(checklist);
-        const total = 5;
-        checklistProgress = Math.round((data.completed / total) * 100);
-      }
-
-      setProgressData({
-        validation: leanCanvasProgress,
-        leanCanvas: leanCanvasProgress,
-        legalChecklist: checklistProgress,
-      });
-    } catch (error) {
-      console.error('Error loading progress data:', error);
+    let leanCanvasProgress = 0;
+    const leanData = safeJSONParse(leanCanvas, {});
+    if (Object.keys(leanData).length > 0) {
+      const totalBlocks = 9;
+      const completedBlocks = Object.values(leanData).filter(v => v && String(v).trim() !== '').length;
+      leanCanvasProgress = Math.round((completedBlocks / totalBlocks) * 100);
     }
+
+    let checklistProgress = 0;
+    const checkData = safeJSONParse(checklist, { completed: 0 });
+    const total = 5;
+    checklistProgress = Math.round((checkData.completed / total) * 100);
+
+    setProgressData({
+      validation: leanCanvasProgress,
+      leanCanvas: leanCanvasProgress,
+      legalChecklist: checklistProgress,
+    });
   };
 
   const closeBanner = () => {
@@ -105,8 +101,8 @@ const EntrepreneurDashboard = () => {
 
   const SidebarContent = () => (
     <div className="flex flex-col h-full">
-      <div className="p-6 border-b border-purple-200">
-        <div className="flex items-center gap-2 text-purple-600">
+      <div className="p-6 border-b border-slate-200">
+        <div className="flex items-center gap-2 text-primary-600">
           <Lightbulb className="h-6 w-6" />
           <span className="font-bold text-lg">Emprendedor</span>
         </div>
@@ -120,8 +116,8 @@ const EntrepreneurDashboard = () => {
             className={cn(
               "w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-left",
               item.active
-                ? "bg-purple-600 text-white"
-                : "text-gray-700 hover:bg-purple-50"
+                ? "bg-primary-600 text-white"
+                : "text-gray-700 hover:bg-slate-50"
             )}
             aria-label={item.label}
           >
@@ -131,10 +127,10 @@ const EntrepreneurDashboard = () => {
         ))}
       </nav>
 
-      <div className="p-4 border-t border-purple-200">
+      <div className="p-4 border-t border-slate-200">
         <Button
           variant="outline"
-          className="w-full border-purple-600 text-purple-600 hover:bg-purple-50"
+          className="w-full border-primary-600 text-primary-600 hover:bg-slate-50"
           onClick={openRegisterModal}
         >
           Crear Cuenta
@@ -144,7 +140,7 @@ const EntrepreneurDashboard = () => {
   );
 
   return (
-    <div className="min-h-screen bg-purple-50/30">
+    <div className="min-h-screen bg-slate-50">
       {/* Mobile Header */}
       <div className="md:hidden fixed top-0 left-0 right-0 bg-white border-b z-50 p-4">
         <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
@@ -161,7 +157,7 @@ const EntrepreneurDashboard = () => {
 
       <div className="flex">
         {/* Desktop Sidebar */}
-        <aside className="hidden md:block w-64 bg-white border-r border-purple-200 fixed h-screen">
+        <aside className="hidden md:block w-64 bg-white border-r border-slate-200 fixed h-screen">
           <SidebarContent />
         </aside>
 
@@ -199,18 +195,18 @@ const EntrepreneurDashboard = () => {
 
             {/* Metrics Cards */}
             <div className="grid md:grid-cols-2 gap-6 mb-8">
-              <Card className="border border-purple-200 hover:shadow-lg transition-shadow">
+              <Card className="border border-slate-200 hover:shadow-lg transition-shadow">
                 <CardHeader>
                   <div className="flex items-center gap-3">
-                    <div className="p-2 bg-purple-100 rounded-lg">
-                      <TrendingUp className="h-6 w-6 text-purple-600" />
+                    <div className="p-2 bg-primary-100 rounded-lg">
+                      <TrendingUp className="h-6 w-6 text-primary-600" />
                     </div>
                     <CardTitle className="text-lg">Progreso de Validación</CardTitle>
                   </div>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
-                    <div className="text-3xl font-bold text-purple-600">
+                    <div className="text-3xl font-bold text-primary-600">
                       {progressData.validation}%
                     </div>
                     <Progress value={progressData.validation} className="h-2" />
@@ -221,11 +217,11 @@ const EntrepreneurDashboard = () => {
                 </CardContent>
               </Card>
 
-              <Card className="border border-purple-200 hover:shadow-lg transition-shadow">
+              <Card className="border border-slate-200 hover:shadow-lg transition-shadow">
                 <CardHeader>
                   <div className="flex items-center gap-3">
-                    <div className="p-2 bg-pink-100 rounded-lg">
-                      <DollarSign className="h-6 w-6 text-pink-600" />
+                    <div className="p-2 bg-success-100 rounded-lg">
+                      <DollarSign className="h-6 w-6 text-success-600" />
                     </div>
                     <CardTitle className="text-lg">Rentabilidad Estimada</CardTitle>
                   </div>
@@ -240,18 +236,18 @@ const EntrepreneurDashboard = () => {
                 </CardContent>
               </Card>
 
-              <Card className="border border-purple-200 hover:shadow-lg transition-shadow">
+              <Card className="border border-slate-200 hover:shadow-lg transition-shadow">
                 <CardHeader>
                   <div className="flex items-center gap-3">
-                    <div className="p-2 bg-purple-100 rounded-lg">
-                      <CheckSquare className="h-6 w-6 text-purple-600" />
+                    <div className="p-2 bg-primary-100 rounded-lg">
+                      <CheckSquare className="h-6 w-6 text-primary-600" />
                     </div>
                     <CardTitle className="text-lg">Lean Canvas Completado</CardTitle>
                   </div>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-2">
-                    <div className="text-2xl font-bold text-purple-600">
+                    <div className="text-2xl font-bold text-primary-600">
                       {Math.round((progressData.leanCanvas / 100) * 9)}/9 bloques
                     </div>
                     <Progress value={progressData.leanCanvas} className="h-2" />
@@ -259,18 +255,18 @@ const EntrepreneurDashboard = () => {
                 </CardContent>
               </Card>
 
-              <Card className="border border-purple-200 hover:shadow-lg transition-shadow">
+              <Card className="border border-slate-200 hover:shadow-lg transition-shadow">
                 <CardHeader>
                   <div className="flex items-center gap-3">
-                    <div className="p-2 bg-blue-100 rounded-lg">
-                      <FileCheck className="h-6 w-6 text-blue-600" />
+                    <div className="p-2 bg-cyan-100 rounded-lg">
+                      <FileCheck className="h-6 w-6 text-cyan-600" />
                     </div>
                     <CardTitle className="text-lg">Trámites Legales</CardTitle>
                   </div>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-2">
-                    <div className="text-2xl font-bold text-blue-600">
+                    <div className="text-2xl font-bold text-cyan-600">
                       {Math.round((progressData.legalChecklist / 100) * 5)}/5 completados
                     </div>
                     <Progress value={progressData.legalChecklist} className="h-2" />
@@ -280,10 +276,10 @@ const EntrepreneurDashboard = () => {
             </div>
 
             {/* First Steps Checklist */}
-            <Card className="border border-purple-200 mb-8">
+            <Card className="border border-slate-200 mb-8">
               <CardHeader>
                 <CardTitle className="text-xl flex items-center gap-2">
-                  <ClipboardCheck className="h-6 w-6 text-purple-600" />
+                  <ClipboardCheck className="h-6 w-6 text-primary-600" />
                   Tus Primeros Pasos
                 </CardTitle>
               </CardHeader>
@@ -296,7 +292,7 @@ const EntrepreneurDashboard = () => {
                     { id: 4, text: "Define misión y visión de tu emprendimiento" },
                     { id: 5, text: "Revisa los recursos y guías disponibles" },
                   ].map((step) => (
-                    <div key={step.id} className="flex items-start gap-3 p-3 rounded-lg hover:bg-purple-50 transition-colors">
+                    <div key={step.id} className="flex items-start gap-3 p-3 rounded-lg hover:bg-slate-50 transition-colors">
                       <div className="w-5 h-5 rounded border-2 border-gray-300 flex-shrink-0 mt-0.5" />
                       <span className="text-gray-700">{step.text}</span>
                     </div>
@@ -309,7 +305,7 @@ const EntrepreneurDashboard = () => {
             <div className="flex justify-center">
               <Button
                 size="lg"
-                className="bg-gradient-to-r from-purple-600 to-purple-700 hover:opacity-90 text-white px-8 py-6 text-lg"
+                className="bg-gradient-to-r from-primary-500 to-cyan-500 hover:opacity-90 text-white px-8 py-6 text-lg"
                 onClick={() => navigate('/demo/emprendedor/validacion-idea')}
               >
                 Empezar Validación de Idea →
