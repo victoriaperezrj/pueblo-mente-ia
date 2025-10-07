@@ -54,8 +54,11 @@ const DemoConfiguracion = lazy(() => import("./pages/demo/entrepreneur/Configura
 
 // Loading fallback component
 const PageLoader = () => (
-  <div className="flex items-center justify-center min-h-screen">
-    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+  <div className="flex items-center justify-center min-h-screen bg-black">
+    <div className="text-center">
+      <div className="w-16 h-16 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+      <p className="text-white font-semibold">Cargando...</p>
+    </div>
   </div>
 );
 
