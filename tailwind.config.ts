@@ -14,26 +14,29 @@ export default {
     },
     extend: {
       colors: {
-        // Backgrounds claros
+        // Shadcn Base System (MUST be first for compatibility)
+        border: "hsl(var(--border))",
+        input: "hsl(var(--input))",
+        ring: "hsl(var(--ring))",
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
+        
+        // Backgrounds claros (custom colors)
         bg: {
           primary: '#FFFFFF',
           secondary: '#F8FAFC',
           tertiary: '#F1F5F9',
           dark: '#0F172A'
         },
-        // Borders sutiles
-        border: {
-          light: '#E2E8F0',
-          DEFAULT: '#CBD5E1',
-          dark: '#94A3B8'
-        },
-        // Textos
+        
+        // Textos (custom colors)
         text: {
           primary: '#0F172A',
           secondary: '#475569',
           tertiary: '#64748B',
           inverse: '#FFFFFF'
         },
+        
         // Módulo Emprendedor (Púrpura energético)
         entrepreneur: {
           50: '#FAF5FF',
@@ -47,6 +50,7 @@ export default {
           800: '#6B21A8',
           900: '#581C87'
         },
+        
         // Módulo Negocio en Marcha (Azul confianza)
         business: {
           50: '#EFF6FF',
@@ -60,6 +64,7 @@ export default {
           800: '#1E40AF',
           900: '#1E3A8A'
         },
+        
         // Módulo PYME (Verde crecimiento)
         enterprise: {
           50: '#F0FDF4',
@@ -73,12 +78,8 @@ export default {
           800: '#166534',
           900: '#14532D'
         },
-        // Estados
-        success: '#10B981',
-        warning: '#F59E0B',
-        error: '#EF4444',
-        info: '#3B82F6',
-        // Shadcn compatibility
+        
+        // Shadcn Component System
         primary: {
           50: '#faf5ff',
           100: '#f3e8ff',
@@ -107,6 +108,21 @@ export default {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
           light: "hsl(var(--secondary-light))",
+        },
+        success: {
+          DEFAULT: "hsl(var(--success))",
+          foreground: "hsl(var(--success-foreground))",
+          light: "hsl(var(--success-light))",
+        },
+        warning: {
+          DEFAULT: "hsl(var(--warning))",
+          foreground: "hsl(var(--warning-foreground))",
+          light: "hsl(var(--warning-light))",
+        },
+        info: {
+          DEFAULT: "hsl(var(--info))",
+          foreground: "hsl(var(--info-foreground))",
+          light: "hsl(var(--info-light))",
         },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
