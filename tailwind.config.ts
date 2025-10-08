@@ -14,11 +14,71 @@ export default {
     },
     extend: {
       colors: {
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
+        // Backgrounds claros
+        bg: {
+          primary: '#FFFFFF',
+          secondary: '#F8FAFC',
+          tertiary: '#F1F5F9',
+          dark: '#0F172A'
+        },
+        // Borders sutiles
+        border: {
+          light: '#E2E8F0',
+          DEFAULT: '#CBD5E1',
+          dark: '#94A3B8'
+        },
+        // Textos
+        text: {
+          primary: '#0F172A',
+          secondary: '#475569',
+          tertiary: '#64748B',
+          inverse: '#FFFFFF'
+        },
+        // Módulo Emprendedor (Púrpura energético)
+        entrepreneur: {
+          50: '#FAF5FF',
+          100: '#F3E8FF',
+          200: '#E9D5FF',
+          300: '#D8B4FE',
+          400: '#C084FC',
+          500: '#A855F7',
+          600: '#9333EA',
+          700: '#7E22CE',
+          800: '#6B21A8',
+          900: '#581C87'
+        },
+        // Módulo Negocio en Marcha (Azul confianza)
+        business: {
+          50: '#EFF6FF',
+          100: '#DBEAFE',
+          200: '#BFDBFE',
+          300: '#93C5FD',
+          400: '#60A5FA',
+          500: '#3B82F6',
+          600: '#2563EB',
+          700: '#1D4ED8',
+          800: '#1E40AF',
+          900: '#1E3A8A'
+        },
+        // Módulo PYME (Verde crecimiento)
+        enterprise: {
+          50: '#F0FDF4',
+          100: '#DCFCE7',
+          200: '#BBF7D0',
+          300: '#86EFAC',
+          400: '#4ADE80',
+          500: '#22C55E',
+          600: '#16A34A',
+          700: '#15803D',
+          800: '#166534',
+          900: '#14532D'
+        },
+        // Estados
+        success: '#10B981',
+        warning: '#F59E0B',
+        error: '#EF4444',
+        info: '#3B82F6',
+        // Shadcn compatibility
         primary: {
           50: '#faf5ff',
           100: '#f3e8ff',
@@ -47,21 +107,6 @@ export default {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
           light: "hsl(var(--secondary-light))",
-        },
-        success: {
-          DEFAULT: "hsl(var(--success))",
-          foreground: "hsl(var(--success-foreground))",
-          light: "hsl(var(--success-light))",
-        },
-        warning: {
-          DEFAULT: "hsl(var(--warning))",
-          foreground: "hsl(var(--warning-foreground))",
-          light: "hsl(var(--warning-light))",
-        },
-        info: {
-          DEFAULT: "hsl(var(--info))",
-          foreground: "hsl(var(--info-foreground))",
-          light: "hsl(var(--info-light))",
         },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
@@ -109,6 +154,14 @@ export default {
           "5": "hsl(var(--chart-5))",
         },
       },
+      fontFamily: {
+        sans: ['Inter', 'system-ui', 'sans-serif']
+      },
+      boxShadow: {
+        'soft': '0 2px 8px rgba(0, 0, 0, 0.04)',
+        'medium': '0 4px 12px rgba(0, 0, 0, 0.08)',
+        'hard': '0 8px 24px rgba(0, 0, 0, 0.12)'
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
@@ -139,6 +192,18 @@ export default {
           "0%, 100%": { transform: "translateY(0)" },
           "50%": { transform: "translateY(-5px)" },
         },
+        slideDown: {
+          '0%': { opacity: '0', transform: 'translateY(-10px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' }
+        },
+        fadeIn: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' }
+        },
+        scaleIn: {
+          '0%': { opacity: '0', transform: 'scale(0.95)' },
+          '100%': { opacity: '1', transform: 'scale(1)' }
+        }
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -147,6 +212,9 @@ export default {
         "scale-in": "scale-in 0.3s ease-out",
         "slide-up": "slide-up 0.6s ease-out",
         "bounce-subtle": "bounce-subtle 2s ease-in-out infinite",
+        slideDown: 'slideDown 0.3s ease-out',
+        fadeIn: 'fadeIn 0.5s ease-in',
+        scaleIn: 'scaleIn 0.2s ease-out'
       },
     },
   },

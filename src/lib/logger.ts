@@ -16,10 +16,15 @@ export const logger = {
   },
 
   /**
-   * Errors - always logged (needed for debugging production issues)
+   * Errors - handled carefully to avoid leaking sensitive data
    */
-  error: (...args: any[]) => {
-    console.error(...args);
+  error: (message: string, context?: any) => {
+    if (isDev) {
+      console.error(message, context);
+    } else {
+      // In production, only log generic error messages
+      console.error('An error occurred');
+    }
   },
 
   /**

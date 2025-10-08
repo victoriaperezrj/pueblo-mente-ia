@@ -1,245 +1,187 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Lightbulb, Store, Building2, Check, Loader2, ArrowLeft } from "lucide-react";
-import { toast } from "sonner";
+import { useNavigate } from 'react-router-dom';
+import { Rocket, TrendingUp, BarChart3, ArrowLeft, CheckCircle } from 'lucide-react';
 
-type UserType = 'entrepreneur' | 'business_owner' | 'enterprise';
-
-const Classify = () => {
+export default function OnboardingClassify() {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
-  const [checkingAuth, setCheckingAuth] = useState(true);
-
-  useEffect(() => {
-    // No authentication check - allow guest mode
-    setCheckingAuth(false);
-  }, []);
-
-  const handleSelect = async (type: UserType) => {
-    setLoading(true);
-    try {
-      // For entrepreneur, use guest mode
-      if (type === 'entrepreneur') {
-        localStorage.setItem('user_profile', 'emprendedor');
-        localStorage.setItem('is_guest_mode', 'true');
-        navigate('/demo/emprendedor/dashboard');
-        return;
-      }
-
-      // For other types, show "coming soon" message
-      toast.info("Esta sección estará disponible pronto. Enfócate en validar tu idea primero 🚀");
-    } catch (error: any) {
-      console.error('Error:', error);
-      toast.error("Ocurrió un error");
-    } finally {
-      setLoading(false);
+  
+  const handleSelectProfile = (profile: 'entrepreneur' | 'business' | 'enterprise') => {
+    // NO guardar rol en localStorage (security)
+    // Solo guardar que está en modo demo
+    localStorage.setItem('is_guest_mode', 'true');
+    localStorage.setItem('demo_profile', profile); // Solo para demo, no para auth
+    
+    if (profile === 'entrepreneur') {
+      navigate('/demo/entrepreneur/dashboard');
+    } else if (profile === 'business') {
+      navigate('/demo/negocio/dashboard');
+    } else {
+      navigate('/demo/pyme/dashboard');
     }
   };
-
-  if (checkingAuth) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
-    );
-  }
-
+  
   return (
-    <div className="min-h-screen bg-background p-4">
-      <div className="container mx-auto max-w-7xl py-12">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            ¿En qué etapa estás?
+    <div className="min-h-screen bg-bg-secondary py-12 px-4">
+      <div className="max-w-6xl mx-auto">
+        <button
+          onClick={() => navigate('/')}
+          className="flex items-center gap-2 text-text-tertiary hover:text-text-primary mb-8 transition"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          Volver
+        </button>
+        
+        <div className="text-center mb-12">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 text-text-primary">
+            ¿En qué etapa está tu proyecto?
           </h1>
-          <p className="text-xl text-muted-foreground mb-2">
-            Elegí la opción que mejor te describa
-          </p>
-          <p className="text-sm text-muted-foreground">
-            (opcional - podés saltar este paso)
+          <p className="text-lg text-text-secondary">
+            Elegí tu perfil para acceder a herramientas personalizadas
           </p>
         </div>
         
-        <div className="flex justify-end mb-6">
-          <Button
-            variant="ghost"
-            onClick={() => navigate('/dashboard')}
-            className="gap-2"
-          >
-            Saltar todo e ir al dashboard →
-          </Button>
-        </div>
-
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-3 gap-6 mb-8">
+          <ProfileCard
+            icon={Rocket}
+            badge="DESDE CERO"
+            title="Emprendedor"
+            subtitle="Tengo una Idea"
+            description="Aún no arranqué, pero tengo una idea clara. Necesito validarla y hacer números."
+            features={[
+              'Lean Canvas interactivo',
+              'Análisis con IA',
+              'Simulador financiero',
+              'Checklist AFIP'
+            ]}
+            buttonText="Empezar Validación"
+            color="entrepreneur"
+            onClick={() => handleSelectProfile('entrepreneur')}
+          />
           
-          {/* OPCIÓN 1: EMPRENDEDOR */}
-          <Card className="p-8 hover:shadow-2xl transition-all border-2 hover:border-purple-500 cursor-pointer group">
-            <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl w-16 h-16 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-              <Lightbulb className="h-8 w-8 text-white" />
-            </div>
-            
-            <Badge className="mb-4 bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-100">
-              Desde Cero
-            </Badge>
-            
-            <h3 className="text-2xl font-bold mb-3">
-              Tengo una Idea
-            </h3>
-            
-            <p className="text-muted-foreground mb-6 leading-relaxed">
-              Todavía no arranqué. Quiero validar si mi idea funciona, armar el plan y calcular los números antes de invertir.
-            </p>
-            
-            <ul className="space-y-3 mb-8 text-sm">
-              <li className="flex items-start gap-2">
-                <Check className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
-                <span>Validación de viabilidad realista</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <Check className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
-                <span>Plan de negocio paso a paso</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <Check className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
-                <span>Simulador financiero con inflación</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <Check className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
-                <span>Calculadora de producción</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <Check className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
-                <span>Regulaciones y permisos</span>
-              </li>
-            </ul>
-            
-            <Button 
-              className="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:opacity-90 text-white"
-              onClick={() => handleSelect('entrepreneur')}
-              disabled={loading}
-            >
-              {loading ? "Guardando..." : "Empezar Validación →"}
-            </Button>
-          </Card>
-
-          {/* OPCIÓN 2: NEGOCIO ACTIVO */}
-          <Card className="p-8 hover:shadow-2xl transition-all border-2 hover:border-blue-500 cursor-pointer group">
-            <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl w-16 h-16 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-              <Store className="h-8 w-8 text-white" />
-            </div>
-            
-            <Badge className="mb-4 bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-100">
-              1 a 3 Años
-            </Badge>
-            
-            <h3 className="text-2xl font-bold mb-3">
-              Ya Tengo mi Negocio
-            </h3>
-            
-            <p className="text-muted-foreground mb-6 leading-relaxed">
-              Mi emprendimiento está funcionando pero llevo todo a mano o en Excel. Quiero organizarme mejor y crecer.
-            </p>
-            
-            <ul className="space-y-3 mb-8 text-sm">
-              <li className="flex items-start gap-2">
-                <Check className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
-                <span>Registrar ventas y gastos fácil</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <Check className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
-                <span>Controlar inventario en tiempo real</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <Check className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
-                <span>Gestionar clientes y agenda</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <Check className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
-                <span>Ver reportes y números claros</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <Check className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
-                <span>Compras en grupo (ahorrá)</span>
-              </li>
-            </ul>
-            
-            <Button 
-              className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:opacity-90 text-white"
-              onClick={() => handleSelect('business_owner')}
-              disabled={loading}
-            >
-              {loading ? "Guardando..." : "Organizar mi Negocio →"}
-            </Button>
-          </Card>
-
-          {/* OPCIÓN 3: PYME/EMPRESA */}
-          <Card className="p-8 hover:shadow-2xl transition-all border-2 hover:border-emerald-500 cursor-pointer group">
-            <div className="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl w-16 h-16 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-              <Building2 className="h-8 w-8 text-white" />
-            </div>
-            
-            <Badge className="mb-4 bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-100">
-              +3 Años
-            </Badge>
-            
-            <h3 className="text-2xl font-bold mb-3">
-              Soy PYME/Empresa
-            </h3>
-            
-            <p className="text-muted-foreground mb-6 leading-relaxed">
-              Tengo un negocio establecido con equipo y procesos. Quiero automatizar, innovar y escalar con IA.
-            </p>
-            
-            <ul className="space-y-3 mb-8 text-sm">
-              <li className="flex items-start gap-2">
-                <Check className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
-                <span>Automatización de workflows</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <Check className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
-                <span>IA predictiva y análisis avanzado</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <Check className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
-                <span>Gestión multi-sucursal</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <Check className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
-                <span>Integraciones con sistemas existentes</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <Check className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
-                <span>Business Intelligence</span>
-              </li>
-            </ul>
-            
-            <Button 
-              className="w-full bg-gradient-to-r from-emerald-600 to-emerald-700 hover:opacity-90 text-white"
-              onClick={() => handleSelect('enterprise')}
-              disabled={loading}
-            >
-              {loading ? "Guardando..." : "Innovar y Automatizar →"}
-            </Button>
-          </Card>
-
+          <ProfileCard
+            icon={TrendingUp}
+            badge="1-3 AÑOS"
+            title="Negocio"
+            subtitle="Tengo un Negocio"
+            description="Ya vendo, pero llevo todo en Excel. Quiero organizarme mejor."
+            features={[
+              'Dashboard de ventas',
+              'CRM de clientes',
+              'Control de gastos',
+              'Facturación AFIP'
+            ]}
+            buttonText="Organizar Negocio"
+            color="business"
+            onClick={() => handleSelectProfile('business')}
+            popular
+          />
+          
+          <ProfileCard
+            icon={BarChart3}
+            badge="+3 AÑOS"
+            title="PYME"
+            subtitle="Tengo una Empresa"
+            description="Tengo equipo y procesos. Quiero automatizar y escalar."
+            features={[
+              'Gestión de equipo',
+              'Automatización',
+              'Multi-sucursal',
+              'Reportes ejecutivos'
+            ]}
+            buttonText="Automatizar Empresa"
+            color="enterprise"
+            onClick={() => handleSelectProfile('enterprise')}
+          />
         </div>
         
-        <div className="text-center mt-8">
-          <Button 
-            variant="ghost" 
-            onClick={() => navigate('/')}
-            className="gap-2"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Volver al Inicio
-          </Button>
+        <div className="text-center text-sm text-text-tertiary bg-business-50 border border-business-200 rounded-lg p-4">
+          <p className="font-medium text-business-700">
+            Tip: Podés cambiar de perfil en cualquier momento desde Configuración
+          </p>
         </div>
       </div>
     </div>
   );
-};
+}
 
-export default Classify;
+interface ProfileCardProps {
+  icon: React.ElementType;
+  badge: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  features: string[];
+  buttonText: string;
+  color: 'entrepreneur' | 'business' | 'enterprise';
+  onClick: () => void;
+  popular?: boolean;
+}
+
+function ProfileCard({ icon: Icon, badge, title, subtitle, description, features, buttonText, color, onClick, popular }: ProfileCardProps) {
+  const colors = {
+    entrepreneur: {
+      bg: 'from-entrepreneur-50 to-entrepreneur-100',
+      border: 'border-entrepreneur-300',
+      icon: 'from-entrepreneur-500 to-entrepreneur-600',
+      badge: 'bg-entrepreneur-100 text-entrepreneur-700',
+      button: 'bg-entrepreneur-500 hover:bg-entrepreneur-600 text-white',
+      check: 'text-entrepreneur-500'
+    },
+    business: {
+      bg: 'from-business-50 to-business-100',
+      border: 'border-business-300',
+      icon: 'from-business-500 to-business-600',
+      badge: 'bg-business-100 text-business-700',
+      button: 'bg-business-500 hover:bg-business-600 text-white',
+      check: 'text-business-500'
+    },
+    enterprise: {
+      bg: 'from-enterprise-50 to-enterprise-100',
+      border: 'border-enterprise-300',
+      icon: 'from-enterprise-500 to-enterprise-600',
+      badge: 'bg-enterprise-100 text-enterprise-700',
+      button: 'bg-enterprise-500 hover:bg-enterprise-600 text-white',
+      check: 'text-enterprise-500'
+    }
+  };
+  
+  const c = colors[color];
+  
+  return (
+    <div className={`relative bg-gradient-to-br ${c.bg} border-2 ${c.border} rounded-2xl p-6 hover:scale-105 transition-all duration-300 shadow-soft hover:shadow-medium cursor-pointer`}>
+      {popular && (
+        <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-warning text-white text-xs font-bold rounded-full shadow-soft">
+          MÁS POPULAR
+        </div>
+      )}
+      
+      <div className={`w-14 h-14 bg-gradient-to-br ${c.icon} rounded-xl flex items-center justify-center mb-4 shadow-soft`}>
+        <Icon className="w-8 h-8 text-white" />
+      </div>
+      
+      <div className={`inline-block px-3 py-1 ${c.badge} text-xs font-bold rounded-full mb-3`}>
+        {badge}
+      </div>
+      
+      <h3 className="text-2xl font-bold text-text-primary">{title}</h3>
+      <h4 className="text-lg font-semibold text-text-secondary mb-3">{subtitle}</h4>
+      <p className="text-sm text-text-tertiary mb-4 leading-relaxed">{description}</p>
+      
+      <ul className="space-y-2 mb-6">
+        {features.map((feature, index) => (
+          <li key={index} className="flex items-start gap-2 text-sm text-text-secondary">
+            <CheckCircle className={`w-4 h-4 ${c.check} mt-0.5 flex-shrink-0`} />
+            <span>{feature}</span>
+          </li>
+        ))}
+      </ul>
+      
+      <button
+        onClick={onClick}
+        className={`w-full py-3 ${c.button} rounded-lg font-semibold transition flex items-center justify-center gap-2 group shadow-soft`}
+      >
+        {buttonText}
+        <Icon className="w-4 h-4 group-hover:translate-x-1 transition" />
+      </button>
+    </div>
+  );
+}
