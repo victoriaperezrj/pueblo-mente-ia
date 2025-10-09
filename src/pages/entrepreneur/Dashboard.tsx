@@ -133,11 +133,11 @@ export default function EntrepreneurDashboard() {
       const business = businesses?.[0];
 
       if (business) {
-        // Update profile to business_owner
+        // Update profile to business
         await supabase
           .from('profiles')
           .update({ 
-            user_type: 'business_owner'
+            user_type: 'business'
           })
           .eq('id', user.id);
 

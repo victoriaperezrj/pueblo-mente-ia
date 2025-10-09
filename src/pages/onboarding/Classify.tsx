@@ -1,30 +1,96 @@
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Rocket, TrendingUp, BarChart3, ArrowLeft, CheckCircle } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { assignUserRole } from '@/hooks/useUserRole';
+import { useCustomToast } from '@/hooks/use-custom-toast';
+import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
+
+type ProfileType = 'entrepreneur' | 'business' | 'pyme_enterprise';
 
 export default function OnboardingClassify() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const { showToast, ToastComponent } = useCustomToast();
+  const [loading, setLoading] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const isDemoMode = searchParams.get('mode') === 'demo';
   
-  const handleSelectProfile = (profile: 'entrepreneur' | 'business' | 'enterprise') => {
-    // NO guardar rol en localStorage (security)
-    // Solo guardar que está en modo demo
-    localStorage.setItem('is_guest_mode', 'true');
-    localStorage.setItem('demo_profile', profile); // Solo para demo, no para auth
+  useEffect(() => {
+    checkAuth();
+  }, []);
+  
+  const checkAuth = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    setIsAuthenticated(!!user);
+  };
+  
+  const handleSelectProfile = async (profile: ProfileType) => {
+    setLoading(true);
     
-    if (profile === 'entrepreneur') {
-      navigate('/demo/entrepreneur/dashboard');
-    } else if (profile === 'business') {
-      navigate('/demo/negocio/dashboard');
-    } else {
-      navigate('/demo/pyme/dashboard');
+    try {
+      if (isDemoMode || !isAuthenticated) {
+        // Modo demo - solo localStorage
+        localStorage.setItem('is_guest_mode', 'true');
+        localStorage.setItem('demo_profile', profile);
+        
+        if (profile === 'entrepreneur') {
+          navigate('/demo/entrepreneur/dashboard');
+        } else if (profile === 'business') {
+          navigate('/demo/negocio/dashboard');
+        } else {
+          navigate('/demo/pyme/dashboard');
+        }
+      } else {
+        // Usuario autenticado - guardar en BD
+        const { data: { user } } = await supabase.auth.getUser();
+        
+        if (!user) {
+          showToast('Debes iniciar sesión primero', 'error');
+          navigate('/auth');
+          return;
+        }
+
+        // Asignar rol al usuario
+        const result = await assignUserRole(user.id, profile);
+        
+        if (!result.success) {
+          showToast(result.error || 'Error al asignar perfil', 'error');
+          return;
+        }
+
+        // Actualizar perfil con user_type
+        await supabase
+          .from('profiles')
+          .update({ user_type: profile })
+          .eq('id', user.id);
+
+        showToast('Perfil configurado exitosamente', 'success');
+        
+        // Redirigir según el tipo de perfil
+        if (profile === 'entrepreneur') {
+          navigate('/entrepreneur/dashboard');
+        } else {
+          navigate('/dashboard');
+        }
+      }
+    } catch (error: any) {
+      console.error('Error en selección de perfil:', error);
+      showToast('Ocurrió un error inesperado', 'error');
+    } finally {
+      setLoading(false);
     }
   };
   
   return (
     <div className="min-h-screen bg-bg-secondary py-12 px-4">
+      {ToastComponent}
+      
       <div className="max-w-6xl mx-auto">
         <button
-          onClick={() => navigate('/')}
+          onClick={() => navigate(isAuthenticated ? '/dashboard' : '/')}
           className="flex items-center gap-2 text-text-tertiary hover:text-text-primary mb-8 transition"
+          disabled={loading}
         >
           <ArrowLeft className="w-4 h-4" />
           Volver
@@ -55,6 +121,7 @@ export default function OnboardingClassify() {
             buttonText="Empezar Validación"
             color="entrepreneur"
             onClick={() => handleSelectProfile('entrepreneur')}
+            loading={loading}
           />
           
           <ProfileCard
@@ -73,6 +140,7 @@ export default function OnboardingClassify() {
             color="business"
             onClick={() => handleSelectProfile('business')}
             popular
+            loading={loading}
           />
           
           <ProfileCard
@@ -89,7 +157,8 @@ export default function OnboardingClassify() {
             ]}
             buttonText="Automatizar Empresa"
             color="enterprise"
-            onClick={() => handleSelectProfile('enterprise')}
+            onClick={() => handleSelectProfile('pyme_enterprise')}
+            loading={loading}
           />
         </div>
         
@@ -114,9 +183,10 @@ interface ProfileCardProps {
   color: 'entrepreneur' | 'business' | 'enterprise';
   onClick: () => void;
   popular?: boolean;
+  loading?: boolean;
 }
 
-function ProfileCard({ icon: Icon, badge, title, subtitle, description, features, buttonText, color, onClick, popular }: ProfileCardProps) {
+function ProfileCard({ icon: Icon, badge, title, subtitle, description, features, buttonText, color, onClick, popular, loading }: ProfileCardProps) {
   const colors = {
     entrepreneur: {
       bg: 'from-entrepreneur-50 to-entrepreneur-100',
@@ -177,10 +247,17 @@ function ProfileCard({ icon: Icon, badge, title, subtitle, description, features
       
       <button
         onClick={onClick}
-        className={`w-full py-3 ${c.button} rounded-lg font-semibold transition flex items-center justify-center gap-2 group shadow-soft`}
+        disabled={loading}
+        className={`w-full py-3 ${c.button} rounded-lg font-semibold transition flex items-center justify-center gap-2 group shadow-soft disabled:opacity-50 disabled:cursor-not-allowed`}
       >
-        {buttonText}
-        <Icon className="w-4 h-4 group-hover:translate-x-1 transition" />
+        {loading ? (
+          <LoadingSpinner size="sm" className="border-t-white" />
+        ) : (
+          <>
+            {buttonText}
+            <Icon className="w-4 h-4 group-hover:translate-x-1 transition" />
+          </>
+        )}
       </button>
     </div>
   );

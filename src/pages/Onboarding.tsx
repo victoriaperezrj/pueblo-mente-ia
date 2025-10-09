@@ -12,7 +12,7 @@ const Onboarding = () => {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
 
-  const handleSelection = async (userType: 'entrepreneur' | 'business_owner') => {
+  const handleSelection = async (userType: 'entrepreneur' | 'business') => {
     setLoading(true);
     try {
       const { data: { user } } = await supabase.auth.getUser();
@@ -108,7 +108,7 @@ const Onboarding = () => {
           {/* TARJETA EMPRESARIO */}
           <Card 
             className="hover:scale-105 hover:shadow-2xl transition-all duration-300 cursor-pointer group border-2 hover:border-green-500"
-            onClick={() => !loading && handleSelection('business_owner')}
+            onClick={() => !loading && handleSelection('business')}
           >
             <CardHeader className="text-center space-y-4">
               <div className="mx-auto w-20 h-20 rounded-full bg-green-500/10 flex items-center justify-center group-hover:bg-green-500/20 transition-colors">
@@ -131,7 +131,7 @@ const Onboarding = () => {
                 disabled={loading}
                 onClick={(e) => {
                   e.stopPropagation();
-                  handleSelection('business_owner');
+                  handleSelection('business');
                 }}
               >
                 Comenzar como Empresario

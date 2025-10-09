@@ -624,31 +624,37 @@ export type Database = {
       }
       profiles: {
         Row: {
+          avatar_url: string | null
           created_at: string | null
+          email: string | null
           full_name: string | null
           id: string
           location: string | null
           phone: string | null
           updated_at: string | null
-          user_type: Database["public"]["Enums"]["user_type"] | null
+          user_type: Database["public"]["Enums"]["app_role"] | null
         }
         Insert: {
+          avatar_url?: string | null
           created_at?: string | null
+          email?: string | null
           full_name?: string | null
           id: string
           location?: string | null
           phone?: string | null
           updated_at?: string | null
-          user_type?: Database["public"]["Enums"]["user_type"] | null
+          user_type?: Database["public"]["Enums"]["app_role"] | null
         }
         Update: {
+          avatar_url?: string | null
           created_at?: string | null
+          email?: string | null
           full_name?: string | null
           id?: string
           location?: string | null
           phone?: string | null
           updated_at?: string | null
-          user_type?: Database["public"]["Enums"]["user_type"] | null
+          user_type?: Database["public"]["Enums"]["app_role"] | null
         }
         Relationships: []
       }
@@ -742,6 +748,35 @@ export type Database = {
           },
         ]
       }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_user_profile"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       appointments_safe: {
@@ -803,8 +838,20 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: undefined
       }
+      get_user_role: {
+        Args: { _user_id: string }
+        Returns: Database["public"]["Enums"]["app_role"]
+      }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
+      app_role: "entrepreneur" | "business" | "pyme_enterprise" | "admin"
       business_type:
         | "bakery"
         | "hair_salon"
@@ -942,6 +989,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      app_role: ["entrepreneur", "business", "pyme_enterprise", "admin"],
       business_type: [
         "bakery",
         "hair_salon",

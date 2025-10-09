@@ -46,8 +46,8 @@ const DashboardLayout = () => {
         return;
       }
 
-      // Check if user has any businesses (only for business_owner)
-      if (profile.user_type === 'business_owner') {
+      // Check if user has any businesses (only for business)
+      if (profile.user_type === 'business' || profile.user_type === 'pyme_enterprise') {
         const { data: businesses, error } = await supabase
           .from("businesses")
           .select("id")

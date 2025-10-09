@@ -38,20 +38,21 @@ export default function Auth() {
         showToast('Sesión iniciada correctamente', 'success');
         navigate('/dashboard');
       } else {
-        const { error } = await supabase.auth.signUp({
+        const { data, error } = await supabase.auth.signUp({
           email: formData.email,
           password: formData.password,
           options: {
-            data: {
-              role: 'entrepreneur' // Default role
-            }
+            emailRedirectTo: `${window.location.origin}/onboarding/classify`
           }
         });
         
         if (error) throw error;
         
-        showToast('Cuenta creada. Revisá tu email para confirmar', 'success');
-        navigate('/dashboard');
+        if (data.user) {
+          showToast('Cuenta creada exitosamente', 'success');
+          // Redirigir a selección de perfil
+          navigate('/onboarding/classify');
+        }
       }
     } catch (error: any) {
       showToast(error.message || 'Ocurrió un error', 'error');
