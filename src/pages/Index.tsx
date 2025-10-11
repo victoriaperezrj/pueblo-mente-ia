@@ -1,11 +1,41 @@
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   TrendingUp, Target, Zap, 
   ArrowRight, CheckCircle, Building2, Rocket, BarChart3 
 } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { useUserRole } from '@/hooks/useUserRole';
 
 export default function Homepage() {
   const navigate = useNavigate();
+  const { role, loading } = useUserRole();
+  
+  useEffect(() => {
+    const checkAuthAndRedirect = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (session && !loading && role) {
+        // Redirect authenticated users to their dashboard
+        switch (role) {
+          case 'entrepreneur':
+            navigate('/entrepreneur/dashboard');
+            break;
+          case 'business':
+          case 'pyme_enterprise':
+            navigate('/dashboard');
+            break;
+          case 'admin':
+            navigate('/dashboard');
+            break;
+          default:
+            navigate('/onboarding/classify');
+        }
+      }
+    };
+    
+    checkAuthAndRedirect();
+  }, [role, loading, navigate]);
   
   return (
     <div className="min-h-screen bg-bg-secondary text-text-primary">

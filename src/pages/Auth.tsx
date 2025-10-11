@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Building2, Mail, Lock, ArrowLeft, Sparkles, Eye, EyeOff, ArrowRight } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useCustomToast } from '@/hooks/use-custom-toast';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
+import { useUserRole } from '@/hooks/useUserRole';
 
 export default function Auth() {
   const [searchParams] = useSearchParams();
@@ -14,6 +15,7 @@ export default function Auth() {
   
   const navigate = useNavigate();
   const { showToast, ToastComponent } = useCustomToast();
+  const { role, loading: roleLoading } = useUserRole();
   
   const [formData, setFormData] = useState({
     email: '',
@@ -22,13 +24,33 @@ export default function Auth() {
   
   const [loading, setLoading] = useState(false);
   
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (!roleLoading && role) {
+      switch (role) {
+        case 'entrepreneur':
+          navigate('/entrepreneur/dashboard');
+          break;
+        case 'business':
+        case 'pyme_enterprise':
+          navigate('/dashboard');
+          break;
+        case 'admin':
+          navigate('/dashboard');
+          break;
+        default:
+          navigate('/onboarding/classify');
+      }
+    }
+  }, [role, roleLoading, navigate]);
+  
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     
     try {
       if (mode === 'login') {
-        const { error } = await supabase.auth.signInWithPassword({
+        const { data, error } = await supabase.auth.signInWithPassword({
           email: formData.email,
           password: formData.password
         });
@@ -36,7 +58,32 @@ export default function Auth() {
         if (error) throw error;
         
         showToast('Sesión iniciada correctamente', 'success');
-        navigate('/dashboard');
+        
+        // Get user role to redirect appropriately
+        const { data: roleData } = await supabase
+          .from('user_roles')
+          .select('role')
+          .eq('user_id', data.user.id)
+          .maybeSingle();
+        
+        if (roleData) {
+          switch (roleData.role) {
+            case 'entrepreneur':
+              navigate('/entrepreneur/dashboard');
+              break;
+            case 'business':
+            case 'pyme_enterprise':
+              navigate('/dashboard');
+              break;
+            case 'admin':
+              navigate('/dashboard');
+              break;
+            default:
+              navigate('/onboarding/classify');
+          }
+        } else {
+          navigate('/onboarding/classify');
+        }
       } else {
         const { data, error } = await supabase.auth.signUp({
           email: formData.email,
