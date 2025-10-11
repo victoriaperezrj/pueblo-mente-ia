@@ -82,9 +82,9 @@ const App = () => (
               <Route path="/auth" element={<ProtectedRoute requireAuth={false}><Auth /></ProtectedRoute>} />
               <Route path="/demo-start" element={<DemoStart />} />
               
-              {/* Onboarding routes - protected */}
+              {/* Onboarding routes - classify is public for demo, rest are protected */}
               <Route path="/onboarding" element={<ProtectedRoute><Onboarding /></ProtectedRoute>} />
-              <Route path="/onboarding/classify" element={<ProtectedRoute><Classify /></ProtectedRoute>} />
+              <Route path="/onboarding/classify" element={<Classify />} />
               <Route path="/onboarding/entrepreneur/step1" element={<ProtectedRoute><EntrepreneurStep1 /></ProtectedRoute>} />
               <Route path="/onboarding/entrepreneur/analyzing" element={<ProtectedRoute><EntrepreneurAnalyzing /></ProtectedRoute>} />
               <Route path="/onboarding/entrepreneur/results" element={<ProtectedRoute><EntrepreneurResults /></ProtectedRoute>} />
@@ -105,6 +105,7 @@ const App = () => (
               
               {/* Demo Entrepreneur routes */}
               <Route path="/demo/emprendedor/dashboard" element={<DemoEntrepreneurDashboard />} />
+              <Route path="/demo/entrepreneur/dashboard" element={<DemoEntrepreneurDashboard />} />
               <Route path="/demo/emprendedor/validacion-idea" element={<DemoEntrepreneurValidation />} />
               <Route path="/demo/emprendedor/simulador" element={<DemoFinancialSimulator />} />
               <Route path="/demo/emprendedor/lean-canvas" element={<DemoLeanCanvas />} />
@@ -112,6 +113,10 @@ const App = () => (
               <Route path="/demo/emprendedor/recursos" element={<DemoRecursos />} />
               <Route path="/demo/emprendedor/configuracion" element={<DemoConfiguracion />} />
               <Route path="/demo/emprendedor/documentacion" element={<DemoEntrepreneurPlaceholder />} />
+              
+              {/* Demo Business/PYME routes */}
+              <Route path="/demo/negocio/dashboard" element={<DemoEntrepreneurDashboard />} />
+              <Route path="/demo/pyme/dashboard" element={<DemoEntrepreneurDashboard />} />
               
               {/* Business/Pyme routes with DashboardLayout - protected */}
               <Route element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>

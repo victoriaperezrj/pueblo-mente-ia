@@ -144,7 +144,7 @@ export default function Auth() {
           
           {/* Demo Button - DESTACADO */}
           <button
-            onClick={() => navigate('/onboarding/classify')}
+            onClick={() => navigate('/onboarding/classify?mode=demo')}
             className="w-full mb-6 px-6 py-4 bg-gradient-to-r from-entrepreneur-500 to-business-500 text-white rounded-xl font-bold hover:shadow-hard transition-all duration-300 flex items-center justify-center gap-2 group"
           >
             <Sparkles className="w-5 h-5 group-hover:rotate-12 transition" />

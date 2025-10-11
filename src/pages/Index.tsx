@@ -98,7 +98,7 @@ export default function Homepage() {
             {/* CTAs */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
               <button
-                onClick={() => navigate('/onboarding/classify')}
+                onClick={() => navigate('/onboarding/classify?mode=demo')}
                 className="group px-8 py-4 bg-gradient-to-r from-entrepreneur-500 to-business-500 text-white rounded-xl font-bold text-lg hover:shadow-hard transition-all duration-300 flex items-center justify-center gap-2"
               >
                 <Zap className="w-5 h-5" />
@@ -154,7 +154,7 @@ export default function Homepage() {
               ]}
               buttonText="Empezar Validación"
               color="entrepreneur"
-              onClick={() => navigate('/onboarding/classify')}
+              onClick={() => navigate('/onboarding/classify?mode=demo')}
             />
             
             <StageCard
@@ -171,7 +171,7 @@ export default function Homepage() {
               ]}
               buttonText="Organizar Negocio"
               color="business"
-              onClick={() => navigate('/onboarding/classify')}
+              onClick={() => navigate('/onboarding/classify?mode=demo')}
               popular
             />
             
@@ -189,7 +189,7 @@ export default function Homepage() {
               ]}
               buttonText="Automatizar Empresa"
               color="enterprise"
-              onClick={() => navigate('/onboarding/classify')}
+              onClick={() => navigate('/onboarding/classify?mode=demo')}
             />
           </div>
         </div>
@@ -199,7 +199,7 @@ export default function Homepage() {
           <h2 className="text-3xl md:text-5xl font-bold mb-6 text-text-primary">Empezá gratis hoy mismo</h2>
           <p className="text-lg text-text-secondary mb-8">No necesitás tarjeta de crédito. Probá todas las funcionalidades sin límites.</p>
           <button
-            onClick={() => navigate('/onboarding/classify')}
+            onClick={() => navigate('/onboarding/classify?mode=demo')}
             className="px-10 py-5 bg-gradient-to-r from-entrepreneur-500 to-business-500 text-white rounded-xl font-bold text-xl hover:scale-105 transition-transform shadow-hard"
           >
             Comenzar Ahora →
