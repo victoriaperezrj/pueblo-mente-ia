@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { DemoProvider } from "@/contexts/DemoContext";
 import { GuestSessionProvider } from "@/contexts/GuestSessionProvider";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
 
 // Critical pages (loaded immediately)
 import Index from "./pages/Index";
@@ -37,6 +38,8 @@ const EntrepreneurAnalyzing = lazy(() => import("./pages/onboarding/Entrepreneur
 const EntrepreneurResults = lazy(() => import("./pages/onboarding/EntrepreneurResults"));
 const EntrepreneurBusinessPlan = lazy(() => import("./pages/onboarding/EntrepreneurBusinessPlan"));
 const EntrepreneurDashboard = lazy(() => import("./pages/entrepreneur/Dashboard"));
+const BusinessDashboard = lazy(() => import("./pages/business/Dashboard"));
+const PymeDashboard = lazy(() => import("./pages/pyme/Dashboard"));
 
 // Demo pages
 const DemoIntro = lazy(() => import("./pages/demo/DemoIntro"));
@@ -76,16 +79,22 @@ const App = () => (
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/select-role" element={<SelectRole />} />
-              <Route path="/auth" element={<Auth />} />
+              <Route path="/auth" element={<ProtectedRoute requireAuth={false}><Auth /></ProtectedRoute>} />
               <Route path="/demo-start" element={<DemoStart />} />
-              <Route path="/onboarding" element={<Onboarding />} />
-              <Route path="/onboarding/classify" element={<Classify />} />
-              <Route path="/onboarding/entrepreneur/step1" element={<EntrepreneurStep1 />} />
-              <Route path="/onboarding/entrepreneur/analyzing" element={<EntrepreneurAnalyzing />} />
-              <Route path="/onboarding/entrepreneur/results" element={<EntrepreneurResults />} />
-              <Route path="/onboarding/entrepreneur/business-plan" element={<EntrepreneurBusinessPlan />} />
-              <Route path="/onboarding/entrepreneur/financial-simulator" element={<FinancialSimulator />} />
-              <Route path="/entrepreneur/dashboard" element={<EntrepreneurDashboard />} />
+              
+              {/* Onboarding routes - protected */}
+              <Route path="/onboarding" element={<ProtectedRoute><Onboarding /></ProtectedRoute>} />
+              <Route path="/onboarding/classify" element={<ProtectedRoute><Classify /></ProtectedRoute>} />
+              <Route path="/onboarding/entrepreneur/step1" element={<ProtectedRoute><EntrepreneurStep1 /></ProtectedRoute>} />
+              <Route path="/onboarding/entrepreneur/analyzing" element={<ProtectedRoute><EntrepreneurAnalyzing /></ProtectedRoute>} />
+              <Route path="/onboarding/entrepreneur/results" element={<ProtectedRoute><EntrepreneurResults /></ProtectedRoute>} />
+              <Route path="/onboarding/entrepreneur/business-plan" element={<ProtectedRoute><EntrepreneurBusinessPlan /></ProtectedRoute>} />
+              <Route path="/onboarding/entrepreneur/financial-simulator" element={<ProtectedRoute><FinancialSimulator /></ProtectedRoute>} />
+              
+              {/* Role-specific dashboards - protected */}
+              <Route path="/entrepreneur/dashboard" element={<ProtectedRoute><EntrepreneurDashboard /></ProtectedRoute>} />
+              <Route path="/business/dashboard" element={<ProtectedRoute><BusinessDashboard /></ProtectedRoute>} />
+              <Route path="/pyme/dashboard" element={<ProtectedRoute><PymeDashboard /></ProtectedRoute>} />
               
               {/* Demo routes */}
               <Route path="/demo/intro" element={<DemoIntro />} />
@@ -104,7 +113,8 @@ const App = () => (
               <Route path="/demo/emprendedor/configuracion" element={<DemoConfiguracion />} />
               <Route path="/demo/emprendedor/documentacion" element={<DemoEntrepreneurPlaceholder />} />
               
-              <Route element={<DashboardLayout />}>
+              {/* Business/Pyme routes with DashboardLayout - protected */}
+              <Route element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/sales" element={<Sales />} />
                 <Route path="/inventory" element={<Inventory />} />
