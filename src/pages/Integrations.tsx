@@ -15,23 +15,23 @@ const Integrations = () => {
   const integrations = [
     {
       name: "SAP Business One",
-      description: "Integración completa con SAP para sincronización de inventario, ventas y finanzas",
+      description: "Conecta tu inventario, ventas y finanzas automáticamente con SAP",
       icon: Building2,
       category: "ERP Enterprise",
       status: "enterprise",
-      features: ["Sincronización bidireccional", "Tiempo real", "Múltiples subsidiarias"],
+      features: ["Actualización automática en ambos sentidos", "Al instante", "Múltiples subsidiarias"],
     },
     {
       name: "Oracle NetSuite",
-      description: "Conecta con Oracle NetSuite para gestión financiera y operacional avanzada",
+      description: "Sincroniza tus finanzas y operaciones fácilmente con Oracle",
       icon: Database,
       category: "Cloud ERP",
       status: "enterprise",
-      features: ["Contabilidad avanzada", "Reportes personalizados", "Multi-moneda"],
+      features: ["Contabilidad avanzada", "Reportes a tu medida", "Multi-moneda"],
     },
     {
       name: "Microsoft Dynamics 365",
-      description: "Integración con Dynamics 365 Business Central para gestión empresarial",
+      description: "Maneja tu negocio de forma integrada con Microsoft 365",
       icon: Building2,
       category: "ERP Microsoft",
       status: "enterprise",
@@ -117,7 +117,7 @@ const Integrations = () => {
                 <p className="text-sm text-muted-foreground">{integration.description}</p>
                 
                 <div className="space-y-2">
-                  <p className="text-xs font-semibold text-muted-foreground">Características:</p>
+                  <p className="text-xs font-semibold text-muted-foreground">Incluye:</p>
                   <ul className="space-y-1">
                     {integration.features.map((feature) => (
                       <li key={feature} className="text-xs flex items-center gap-2">

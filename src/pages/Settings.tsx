@@ -9,6 +9,8 @@ import { useToast } from "@/hooks/use-toast";
 import { Settings as SettingsIcon, User, Building2, Bell, Shield, Palette } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const Settings = () => {
   const { toast } = useToast();
@@ -294,9 +296,9 @@ const Settings = () => {
             <CardContent className="space-y-6">
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
-                  <Label className="text-base">Notificaciones Push</Label>
+                  <Label className="text-base">Alertas Instantáneas</Label>
                   <p className="text-sm text-muted-foreground">
-                    Recibí alertas importantes en tiempo real
+                    Recibe alertas al instante en tu dispositivo
                   </p>
                 </div>
                 <Switch
@@ -307,17 +309,87 @@ const Settings = () => {
 
               <Separator />
 
-              <div className="flex items-center justify-between">
-                <div className="space-y-0.5">
-                  <Label className="text-base">Notificaciones por Email</Label>
-                  <p className="text-sm text-muted-foreground">
-                    Recibí resúmenes y reportes por correo
-                  </p>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label className="text-base">Correos Informativos</Label>
+                    <p className="text-sm text-muted-foreground">
+                      Recibí resúmenes y reportes por correo
+                    </p>
+                  </div>
+                  <Switch
+                    checked={emailNotifications}
+                    onCheckedChange={setEmailNotifications}
+                  />
                 </div>
-                <Switch
-                  checked={emailNotifications}
-                  onCheckedChange={setEmailNotifications}
-                />
+
+                {emailNotifications && (
+                  <div className="ml-4 space-y-4 p-4 border-l-2 border-primary/30 bg-muted/30 rounded-r-lg">
+                    <div className="space-y-3">
+                      <Label className="text-sm font-semibold">Tipo de correos que deseo recibir:</Label>
+                      <div className="space-y-2">
+                        <div className="flex items-center space-x-2">
+                          <Checkbox id="sales-summary" defaultChecked />
+                          <Label htmlFor="sales-summary" className="text-sm cursor-pointer">
+                            Resumen semanal de ventas
+                          </Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Checkbox id="low-inventory" defaultChecked />
+                          <Label htmlFor="low-inventory" className="text-sm cursor-pointer">
+                            Recordatorios de inventario bajo
+                          </Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Checkbox id="new-features" defaultChecked />
+                          <Label htmlFor="new-features" className="text-sm cursor-pointer">
+                            Nuevas funcionalidades
+                          </Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Checkbox id="entrepreneur-tips" defaultChecked />
+                          <Label htmlFor="entrepreneur-tips" className="text-sm cursor-pointer">
+                            Tips de emprendimiento
+                          </Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Checkbox id="monthly-reports" />
+                          <Label htmlFor="monthly-reports" className="text-sm cursor-pointer">
+                            Reportes mensuales
+                          </Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Checkbox id="billing-alerts" defaultChecked />
+                          <Label htmlFor="billing-alerts" className="text-sm cursor-pointer">
+                            Alertas de facturación
+                          </Label>
+                        </div>
+                      </div>
+                    </div>
+
+                    <Separator />
+
+                    <div className="space-y-2">
+                      <Label className="text-sm font-semibold">Frecuencia de envío:</Label>
+                      <Select defaultValue="weekly">
+                        <SelectTrigger>
+                          <SelectValue placeholder="Seleccionar frecuencia" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="daily">Diaria</SelectItem>
+                          <SelectItem value="weekly">Semanal</SelectItem>
+                          <SelectItem value="biweekly">Quincenal</SelectItem>
+                          <SelectItem value="monthly">Mensual</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <Button variant="outline" className="w-full" size="sm">
+                      <Bell className="h-4 w-4 mr-2" />
+                      Personalizar mis emails
+                    </Button>
+                  </div>
+                )}
               </div>
 
               <Separator />

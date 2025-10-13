@@ -223,29 +223,31 @@ const FinancialSimulator = () => {
             Volver al Plan de Negocio
           </Button>
           
-          <div className="flex items-start justify-between flex-wrap gap-4">
-            <div>
+          <div>
+            <div className="flex items-start justify-between flex-wrap gap-4">
+              <div>
                 <h1 className="text-4xl font-bold tracking-tight flex items-center gap-3">
                   <div className="bg-gradient-primary rounded-xl p-2.5">
                     <Calculator className="h-8 w-8 text-white" />
                   </div>
-                  Calculá cuánta plata vas a ganar
+                  Recomendaciones Inteligentes 🤖
                 </h1>
                 <p className="text-muted-foreground mt-2">
-                  Con impuestos reales, inflación y préstamos de San Luis
+                  Descubrí qué cambios harían tu negocio más rentable
                 </p>
-              {businessName && (
-                <Badge variant="outline" className="mt-2">
-                  Basado en tu idea: {businessName}
-                </Badge>
-              )}
-            </div>
+                {businessName && (
+                  <Badge variant="outline" className="mt-2">
+                    Basado en tu idea: {businessName}
+                  </Badge>
+                )}
+              </div>
             
-            <div className="flex gap-2">
-              <Button variant="outline" className="border-2" onClick={() => toast({ title: "Próximamente", description: "La exportación estará disponible pronto" })}>
-                <Download className="h-4 w-4 mr-2" />
-                Descargar en Excel
-              </Button>
+              <div className="flex gap-2">
+                <Button variant="outline" className="border-2" onClick={() => toast({ title: "Próximamente", description: "La exportación estará disponible pronto" })}>
+                  <Download className="h-4 w-4 mr-2" />
+                  Descargar en Excel
+                </Button>
+              </div>
             </div>
           </div>
         </div>
@@ -309,8 +311,13 @@ const FinancialSimulator = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <div className="flex justify-between">
-                    <Label>Ticket Promedio (productos por cliente)</Label>
+                  <div className="flex justify-between items-center">
+                    <div className="flex items-center gap-2">
+                      <Label>Venta Promedio por Cliente</Label>
+                      <span className="text-xs text-muted-foreground cursor-help" title="¿Cuánto compra en promedio cada cliente? Ejemplo: Si vendes 100 productos a 10 clientes, el promedio es 10 productos por cliente.">
+                        💡
+                      </span>
+                    </div>
                     <span className="text-xl font-bold">{ticketAverage} productos</span>
                   </div>
                   <Slider
@@ -320,6 +327,9 @@ const FinancialSimulator = () => {
                     max={10}
                     step={1}
                   />
+                  <p className="text-xs text-muted-foreground">
+                    💡 ¿Cuánto compra en promedio cada cliente?
+                  </p>
                 </div>
 
                 <div className="p-4 bg-success/10 rounded-lg border-2 border-success/50">
@@ -662,40 +672,117 @@ const FinancialSimulator = () => {
             {/* Projection Table */}
             <Card>
               <CardHeader>
-                <CardTitle>Cómo va a estar tu negocio los próximos 3 años</CardTitle>
+                <CardTitle>Tu Proyección en Resumen 📊</CardTitle>
+                <CardDescription>
+                  {breakEvenMonth > 0 ? (
+                    <div className="space-y-2 mt-4 p-4 bg-gradient-to-r from-primary/10 to-success/10 rounded-lg border-2 border-primary/30">
+                      <div className="flex items-center gap-2">
+                        <span className="text-2xl">⚠️</span>
+                        <p className="font-medium">
+                          Primeros {breakEvenMonth - 1} meses: Pérdidas (inversión inicial)
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-2xl">✅</span>
+                        <p className="font-medium">
+                          Mes {breakEvenMonth}: ¡Tu primer mes rentable! (+{formatCurrency(projections[breakEvenMonth - 1]?.realProfit || 0)})
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-2xl">🎯</span>
+                        <p className="font-medium">
+                          Mes 12: Ganancia proyectada de {formatCurrency(projections[11]?.realProfit || 0)}
+                        </p>
+                      </div>
+                    </div>
+                  ) : (
+                    <p className="text-warning">Tu negocio necesita ajustes en los números</p>
+                  )}
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">
                     <thead>
-                      <tr className="border-b">
-                        <th className="text-left p-2">Mes</th>
-                        <th className="text-right p-2">Ventas {showRealValues ? 'Real' : 'Nom.'}</th>
-                        <th className="text-right p-2">Gastos</th>
-                        <th className="text-right p-2">Impuestos</th>
-                        <th className="text-right p-2">Ganancia</th>
-                        <th className="text-right p-2">Total</th>
+                      <tr className="border-b-2 border-primary/30">
+                        <th className="text-left p-3">Mes</th>
+                        <th className="text-right p-3">
+                          <div className="flex items-center justify-end gap-2">
+                            <span>📊</span>
+                            <span>Ventas {showRealValues ? 'Real' : 'Nom.'}</span>
+                          </div>
+                        </th>
+                        <th className="text-right p-3">
+                          <div className="flex items-center justify-end gap-2">
+                            <span>💸</span>
+                            <span>Gastos</span>
+                          </div>
+                        </th>
+                        <th className="text-right p-3">
+                          <div className="flex items-center justify-end gap-2">
+                            <span>🏛️</span>
+                            <span>Impuestos</span>
+                          </div>
+                        </th>
+                        <th className="text-right p-3">
+                          <div className="flex items-center justify-end gap-2">
+                            <span>💰</span>
+                            <span>Ganancia</span>
+                          </div>
+                        </th>
+                        <th className="text-right p-3">
+                          <div className="flex items-center justify-end gap-2">
+                            <span>📈</span>
+                            <span>Total Acumulado</span>
+                          </div>
+                        </th>
                       </tr>
                     </thead>
                     <tbody>
-                      {projections.map((p) => (
-                        <tr key={p.month} className="border-b hover:bg-muted/50">
-                          <td className="p-2">{p.month}</td>
-                          <td className="text-right p-2">
-                            {formatCurrency(showRealValues ? p.realRevenue : p.nominalRevenue)}
-                          </td>
-                          <td className="text-right p-2">{formatCurrency(p.costs)}</td>
-                          <td className="text-right p-2">{formatCurrency(p.taxes)}</td>
-                          <td className={`text-right p-2 font-medium ${p.realProfit >= 0 ? 'text-success' : 'text-destructive'}`}>
-                            {formatCurrency(showRealValues ? p.realProfit : p.nominalProfit)}
-                          </td>
-                          <td className={`text-right p-2 font-bold ${p.accumulated >= 0 ? 'text-success' : 'text-destructive'}`}>
-                            {formatCurrency(p.accumulated)}
-                          </td>
-                        </tr>
-                      ))}
+                      {projections.map((p) => {
+                        const isPositiveMonth = p.realProfit >= 0;
+                        const isBreakEvenMonth = p.month === breakEvenMonth;
+                        
+                        return (
+                          <tr 
+                            key={p.month} 
+                            className={`border-b transition-colors cursor-pointer group ${
+                              isBreakEvenMonth ? 'bg-success/20 hover:bg-success/30' : 
+                              isPositiveMonth ? 'hover:bg-success/10' : 'hover:bg-destructive/10'
+                            }`}
+                            title={`💡 Mes ${p.month}:\n- Necesitas vender: ${formatCurrency(showRealValues ? p.realRevenue : p.nominalRevenue)}\n- Tus gastos serán: ${formatCurrency(p.costs + p.taxes)}\n- Resultado: ${formatCurrency(showRealValues ? p.realProfit : p.nominalProfit)}`}
+                          >
+                            <td className="p-3 font-medium">
+                              {isBreakEvenMonth && <span className="mr-2">🎯</span>}
+                              Mes {p.month}
+                            </td>
+                            <td className="text-right p-3">
+                              {formatCurrency(showRealValues ? p.realRevenue : p.nominalRevenue)}
+                            </td>
+                            <td className="text-right p-3 text-muted-foreground">
+                              {formatCurrency(p.costs)}
+                            </td>
+                            <td className="text-right p-3 text-warning">
+                              {formatCurrency(p.taxes)}
+                            </td>
+                            <td className={`text-right p-3 font-semibold ${
+                              isPositiveMonth ? 'text-success' : 'text-destructive'
+                            }`}>
+                              {formatCurrency(showRealValues ? p.realProfit : p.nominalProfit)}
+                            </td>
+                            <td className={`text-right p-3 font-bold ${
+                              p.accumulated >= 0 ? 'text-success' : 'text-destructive'
+                            }`}>
+                              {formatCurrency(p.accumulated)}
+                            </td>
+                          </tr>
+                        );
+                      })}
                     </tbody>
                   </table>
+                </div>
+                <div className="mt-4 p-3 bg-muted/50 rounded-lg text-xs text-muted-foreground">
+                  <p>💡 <strong>Tip:</strong> Pasa el mouse sobre cada fila para ver el detalle del mes</p>
                 </div>
               </CardContent>
             </Card>

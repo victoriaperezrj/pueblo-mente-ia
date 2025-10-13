@@ -4,9 +4,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Download, Database, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
 
 const DataBackup = () => {
   const [loading, setLoading] = useState<string | null>(null);
+  const [backupFrequency, setBackupFrequency] = useState<string>("weekly");
 
   const downloadJSON = (data: any, filename: string) => {
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
@@ -238,6 +241,75 @@ const DataBackup = () => {
           );
         })}
       </div>
+
+      <Card className="bg-muted/50 border-2">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <CheckCircle2 className="h-5 w-5 text-primary" />
+            Frecuencia de Respaldos
+          </CardTitle>
+          <CardDescription>
+            Configura con qué frecuencia quieres realizar respaldos automáticos
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <RadioGroup value={backupFrequency} onValueChange={setBackupFrequency}>
+            <div className="flex items-start space-x-3 p-3 rounded-lg border hover:bg-muted/50 cursor-pointer">
+              <RadioGroupItem value="daily" id="daily" className="mt-1" />
+              <div className="flex-1">
+                <Label htmlFor="daily" className="cursor-pointer font-medium">
+                  Diario
+                </Label>
+                <p className="text-xs text-muted-foreground">Todos los días a las 2:00 AM</p>
+              </div>
+            </div>
+
+            <div className="flex items-start space-x-3 p-3 rounded-lg border hover:bg-muted/50 cursor-pointer">
+              <RadioGroupItem value="weekly" id="weekly" className="mt-1" />
+              <div className="flex-1">
+                <Label htmlFor="weekly" className="cursor-pointer font-medium">
+                  Semanal
+                </Label>
+                <p className="text-xs text-muted-foreground">Cada lunes a las 2:00 AM</p>
+              </div>
+            </div>
+
+            <div className="flex items-start space-x-3 p-3 rounded-lg border hover:bg-muted/50 cursor-pointer">
+              <RadioGroupItem value="biweekly" id="biweekly" className="mt-1" />
+              <div className="flex-1">
+                <Label htmlFor="biweekly" className="cursor-pointer font-medium">
+                  Quincenal
+                </Label>
+                <p className="text-xs text-muted-foreground">Días 1 y 15 de cada mes</p>
+              </div>
+            </div>
+
+            <div className="flex items-start space-x-3 p-3 rounded-lg border hover:bg-muted/50 cursor-pointer">
+              <RadioGroupItem value="monthly" id="monthly" className="mt-1" />
+              <div className="flex-1">
+                <Label htmlFor="monthly" className="cursor-pointer font-medium">
+                  Mensual
+                </Label>
+                <p className="text-xs text-muted-foreground">Primer día de cada mes</p>
+              </div>
+            </div>
+
+            <div className="flex items-start space-x-3 p-3 rounded-lg border hover:bg-muted/50 cursor-pointer">
+              <RadioGroupItem value="custom" id="custom" className="mt-1" />
+              <div className="flex-1">
+                <Label htmlFor="custom" className="cursor-pointer font-medium">
+                  Personalizado
+                </Label>
+                <p className="text-xs text-muted-foreground">Selecciona fecha y hora específicos</p>
+              </div>
+            </div>
+          </RadioGroup>
+
+          <Button className="w-full" variant="outline">
+            Guardar Configuración
+          </Button>
+        </CardContent>
+      </Card>
 
       <Card className="bg-muted/50">
         <CardHeader>

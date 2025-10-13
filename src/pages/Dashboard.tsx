@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { TrendingUp, Package, Users, Calendar, DollarSign, AlertCircle, Lightbulb, FileText, Calculator } from "lucide-react";
 import { DemoBanner } from "@/components/DemoBanner";
+import { FirstTimeWelcomeModal } from "@/components/FirstTimeWelcomeModal";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -82,6 +83,7 @@ const Dashboard = () => {
   return (
     <div className="space-y-6 animate-fade-in">
       {isDemoMode && <DemoBanner />}
+      <FirstTimeWelcomeModal />
       
       <div>
         <h1 className="text-4xl font-bold tracking-tight mb-2">

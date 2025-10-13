@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/sidebar";
 
 const menuItems = [
-  { title: "Mi Negocio", url: "/dashboard", icon: Home, color: "#60A5FA" },
+  { title: "Inicio", url: "/dashboard", icon: Home, color: "#60A5FA" },
   { title: "Ventas", url: "/sales", icon: ShoppingCart, color: "#34D399" },
   { title: "Productos", url: "/inventory", icon: Package, color: "#F59E0B" },
   { title: "Clientes", url: "/customers", icon: Users, color: "#A78BFA" },
