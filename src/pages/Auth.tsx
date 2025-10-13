@@ -24,9 +24,10 @@ export default function Auth() {
   
   const [loading, setLoading] = useState(false);
   
-  // Redirect if already authenticated
+  // Redirect if already authenticated - only redirect if they have a role
   useEffect(() => {
     if (!roleLoading && role) {
+      // User has a role assigned - redirect to their dashboard
       switch (role) {
         case 'entrepreneur':
           navigate('/entrepreneur/dashboard');
@@ -39,9 +40,12 @@ export default function Auth() {
           navigate('/dashboard');
           break;
         default:
+          // Should not happen with valid roles
           navigate('/onboarding/classify');
       }
     }
+    // Note: if roleLoading is false and role is null, user is authenticated but has no role
+    // This is fine - they'll see the login page and after login will be sent to classify
   }, [role, roleLoading, navigate]);
   
   const handleSubmit = async (e: React.FormEvent) => {
@@ -59,14 +63,15 @@ export default function Auth() {
         
         showToast('Sesión iniciada correctamente', 'success');
         
-        // Get user role to redirect appropriately
-        const { data: roleData } = await supabase
+        // Get user role to redirect appropriately - ONLY check user_roles, not profiles
+        const { data: roleData, error: roleError } = await supabase
           .from('user_roles')
           .select('role')
           .eq('user_id', data.user.id)
           .maybeSingle();
         
-        if (roleData) {
+        // If user has a role assigned, redirect to their dashboard
+        if (roleData && roleData.role) {
           switch (roleData.role) {
             case 'entrepreneur':
               navigate('/entrepreneur/dashboard');
@@ -79,9 +84,12 @@ export default function Auth() {
               navigate('/dashboard');
               break;
             default:
+              // Should not happen, but redirect to classify if unknown role
               navigate('/onboarding/classify');
           }
         } else {
+          // No role found - this is a new user or user who never completed onboarding
+          // Redirect to classify to choose their profile
           navigate('/onboarding/classify');
         }
       } else {

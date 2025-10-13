@@ -17,12 +17,30 @@ export default function OnboardingClassify() {
   const isDemoMode = searchParams.get('mode') === 'demo';
   
   useEffect(() => {
-    checkAuth();
+    checkAuthAndRole();
   }, []);
   
-  const checkAuth = async () => {
+  const checkAuthAndRole = async () => {
     const { data: { user } } = await supabase.auth.getUser();
     setIsAuthenticated(!!user);
+    
+    // If user is authenticated, check if they already have a role
+    if (user) {
+      const { data: roleData } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', user.id)
+        .maybeSingle();
+      
+      // If user already has a role, redirect them to their dashboard
+      if (roleData && roleData.role) {
+        if (roleData.role === 'entrepreneur') {
+          navigate('/entrepreneur/dashboard');
+        } else {
+          navigate('/dashboard');
+        }
+      }
+    }
   };
   
   const handleSelectProfile = async (profile: ProfileType) => {
