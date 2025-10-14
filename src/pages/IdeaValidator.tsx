@@ -1,10 +1,11 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { Lightbulb, TrendingUp, TrendingDown, AlertCircle, CheckCircle, Sparkles, Target, Users, DollarSign } from "lucide-react";
+import { Lightbulb, TrendingUp, TrendingDown, AlertCircle, CheckCircle, Sparkles, Target, Users, DollarSign, ArrowLeft } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { IdeaValidatorWizard } from "@/components/IdeaValidatorWizard";
 
@@ -22,6 +23,7 @@ interface ValidationResult {
 
 const IdeaValidator = () => {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<ValidationResult | null>(null);
 
@@ -73,6 +75,18 @@ const IdeaValidator = () => {
 
   return (
     <div className="space-y-6 animate-fade-in">
+      <div className="flex items-center gap-4">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => navigate(-1)}
+          className="gap-2"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Volver
+        </Button>
+      </div>
+      
       <div>
         <h1 className="text-4xl font-bold tracking-tight flex items-center gap-3">
           <div className="bg-gradient-primary rounded-xl p-2.5">

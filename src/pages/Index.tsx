@@ -77,13 +77,13 @@ export default function Homepage() {
         <div className="max-w-7xl mx-auto px-4 py-20 md:py-32">
           <div className="text-center max-w-4xl mx-auto">
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-entrepreneur-50 border border-entrepreneur-200 mb-8 animate-fadeIn">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-entrepreneur-50 border border-entrepreneur-200 mb-8 animate-scale-in">
               <Zap className="w-4 h-4 text-entrepreneur-600" />
-              <span className="text-sm font-medium text-entrepreneur-700">Potenciado con IA • Datos de Argentina</span>
+              <span className="text-sm font-medium text-entrepreneur-700">⚡ Potenciado con IA Argentina</span>
             </div>
             
             {/* Título */}
-            <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight text-text-primary">
+            <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight text-text-primary animate-fade-in">
               Tu negocio, del{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-entrepreneur-500 via-business-500 to-enterprise-500">
                 plan a la acción
@@ -91,24 +91,23 @@ export default function Homepage() {
             </h1>
             
             {/* Subtítulo */}
-            <p className="text-xl text-text-secondary mb-12 max-w-2xl mx-auto">
-              Validá ideas, gestioná ventas o automatizá tu empresa. Un solo lugar para todas las etapas de tu negocio.
+            <p className="text-xl text-text-secondary mb-12 max-w-2xl mx-auto animate-fade-in">
+              Ecosistema digital para emprendedores argentinos. Validá ideas, organizá tu negocio o automatizá tu empresa con IA local.
             </p>
             
             {/* CTAs */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16 animate-fade-in">
               <button
                 onClick={() => navigate('/onboarding/classify?mode=demo')}
-                className="group px-8 py-4 bg-gradient-to-r from-entrepreneur-500 to-business-500 text-white rounded-xl font-bold text-lg hover:shadow-hard transition-all duration-300 flex items-center justify-center gap-2"
+                className="group px-8 py-4 bg-gradient-to-r from-entrepreneur-500 to-business-500 text-white rounded-xl font-bold text-lg hover:scale-105 hover:shadow-hard transition-all duration-300 flex items-center justify-center gap-2 shadow-medium"
               >
-                <Zap className="w-5 h-5" />
                 Explorar Demo Gratis
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition" />
               </button>
               
               <button
                 onClick={() => navigate('/auth?mode=signup')}
-                className="px-8 py-4 bg-white border-2 border-border-DEFAULT text-text-primary rounded-xl font-semibold text-lg hover:border-entrepreneur-300 hover:bg-entrepreneur-50 transition-all duration-300 shadow-soft"
+                className="px-8 py-4 bg-bg-primary border-2 border-border-DEFAULT text-text-primary rounded-xl font-semibold text-lg hover:border-entrepreneur-300 hover:bg-entrepreneur-50 transition-all duration-300 shadow-soft hover:shadow-medium"
               >
                 Crear Cuenta
               </button>
@@ -132,6 +131,23 @@ export default function Homepage() {
           </div>
         </div>
         
+        {/* Camino del Emprendedor - Transición */}
+        <div className="max-w-7xl mx-auto px-4 py-16 bg-gradient-to-r from-entrepreneur-50 via-business-50 to-enterprise-50 rounded-3xl my-20">
+          <div className="text-center mb-12">
+            <div className="flex items-center justify-center gap-4 mb-8">
+              <div className="w-12 h-12 rounded-full bg-entrepreneur-500 flex items-center justify-center text-white font-bold shadow-soft">1</div>
+              <div className="w-32 h-1 bg-gradient-to-r from-entrepreneur-500 to-business-500"></div>
+              <div className="w-12 h-12 rounded-full bg-business-500 flex items-center justify-center text-white font-bold shadow-soft">2</div>
+              <div className="w-32 h-1 bg-gradient-to-r from-business-500 to-enterprise-500"></div>
+              <div className="w-12 h-12 rounded-full bg-enterprise-500 flex items-center justify-center text-white font-bold shadow-soft">3</div>
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-text-primary">Camino del Emprendedor</h2>
+            <p className="text-lg text-text-secondary max-w-2xl mx-auto">
+              Proyecto Emprendedurismo te acompaña en cada fase de tu crecimiento: desde validar una idea hasta escalar tu empresa.
+            </p>
+          </div>
+        </div>
+        
         {/* Tres etapas */}
         <div className="max-w-7xl mx-auto px-4 pb-20">
           <div className="text-center mb-12">
@@ -143,16 +159,16 @@ export default function Homepage() {
             <StageCard
               icon={Rocket}
               badge="DESDE CERO"
-              title="Emprendedores"
-              description="Tenés una idea pero no sabés si va a funcionar. Validala con IA, armá tu plan y calculá números antes de invertir un peso."
+              title="Emprendedor"
+              subtitle="Tengo una Idea"
+              description="Aún no arranqué, pero tengo una idea clara. Necesito validarla y hacer números."
               features={[
                 'Lean Canvas interactivo',
-                'Análisis de mercado con IA',
-                'Simulador financiero realista',
-                'Checklist de trámites AFIP',
-                'Business plan automático'
+                'Análisis con IA',
+                'Simulador financiero',
+                'Checklist AFIP'
               ]}
-              buttonText="Empezar Validación"
+              buttonText="Empezar Validación 🚀"
               color="entrepreneur"
               onClick={() => navigate('/onboarding/classify?mode=demo')}
             />
@@ -160,16 +176,16 @@ export default function Homepage() {
             <StageCard
               icon={TrendingUp}
               badge="1-3 AÑOS"
-              title="Negocio en Marcha"
-              description="Ya vendés, pero llevás todo en Excel o a mano. Organizá finanzas, gestioná clientes y tomá decisiones con datos reales."
+              title="Negocio"
+              subtitle="Tengo un Negocio"
+              description="Ya vendo, pero llevo todo en Excel. Quiero organizarme mejor."
               features={[
-                'Dashboard de ventas en tiempo real',
-                'CRM simple y efectivo',
-                'Control de gastos automático',
-                'Facturación electrónica AFIP',
-                'WhatsApp Business integrado'
+                'Dashboard de ventas',
+                'CRM de clientes',
+                'Control de gastos',
+                'Facturación AFIP'
               ]}
-              buttonText="Organizar Negocio"
+              buttonText="Organizar Negocio 📊"
               color="business"
               onClick={() => navigate('/onboarding/classify?mode=demo')}
               popular
@@ -178,16 +194,16 @@ export default function Homepage() {
             <StageCard
               icon={BarChart3}
               badge="+3 AÑOS"
-              title="PYME/Empresa"
-              description="Tenés equipo y procesos, pero todo es manual. Automatizá workflows, integrá sistemas y escalá con inteligencia artificial."
+              title="PYME"
+              subtitle="Tengo una Empresa"
+              description="Tengo equipo y procesos. Quiero automatizar y escalar."
               features={[
-                'Gestión de equipo completa',
-                'Automatización de procesos',
-                'Multi-sucursal y multi-usuario',
-                'BI y reportes ejecutivos',
-                'Integraciones con ERP/CRM'
+                'Gestión de equipo',
+                'Automatización',
+                'Multi-sucursal',
+                'Reportes ejecutivos'
               ]}
-              buttonText="Automatizar Empresa"
+              buttonText="Automatizar Empresa 🏢"
               color="enterprise"
               onClick={() => navigate('/onboarding/classify?mode=demo')}
             />
@@ -229,6 +245,7 @@ interface StageCardProps {
   icon: React.ElementType;
   badge: string;
   title: string;
+  subtitle: string;
   description: string;
   features: string[];
   buttonText: string;
@@ -237,7 +254,7 @@ interface StageCardProps {
   popular?: boolean;
 }
 
-function StageCard({ icon: Icon, badge, title, description, features, buttonText, color, onClick, popular }: StageCardProps) {
+function StageCard({ icon: Icon, badge, title, subtitle, description, features, buttonText, color, onClick, popular }: StageCardProps) {
   const colors = {
     entrepreneur: {
       bg: 'from-entrepreneur-50 to-entrepreneur-100',
@@ -268,22 +285,23 @@ function StageCard({ icon: Icon, badge, title, description, features, buttonText
   const c = colors[color];
   
   return (
-    <div className={`relative bg-gradient-to-br ${c.bg} border-2 ${c.border} rounded-2xl p-6 hover:scale-105 transition-all duration-300 shadow-soft hover:shadow-medium`}>
+    <div className={`relative bg-gradient-to-br ${c.bg} border-2 ${c.border} rounded-2xl p-6 hover:scale-[1.02] transition-all duration-300 shadow-soft hover:shadow-hard group`}>
       {popular && (
         <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-warning text-white text-xs font-bold rounded-full shadow-soft">
-          MÁS POPULAR
+          ⭐ MÁS POPULAR
         </div>
       )}
       
-      <div className={`w-14 h-14 bg-gradient-to-br ${c.icon} rounded-xl flex items-center justify-center mb-4 shadow-soft`}>
-        <Icon className="w-8 h-8 text-white" />
+      <div className={`w-16 h-16 bg-gradient-to-br ${c.icon} rounded-xl flex items-center justify-center mb-4 shadow-soft group-hover:shadow-medium transition-shadow`}>
+        <Icon className="w-9 h-9 text-white" />
       </div>
       
       <div className={`inline-block px-3 py-1 ${c.badge} text-xs font-bold rounded-full mb-3`}>
-        {badge}
+        🚀 {badge}
       </div>
       
-      <h3 className="text-2xl font-bold mb-3 text-text-primary">{title}</h3>
+      <h3 className="text-2xl font-bold mb-1 text-text-primary">{title}</h3>
+      <p className="text-base font-semibold text-text-secondary mb-3">{subtitle}</p>
       <p className="text-sm text-text-secondary mb-4 leading-relaxed">{description}</p>
       
       <ul className="space-y-2 mb-6">
