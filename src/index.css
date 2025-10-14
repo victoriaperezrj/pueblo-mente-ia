@@ -10,9 +10,9 @@ All colors MUST be HSL.
   :root {
     /* Proyecto Emprendedurismo Design System - Neutral, Alegre y Unisex */
     
-    /* Base Colors - Soft gradient background for accessibility */
+    /* Base Colors - Cheerful gradient background for accessibility */
     --background: 216 50% 98%; /* #F7F9FC */
-    --background-gradient: linear-gradient(180deg, #F7F9FC 0%, #EDEEF0 100%);
+    --background-gradient: linear-gradient(180deg, #F7F9FC 0%, #FFEFD5 100%);
     --foreground: 209 29% 14%; /* #1A252F - Alto contraste para legibilidad */
 
     /* Card System - Rounded 20px */
@@ -23,11 +23,11 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 209 29% 14%;
 
-    /* Primary - Gris Cálido Emprendedor #8A8D93 */
-    --primary: 220 6% 56%;
-    --primary-foreground: 0 0% 100%;
-    --primary-hover: 220 6% 50%;
-    --primary-light: 220 6% 97%;
+    /* Primary - Amarillo Suave Emprendedor #FFD700 */
+    --primary: 51 100% 50%;
+    --primary-foreground: 209 29% 14%;
+    --primary-hover: 51 100% 45%;
+    --primary-light: 51 100% 97%;
 
     /* Secondary - Azul Claro Negocio #4A90E2 */
     --secondary: 212 73% 59%;
@@ -53,10 +53,10 @@ All colors MUST be HSL.
     --muted: 240 5% 96%;
     --muted-foreground: 240 4% 46%;
 
-    /* Accent - Gris Cálido (same as primary) */
-    --accent: 220 6% 56%;
-    --accent-foreground: 0 0% 100%;
-    --accent-light: 220 6% 97%;
+    /* Accent - Amarillo Suave (same as primary) */
+    --accent: 51 100% 50%;
+    --accent-foreground: 209 29% 14%;
+    --accent-light: 51 100% 97%;
 
     /* Destructive System - Red */
     --destructive: 0 84% 60%;
@@ -73,32 +73,32 @@ All colors MUST be HSL.
     /* Sidebar System */
     --sidebar-background: 209 29% 14%;
     --sidebar-foreground: 0 0% 98%;
-    --sidebar-primary: 220 6% 56%;
-    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-primary: 51 100% 50%;
+    --sidebar-primary-foreground: 209 29% 14%;
     --sidebar-accent: 220 11% 20%;
     --sidebar-accent-foreground: 0 0% 98%;
     --sidebar-border: 220 11% 20%;
     --sidebar-ring: 212 73% 59%;
 
-    /* Gradients - Neutral y Alegre */
-    --gradient-primary: linear-gradient(135deg, hsl(220 6% 56%) 0%, hsl(212 73% 59%) 100%);
-    --gradient-hero: linear-gradient(135deg, hsl(220 6% 56%) 0%, hsl(212 73% 59%) 50%, hsl(140 52% 55%) 100%);
-    --gradient-emprendedor: linear-gradient(135deg, hsl(220 6% 56%) 0%, hsl(220 6% 66%) 100%);
+    /* Gradients - Cheerful and Dynamic */
+    --gradient-primary: linear-gradient(135deg, hsl(51 100% 50%) 0%, hsl(212 73% 59%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(51 100% 50%) 0%, hsl(212 73% 59%) 50%, hsl(140 52% 55%) 100%);
+    --gradient-emprendedor: linear-gradient(135deg, hsl(51 100% 50%) 0%, hsl(51 100% 60%) 100%);
     --gradient-negocio: linear-gradient(135deg, hsl(212 73% 59%) 0%, hsl(212 73% 69%) 100%);
     --gradient-pyme: linear-gradient(135deg, hsl(140 52% 55%) 0%, hsl(140 52% 65%) 100%);
-    --gradient-card: linear-gradient(145deg, hsl(220 6% 56% / 0.03) 0%, hsl(212 73% 59% / 0.03) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(51 100% 50% / 0.03) 0%, hsl(212 73% 59% / 0.03) 100%);
 
     /* Shadows - Optimizadas para nueva paleta */
     --shadow-base: 0 2px 8px rgba(0, 0, 0, 0.05);
     --shadow-hover: 0 8px 24px rgba(74, 144, 226, 0.3);
     --shadow-glow: 0 0 20px rgba(74, 144, 226, 0.4);
 
-    /* Chart Colors - Nueva paleta */
-    --chart-1: 220 6% 56%;
+    /* Chart Colors - Nueva paleta alegre */
+    --chart-1: 51 100% 50%;
     --chart-2: 212 73% 59%;
     --chart-3: 140 52% 55%;
     --chart-4: 43 96% 56%;
-    --chart-5: 220 6% 76%;
+    --chart-5: 51 100% 70%;
   }
 
   .dark {
@@ -112,10 +112,10 @@ All colors MUST be HSL.
     --popover: 209 29% 18%;
     --popover-foreground: 0 0% 98%;
 
-    --primary: 220 6% 56%;
-    --primary-foreground: 0 0% 100%;
-    --primary-hover: 220 6% 60%;
-    --primary-light: 220 6% 25%;
+    --primary: 51 100% 50%;
+    --primary-foreground: 209 29% 14%;
+    --primary-hover: 51 100% 45%;
+    --primary-light: 51 100% 25%;
 
     --secondary: 212 73% 59%;
     --secondary-foreground: 0 0% 100%;
@@ -136,9 +136,9 @@ All colors MUST be HSL.
     --muted: 220 11% 25%;
     --muted-foreground: 220 11% 70%;
 
-    --accent: 220 6% 56%;
-    --accent-foreground: 0 0% 100%;
-    --accent-light: 220 6% 25%;
+    --accent: 51 100% 50%;
+    --accent-foreground: 209 29% 14%;
+    --accent-light: 51 100% 25%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
@@ -149,29 +149,29 @@ All colors MUST be HSL.
 
     --sidebar-background: 209 29% 14%;
     --sidebar-foreground: 0 0% 98%;
-    --sidebar-primary: 220 6% 56%;
-    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-primary: 51 100% 50%;
+    --sidebar-primary-foreground: 209 29% 14%;
     --sidebar-accent: 220 11% 20%;
     --sidebar-accent-foreground: 0 0% 98%;
     --sidebar-border: 220 11% 20%;
     --sidebar-ring: 212 73% 59%;
 
-    --gradient-primary: linear-gradient(135deg, hsl(220 6% 56%) 0%, hsl(212 73% 59%) 100%);
-    --gradient-hero: linear-gradient(135deg, hsl(220 6% 56%) 0%, hsl(212 73% 59%) 50%, hsl(140 52% 55%) 100%);
-    --gradient-emprendedor: linear-gradient(135deg, hsl(220 6% 56%) 0%, hsl(220 6% 66%) 100%);
+    --gradient-primary: linear-gradient(135deg, hsl(51 100% 50%) 0%, hsl(212 73% 59%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(51 100% 50%) 0%, hsl(212 73% 59%) 50%, hsl(140 52% 55%) 100%);
+    --gradient-emprendedor: linear-gradient(135deg, hsl(51 100% 50%) 0%, hsl(51 100% 60%) 100%);
     --gradient-negocio: linear-gradient(135deg, hsl(212 73% 59%) 0%, hsl(212 73% 69%) 100%);
     --gradient-pyme: linear-gradient(135deg, hsl(140 52% 55%) 0%, hsl(140 52% 65%) 100%);
-    --gradient-card: linear-gradient(145deg, hsl(220 6% 56% / 0.12) 0%, hsl(212 73% 59% / 0.12) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(51 100% 50% / 0.12) 0%, hsl(212 73% 59% / 0.12) 100%);
 
     --shadow-base: 0 2px 8px rgba(0, 0, 0, 0.2);
     --shadow-hover: 0 8px 24px rgba(74, 144, 226, 0.5);
     --shadow-glow: 0 0 20px rgba(74, 144, 226, 0.6);
 
-    --chart-1: 220 6% 56%;
+    --chart-1: 51 100% 50%;
     --chart-2: 212 73% 59%;
     --chart-3: 140 52% 55%;
     --chart-4: 43 96% 56%;
-    --chart-5: 220 6% 76%;
+    --chart-5: 51 100% 70%;
   }
 }
 

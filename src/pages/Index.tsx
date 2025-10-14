@@ -146,10 +146,10 @@ export default function Homepage() {
           </div>
 
           <div className="relative z-10 max-w-5xl mx-auto text-center space-y-8 animate-fade-in">
-            {/* Badge - Centrado con nuevo color */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/10 border border-secondary/20 backdrop-blur-sm animate-glow-pulse mx-auto">
-              <Zap className="h-4 w-4 text-secondary" />
-              <span className="text-sm font-medium text-secondary">Potenciado con IA Argentina</span>
+            {/* Badge - Centrado con amarillo */}
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 backdrop-blur-sm animate-glow-pulse mx-auto">
+              <Zap className="h-4 w-4 text-primary" />
+              <span className="text-sm font-medium text-primary">Potenciado con IA Argentina</span>
             </div>
 
             {/* Title - Centrado con texto legible sin borrosidad */}
@@ -259,13 +259,13 @@ export default function Homepage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-              {/* Emprendedor Card - Gris cálido */}
+              {/* Emprendedor Card - Amarillo suave */}
               <div className="relative group card-3d bg-card rounded-[20px] p-6 sm:p-8 border-2 border-primary/20 hover:border-primary transition-all duration-300 shadow-base hover:shadow-hover overflow-hidden">
                 <div className="absolute inset-0 gradient-emprendedor opacity-5" />
                 <div className="relative z-10 space-y-4">
                   <div className="flex items-start justify-between">
                     <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-primary flex items-center justify-center animate-float">
-                      <Rocket className="h-6 w-6 sm:h-7 sm:w-7 text-white" />
+                      <Rocket className="h-6 w-6 sm:h-7 sm:w-7 text-foreground" />
                     </div>
                     <span className="px-3 py-1 bg-primary/10 text-primary text-xs font-semibold rounded-full border border-primary/20">
                       DESDE CERO
@@ -291,7 +291,7 @@ export default function Homepage() {
 
                   <Button
                     onClick={() => navigate('/demo/intro')}
-                    className="w-full bg-primary hover:bg-primary-hover text-white rounded-full shadow-md hover:shadow-lg transition-all duration-300 group"
+                    className="w-full bg-primary hover:bg-primary-hover text-foreground rounded-full shadow-md hover:shadow-lg transition-all duration-300 group"
                   >
                     Empezar Validación 🚀
                     <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
@@ -302,8 +302,8 @@ export default function Homepage() {
               {/* Negocio Card - Azul claro */}
               <div className="relative group card-3d bg-card rounded-[20px] p-6 sm:p-8 border-2 border-secondary/20 hover:border-secondary transition-all duration-300 shadow-base hover:shadow-hover overflow-hidden">
                 <div className="absolute inset-0 gradient-negocio opacity-5" />
-                <div className="absolute -top-3 -right-3 bg-secondary text-white px-4 py-1 rounded-full text-xs font-bold shadow-lg rotate-12">
-                  MÁS POPULAR
+                <div className="absolute top-4 right-4 px-4 py-2 bg-white/95 backdrop-blur-sm rounded-full text-xs font-bold text-foreground shadow-lg animate-bounce-subtle border border-secondary/20">
+                  Más Popular
                 </div>
                 <div className="relative z-10 space-y-4">
                   <div className="flex items-start justify-between">
