@@ -20,10 +20,15 @@ import {
   DollarSign,
   CheckSquare,
   FileCheck,
+  Rocket,
+  Target,
+  Zap,
+  Sparkles,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { safeJSONParse } from "@/lib/safe-json";
 import { logger } from "@/lib/logger";
+import LocalIA from "@/components/LocalIA";
 
 const EntrepreneurDashboard = () => {
   const navigate = useNavigate();
@@ -95,49 +100,63 @@ const EntrepreneurDashboard = () => {
   };
 
   const SidebarContent = () => (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full bg-gradient-to-b from-[#6E4AFF]/5 to-white">
       <div className="p-6 border-b border-slate-200">
-        <div className="flex items-center gap-2 text-primary-600">
-          <Lightbulb className="h-6 w-6" />
-          <span className="font-bold text-lg">Emprendedor</span>
+        <div className="flex items-center gap-3 group">
+          <div className="w-12 h-12 bg-gradient-to-br from-[#6E4AFF] to-[#3D8BFF] rounded-xl flex items-center justify-center shadow-lg animate-float">
+            <Rocket className="h-6 w-6 text-white" />
+          </div>
+          <div>
+            <span className="font-bold text-lg text-slate-900">Emprendedor</span>
+            <p className="text-xs text-slate-600">Valida tu idea</p>
+          </div>
         </div>
       </div>
 
-      <nav className="flex-1 p-4 space-y-2">
+      <nav className="flex-1 p-4 space-y-1">
         {menuItems.map((item) => (
           <button
             key={item.path}
             onClick={() => handleNavigation(item.path)}
             className={cn(
-              "w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-left",
+              "w-full flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all text-left font-medium group",
               item.active
-                ? "bg-primary-600 text-white"
-                : "text-gray-700 hover:bg-slate-50"
+                ? "bg-gradient-to-r from-[#6E4AFF] to-[#3D8BFF] text-white shadow-lg shadow-[#6E4AFF]/30"
+                : "text-slate-700 hover:bg-[#6E4AFF]/10 hover:text-[#6E4AFF]"
             )}
             aria-label={item.label}
           >
-            <item.icon className="h-5 w-5" />
-            <span className="font-medium">{item.label}</span>
+            <item.icon className={cn(
+              "h-5 w-5 transition-transform",
+              item.active ? "scale-110" : "group-hover:scale-110"
+            )} />
+            <span className="text-sm">{item.label}</span>
+            {item.active && (
+              <div className="ml-auto w-2 h-2 bg-white rounded-full animate-pulse" />
+            )}
           </button>
         ))}
       </nav>
 
-      <div className="p-4 border-t border-slate-200">
+      <div className="p-4 border-t border-slate-200 bg-gradient-to-t from-slate-50 to-transparent">
         <Button
           variant="outline"
-          className="w-full border-primary-600 text-primary-600 hover:bg-slate-50"
+          className="w-full border-2 border-[#6E4AFF] text-[#6E4AFF] hover:bg-[#6E4AFF] hover:text-white font-semibold py-6 rounded-xl transition-all"
           onClick={openRegisterModal}
         >
-          Crear Cuenta
+          <Sparkles className="w-4 h-4 mr-2" />
+          Crear Cuenta Premium
         </Button>
       </div>
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-gradient-to-br from-white via-[#F5F8FF] to-white">
+      <LocalIA />
+      
       {/* Mobile Header */}
-      <div className="md:hidden fixed top-0 left-0 right-0 bg-white border-b z-50 p-4">
+      <div className="md:hidden fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-xl border-b z-50 p-4">
         <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
           <SheetTrigger asChild>
             <Button variant="ghost" size="icon" aria-label="Abrir menú">
@@ -159,7 +178,19 @@ const EntrepreneurDashboard = () => {
         {/* Main Content */}
         <main className="flex-1 md:ml-64 pt-20 md:pt-0 p-4 md:p-8">
           <div className="max-w-6xl mx-auto">
-            <h1 className="text-3xl font-bold mb-6 text-gray-900">Dashboard Emprendedor</h1>
+            {/* Hero Welcome */}
+            <div className="mb-8 text-center md:text-left">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-[#6E4AFF]/10 to-[#3D8BFF]/10 border border-[#6E4AFF]/20 mb-4">
+                <Zap className="w-4 h-4 text-[#6E4AFF]" />
+                <span className="text-sm font-semibold text-[#6E4AFF]">Etapa: Emprendedor</span>
+              </div>
+              <h1 className="text-4xl md:text-5xl font-bold mb-3 bg-gradient-to-r from-[#6E4AFF] to-[#3D8BFF] bg-clip-text text-transparent">
+                ¡Bienvenido de vuelta!
+              </h1>
+              <p className="text-lg text-slate-600">
+                Valida tu idea y transforma tu visión en un plan de negocio sólido
+              </p>
+            </div>
 
             {/* Demo Banner */}
             {showBanner && (
@@ -189,122 +220,144 @@ const EntrepreneurDashboard = () => {
             )}
 
             {/* Metrics Cards */}
-            <div className="grid md:grid-cols-2 gap-6 mb-8">
-              <Card className="border border-slate-200 hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 bg-primary-100 rounded-lg">
-                      <TrendingUp className="h-6 w-6 text-primary-600" />
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+              <Card className="border-2 border-[#6E4AFF]/10 hover:border-[#6E4AFF]/30 hover:shadow-2xl transition-all duration-300 bg-gradient-to-br from-white to-[#6E4AFF]/5">
+                <CardHeader className="pb-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="p-3 bg-gradient-to-br from-[#6E4AFF] to-[#3D8BFF] rounded-xl shadow-lg">
+                        <TrendingUp className="h-5 w-5 text-white" />
+                      </div>
+                      <CardTitle className="text-base font-semibold">Validación</CardTitle>
                     </div>
-                    <CardTitle className="text-lg">Progreso de Validación</CardTitle>
                   </div>
                 </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    <div className="text-3xl font-bold text-primary-600">
+                <CardContent className="pt-2">
+                  <div className="space-y-2">
+                    <div className="text-3xl font-bold text-[#6E4AFF]">
                       {progressData.validation}%
                     </div>
-                    <Progress value={progressData.validation} className="h-2" />
-                    <p className="text-sm text-gray-600">
-                      {progressData.validation === 0 ? "Todavía no empezaste" : "¡Vas muy bien!"}
+                    <Progress value={progressData.validation} className="h-2.5 bg-slate-200" />
+                    <p className="text-xs text-slate-600">
+                      {progressData.validation === 0 ? "¡Empieza tu validación!" : "¡Excelente progreso!"}
                     </p>
                   </div>
                 </CardContent>
               </Card>
 
-              <Card className="border border-slate-200 hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 bg-success-100 rounded-lg">
-                      <DollarSign className="h-6 w-6 text-success-600" />
+              <Card className="border-2 border-[#2BCB6F]/10 hover:border-[#2BCB6F]/30 hover:shadow-2xl transition-all duration-300 bg-gradient-to-br from-white to-[#2BCB6F]/5">
+                <CardHeader className="pb-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="p-3 bg-gradient-to-br from-[#2BCB6F] to-[#1DA359] rounded-xl shadow-lg">
+                        <DollarSign className="h-5 w-5 text-white" />
+                      </div>
+                      <CardTitle className="text-base font-semibold">Rentabilidad</CardTitle>
                     </div>
-                    <CardTitle className="text-lg">Rentabilidad Estimada</CardTitle>
                   </div>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="pt-2">
                   <div className="space-y-2">
-                    <div className="text-2xl font-bold text-gray-900">Sin datos</div>
-                    <p className="text-sm text-gray-600">
-                      Completa el simulador para ver proyección
+                    <div className="text-2xl font-bold text-slate-900">Sin datos</div>
+                    <p className="text-xs text-slate-600">
+                      Usa el simulador financiero
                     </p>
                   </div>
                 </CardContent>
               </Card>
 
-              <Card className="border border-slate-200 hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 bg-primary-100 rounded-lg">
-                      <CheckSquare className="h-6 w-6 text-primary-600" />
+              <Card className="border-2 border-[#6E4AFF]/10 hover:border-[#6E4AFF]/30 hover:shadow-2xl transition-all duration-300 bg-gradient-to-br from-white to-[#6E4AFF]/5">
+                <CardHeader className="pb-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="p-3 bg-gradient-to-br from-[#6E4AFF] to-[#3D8BFF] rounded-xl shadow-lg">
+                        <CheckSquare className="h-5 w-5 text-white" />
+                      </div>
+                      <CardTitle className="text-base font-semibold">Lean Canvas</CardTitle>
                     </div>
-                    <CardTitle className="text-lg">Lean Canvas Completado</CardTitle>
                   </div>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="pt-2">
                   <div className="space-y-2">
-                    <div className="text-2xl font-bold text-primary-600">
+                    <div className="text-2xl font-bold text-[#6E4AFF]">
                       {Math.round((progressData.leanCanvas / 100) * 9)}/9 bloques
                     </div>
-                    <Progress value={progressData.leanCanvas} className="h-2" />
+                    <Progress value={progressData.leanCanvas} className="h-2.5 bg-slate-200" />
                   </div>
                 </CardContent>
               </Card>
 
-              <Card className="border border-slate-200 hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 bg-cyan-100 rounded-lg">
-                      <FileCheck className="h-6 w-6 text-cyan-600" />
+              <Card className="border-2 border-[#3D8BFF]/10 hover:border-[#3D8BFF]/30 hover:shadow-2xl transition-all duration-300 bg-gradient-to-br from-white to-[#3D8BFF]/5">
+                <CardHeader className="pb-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="p-3 bg-gradient-to-br from-[#3D8BFF] to-[#2B6BCC] rounded-xl shadow-lg">
+                        <FileCheck className="h-5 w-5 text-white" />
+                      </div>
+                      <CardTitle className="text-base font-semibold">Trámites</CardTitle>
                     </div>
-                    <CardTitle className="text-lg">Trámites Legales</CardTitle>
                   </div>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="pt-2">
                   <div className="space-y-2">
-                    <div className="text-2xl font-bold text-cyan-600">
-                      {Math.round((progressData.legalChecklist / 100) * 5)}/5 completados
+                    <div className="text-2xl font-bold text-[#3D8BFF]">
+                      {Math.round((progressData.legalChecklist / 100) * 5)}/5 hechos
                     </div>
-                    <Progress value={progressData.legalChecklist} className="h-2" />
+                    <Progress value={progressData.legalChecklist} className="h-2.5 bg-slate-200" />
                   </div>
                 </CardContent>
               </Card>
             </div>
 
             {/* First Steps Checklist */}
-            <Card className="border border-slate-200 mb-8">
+            <Card className="border-2 border-slate-200 hover:border-[#6E4AFF]/30 hover:shadow-2xl transition-all duration-300 mb-8 bg-gradient-to-br from-white to-slate-50">
               <CardHeader>
-                <CardTitle className="text-xl flex items-center gap-2">
-                  <ClipboardCheck className="h-6 w-6 text-primary-600" />
+                <CardTitle className="text-2xl flex items-center gap-3">
+                  <div className="p-2 bg-gradient-to-br from-[#6E4AFF] to-[#3D8BFF] rounded-lg">
+                    <Target className="h-6 w-6 text-white" />
+                  </div>
                   Tus Primeros Pasos
                 </CardTitle>
+                <p className="text-sm text-slate-600 mt-2">
+                  Completa estos pasos para validar tu idea de negocio
+                </p>
               </CardHeader>
               <CardContent>
-                <div className="space-y-3">
+                <div className="space-y-2">
                   {[
-                    { id: 1, text: "Valida tu idea completando el Lean Canvas" },
-                    { id: 2, text: "Simula tu rentabilidad con números reales" },
-                    { id: 3, text: "Completa el checklist de trámites iniciales" },
-                    { id: 4, text: "Define misión y visión de tu emprendimiento" },
-                    { id: 5, text: "Revisa los recursos y guías disponibles" },
-                  ].map((step) => (
-                    <div key={step.id} className="flex items-start gap-3 p-3 rounded-lg hover:bg-slate-50 transition-colors">
-                      <div className="w-5 h-5 rounded border-2 border-gray-300 flex-shrink-0 mt-0.5" />
-                      <span className="text-gray-700">{step.text}</span>
-                    </div>
-                  ))}
+                    { id: 1, text: "✨ Valida tu idea completando el Lean Canvas", icon: Lightbulb },
+                    { id: 2, text: "💰 Simula tu rentabilidad con números reales", icon: Calculator },
+                    { id: 3, text: "📋 Completa el checklist de trámites AFIP", icon: ClipboardCheck },
+                    { id: 4, text: "🎯 Define misión y visión de tu emprendimiento", icon: Target },
+                    { id: 5, text: "📚 Revisa recursos y guías disponibles", icon: BookOpen },
+                  ].map((step) => {
+                    const Icon = step.icon;
+                    return (
+                      <div key={step.id} className="flex items-center gap-4 p-4 rounded-xl hover:bg-[#6E4AFF]/5 transition-all group cursor-pointer border border-transparent hover:border-[#6E4AFF]/20">
+                        <div className="w-10 h-10 rounded-xl border-2 border-slate-300 group-hover:border-[#6E4AFF] flex items-center justify-center flex-shrink-0 transition-all">
+                          <Icon className="w-5 h-5 text-slate-400 group-hover:text-[#6E4AFF] transition-colors" />
+                        </div>
+                        <span className="text-slate-700 group-hover:text-[#6E4AFF] font-medium transition-colors">{step.text}</span>
+                      </div>
+                    );
+                  })}
                 </div>
               </CardContent>
             </Card>
 
             {/* CTA Button */}
-            <div className="flex justify-center">
+            <div className="flex flex-col items-center gap-4">
               <Button
                 size="lg"
-                className="bg-gradient-to-r from-primary-500 to-cyan-500 hover:opacity-90 text-white px-8 py-6 text-lg"
+                className="bg-gradient-to-r from-[#6E4AFF] to-[#3D8BFF] hover:opacity-90 text-white px-12 py-7 text-lg font-bold rounded-2xl shadow-2xl hover:shadow-[#6E4AFF]/50 hover:scale-105 transition-all animate-glow-pulse group"
                 onClick={() => navigate('/demo/emprendedor/validacion-idea')}
               >
-                Empezar Validación de Idea →
+                <Rocket className="w-6 h-6 mr-2 group-hover:translate-x-1 transition-transform" />
+                Empezar Validación de Idea
               </Button>
+              <p className="text-sm text-slate-600">
+                ¿Necesitas ayuda? Usa el asistente <span className="font-semibold text-[#6E4AFF]">LocalIA</span> en la esquina inferior
+              </p>
             </div>
           </div>
         </main>
