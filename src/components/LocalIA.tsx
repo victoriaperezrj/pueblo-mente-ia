@@ -104,14 +104,14 @@ export default function LocalIA() {
 
   return (
     <>
-      {/* Floating Button */}
+      {/* Floating Button - Azul claro */}
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
           className={cn(
             "fixed bottom-6 right-6 z-50",
             "w-16 h-16 rounded-full",
-            "bg-primary shadow-2xl",
+            "bg-secondary shadow-2xl",
             "text-white",
             "flex items-center justify-center",
             "hover:scale-110 transition-all duration-300 ease-in-out",
@@ -137,8 +137,8 @@ export default function LocalIA() {
             isMinimized && "h-16"
           )}
         >
-          {/* Header */}
-          <div className="bg-primary text-white p-4 flex items-center justify-between">
+          {/* Header - Azul claro */}
+          <div className="bg-secondary text-white p-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm animate-float">
                 <Sparkles className="w-5 h-5" />
@@ -186,7 +186,7 @@ export default function LocalIA() {
                     )}
                   >
                     {msg.role === 'assistant' && (
-                      <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center flex-shrink-0 shadow-md">
+                      <div className="w-8 h-8 bg-secondary rounded-full flex items-center justify-center flex-shrink-0 shadow-md">
                         <Sparkles className="w-4 h-4 text-white" />
                       </div>
                     )}
@@ -194,7 +194,7 @@ export default function LocalIA() {
                       className={cn(
                         "max-w-[75%] rounded-2xl px-4 py-3 shadow-sm",
                         msg.role === 'user'
-                          ? "bg-primary text-white"
+                          ? "bg-secondary text-white"
                           : "bg-card border border-border text-foreground"
                       )}
                     >
@@ -205,14 +205,14 @@ export default function LocalIA() {
                 
                 {isTyping && (
                   <div className="flex gap-3 animate-fade-in">
-                    <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center shadow-md">
+                    <div className="w-8 h-8 bg-secondary rounded-full flex items-center justify-center shadow-md">
                       <Sparkles className="w-4 h-4 text-white animate-pulse" />
                     </div>
                     <div className="bg-card border border-border rounded-2xl px-4 py-3">
                       <div className="flex gap-1">
-                        <span className="w-2 h-2 bg-primary/60 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                        <span className="w-2 h-2 bg-primary/60 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                        <span className="w-2 h-2 bg-primary/60 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                        <span className="w-2 h-2 bg-secondary/60 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                        <span className="w-2 h-2 bg-secondary/60 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                        <span className="w-2 h-2 bg-secondary/60 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                       </div>
                     </div>
                   </div>
@@ -229,7 +229,7 @@ export default function LocalIA() {
                       <button
                         key={idx}
                         onClick={() => handleQuickQuestion(q)}
-                        className="text-xs px-3 py-2 bg-card border border-border rounded-xl hover:bg-primary/10 hover:border-primary transition-all duration-300 text-left hover:shadow-sm"
+                        className="text-xs px-3 py-2 bg-card border border-border rounded-xl hover:bg-secondary/10 hover:border-secondary transition-all duration-300 text-left hover:shadow-sm"
                         disabled={isTyping}
                       >
                         {q}
@@ -254,7 +254,7 @@ export default function LocalIA() {
                   <Button
                     onClick={handleSend}
                     disabled={!input.trim() || isTyping}
-                    className="bg-primary hover:bg-primary-hover px-6 shadow-md hover:shadow-lg transition-all duration-300"
+                    className="bg-secondary hover:bg-secondary/90 px-6 shadow-md hover:shadow-lg transition-all duration-300"
                   >
                     <Send className="w-4 h-4" />
                   </Button>
