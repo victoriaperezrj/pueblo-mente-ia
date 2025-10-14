@@ -15,6 +15,7 @@ import {
   DollarSign, TrendingUp, PieChart, AlertTriangle, 
   Download, ArrowLeft, Sparkles, Target, Calculator 
 } from "lucide-react";
+import { TooltipInfo } from "@/components/ui/tooltip-info";
 import { 
   calculateMonthlyRevenue, 
   calculateVariableCosts, 
@@ -314,9 +315,7 @@ const FinancialSimulator = () => {
                   <div className="flex justify-between items-center">
                     <div className="flex items-center gap-2">
                       <Label>Venta Promedio por Cliente</Label>
-                      <span className="text-xs text-muted-foreground cursor-help" title="¿Cuánto compra en promedio cada cliente? Ejemplo: Si vendes 100 productos a 10 clientes, el promedio es 10 productos por cliente.">
-                        💡
-                      </span>
+                      <TooltipInfo content="💡 ¿Cuánto compra en promedio cada cliente? Ejemplo: Si vendes 100 productos a 10 clientes, el promedio es 10 productos por cliente." />
                     </div>
                     <span className="text-xl font-bold">{ticketAverage} productos</span>
                   </div>
@@ -327,9 +326,6 @@ const FinancialSimulator = () => {
                     max={10}
                     step={1}
                   />
-                  <p className="text-xs text-muted-foreground">
-                    💡 ¿Cuánto compra en promedio cada cliente?
-                  </p>
                 </div>
 
                 <div className="p-4 bg-success/10 rounded-lg border-2 border-success/50">

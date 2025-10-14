@@ -8,7 +8,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Sparkles } from "lucide-react";
+import { Card } from "@/components/ui/card";
+import { Lightbulb, Sparkles, Target, TrendingUp, Users } from "lucide-react";
 
 export function FirstTimeWelcomeModal() {
   const [isOpen, setIsOpen] = useState(false);
@@ -22,7 +23,7 @@ export function FirstTimeWelcomeModal() {
       // Show modal after a short delay
       setTimeout(() => {
         setIsOpen(true);
-      }, 500);
+      }, 1000);
     }
   }, []);
 
@@ -39,45 +40,87 @@ export function FirstTimeWelcomeModal() {
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-2xl">
         <DialogHeader>
           <div className="flex items-center justify-center mb-4">
-            <div className="bg-gradient-primary rounded-full p-4">
-              <Sparkles className="h-8 w-8 text-white" />
+            <div className="bg-gradient-primary rounded-full p-4 animate-pulse">
+              <Sparkles className="h-10 w-10 text-white" />
             </div>
           </div>
-          <DialogTitle className="text-2xl text-center">
+          <DialogTitle className="text-3xl font-bold text-center bg-gradient-primary bg-clip-text text-transparent">
             🤖 ¡Bienvenido! Antes de empezar...
           </DialogTitle>
-          <DialogDescription className="text-center text-base pt-4 space-y-4">
-            <p>
-              Para darte <span className="font-semibold text-foreground">recomendaciones personalizadas</span>, 
-              necesito conocer tu idea de negocio.
-            </p>
-            <div className="bg-muted/50 rounded-lg p-4">
-              <p className="text-sm text-muted-foreground">
-                Nuestro validador de ideas te ayudará a entender el potencial de tu negocio 
-                y te dará insights valiosos basados en IA.
-              </p>
-            </div>
+          <DialogDescription className="text-center text-base">
+            Para darte recomendaciones personalizadas, necesito conocer tu idea de negocio.
           </DialogDescription>
         </DialogHeader>
-        <div className="flex flex-col gap-3 mt-4">
+
+        <div className="space-y-4 my-4">
+          <p className="text-sm text-muted-foreground text-center">
+            Con el Validador de Ideas descubrirás:
+          </p>
+          
+          <div className="grid gap-3">
+            <Card className="p-3 border-2 hover:border-primary/50 transition-colors">
+              <div className="flex items-center gap-3">
+                <div className="bg-gradient-primary rounded-lg p-2 flex-shrink-0">
+                  <Target className="h-5 w-5 text-white" />
+                </div>
+                <div className="text-sm">
+                  <p className="font-semibold">¿Tu idea puede funcionar?</p>
+                  <p className="text-muted-foreground text-xs">Análisis de viabilidad con IA</p>
+                </div>
+              </div>
+            </Card>
+
+            <Card className="p-3 border-2 hover:border-success/50 transition-colors">
+              <div className="flex items-center gap-3">
+                <div className="bg-gradient-success rounded-lg p-2 flex-shrink-0">
+                  <TrendingUp className="h-5 w-5 text-white" />
+                </div>
+                <div className="text-sm">
+                  <p className="font-semibold">Oportunidades y riesgos</p>
+                  <p className="text-muted-foreground text-xs">Fortalezas, debilidades y amenazas</p>
+                </div>
+              </div>
+            </Card>
+
+            <Card className="p-3 border-2 hover:border-warning/50 transition-colors">
+              <div className="flex items-center gap-3">
+                <div className="bg-gradient-warm rounded-lg p-2 flex-shrink-0">
+                  <Users className="h-5 w-5 text-white" />
+                </div>
+                <div className="text-sm">
+                  <p className="font-semibold">Tu mercado objetivo</p>
+                  <p className="text-muted-foreground text-xs">Tamaño del mercado y competencia</p>
+                </div>
+              </div>
+            </Card>
+          </div>
+
+          <div className="bg-primary/5 border border-primary/20 rounded-lg p-3 mt-4">
+            <p className="text-xs text-center text-muted-foreground">
+              ⏱️ Solo toma <span className="font-semibold text-foreground">10 minutos</span> y es completamente <span className="font-semibold text-foreground">gratis</span>
+            </p>
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-3">
           <Button
             onClick={handleValidateIdea}
             variant="gradient"
             size="lg"
             className="w-full"
           >
-            <Sparkles className="mr-2 h-5 w-5" />
+            <Lightbulb className="mr-2 h-5 w-5" />
             Validar mi Idea de Negocio
           </Button>
           <Button
             onClick={handleSkip}
-            variant="ghost"
-            size="sm"
+            variant="outline"
+            className="w-full"
           >
-            Lo haré después
+            Explorar sin validar
           </Button>
         </div>
       </DialogContent>

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { TrendingUp, Package, Users, Calendar, DollarSign, AlertCircle, Lightbulb, FileText, Calculator } from "lucide-react";
 import { DemoBanner } from "@/components/DemoBanner";
 import { FirstTimeWelcomeModal } from "@/components/FirstTimeWelcomeModal";
+import { EntrepreneurProgressBar } from "@/components/EntrepreneurProgressBar";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -80,6 +81,15 @@ const Dashboard = () => {
     },
   ];
 
+  // Mock progress data - in real app this would come from user's actual progress
+  const progressSteps = [
+    { id: '1', label: 'Idea validada', completed: false },
+    { id: '2', label: 'Plan de negocio creado', completed: false },
+    { id: '3', label: 'Configurar primera venta', completed: false, current: true },
+    { id: '4', label: 'Conectar sistema de pagos', completed: false },
+    { id: '5', label: 'Lanzar marketing inicial', completed: false },
+  ];
+
   return (
     <div className="space-y-6 animate-fade-in">
       {isDemoMode && <DemoBanner />}
@@ -93,6 +103,13 @@ const Dashboard = () => {
           {isDemoMode ? 'Explorá todas las funcionalidades sin límites' : 'Aquí está el resumen de tu negocio'}
         </p>
       </div>
+
+      {/* Progress Bar */}
+      <EntrepreneurProgressBar 
+        currentPhase="FASE DE LANZAMIENTO"
+        overallProgress={40}
+        steps={progressSteps}
+      />
 
       {/* Stats Grid */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
