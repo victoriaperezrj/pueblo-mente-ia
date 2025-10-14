@@ -91,11 +91,6 @@ const EntrepreneurDashboard = () => {
   ];
 
   const handleNavigation = (path: string) => {
-    if (path === "/demo/emprendedor/dashboard") {
-      // Already here
-      return;
-    }
-    // For now, show placeholder
     navigate(path);
   };
 
