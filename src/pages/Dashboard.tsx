@@ -201,12 +201,13 @@ const Dashboard = () => {
         </Card>
       </div>
 
-      {/* AI Tools Section */}
+      {/* Quick Action Cards */}
       <div>
-        <h2 className="text-2xl font-bold mb-4">🤖 Herramientas de IA</h2>
+        <h2 className="text-2xl font-bold mb-2">🚀 ¿Qué querés lograr hoy?</h2>
+        <p className="text-muted-foreground mb-4">Empezá con lo más importante para tu negocio</p>
         <div className="grid md:grid-cols-3 gap-6">
           <Card
-            className="border-2 hover:border-primary/50 transition-all duration-300 hover:shadow-2xl cursor-pointer group overflow-hidden"
+            className="border-2 hover:border-primary/50 transition-all duration-300 hover:shadow-2xl cursor-pointer group overflow-hidden hover:scale-105"
             onClick={() => navigate("/idea-validator")}
           >
             <div className="h-1 bg-gradient-primary" />
@@ -215,16 +216,21 @@ const Dashboard = () => {
                 <Lightbulb className="h-6 w-6 text-white" />
               </div>
               <CardTitle className="group-hover:text-primary transition-colors">
-                Validador de Ideas
+                💡 Validar mi idea
               </CardTitle>
               <CardDescription>
-                Analizá el potencial de tu negocio con IA
+                Descubrí si tu idea puede funcionar en el mercado
               </CardDescription>
             </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground">
+                ⏱️ 10 minutos • 🤖 Con IA
+              </p>
+            </CardContent>
           </Card>
 
           <Card
-            className="border-2 hover:border-success/50 transition-all duration-300 hover:shadow-2xl cursor-pointer group overflow-hidden"
+            className="border-2 hover:border-success/50 transition-all duration-300 hover:shadow-2xl cursor-pointer group overflow-hidden hover:scale-105"
             onClick={() => navigate("/business-blueprint")}
           >
             <div className="h-1 bg-gradient-success" />
@@ -233,16 +239,21 @@ const Dashboard = () => {
                 <FileText className="h-6 w-6 text-white" />
               </div>
               <CardTitle className="group-hover:text-success transition-colors">
-                Business Blueprint
+                📊 Ver mis planes
               </CardTitle>
               <CardDescription>
                 Plan de negocio completo generado con IA
               </CardDescription>
             </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground">
+                📋 Blueprint completo • 🎯 Paso a paso
+              </p>
+            </CardContent>
           </Card>
 
           <Card
-            className="border-2 hover:border-warning/50 transition-all duration-300 hover:shadow-2xl cursor-pointer group overflow-hidden"
+            className="border-2 hover:border-warning/50 transition-all duration-300 hover:shadow-2xl cursor-pointer group overflow-hidden hover:scale-105"
             onClick={() => navigate("/financial-simulator")}
           >
             <div className="h-1 bg-gradient-warm" />
@@ -251,12 +262,17 @@ const Dashboard = () => {
                 <Calculator className="h-6 w-6 text-white" />
               </div>
               <CardTitle className="group-hover:text-warning transition-colors">
-                Simulador Financiero
+                💰 Revisar finanzas
               </CardTitle>
               <CardDescription>
                 Proyectá ventas, costos y rentabilidad
               </CardDescription>
             </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground">
+                💹 Proyección 12 meses • 📈 Punto equilibrio
+              </p>
+            </CardContent>
           </Card>
         </div>
       </div>

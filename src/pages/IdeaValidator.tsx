@@ -1,15 +1,12 @@
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { Lightbulb, TrendingUp, TrendingDown, AlertCircle, CheckCircle, Loader2, Sparkles, Target, Users, DollarSign } from "lucide-react";
-import { Separator } from "@/components/ui/separator";
+import { Lightbulb, TrendingUp, TrendingDown, AlertCircle, CheckCircle, Sparkles, Target, Users, DollarSign } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { IdeaValidatorWizard } from "@/components/IdeaValidatorWizard";
 
 interface ValidationResult {
   score: number;
@@ -28,25 +25,18 @@ const IdeaValidator = () => {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<ValidationResult | null>(null);
 
-  // Form state
-  const [businessIdea, setBusinessIdea] = useState("");
-  const [targetMarket, setTargetMarket] = useState("");
-  const [problem, setProblem] = useState("");
-  const [solution, setSolution] = useState("");
-  const [budget, setBudget] = useState("");
-
-  const handleValidate = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleWizardComplete = async (formData: any) => {
     setLoading(true);
 
     try {
       const { data, error } = await supabase.functions.invoke('validate-idea', {
         body: {
-          businessIdea,
-          targetMarket,
-          problem,
-          solution,
-          budget
+          businessIdea: formData.idea,
+          targetMarket: formData.targetCustomer,
+          problem: formData.problem || formData.idea,
+          solution: formData.idea,
+          budget: formData.budget,
+          revenueModel: formData.revenue
         }
       });
 
@@ -78,11 +68,6 @@ const IdeaValidator = () => {
   };
 
   const resetForm = () => {
-    setBusinessIdea("");
-    setTargetMarket("");
-    setProblem("");
-    setSolution("");
-    setBudget("");
     setResult(null);
   };
 
@@ -101,114 +86,24 @@ const IdeaValidator = () => {
       </div>
 
       {!result ? (
-        <form onSubmit={handleValidate} className="space-y-6">
-          <Card className="border-2 overflow-hidden hover:border-primary/50 transition-all duration-300">
-            <div className="h-1 bg-gradient-hero" />
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <div className="bg-gradient-primary rounded-lg p-2">
-                  <Sparkles className="h-5 w-5 text-white" />
+        <div className="space-y-6">
+          <Card className="border-2 bg-gradient-to-br from-primary/5 to-secondary/5">
+            <CardContent className="pt-6">
+              <div className="text-center space-y-3">
+                <div className="bg-gradient-primary rounded-full w-16 h-16 flex items-center justify-center mx-auto">
+                  <Sparkles className="h-8 w-8 text-white" />
                 </div>
-                Contanos tu idea
-              </CardTitle>
-              <CardDescription>
-                Completá el formulario con la mayor información posible
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="businessIdea">¿Cuál es tu idea de negocio? *</Label>
-                <Textarea
-                  id="businessIdea"
-                  placeholder="Ej: Panadería artesanal con productos sin gluten y veganos, enfocada en delivery..."
-                  value={businessIdea}
-                  onChange={(e) => setBusinessIdea(e.target.value)}
-                  required
-                  rows={4}
-                  className="resize-none"
-                />
-              </div>
-
-              <div className="grid md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="targetMarket">Mercado objetivo *</Label>
-                  <Input
-                    id="targetMarket"
-                    placeholder="Ej: Familias de San Luis Capital, 25-45 años"
-                    value={targetMarket}
-                    onChange={(e) => setTargetMarket(e.target.value)}
-                    required
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="budget">Presupuesto estimado</Label>
-                  <Input
-                    id="budget"
-                    type="number"
-                    placeholder="Ej: 500000"
-                    value={budget}
-                    onChange={(e) => setBudget(e.target.value)}
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="problem">¿Qué problema resuelve? *</Label>
-                <Textarea
-                  id="problem"
-                  placeholder="Ej: Dificultad para conseguir productos frescos sin gluten en San Luis..."
-                  value={problem}
-                  onChange={(e) => setProblem(e.target.value)}
-                  required
-                  rows={3}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="solution">¿Cuál es tu solución? *</Label>
-                <Textarea
-                  id="solution"
-                  placeholder="Ej: Ofrecer variedad de productos horneados frescos diariamente con delivery rápido..."
-                  value={solution}
-                  onChange={(e) => setSolution(e.target.value)}
-                  required
-                  rows={3}
-                />
-              </div>
-
-              <div className="bg-primary/5 border border-primary/20 rounded-lg p-4">
-                <p className="text-sm text-muted-foreground flex items-start gap-2">
-                  <AlertCircle className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-                  <span>
-                    Cuanta más información nos des, más preciso será el análisis. La IA evaluará 
-                    viabilidad, competencia, mercado y rentabilidad.
-                  </span>
+                <h2 className="text-2xl font-bold">¡Bienvenido al Validador de Ideas!</h2>
+                <p className="text-muted-foreground max-w-2xl mx-auto">
+                  Te guiaremos paso a paso para analizar tu idea de negocio con inteligencia artificial.
+                  Solo tomará <span className="font-semibold text-foreground">10 minutos</span> y obtendrás un análisis completo.
                 </p>
               </div>
-
-              <Button
-                type="submit"
-                disabled={loading}
-                variant="gradient"
-                size="lg"
-                className="w-full"
-              >
-                {loading ? (
-                  <>
-                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                    Analizando con IA...
-                  </>
-                ) : (
-                  <>
-                    <Sparkles className="mr-2 h-5 w-5" />
-                    Validar mi Idea
-                  </>
-                )}
-              </Button>
             </CardContent>
           </Card>
-        </form>
+
+          <IdeaValidatorWizard onComplete={handleWizardComplete} loading={loading} />
+        </div>
       ) : (
         <div className="space-y-6">
           {/* Score Card */}
