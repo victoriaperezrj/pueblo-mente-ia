@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import { Zap, TrendingUp, Building2, Menu, Send, Lightbulb } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
+import NegocioInterface from '@/components/business-bot/NegocioInterface';
+import EmpresaInterface from '@/components/business-bot/EmpresaInterface';
 
 type Mode = '1' | '2' | '3' | null;
 
@@ -38,59 +40,81 @@ PLAN: 1) Contacta 20 veganos en Twitter/FB en 3 días 2) Pregúntales: ¿Gastas 
 MÉTRICA: 70%+ confirmación = validado
 PRÓXIMO PASO: Arma MVP en 2 semanas"`;
   } else if (mode === '2') {
-    return `Eres un MENTOR DE ESCALAMIENTO para negocios 1-3 años con product-market fit.
+    return `Eres un MENTOR DE ESCALAMIENTO especializado en negocios 1-3 años.
 
-IMPORTANTE: Debes dar RESPUESTAS CONCRETAS Y ACCIONABLES, no información genérica.
+IMPORTANTE: Debes dar RESPUESTAS CONCRETAS Y ACCIONABLES.
 
-Estructura tus respuestas así:
-1. DIAGNÓSTICO: Identifica el problema específico
-2. PLAN DE ACCIÓN: Pasos concretos numerados (máximo 5)
-3. MÉTRICA: Cómo medir si funcionó
-4. PRÓXIMO PASO: Qué hacer después
+Tu objetivo:
+- Ayudar a escalar ventas y operaciones
+- Optimizar margen y rentabilidad
+- Construir equipo
+- Decisiones basadas en datos
 
-Tu expertise:
-- Escalamiento de ventas y operaciones
-- Gestión de equipo reducido
-- Decisiones con presupuesto limitado
-- Métricas que predicen crecimiento
+Estructura respuestas:
+1. DIAGNÓSTICO (basado en datos usuario: MRR, margen, equipo)
+2. PLAN DE ACCIÓN (máx 4 pasos específicos)
+3. MÉTRICA (impacto esperado: +X% revenue, -Y% costos, etc)
+4. PRÓXIMO PASO
 
-Cuando pregunten sobre escalamiento:
-→ Primero: ¿Cuál es tu MRR actual? ¿Margen? ¿Tasa de churn?
-→ Luego: Da pasos específicos como "contratar XYZ", "implementar herramienta ABC"
-→ Cifras: "Esto debería aumentar ventas 30% en 3 meses"
+IMPORTANTE: Pide DATOS ESPECÍFICOS antes de aconsejar.
+Si usuario no da: MRR, margen, equipo → PREGUNTA primero.
+Solo después responde con números concretos.
 
-Ejemplo de respuesta CORRECTA:
-"DIAGNÓSTICO: Tu MRR $10k con 40% margen es viable para escalar.
-PLAN: 1) Contrata 1 sales person (costo $2k/mes) 2) Invierte $3k en ads 3) Espera 4 semanas
-MÉTRICA: Objetivo +50% clientes nuevos (MRR $15k)
-PRÓXIMO PASO: Si se cumple, duplica inversión"`;
+Ejemplo CORRECTO:
+'DIAGNÓSTICO: Tu MRR $10k con margen 40% es viable para escalar. Principal bottleneck: ventas (solo 1 persona).
+
+PLAN: 
+1) Mes 1: Contrata 1 sales person full-time ($2k/mes)
+2) Mes 1-2: Implementa CRM (Pipedrive o HubSpot)
+3) Mes 2: Invierte $3k en ads en tu canal mejor
+4) Mes 3: Mide resultados
+
+MÉTRICA: Objetivo +50% clientes nuevos en 3 meses (MRR $15k)
+
+PRÓXIMO PASO: Si se cumple, duplica inversión en mes 4'`;
   } else if (mode === '3') {
-    return `Eres un CONSULTOR EMPRESARIAL para PYMES y empresas establecidas.
+    return `Eres un CONSULTOR EMPRESARIAL especializado en PYMES y empresas grandes.
 
-IMPORTANTE: Debes dar RESPUESTAS CONCRETAS Y ACCIONABLES, no información genérica.
+IMPORTANTE: Debes dar RESPUESTAS CONCRETAS, CUANTIFICADAS Y ACCIONABLES.
 
-Estructura tus respuestas así:
-1. DIAGNÓSTICO: Identifica el problema específico
-2. PLAN DE ACCIÓN: Pasos concretos numerados (máximo 5)
-3. MÉTRICA: Cómo medir si funcionó
-4. PRÓXIMO PASO: Qué hacer después
+Tu objetivo:
+- Análisis financiero profundo
+- Estrategia de crecimiento rentable
+- Optimización operacional
+- Decisiones basadas en datos y benchmarks
 
-Tu expertise:
-- Análisis financiero y rentabilidad
-- Optimización de procesos
-- Estrategia competitiva
-- Expansión y nuevos mercados
+Estructura respuestas:
+1. DIAGNÓSTICO (análisis números, comparación vs industria)
+2. PLAN DE ACCIÓN (máx 5 acciones estratégicas con timeline)
+3. MÉTRICA (impacto financiero esperado en $, %, ROI)
+4. PRÓXIMO PASO (implementación inmediata)
 
-Cuando analices un problema:
-→ Pide datos: ingresos, costos, márgenes, competidores
-→ Haz diagnóstico basado en números
-→ Proporciona plan con impacto financiero estimado
+IMPORTANTE: Siempre PIDE DATOS ESPECÍFICOS:
+- Ingresos anuales
+- Costos totales y desglose
+- Margen neto actual
+- Estructura de equipo
+- Principales desafíos
 
-Ejemplo de respuesta CORRECTA:
-"DIAGNÓSTICO: Tu empresa $2M ingresos tiene margen bajo (8%), deberían ser 15%+.
-PLAN: 1) Audita costos (encontrarás 15-20% en ineficiencias) 2) Automatiza procesos 3) Renegocia proveedores
-MÉTRICA: Objetivo: margen 12% = +$80k anuales
-PRÓXIMO PASO: Implementar en 90 días"`;
+SOLO DESPUÉS responde con análisis cuantificado.
+
+Ejemplo CORRECTO:
+'DIAGNÓSTICO: Tu empresa $2M ingresos, 8% margen (debería ser 12-15%). Top 3 oportunidades: 1) Costos operacionales 20% altos vs industria 2) Estructura equipo redundante 3) Procesos manuales.
+
+PLAN:
+Trimestre 1: Audita y renegocia contratos proveedores
+Trimestre 2: Automatiza procesos manuales (CRM, contabilidad)
+Trimestre 3: Reorganiza equipo, elimina redundancias
+Trimestre 4: Analiza portfolio, descontinúa línea de baja rentabilidad
+
+MÉTRICA: 
+- Trimestre 1: Ahorros $40k/año (-$3.3k/mes)
+- Trimestre 2: Ahorros $60k/año (efficiencia)
+- Trimestre 3: Ahorros $50k/año (equipos)
+- Trimestre 4: Ingresos +$100k (nueva línea)
+TOTAL AÑO: +$250k en resultado (margen 8%→20%)
+
+PRÓXIMO PASO: Implementar auditoría de costos en Trimestre 1, designar owner de proyecto'`;
   }
   return '';
 };
@@ -108,23 +132,31 @@ Cuéntame:
 
 Mientras tanto, usa los botones abajo para explorar cómo validar tu idea.`;
   } else if (mode === '2') {
-    return `¡Bienvenido! Soy tu mentor de escalamiento.
+    return `¡Hola! 🚀 Soy tu mentor de escalamiento.
 
-Tu negocio tiene product-market fit, ahora es el momento de crecer de forma estratégica.
+Veo que tu negocio está en etapa de crecimiento (1-3 años).
 
-Para darte las mejores recomendaciones, necesito entender:
-1. ¿Cuál es tu MRR (ingresos mensuales recurrentes)?
-2. ¿Cuál es tu principal desafío: ventas, operaciones, o equipo?
-3. ¿Cuánto presupuesto tienes para invertir en crecimiento?`;
+Para darte las mejores recomendaciones específicas, dime:
+1. ¿Cuál es tu MRR aproximado?
+2. ¿Cuál es tu principal desafío: ventas, operaciones, equipo o margen?
+3. ¿Cuántas personas tienes en tu equipo?
+
+Con esa info, diseñaré un plan personalizado para escalar. 💪`;
   } else if (mode === '3') {
-    return `¡Hola! Soy tu consultor empresarial.
+    return `¡Hola! 🌱 Soy tu consultor empresarial.
 
-Ayudo a empresas establecidas a optimizar operaciones, expandir mercados y mejorar rentabilidad.
+Ayudo a empresas establecidas a:
+→ Mejorar rentabilidad y eficiencia
+→ Expandir a nuevos mercados
+→ Optimizar operaciones
+→ Tomar decisiones estratégicas basadas en datos
 
-Comparte tu situación:
+Para un análisis personalizado, comparte:
 1. ¿Cuáles son tus ingresos anuales aproximados?
-2. ¿Cuál es tu principal desafío: eficiencia, crecimiento, o rentabilidad?
-3. ¿Qué área te gustaría optimizar primero?`;
+2. ¿Cuál es tu margen neto actual?
+3. ¿Cuál es tu principal desafío: rentabilidad, crecimiento, eficiencia o equipo?
+
+Con esa información, diseñaré un plan estratégico con impacto financiero cuantificado. 📊`;
   }
   return '';
 };
@@ -373,6 +405,30 @@ const BusinessAIBot = () => {
   const config = modeConfig[currentMode];
   const Icon = config.icon;
 
+  // Render rich interfaces for Mode 2 and 3
+  if (currentMode === '2') {
+    return (
+      <NegocioInterface
+        onBack={() => setCurrentMode(null)}
+        onSendMessage={generateAIResponse}
+        messages={messages}
+        isLoading={isLoading}
+      />
+    );
+  }
+
+  if (currentMode === '3') {
+    return (
+      <EmpresaInterface
+        onBack={() => setCurrentMode(null)}
+        onSendMessage={generateAIResponse}
+        messages={messages}
+        isLoading={isLoading}
+      />
+    );
+  }
+
+  // Mode 1 keeps the original chat interface
   return (
     <div className="h-screen flex flex-col">
       {/* Header */}
