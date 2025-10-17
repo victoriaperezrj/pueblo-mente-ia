@@ -16,6 +16,7 @@ import SelectRole from "./pages/SelectRole";
 
 // Lazy-loaded pages
 const DemoStart = lazy(() => import("./pages/DemoStart"));
+const BusinessAIBot = lazy(() => import("./pages/BusinessAIBot"));
 const Onboarding = lazy(() => import("./pages/Onboarding"));
 const Classify = lazy(() => import("./pages/onboarding/Classify"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
@@ -80,6 +81,7 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/select-role" element={<SelectRole />} />
               <Route path="/auth" element={<ProtectedRoute requireAuth={false}><Auth /></ProtectedRoute>} />
+              <Route path="/business-ai-bot" element={<BusinessAIBot />} />
               <Route path="/demo-start" element={<DemoStart />} />
               
               {/* Onboarding routes - classify is public for demo, rest are protected */}

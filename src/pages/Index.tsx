@@ -167,7 +167,7 @@ export default function Homepage() {
             </div>
 
             {/* CTAs - Centered, GROK style buttons */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4 w-full max-w-2xl mx-auto px-4">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4 w-full max-w-3xl mx-auto px-4">
               <Button
                 size="lg"
                 onClick={() => navigate('/demo/intro')}
@@ -175,6 +175,13 @@ export default function Homepage() {
               >
                 Comenzar Gratis
                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+              </Button>
+              <Button
+                size="lg"
+                onClick={() => navigate('/business-ai-bot')}
+                className="w-full sm:w-auto px-8 py-6 text-base sm:text-lg rounded-lg bg-gradient-to-br from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white backdrop-blur-sm transition-all duration-200 hover:-translate-y-1 font-semibold shadow-xl hover:shadow-2xl"
+              >
+                Bot IA Empresarial 🤖
               </Button>
               <Button
                 size="lg"
