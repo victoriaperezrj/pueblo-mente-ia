@@ -93,10 +93,10 @@ const App = () => (
               <Route path="/onboarding/entrepreneur/business-plan" element={<ProtectedRoute><EntrepreneurBusinessPlan /></ProtectedRoute>} />
               <Route path="/onboarding/entrepreneur/financial-simulator" element={<ProtectedRoute><FinancialSimulator /></ProtectedRoute>} />
               
-              {/* Role-specific dashboards - accessible via SelectRole */}
-              <Route path="/dashboard/entrepreneur" element={<EntrepreneurDashboard />} />
-              <Route path="/dashboard/business" element={<BusinessDashboard />} />
-              <Route path="/dashboard/enterprise" element={<PymeDashboard />} />
+              {/* Role-specific dashboards - protected */}
+              <Route path="/entrepreneur/dashboard" element={<ProtectedRoute><EntrepreneurDashboard /></ProtectedRoute>} />
+              <Route path="/business/dashboard" element={<ProtectedRoute><BusinessDashboard /></ProtectedRoute>} />
+              <Route path="/pyme/dashboard" element={<ProtectedRoute><PymeDashboard /></ProtectedRoute>} />
               
               {/* Demo routes */}
               <Route path="/demo/intro" element={<DemoIntro />} />
