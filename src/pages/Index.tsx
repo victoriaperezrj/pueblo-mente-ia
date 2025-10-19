@@ -186,7 +186,7 @@ export default function Homepage() {
               <Button
                 size="lg"
                 variant="outline"
-                onClick={() => navigate('/auth')}
+                onClick={() => navigate('/select-role')}
                 className="w-full sm:w-auto px-8 py-6 text-base sm:text-lg rounded-lg bg-white/15 border-2 border-white hover:bg-white/25 text-white backdrop-blur-sm transition-all duration-200 hover:-translate-y-1 font-semibold"
               >
                 Ver Demo
@@ -437,7 +437,7 @@ export default function Homepage() {
                   <Button
                     size="lg"
                     variant="outline"
-                    onClick={() => navigate('/auth')}
+                    onClick={() => navigate('/select-role')}
                     className="bg-white/15 border-2 border-white hover:bg-white/25 text-white backdrop-blur-sm px-8 py-6 text-lg font-semibold rounded-lg transition-all duration-200 hover:-translate-y-1"
                   >
                     Agendar Demo
