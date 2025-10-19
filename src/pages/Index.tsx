@@ -1,48 +1,57 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Shield, Gift, Lock, Sparkles, Lightbulb, TrendingUp, Building2 } from 'lucide-react';
 
 export default function Index() {
   const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
+  const [typedText, setTypedText] = useState('');
+  const fullText = 'Tu negocio, del plan a la acción';
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
-    };
+    const handleScroll = () => setIsScrolled(window.scrollY > 10);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  return (
-    <div className="min-h-screen bg-white">
-      {/* HEADER - Sticky, minimalista */}
-      <header 
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          isScrolled ? 'bg-white/80 backdrop-blur-md border-b border-gray-100' : 'bg-transparent'
-        }`}
-      >
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          {/* Logo */}
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">
-              PE
-            </div>
-            <span className="font-semibold text-gray-900 hidden sm:inline">
-              Proyecto Emprendedurismo
-            </span>
-          </div>
+  // Typewriter effect
+  useEffect(() => {
+    let currentIndex = 0;
+    const interval = setInterval(() => {
+      if (currentIndex <= fullText.length) {
+        setTypedText(fullText.slice(0, currentIndex));
+        currentIndex++;
+      } else {
+        clearInterval(interval);
+      }
+    }, 50);
+    return () => clearInterval(interval);
+  }, []);
 
-          {/* Right Actions */}
+  return (
+    <div className="min-h-screen bg-[#FFF8E1]">
+      {/* Header Sticky */}
+      <header className={`
+        fixed top-0 left-0 right-0 z-50 transition-all duration-300
+        ${isScrolled ? 'bg-white/90 backdrop-blur-md border-b border-gray-200' : 'bg-transparent'}
+      `}>
+        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-gradient-to-br from-[hsl(195,100%,50%)] to-[hsl(271,76%,53%)] rounded-xl flex items-center justify-center shadow-lg">
+              <Sparkles className="w-5 h-5 text-white" />
+            </div>
+            <span className="font-bold text-lg text-gray-900">Proyecto Emprendedurismo</span>
+          </div>
           <div className="flex items-center gap-3">
             <button
               onClick={() => navigate('/auth?mode=login')}
-              className="text-gray-600 hover:text-gray-900 font-medium text-sm transition"
+              className="text-gray-700 hover:text-gray-900 font-medium text-sm transition"
             >
-              Iniciar Sesión
+              Login
             </button>
             <button
               onClick={() => navigate('/auth?mode=signup')}
-              className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-medium text-sm transition"
+              className="px-4 py-2 bg-gradient-to-r from-[hsl(150,100%,50%)] to-[hsl(4,100%,70%)] text-white rounded-lg hover:opacity-90 font-semibold text-sm transition shadow-md"
             >
               Crear Cuenta
             </button>
@@ -50,138 +59,177 @@ export default function Index() {
         </div>
       </header>
 
-      {/* HERO SECTION */}
-      <section className="min-h-screen flex flex-col items-center justify-center px-6 pt-20">
-        {/* Gradient background subtle */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-full blur-3xl opacity-20 -z-10"></div>
-          <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-purple-100 to-indigo-100 rounded-full blur-3xl opacity-20 -z-10"></div>
+      {/* Hero Section con typewriter + partículas sutiles */}
+      <section className="min-h-screen flex flex-col items-center justify-center px-6 pt-20 relative overflow-hidden">
+        {/* Gradient background neón sutil */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-[hsl(195,100%,50%)]/10 to-[hsl(150,100%,50%)]/10 rounded-full blur-3xl animate-float" />
+          <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-[hsl(271,76%,53%)]/10 to-[hsl(4,100%,70%)]/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }} />
         </div>
 
-        <div className="max-w-2xl text-center space-y-6 animate-fade-in">
+        <div className="max-w-3xl text-center space-y-8 relative z-10 animate-fade-in">
           {/* Micro-label */}
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-indigo-50 border border-indigo-200 rounded-full">
-            <span className="text-xs font-semibold text-indigo-700 uppercase tracking-wide">
-              ✨ IA para emprendedores
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-[hsl(195,100%,93%)] border-2 border-[hsl(195,100%,50%)] rounded-full">
+            <Sparkles className="w-4 h-4 text-[hsl(195,100%,50%)]" />
+            <span className="text-xs font-bold text-[hsl(195,100%,30%)] uppercase tracking-wide">
+              ✨ Ecosistema IA para emprendedores
             </span>
           </div>
 
-          {/* Main Headline */}
-          <h1 className="text-5xl sm:text-6xl font-bold text-gray-900 leading-tight">
-            De la idea a los números en días, no meses
+          {/* Typewriter Headline */}
+          <h1 className="text-5xl sm:text-6xl font-bold text-gray-900 leading-tight min-h-[4rem]">
+            {typedText}
+            <span className="animate-pulse">|</span>
           </h1>
 
           {/* Subtitle */}
-          <p className="text-lg sm:text-xl text-gray-600 leading-relaxed">
-            Validá tu negocio, organizá ventas, escalá con IA. Todo en un solo lugar.
+          <p className="text-xl sm:text-2xl text-gray-700 leading-relaxed">
+            Ecosistema inteligente que evoluciona con vos: validación, organización y escalamiento con IA local
           </p>
 
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+          {/* CTA Buttons con ripple */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6">
             <button
               onClick={() => navigate('/select-role')}
-              className="px-8 py-4 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-semibold text-lg transition transform hover:scale-105 hover:shadow-lg"
+              className="px-8 py-4 bg-gradient-to-r from-[hsl(150,100%,50%)] to-[hsl(195,100%,50%)] text-white rounded-xl hover:opacity-90 font-bold text-lg transition transform hover:scale-105 shadow-lg ripple-effect"
             >
-              Comenzar →
+              Explorar Demo →
             </button>
             <button
-              onClick={() => navigate('/select-role')}
-              className="px-8 py-4 border-2 border-indigo-600 text-indigo-600 rounded-lg hover:bg-indigo-50 font-semibold text-lg transition"
+              onClick={() => navigate('/auth?mode=signup')}
+              className="px-8 py-4 bg-gradient-to-r from-[hsl(4,100%,70%)] to-[hsl(271,76%,53%)] text-white rounded-xl hover:opacity-90 font-bold text-lg transition transform hover:scale-105 shadow-lg"
             >
-              Ver Demo
+              Crear Cuenta
             </button>
           </div>
 
           {/* Benefit line */}
-          <p className="text-sm text-gray-500 pt-4">
-            Sin tarjeta • Acceso inmediato • Datos seguros
+          <p className="text-sm text-gray-600 pt-4 flex items-center justify-center gap-6 flex-wrap">
+            <span className="flex items-center gap-2">
+              <Shield className="w-4 h-4 text-[hsl(195,100%,50%)]" />
+              Sin tarjeta
+            </span>
+            <span className="flex items-center gap-2">
+              <Gift className="w-4 h-4 text-[hsl(150,100%,50%)]" />
+              Gratis empezar
+            </span>
+            <span className="flex items-center gap-2">
+              <Lock className="w-4 h-4 text-[hsl(271,76%,53%)]" />
+              Datos seguros
+            </span>
           </p>
         </div>
       </section>
 
-      {/* SECTION 2: Las 3 Etapas (Info, NO clickeable) */}
-      <section className="py-24 px-6 bg-gray-50">
+      {/* Three Modes Section */}
+      <section className="py-24 px-6 bg-white">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16 space-y-4">
-            <h2 className="text-4xl font-bold text-gray-900">
-              ¿En qué etapa estás?
-            </h2>
-            <p className="text-lg text-gray-600">
-              Herramientas diseñadas para tu momento
-            </p>
+            <h2 className="text-4xl font-bold text-gray-900">¿En qué etapa estás?</h2>
+            <p className="text-xl text-gray-600">Herramientas diseñadas para tu momento</p>
           </div>
 
-          {/* 3 Info Cards (NOT clickeable, just display) */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Card 1 */}
-            <div className="group bg-white rounded-xl p-8 hover:shadow-lg transition-shadow duration-300">
-              <div className="w-12 h-12 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-lg flex items-center justify-center text-white text-xl mb-4">
-                🚀
+            {/* Card 1: Emprendedor */}
+            <button
+              onClick={() => navigate('/modo-emprendedor')}
+              className="group bg-gradient-to-br from-[hsl(195,100%,93%)] to-white border-2 border-[hsl(195,100%,50%)] rounded-2xl p-8 hover:shadow-2xl hover-3d transition-all duration-300 text-left"
+            >
+              <div className="w-14 h-14 bg-gradient-to-br from-[hsl(195,100%,50%)] to-[hsl(150,100%,50%)] rounded-xl flex items-center justify-center text-white text-2xl mb-4 shadow-lg">
+                <Lightbulb className="w-7 h-7" />
               </div>
+              <span className="inline-block px-3 py-1 bg-[hsl(195,100%,50%)] text-white text-xs font-bold rounded mb-3 uppercase">
+                Desde cero
+              </span>
               <h3 className="text-2xl font-bold text-gray-900 mb-2">Emprendedor</h3>
               <p className="text-gray-600 text-sm mb-4">
-                ¿Tenés una idea? Validala con IA en minutos.
+                ¿Tenés una idea? Validala con IA en minutos
               </p>
-              <ul className="space-y-2 text-sm text-gray-500">
-                <li>✓ Validación rápida</li>
-                <li>✓ Números reales</li>
-                <li>✓ Plan de acción</li>
+              <ul className="space-y-2 text-sm text-gray-700">
+                <li className="flex items-center gap-2">
+                  <span className="text-[hsl(150,100%,50%)]">✓</span> Validación rápida
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="text-[hsl(150,100%,50%)]">✓</span> Números reales
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="text-[hsl(150,100%,50%)]">✓</span> Plan de acción
+                </li>
               </ul>
-            </div>
+              <div className="mt-6 text-[hsl(195,100%,50%)] font-bold flex items-center gap-2 group-hover:gap-3 transition-all">
+                Comenzar <span>→</span>
+              </div>
+            </button>
 
-            {/* Card 2 - DESTACADA */}
-            <div className="group bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl p-8 text-white shadow-xl hover:shadow-2xl transition-all duration-300 md:scale-105 relative">
-              <div className="absolute top-4 right-4 px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-xs font-bold">
+            {/* Card 2: Negocio - DESTACADA */}
+            <button
+              onClick={() => navigate('/modo-negocio')}
+              className="group bg-gradient-to-br from-[hsl(271,76%,53%)] to-[hsl(4,100%,70%)] rounded-2xl p-8 text-white shadow-2xl hover:shadow-[0_0_30px_rgba(138,43,226,0.5)] hover-3d transition-all duration-300 md:scale-105 relative text-left"
+            >
+              <div className="absolute top-4 right-4 bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold">
                 ⭐ Popular
               </div>
-              <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center text-white text-xl mb-4">
-                📊
+              <div className="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center text-white text-2xl mb-4">
+                <TrendingUp className="w-7 h-7" />
               </div>
+              <span className="inline-block px-3 py-1 bg-white/20 text-white text-xs font-bold rounded mb-3 uppercase">
+                1-3 años
+              </span>
               <h3 className="text-2xl font-bold mb-2">Negocio</h3>
-              <p className="text-white/80 text-sm mb-4">
-                Vendés pero todo a mano. Necesitás orden y crecimiento.
+              <p className="text-white/90 text-sm mb-4">
+                Vendés pero todo a mano. Necesitás orden
               </p>
-              <ul className="space-y-2 text-sm text-white/70">
-                <li>✓ Dashboard real-time</li>
-                <li>✓ Gestión de clientes</li>
-                <li>✓ Control de gastos</li>
+              <ul className="space-y-2 text-sm text-white/80">
+                <li className="flex items-center gap-2">
+                  <span>✓</span> Dashboard real-time
+                </li>
+                <li className="flex items-center gap-2">
+                  <span>✓</span> CRM simple
+                </li>
+                <li className="flex items-center gap-2">
+                  <span>✓</span> Control gastos
+                </li>
               </ul>
-            </div>
-
-            {/* Card 3 */}
-            <div className="group bg-white rounded-xl p-8 hover:shadow-lg transition-shadow duration-300">
-              <div className="w-12 h-12 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-lg flex items-center justify-center text-white text-xl mb-4">
-                🏢
+              <div className="mt-6 text-white font-bold flex items-center gap-2 group-hover:gap-3 transition-all">
+                Comenzar <span>→</span>
               </div>
+            </button>
+
+            {/* Card 3: Empresa */}
+            <button
+              onClick={() => navigate('/modo-empresa')}
+              className="group bg-gradient-to-br from-[hsl(150,100%,93%)] to-white border-2 border-[hsl(150,100%,50%)] rounded-2xl p-8 hover:shadow-2xl hover-3d transition-all duration-300 text-left"
+            >
+              <div className="w-14 h-14 bg-gradient-to-br from-[hsl(150,100%,50%)] to-[hsl(4,100%,70%)] rounded-xl flex items-center justify-center text-white text-2xl mb-4 shadow-lg">
+                <Building2 className="w-7 h-7" />
+              </div>
+              <span className="inline-block px-3 py-1 bg-[hsl(150,100%,50%)] text-white text-xs font-bold rounded mb-3 uppercase">
+                +3 años
+              </span>
               <h3 className="text-2xl font-bold text-gray-900 mb-2">Empresa</h3>
               <p className="text-gray-600 text-sm mb-4">
-                Creció tu empresa. Automatizá y escalá.
+                Creció. Automatizá y escalá
               </p>
-              <ul className="space-y-2 text-sm text-gray-500">
-                <li>✓ Multi-sucursal</li>
-                <li>✓ Gestión de equipo</li>
-                <li>✓ Automatizaciones IA</li>
+              <ul className="space-y-2 text-sm text-gray-700">
+                <li className="flex items-center gap-2">
+                  <span className="text-[hsl(4,100%,70%)]">✓</span> Multi-sucursal
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="text-[hsl(4,100%,70%)]">✓</span> Gestión equipo
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="text-[hsl(4,100%,70%)]">✓</span> Automatización IA
+                </li>
               </ul>
-            </div>
+              <div className="mt-6 text-[hsl(150,100%,50%)] font-bold flex items-center gap-2 group-hover:gap-3 transition-all">
+                Comenzar <span>→</span>
+              </div>
+            </button>
           </div>
         </div>
       </section>
 
-      {/* CTA Final Section - Simple */}
-      <section className="py-20 px-6 bg-indigo-600 text-white text-center">
-        <div className="max-w-2xl mx-auto">
-          <h2 className="text-4xl font-bold mb-6">Probá gratis</h2>
-          <p className="text-lg mb-8">Sin sorpresas. Sin tarjeta. Sin restricciones.</p>
-          <button
-            onClick={() => navigate('/select-role')}
-            className="px-8 py-4 bg-white text-indigo-600 rounded-lg hover:bg-gray-100 font-semibold text-lg transition"
-          >
-            Empezar Ahora
-          </button>
-        </div>
-      </section>
-
-      {/* FOOTER */}
+      {/* Footer */}
       <footer className="bg-gray-900 text-gray-400 py-12 px-6">
         <div className="max-w-6xl mx-auto text-center text-sm">
           <p>© 2025 Proyecto Emprendedurismo. Todos los derechos reservados.</p>
@@ -194,23 +242,6 @@ export default function Index() {
           </div>
         </div>
       </footer>
-
-      {/* CSS for animations */}
-      <style>{`
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        .animate-fade-in {
-          animation: fadeIn 0.8s ease-out;
-        }
-      `}</style>
     </div>
   );
 }

@@ -8,100 +8,115 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Proyecto Emprendedurismo Design System - GROK Style Professional */
+    /* Proyecto Emprendedurismo - Paleta Neón Alegre Futurista */
     
-    /* Base Colors - Professional gradient background */
-    --background: 216 50% 98%; /* #F8FAFC */
-    --background-gradient: linear-gradient(180deg, #F8FAFC 0%, #EFF6FF 100%);
-    --foreground: 209 29% 14%; /* #0F172A - High contrast for readability */
-
-    /* Card System - Rounded 12px GROK style */
+    /* Base - Blanco/Crema */
+    --background: 48 100% 99%; /* #FFFFFF → #FFF8E1 crema cálido */
+    --foreground: 0 0% 10%; /* Texto oscuro alto contraste */
+    
+    /* Card System */
     --card: 0 0% 100%;
-    --card-foreground: 209 29% 14%;
-
-    /* Popover System */
+    --card-foreground: 0 0% 10%;
+    
+    /* Popover */
     --popover: 0 0% 100%;
-    --popover-foreground: 209 29% 14%;
-
-    /* Primary - Azul Profesional #2563EB (Confianza) */
-    --primary: 217 91% 60%;
+    --popover-foreground: 0 0% 10%;
+    
+    /* Colores Neón por Modo */
+    
+    /* MODO 1: EMPRENDEDOR - Azul Neón #00BFFF */
+    --neon-blue: 195 100% 50%; /* #00BFFF */
+    --neon-blue-light: 195 100% 93%; /* #E0F6FF tint 50 */
+    --neon-blue-200: 195 100% 80%; /* #B3E5FC tint 200 */
+    
+    /* MODO 2: NEGOCIO - Púrpura Neón #8A2BE2 */
+    --neon-purple: 271 76% 53%; /* #8A2BE2 */
+    --neon-purple-light: 271 76% 95%; /* #F3E5F5 tint 50 */
+    --neon-purple-200: 271 76% 85%; /* #E1BEE7 tint 200 */
+    
+    /* MODO 3: EMPRESA - Verde Neón #00FF7F */
+    --neon-green: 150 100% 50%; /* #00FF7F */
+    --neon-green-light: 150 100% 95%; /* #E8F5E8 tint 50 */
+    --neon-green-200: 150 100% 80%; /* #C8E6C9 tint 200 */
+    
+    /* Acentos Globales */
+    --neon-mint: 150 100% 50%; /* #00FF88 menta hover */
+    --neon-coral: 4 100% 70%; /* #FF6B6B coral hover */
+    
+    /* Primary Dynamic (cambia según modo activo - default azul) */
+    --primary: 195 100% 50%;
     --primary-foreground: 0 0% 100%;
-    --primary-hover: 217 91% 50%;
-    --primary-light: 217 91% 97%;
-
-    /* Secondary - Verde Natural #10B981 (Crecimiento) */
-    --secondary: 160 84% 39%;
+    --primary-hover: 195 100% 45%;
+    --primary-light: 195 100% 93%;
+    
+    /* Secondary */
+    --secondary: 150 100% 50%;
     --secondary-foreground: 0 0% 100%;
-    --secondary-light: 160 84% 97%;
-
-    /* Success - Verde Natural (igual que secondary) */
-    --success: 160 84% 39%;
+    --secondary-light: 150 100% 93%;
+    
+    /* Success */
+    --success: 150 100% 50%;
     --success-foreground: 0 0% 100%;
-    --success-light: 160 84% 97%;
-
-    /* Warning - Amber */
+    --success-light: 150 100% 93%;
+    
+    /* Warning */
     --warning: 43 96% 56%;
-    --warning-foreground: 240 9% 11%;
-    --warning-light: 43 96% 96%;
-
-    /* Info - Same as Primary */
-    --info: 217 91% 60%;
+    --warning-foreground: 0 0% 10%;
+    --warning-light: 43 96% 93%;
+    
+    /* Info */
+    --info: 195 100% 50%;
     --info-foreground: 0 0% 100%;
-    --info-light: 217 91% 97%;
-
-    /* Muted System */
-    --muted: 240 5% 96%;
-    --muted-foreground: 240 4% 46%;
-
-    /* Accent - Púrpura Suave #8B5CF6 (Innovación) */
-    --accent: 258 90% 66%;
+    --info-light: 195 100% 93%;
+    
+    /* Muted */
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 40%;
+    
+    /* Accent - Coral */
+    --accent: 4 100% 70%;
     --accent-foreground: 0 0% 100%;
-    --accent-light: 258 90% 97%;
-
-    /* Destructive System - Red */
+    --accent-light: 4 100% 95%;
+    
+    /* Destructive */
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
-
+    
     /* Border & Input */
-    --border: 220 11% 90%;
-    --input: 220 11% 90%;
-    --ring: 217 91% 60%;
-
-    /* Radius - 12px standard GROK style */
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
+    --ring: 195 100% 50%;
+    
+    /* Radius - 12px GROK style */
     --radius: 0.75rem;
-
-    /* Sidebar System */
+    
+    /* Sidebar */
     --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 209 29% 14%;
-    --sidebar-primary: 217 91% 60%;
+    --sidebar-foreground: 0 0% 10%;
+    --sidebar-primary: 195 100% 50%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 216 50% 96%;
-    --sidebar-accent-foreground: 209 29% 14%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217 91% 60%;
-
-    /* Gradients - GROK Style Professional */
-    --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%), hsl(217 91% 70%));
-    --gradient-secondary: linear-gradient(135deg, hsl(160 84% 39%), hsl(160 84% 55%));
-    --gradient-accent: linear-gradient(135deg, hsl(258 90% 66%), hsl(258 90% 76%));
-    --gradient-hero: linear-gradient(45deg, hsl(217 91% 60%) 0%, hsl(258 90% 66%) 100%);
-    --gradient-cta: linear-gradient(135deg, hsl(258 90% 66%) 0%, hsl(217 91% 60%) 100%);
-    --gradient-emprendedor: linear-gradient(135deg, hsl(217 91% 60%) 0%, hsl(217 91% 70%) 100%);
-    --gradient-negocio: linear-gradient(135deg, hsl(217 91% 60%) 0%, hsl(258 90% 66%) 50%);
-    --gradient-pyme: linear-gradient(135deg, hsl(160 84% 39%) 0%, hsl(160 84% 55%) 100%);
-    --gradient-card: linear-gradient(145deg, hsl(217 91% 60% / 0.03) 0%, hsl(258 90% 66% / 0.03) 100%);
-
-    /* Shadows - GROK Style */
-    --shadow-base: 0 1px 3px rgba(0, 0, 0, 0.08);
-    --shadow-hover: 0 8px 16px rgba(37, 99, 235, 0.12);
-    --shadow-glow: 0 0 40px rgba(37, 99, 235, 0.2);
-
-    /* Chart Colors - Professional palette */
-    --chart-1: 217 91% 60%;
-    --chart-2: 160 84% 39%;
-    --chart-3: 258 90% 66%;
-    --chart-4: 212 73% 59%;
-    --chart-5: 140 52% 55%;
+    --sidebar-accent: 0 0% 96%;
+    --sidebar-accent-foreground: 0 0% 10%;
+    --sidebar-border: 0 0% 90%;
+    --sidebar-ring: 195 100% 50%;
+    
+    /* Gradientes Neón 135deg */
+    --gradient-neon-blue: linear-gradient(135deg, hsl(195 100% 50%), hsl(150 100% 50%));
+    --gradient-neon-purple: linear-gradient(135deg, hsl(271 76% 53%), hsl(4 100% 70%));
+    --gradient-neon-green: linear-gradient(135deg, hsl(150 100% 50%), hsl(4 100% 70%));
+    
+    /* Neon Glow Shadows */
+    --shadow-neon-mint: 0 0 10px rgba(0, 255, 136, 0.5);
+    --shadow-neon-blue: 0 0 10px rgba(0, 191, 255, 0.5);
+    --shadow-neon-purple: 0 0 10px rgba(138, 43, 226, 0.5);
+    --shadow-neon-coral: 0 0 10px rgba(255, 107, 107, 0.5);
+    
+    /* Chart Colors */
+    --chart-1: 195 100% 50%;
+    --chart-2: 150 100% 50%;
+    --chart-3: 271 76% 53%;
+    --chart-4: 4 100% 70%;
+    --chart-5: 48 100% 60%;
   }
 
   .dark {
@@ -187,236 +202,185 @@ All colors MUST be HSL.
     @apply bg-background text-foreground;
   }
 
-  /* Gradient utilities GROK Style */
-  .gradient-primary {
-    background: var(--gradient-primary);
+  /* Gradient utilities Neón Futurista */
+  .gradient-neon-blue {
+    background: var(--gradient-neon-blue);
   }
-
-  .gradient-secondary {
-    background: var(--gradient-secondary);
+  
+  .gradient-neon-purple {
+    background: var(--gradient-neon-purple);
   }
-
-  .gradient-accent {
-    background: var(--gradient-accent);
+  
+  .gradient-neon-green {
+    background: var(--gradient-neon-green);
   }
-
-  .gradient-hero {
-    background: var(--gradient-hero);
+  
+  /* Animaciones Wave (ondas en hero/chat load) */
+  @keyframes wave {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+  }
+  
+  .animate-wave {
+    animation: wave 2s ease-in-out infinite;
+  }
+  
+  /* Hover 3D Effect con rotateY */
+  .hover-3d {
+    transition: all 0.3s ease;
+  }
+  
+  .hover-3d:hover {
+    transform: translateY(-5px) rotateX(5deg);
+  }
+  
+  /* Pulse Neón */
+  @keyframes neon-pulse {
+    0%, 100% {
+      box-shadow: 0 0 5px hsl(var(--neon-mint) / 0.5), 0 0 10px hsl(var(--neon-mint) / 0.3);
+    }
+    50% {
+      box-shadow: 0 0 10px hsl(var(--neon-mint) / 0.8), 0 0 20px hsl(var(--neon-mint) / 0.5);
+    }
+  }
+  
+  .neon-pulse {
+    animation: neon-pulse 1s ease-in-out infinite;
+  }
+  
+  /* Ripple Wave */
+  @keyframes ripple {
+    0% {
+      transform: scale(0.8);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(2.4);
+      opacity: 0;
+    }
+  }
+  
+  .ripple-effect {
     position: relative;
     overflow: hidden;
   }
-
-  .gradient-hero::before {
+  
+  .ripple-effect::after {
     content: '';
     position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(139, 92, 246, 0.08) 0%, transparent 70%);
-    animation: blobMove1 20s ease-in-out infinite;
-    will-change: transform;
+    width: 100%;
+    height: 100%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    animation: ripple 0.6s ease-out;
   }
-
-  .gradient-hero::after {
-    content: '';
-    position: absolute;
-    bottom: -50%;
-    right: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(37, 99, 235, 0.06) 0%, transparent 70%);
-    animation: blobMove2 25s ease-in-out infinite;
-    will-change: transform;
+  
+  /* Fade & Scale suave 0.3s */
+  .animate-fade-scale {
+    animation: fadeScale 0.3s ease-out;
   }
-
-  .gradient-cta {
-    background: var(--gradient-cta);
-  }
-
-  .gradient-emprendedor {
-    background: var(--gradient-emprendedor);
-  }
-
-  .gradient-negocio {
-    background: var(--gradient-negocio);
-  }
-
-  .gradient-pyme {
-    background: var(--gradient-pyme);
-  }
-
-  .gradient-card {
-    background: var(--gradient-card);
-  }
-
-  /* GROK Style Blob Animations */
-  @keyframes blobMove1 {
-    0%, 100% { 
-      transform: translate(0, 0) rotate(0deg) scale(1); 
-    }
-    33% { 
-      transform: translate(50px, -30px) rotate(120deg) scale(1.1); 
-    }
-    66% { 
-      transform: translate(-30px, 50px) rotate(240deg) scale(0.9); 
-    }
-  }
-
-  @keyframes blobMove2 {
-    0%, 100% { 
-      transform: translate(0, 0) rotate(0deg) scale(1); 
-    }
-    33% { 
-      transform: translate(-50px, 30px) rotate(-120deg) scale(0.9); 
-    }
-    66% { 
-      transform: translate(30px, -50px) rotate(-240deg) scale(1.1); 
-    }
-  }
-
-  /* Glass effect */
-  .glass-effect {
-    @apply backdrop-blur-md bg-background/80 border border-border/50;
-  }
-
-  /* Glow effects */
-  .glow-effect {
-    box-shadow: var(--shadow-glow);
-  }
-
-  .hover-glow {
-    @apply transition-all duration-300 ease-in-out;
-  }
-
-  .hover-glow:hover {
-    box-shadow: var(--shadow-hover);
-    transform: translateY(-2px);
-  }
-
-  /* Lift effect */
-  .hover-lift {
-    @apply transition-all duration-300 ease-in-out hover:scale-105;
-  }
-
-  /* Card 3D effect - GROK Style */
-  .card-3d {
-    @apply transition-all duration-300 ease-in-out;
-    transform-style: preserve-3d;
-  }
-
-  .card-3d:hover {
-    transform: translateY(-4px) scale(1.02);
-    box-shadow: var(--shadow-hover);
-  }
-
-  .animate-bounce-subtle {
-    animation: bounce-subtle 3s ease-in-out infinite;
-  }
-
-  @keyframes bounce-subtle {
-    0%, 100% {
-      transform: translateY(0);
-    }
-    50% {
-      transform: translateY(-10px);
-    }
-  }
-
-  .animate-scale-in {
-    animation: scale-in 0.3s ease-out;
-  }
-
-  @keyframes scale-in {
+  
+  @keyframes fadeScale {
     0% {
-      transform: scale(0.9);
       opacity: 0;
+      transform: scale(0.95);
     }
     100% {
+      opacity: 1;
       transform: scale(1);
-      opacity: 1;
     }
   }
-
-  .animate-glow-pulse {
-    animation: glow-pulse 3s ease-in-out infinite;
+  
+  /* Bounce In (para mensajes user) */
+  .animate-bounce-in {
+    animation: bounceIn 0.3s ease-out;
   }
-
-  @keyframes glow-pulse {
-    0%, 100% {
-      box-shadow: 0 0 20px rgba(37, 99, 235, 0.2), 0 0 40px rgba(37, 99, 235, 0.1);
-    }
-    50% {
-      box-shadow: 0 0 30px rgba(37, 99, 235, 0.3), 0 0 60px rgba(37, 99, 235, 0.15);
-    }
-  }
-
-  .animate-float {
-    animation: float 3s ease-in-out infinite;
-  }
-
-  @keyframes float {
-    0%, 100% {
-      transform: translateY(0px);
-    }
-    50% {
-      transform: translateY(-15px);
-    }
-  }
-
-  /* GROK Style Float Up Animation for Hero */
-  .animate-float-up {
-    animation: floatUp 6s ease-in-out infinite;
-  }
-
-  @keyframes floatUp {
-    0%, 100% { 
-      transform: translateY(0px); 
-    }
-    50% { 
-      transform: translateY(-20px); 
-    }
-  }
-
-  .animate-fade-in {
-    animation: fade-in 0.5s ease-out;
-  }
-
-  @keyframes fade-in {
+  
+  @keyframes bounceIn {
     0% {
       opacity: 0;
-      transform: translateY(10px);
+      transform: scale(0.3);
+    }
+    50% {
+      transform: scale(1.05);
     }
     100% {
       opacity: 1;
-      transform: translateY(0);
+      transform: scale(1);
     }
   }
-
-  .animate-shimmer {
-    animation: shimmer 2s linear infinite;
-    background: linear-gradient(
-      90deg,
-      transparent 0%,
-      hsl(var(--primary) / 0.1) 50%,
-      transparent 100%
-    );
-    background-size: 200% 100%;
+  
+  /* Slide Right (widget expandido) */
+  .animate-slide-right {
+    animation: slideRight 0.3s ease-out;
   }
-
-  @keyframes shimmer {
+  
+  @keyframes slideRight {
     0% {
-      background-position: -200% 0;
+      opacity: 0;
+      transform: translateX(100%);
     }
     100% {
-      background-position: 200% 0;
+      opacity: 1;
+      transform: translateX(0);
     }
   }
-
-  .neon-glow {
+  
+  /* Typewriter Effect */
+  @keyframes typewriter {
+    from { width: 0; }
+    to { width: 100%; }
+  }
+  
+  .typewriter {
+    overflow: hidden;
+    white-space: nowrap;
+    animation: typewriter 3s steps(50) 1s forwards;
+  }
+  
+  /* Neon Glow Text */
+  .neon-glow-text {
     text-shadow: 
-      0 0 10px hsl(var(--primary) / 0.5),
-      0 0 20px hsl(var(--primary) / 0.3),
-      0 0 30px hsl(var(--primary) / 0.2);
+      0 0 10px currentColor,
+      0 0 20px currentColor,
+      0 0 30px currentColor;
+  }
+  
+  /* Tooltip Insight Generativo */
+  .tooltip-insight {
+    position: relative;
+  }
+  
+  .tooltip-insight::after {
+    content: attr(data-insight);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-8px);
+    background: hsl(var(--foreground));
+    color: hsl(var(--background));
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s, transform 0.2s;
+    z-index: 50;
+  }
+  
+  .tooltip-insight:hover::after {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-4px);
+  }
+  
+  /* Focus Trap para accesibilidad */
+  .focus-trap:focus {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
   }
 }

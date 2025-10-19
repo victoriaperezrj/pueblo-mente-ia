@@ -13,6 +13,9 @@ import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 import SelectRole from "./pages/SelectRole";
+import ModoEmprendedor from "./pages/ModoEmprendedor";
+import ModoNegocio from "./pages/ModoNegocio";
+import ModoEmpresa from "./pages/ModoEmpresa";
 
 // Lazy-loaded pages
 const DemoStart = lazy(() => import("./pages/DemoStart"));
@@ -81,6 +84,11 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/select-role" element={<SelectRole />} />
               <Route path="/auth" element={<ProtectedRoute requireAuth={false}><Auth /></ProtectedRoute>} />
+              
+              {/* Nuevas rutas de modos con widget IA */}
+              <Route path="/modo-emprendedor" element={<ModoEmprendedor />} />
+              <Route path="/modo-negocio" element={<ModoNegocio />} />
+              <Route path="/modo-empresa" element={<ModoEmpresa />} />
               <Route path="/business-ai-bot" element={<BusinessAIBot />} />
               <Route path="/demo-start" element={<DemoStart />} />
               
