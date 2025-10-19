@@ -19,9 +19,9 @@ export default function Auth() {
     setError('');
     setLoading(true);
 
-    // Validación básica
+    // Validaciones
     if (!email || !password) {
-      setError('Email y contraseña son requeridos');
+      setError('Email y contraseña requeridos');
       setLoading(false);
       return;
     }
@@ -33,19 +33,15 @@ export default function Auth() {
     }
 
     if (!isLogin && password.length < 8) {
-      setError('La contraseña debe tener mínimo 8 caracteres');
+      setError('Mínimo 8 caracteres');
       setLoading(false);
       return;
     }
 
     try {
-      // Simulación de login/signup
-      // En producción aquí irían las calls a Supabase
+      // Simulación 1s
       setTimeout(() => {
-        // Guardar usuario en sessionStorage (demo)
         sessionStorage.setItem('user', JSON.stringify({ email, role: null }));
-        
-        // Redirigir a SelectRole para que elija etapa
         navigate('/select-role');
         setLoading(false);
       }, 1000);
@@ -56,50 +52,72 @@ export default function Auth() {
   };
 
   return (
-    <div className="min-h-screen flex">
-      {/* Left Side - Gradient */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-blue-600 to-purple-600 flex-col items-center justify-center p-8 text-white">
-        <div className="max-w-md text-center">
-          <h2 className="text-4xl font-bold mb-4">
-            {isLogin ? 'Bienvenido de vuelta' : 'Crea tu cuenta'}
-          </h2>
-          <p className="text-lg text-blue-100 mb-8">
-            {isLogin
-              ? 'Accedé a tu ecosistema completo'
-              : 'Comienza tu viaje emprendedor hoy'}
-          </p>
-          <ul className="text-left space-y-3">
-            <li className="flex items-center gap-2">
-              <span>✓</span>
+    <div className="min-h-screen flex bg-white">
+      {/* LEFT - Gradient (Hidden en mobile) */}
+      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-indigo-600 via-purple-600 to-indigo-700 flex-col items-center justify-center p-8 text-white relative overflow-hidden">
+        {/* Animated background shapes */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
+          <div className="absolute bottom-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
+        </div>
+
+        <div className="max-w-md text-center relative z-10 space-y-8">
+          <div>
+            <h2 className="text-5xl font-bold mb-4">
+              {isLogin ? 'Bienvenido de vuelta' : 'Comienza tu viaje'}
+            </h2>
+            <p className="text-lg text-indigo-100">
+              {isLogin
+                ? 'Accedé a tu ecosistema completo'
+                : 'Empezá a validar, organizar y crecer'}
+            </p>
+          </div>
+
+          <ul className="text-left space-y-3 text-indigo-50">
+            <li className="flex items-center gap-3">
+              <span className="text-xl">✓</span>
               <span>Sin tarjeta de crédito</span>
             </li>
-            <li className="flex items-center gap-2">
-              <span>✓</span>
-              <span>Tus datos seguros con Supabase</span>
+            <li className="flex items-center gap-3">
+              <span className="text-xl">✓</span>
+              <span>Datos seguros y cifrados</span>
             </li>
-            <li className="flex items-center gap-2">
-              <span>✓</span>
+            <li className="flex items-center gap-3">
+              <span className="text-xl">✓</span>
               <span>Acceso inmediato</span>
             </li>
           </ul>
         </div>
       </div>
 
-      {/* Right Side - Form */}
-      <div className="w-full lg:w-1/2 flex flex-col items-center justify-center p-6 bg-white">
-        <div className="w-full max-w-md">
-          {/* Mobile Header */}
-          <div className="lg:hidden mb-8 text-center">
-            <h2 className="text-3xl font-bold text-gray-900">
+      {/* RIGHT - Form */}
+      <div className="w-full lg:w-1/2 flex flex-col items-center justify-center p-6">
+        <div className="w-full max-w-sm space-y-8">
+          {/* Back button */}
+          <button
+            onClick={() => navigate('/')}
+            className="text-gray-600 hover:text-gray-900 text-sm font-medium flex items-center gap-1"
+          >
+            ← Volver
+          </button>
+
+          {/* Title */}
+          <div className="space-y-2">
+            <h1 className="text-4xl font-bold text-gray-900">
               {isLogin ? 'Iniciar Sesión' : 'Crear Cuenta'}
-            </h2>
+            </h1>
+            <p className="text-gray-600">
+              {isLogin
+                ? 'Accedé a tu cuenta'
+                : 'Únete a miles de emprendedores'}
+            </p>
           </div>
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Email Input */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+            {/* Email */}
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-700">
                 Correo Electrónico
               </label>
               <input
@@ -107,13 +125,13 @@ export default function Auth() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="tu@email.com"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition bg-gray-50"
               />
             </div>
 
-            {/* Password Input */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+            {/* Password */}
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-700">
                 Contraseña
               </label>
               <div className="relative">
@@ -122,22 +140,22 @@ export default function Auth() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder={isLogin ? '••••••••' : 'Mínimo 8 caracteres'}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition bg-gray-50"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-3 text-gray-600 hover:text-gray-900"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
                 >
-                  {showPassword ? '👁️' : '👁️‍🗨️'}
+                  {showPassword ? '👁️‍🗨️' : '👁️'}
                 </button>
               </div>
             </div>
 
-            {/* Confirm Password (Signup only) */}
+            {/* Confirm Password (Signup) */}
             {!isLogin && (
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-700">
                   Confirmar Contraseña
                 </label>
                 <input
@@ -145,23 +163,23 @@ export default function Auth() {
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="Confirmar contraseña"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition bg-gray-50"
                 />
               </div>
             )}
 
-            {/* Error Message */}
+            {/* Error */}
             {error && (
               <div className="p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
                 {error}
               </div>
             )}
 
-            {/* Submit Button */}
+            {/* Submit */}
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
+              className="w-full py-3 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition transform hover:scale-105"
             >
               {loading
                 ? 'Cargando...'
@@ -180,61 +198,57 @@ export default function Auth() {
               </div>
             </div>
 
-            {/* Google Button */}
+            {/* Google */}
             <button
               type="button"
-              className="w-full py-3 border-2 border-gray-300 text-gray-900 font-semibold rounded-lg hover:border-gray-400 hover:bg-gray-50 transition flex items-center justify-center gap-2"
+              onClick={() => alert('Google OAuth - Próximamente')}
+              className="w-full py-3 border-2 border-gray-300 text-gray-900 font-semibold rounded-lg hover:bg-gray-50 transition flex items-center justify-center gap-2"
             >
               <span>🔵</span>
               Continuar con Google
             </button>
-
-            {/* Toggle Mode */}
-            <div className="text-center text-sm text-gray-600 mt-6">
-              {isLogin ? (
-                <>
-                  ¿No tienes cuenta?{' '}
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsLogin(false);
-                      setError('');
-                    }}
-                    className="text-blue-600 font-semibold hover:underline"
-                  >
-                    Crear una
-                  </button>
-                </>
-              ) : (
-                <>
-                  ¿Ya tienes cuenta?{' '}
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsLogin(true);
-                      setError('');
-                    }}
-                    className="text-blue-600 font-semibold hover:underline"
-                  >
-                    Iniciar sesión
-                  </button>
-                </>
-              )}
-            </div>
           </form>
 
+          {/* Toggle */}
+          <div className="text-center text-sm text-gray-600">
+            {isLogin ? (
+              <>
+                ¿No tienes cuenta?{' '}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsLogin(false);
+                    setError('');
+                    setPassword('');
+                    setConfirmPassword('');
+                  }}
+                  className="text-indigo-600 font-semibold hover:underline"
+                >
+                  Crear una
+                </button>
+              </>
+            ) : (
+              <>
+                ¿Ya tienes cuenta?{' '}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsLogin(true);
+                    setError('');
+                    setPassword('');
+                    setConfirmPassword('');
+                  }}
+                  className="text-indigo-600 font-semibold hover:underline"
+                >
+                  Iniciar sesión
+                </button>
+              </>
+            )}
+          </div>
+
           {/* Footer */}
-          <div className="mt-8 pt-6 border-t border-gray-200 text-center text-xs text-gray-500">
-            <p>Al registrarte, aceptas nuestros</p>
-            <div className="flex justify-center gap-2 mt-1">
-              <a href="#" className="hover:text-gray-700">
-                Términos
-              </a>
-              <span>•</span>
-              <a href="#" className="hover:text-gray-700">
-                Privacidad
-              </a>
-            </div>
+          <div className="text-center text-xs text-gray-500 pt-4 border-t border-gray-200">
+            <p>Al continuar, aceptas nuestros Términos y Privacidad</p>
           </div>
         </div>
       </div>
