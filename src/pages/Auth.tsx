@@ -1,293 +1,256 @@
-import { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Building2, Mail, Lock, ArrowLeft, Sparkles, Eye, EyeOff, ArrowRight } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
-import { useCustomToast } from '@/hooks/use-custom-toast';
-import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
-import { useUserRole } from '@/hooks/useUserRole';
 
 export default function Auth() {
-  const [searchParams] = useSearchParams();
-  const initialMode = searchParams.get('mode') || 'login';
-  const [mode, setMode] = useState<'login' | 'signup'>(initialMode as 'login' | 'signup');
-  const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
-  
   const navigate = useNavigate();
-  const { showToast, ToastComponent } = useCustomToast();
-  const { role, loading: roleLoading } = useUserRole();
+  const [searchParams] = useSearchParams();
+  const mode = searchParams.get('mode') || 'login';
   
-  const [formData, setFormData] = useState({
-    email: '',
-    password: ''
-  });
-  
+  const [isLogin, setIsLogin] = useState(mode === 'login');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  
-  // Redirect if already authenticated - only redirect if they have a role
-  useEffect(() => {
-    if (!roleLoading && role) {
-      // User has a role assigned - redirect to their dashboard
-      switch (role) {
-        case 'entrepreneur':
-          navigate('/entrepreneur/dashboard');
-          break;
-        case 'business':
-        case 'pyme_enterprise':
-          navigate('/dashboard');
-          break;
-        case 'admin':
-          navigate('/dashboard');
-          break;
-        default:
-          // Should not happen with valid roles
-          navigate('/onboarding/classify');
-      }
-    }
-    // Note: if roleLoading is false and role is null, user is authenticated but has no role
-    // This is fine - they'll see the login page and after login will be sent to classify
-  }, [role, roleLoading, navigate]);
-  
+  const [showPassword, setShowPassword] = useState(false);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
     setLoading(true);
-    
+
+    // Validaciones
+    if (!email || !password) {
+      setError('Email y contraseña requeridos');
+      setLoading(false);
+      return;
+    }
+
+    if (!isLogin && password !== confirmPassword) {
+      setError('Las contraseñas no coinciden');
+      setLoading(false);
+      return;
+    }
+
+    if (!isLogin && password.length < 8) {
+      setError('Mínimo 8 caracteres');
+      setLoading(false);
+      return;
+    }
+
     try {
-      if (mode === 'login') {
-        const { data, error } = await supabase.auth.signInWithPassword({
-          email: formData.email,
-          password: formData.password
-        });
-        
-        if (error) throw error;
-        
-        showToast('Sesión iniciada correctamente', 'success');
-        
-        // Get user role to redirect appropriately - ONLY check user_roles, not profiles
-        const { data: roleData, error: roleError } = await supabase
-          .from('user_roles')
-          .select('role')
-          .eq('user_id', data.user.id)
-          .maybeSingle();
-        
-        // If user has a role assigned, redirect to their dashboard
-        if (roleData && roleData.role) {
-          switch (roleData.role) {
-            case 'entrepreneur':
-              navigate('/entrepreneur/dashboard');
-              break;
-            case 'business':
-            case 'pyme_enterprise':
-              navigate('/dashboard');
-              break;
-            case 'admin':
-              navigate('/dashboard');
-              break;
-            default:
-              // Should not happen, but redirect to classify if unknown role
-              navigate('/onboarding/classify');
-          }
-        } else {
-          // No role found - this is a new user or user who never completed onboarding
-          // Redirect to classify to choose their profile
-          navigate('/onboarding/classify');
-        }
-      } else {
-        const { data, error } = await supabase.auth.signUp({
-          email: formData.email,
-          password: formData.password,
-          options: {
-            emailRedirectTo: `${window.location.origin}/onboarding/classify`
-          }
-        });
-        
-        if (error) throw error;
-        
-        if (data.user) {
-          showToast('Cuenta creada exitosamente', 'success');
-          // Redirigir a selección de perfil
-          navigate('/onboarding/classify');
-        }
-      }
-    } catch (error: any) {
-      showToast(error.message || 'Ocurrió un error', 'error');
-    } finally {
+      // Simulación 1s
+      setTimeout(() => {
+        sessionStorage.setItem('user', JSON.stringify({ email, role: null }));
+        navigate('/select-role');
+        setLoading(false);
+      }, 1000);
+    } catch (err) {
+      setError('Error en autenticación');
       setLoading(false);
     }
   };
-  
+
   return (
-    <div className="min-h-screen bg-bg-secondary flex items-center justify-center p-4">
-      {ToastComponent}
-      
-      {/* Background Grid */}
-      <div className="fixed inset-0 bg-[linear-gradient(to_right,#e2e8f0_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f0_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-30" />
-      
-      <div className="relative z-10 w-full max-w-md">
-        {/* Back button */}
-        <button
-          onClick={() => navigate('/')}
-          className="flex items-center gap-2 text-text-tertiary hover:text-text-primary mb-8 transition"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          <span className="text-sm">Volver al inicio</span>
-        </button>
-        
-        {/* Card */}
-        <div className="bg-white border-2 border-border-light rounded-2xl p-8 shadow-hard">
-          {/* Header */}
-          <div className="flex items-center gap-3 mb-8">
-            <div className="w-12 h-12 bg-gradient-to-br from-entrepreneur-500 to-business-500 rounded-xl flex items-center justify-center shadow-soft">
-              <Building2 className="w-6 h-6 text-white" />
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold text-text-primary">
-                {mode === 'login' ? 'Bienvenido' : 'Crear Cuenta'}
-              </h1>
-              <p className="text-sm text-text-tertiary">
-                Proyecto Emprendedurismo
-              </p>
-            </div>
+    <div className="min-h-screen flex bg-white">
+      {/* LEFT - Gradient (Hidden en mobile) */}
+      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-indigo-600 via-purple-600 to-indigo-700 flex-col items-center justify-center p-8 text-white relative overflow-hidden">
+        {/* Animated background shapes */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
+          <div className="absolute bottom-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
+        </div>
+
+        <div className="max-w-md text-center relative z-10 space-y-8">
+          <div>
+            <h2 className="text-5xl font-bold mb-4">
+              {isLogin ? 'Bienvenido de vuelta' : 'Comienza tu viaje'}
+            </h2>
+            <p className="text-lg text-indigo-100">
+              {isLogin
+                ? 'Accedé a tu ecosistema completo'
+                : 'Empezá a validar, organizar y crecer'}
+            </p>
           </div>
-          
-          {/* Demo Button - DESTACADO */}
+
+          <ul className="text-left space-y-3 text-indigo-50">
+            <li className="flex items-center gap-3">
+              <span className="text-xl">✓</span>
+              <span>Sin tarjeta de crédito</span>
+            </li>
+            <li className="flex items-center gap-3">
+              <span className="text-xl">✓</span>
+              <span>Datos seguros y cifrados</span>
+            </li>
+            <li className="flex items-center gap-3">
+              <span className="text-xl">✓</span>
+              <span>Acceso inmediato</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      {/* RIGHT - Form */}
+      <div className="w-full lg:w-1/2 flex flex-col items-center justify-center p-6">
+        <div className="w-full max-w-sm space-y-8">
+          {/* Back button */}
           <button
-            onClick={() => navigate('/onboarding/classify?mode=demo')}
-            className="w-full mb-6 px-6 py-4 bg-gradient-to-r from-entrepreneur-500 to-business-500 text-white rounded-xl font-bold hover:shadow-hard transition-all duration-300 flex items-center justify-center gap-2 group"
+            onClick={() => navigate('/')}
+            className="text-gray-600 hover:text-gray-900 text-sm font-medium flex items-center gap-1"
           >
-            <Sparkles className="w-5 h-5 group-hover:rotate-12 transition" />
-            PROBAR MODO DEMO GRATIS
-            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition" />
+            ← Volver
           </button>
-          
-          {/* Divider */}
-          <div className="relative my-6">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-border-light" />
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-white text-text-tertiary">
-                O {mode === 'login' ? 'inicia sesión' : 'regístrate'} con email
-              </span>
-            </div>
+
+          {/* Title */}
+          <div className="space-y-2">
+            <h1 className="text-4xl font-bold text-gray-900">
+              {isLogin ? 'Iniciar Sesión' : 'Crear Cuenta'}
+            </h1>
+            <p className="text-gray-600">
+              {isLogin
+                ? 'Accedé a tu cuenta'
+                : 'Únete a miles de emprendedores'}
+            </p>
           </div>
-          
+
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-text-secondary mb-2">
+            {/* Email */}
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-700">
                 Correo Electrónico
               </label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-3.5 w-5 h-5 text-text-tertiary" />
-                <input
-                  type="email"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  placeholder="tu@email.com"
-                  className="w-full pl-10 pr-4 py-3 bg-bg-secondary border border-border-DEFAULT rounded-lg text-text-primary placeholder-text-tertiary focus:border-entrepreneur-500 focus:outline-none focus:ring-2 focus:ring-entrepreneur-500/20 transition"
-                  required
-                />
-              </div>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="tu@email.com"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition bg-gray-50"
+              />
             </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-text-secondary mb-2">
+
+            {/* Password */}
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-700">
                 Contraseña
               </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-3.5 w-5 h-5 text-text-tertiary" />
                 <input
                   type={showPassword ? 'text' : 'password'}
-                  value={formData.password}
-                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                  placeholder="••••••••"
-                  className="w-full pl-10 pr-12 py-3 bg-bg-secondary border border-border-DEFAULT rounded-lg text-text-primary placeholder-text-tertiary focus:border-entrepreneur-500 focus:outline-none focus:ring-2 focus:ring-entrepreneur-500/20 transition"
-                  required
-                  minLength={6}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder={isLogin ? '••••••••' : 'Mínimo 8 caracteres'}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition bg-gray-50"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-3.5 text-text-tertiary hover:text-text-primary transition"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
                 >
-                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  {showPassword ? '👁️‍🗨️' : '👁️'}
                 </button>
               </div>
             </div>
-            
-            {mode === 'login' && (
-              <div className="flex items-center justify-between text-sm">
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={rememberMe}
-                    onChange={(e) => setRememberMe(e.target.checked)}
-                    className="rounded border-border-DEFAULT text-entrepreneur-500 focus:ring-entrepreneur-500"
-                  />
-                  <span className="text-text-secondary">Recordarme</span>
+
+            {/* Confirm Password (Signup) */}
+            {!isLogin && (
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-700">
+                  Confirmar Contraseña
                 </label>
-                <button
-                  type="button"
-                  className="text-entrepreneur-600 hover:text-entrepreneur-700 font-medium"
-                >
-                  ¿Olvidaste tu contraseña?
-                </button>
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  placeholder="Confirmar contraseña"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition bg-gray-50"
+                />
               </div>
             )}
-            
+
+            {/* Error */}
+            {error && (
+              <div className="p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
+                {error}
+              </div>
+            )}
+
+            {/* Submit */}
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-entrepreneur-500 hover:bg-entrepreneur-600 text-white font-semibold rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-soft"
+              className="w-full py-3 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition transform hover:scale-105"
             >
-              {loading && <LoadingSpinner size="sm" className="border-t-white" />}
-              {loading ? 'Procesando...' : mode === 'login' ? 'Iniciar Sesión' : 'Crear Cuenta'}
+              {loading
+                ? 'Cargando...'
+                : isLogin
+                ? 'Iniciar Sesión'
+                : 'Crear Cuenta'}
             </button>
-          </form>
-          
-          {/* Toggle mode */}
-          <div className="mt-6 text-center text-sm">
-            <span className="text-text-tertiary">
-              {mode === 'login' ? '¿No tenés cuenta?' : '¿Ya tenés cuenta?'}
-            </span>{' '}
-            <button
-              onClick={() => setMode(mode === 'login' ? 'signup' : 'login')}
-              className="text-entrepreneur-600 hover:text-entrepreneur-700 font-bold"
-            >
-              {mode === 'login' ? 'Registrate gratis' : 'Iniciá sesión'}
-            </button>
-          </div>
-          
-          {/* Social (opcional) */}
-          <div className="mt-6">
-            <p className="text-xs text-center text-text-tertiary mb-3">o continuá con</p>
+
+            {/* Divider */}
+            <div className="relative my-6">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-300"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-2 bg-white text-gray-500">O</span>
+              </div>
+            </div>
+
+            {/* Google */}
             <button
               type="button"
-              className="w-full py-3 bg-white border-2 border-border-DEFAULT text-text-primary font-semibold rounded-lg hover:bg-bg-secondary transition flex items-center justify-center gap-2"
+              onClick={() => alert('Google OAuth - Próximamente')}
+              className="w-full py-3 border-2 border-gray-300 text-gray-900 font-semibold rounded-lg hover:bg-gray-50 transition flex items-center justify-center gap-2"
             >
-              <svg className="w-5 h-5" viewBox="0 0 24 24">
-                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-              </svg>
+              <span>🔵</span>
               Continuar con Google
             </button>
+          </form>
+
+          {/* Toggle */}
+          <div className="text-center text-sm text-gray-600">
+            {isLogin ? (
+              <>
+                ¿No tienes cuenta?{' '}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsLogin(false);
+                    setError('');
+                    setPassword('');
+                    setConfirmPassword('');
+                  }}
+                  className="text-indigo-600 font-semibold hover:underline"
+                >
+                  Crear una
+                </button>
+              </>
+            ) : (
+              <>
+                ¿Ya tienes cuenta?{' '}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsLogin(true);
+                    setError('');
+                    setPassword('');
+                    setConfirmPassword('');
+                  }}
+                  className="text-indigo-600 font-semibold hover:underline"
+                >
+                  Iniciar sesión
+                </button>
+              </>
+            )}
+          </div>
+
+          {/* Footer */}
+          <div className="text-center text-xs text-gray-500 pt-4 border-t border-gray-200">
+            <p>Al continuar, aceptas nuestros Términos y Privacidad</p>
           </div>
         </div>
-        
-        {/* Footer */}
-        <p className="mt-6 text-center text-xs text-text-tertiary">
-          Al registrarte, aceptás nuestros{' '}
-          <button className="text-entrepreneur-600 hover:text-entrepreneur-700">
-            términos y condiciones
-          </button>
-          {' '}y{' '}
-          <button className="text-entrepreneur-600 hover:text-entrepreneur-700">
-            política de privacidad
-          </button>
-        </p>
       </div>
     </div>
   );
