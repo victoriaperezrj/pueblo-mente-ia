@@ -167,6 +167,20 @@ export default function Index() {
         </div>
       </section>
 
+      {/* CTA Final Section - Simple */}
+      <section className="py-20 px-6 bg-indigo-600 text-white text-center">
+        <div className="max-w-2xl mx-auto">
+          <h2 className="text-4xl font-bold mb-6">Probá gratis</h2>
+          <p className="text-lg mb-8">Sin sorpresas. Sin tarjeta. Sin restricciones.</p>
+          <button
+            onClick={() => navigate('/select-role')}
+            className="px-8 py-4 bg-white text-indigo-600 rounded-lg hover:bg-gray-100 font-semibold text-lg transition"
+          >
+            Empezar Ahora
+          </button>
+        </div>
+      </section>
+
       {/* FOOTER */}
       <footer className="bg-gray-900 text-gray-400 py-12 px-6">
         <div className="max-w-6xl mx-auto text-center text-sm">

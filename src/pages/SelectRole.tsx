@@ -93,7 +93,7 @@ export default function SelectRole() {
 
             {/* Empresa */}
             <button
-              onClick={() => handleSelectRole('enterprise')}
+              onClick={() => handleSelectRole('pyme')}
               disabled={isLoading}
               className="group bg-white rounded-xl p-8 border-2 border-gray-200 hover:border-indigo-500 hover:shadow-xl transition-all duration-300"
             >
