@@ -1,252 +1,315 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Shield, Gift, Lock, Sparkles, Lightbulb, TrendingUp, Building2 } from 'lucide-react';
+import { Rocket, BarChart3, Building2, Menu, X, Check } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 export default function Index() {
   const navigate = useNavigate();
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [typedText, setTypedText] = useState('');
-  const fullText = 'Tu negocio, del plan a la acción';
-
-  useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 10);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  // Typewriter effect
-  useEffect(() => {
-    let currentIndex = 0;
-    const interval = setInterval(() => {
-      if (currentIndex <= fullText.length) {
-        setTypedText(fullText.slice(0, currentIndex));
-        currentIndex++;
-      } else {
-        clearInterval(interval);
-      }
-    }, 50);
-    return () => clearInterval(interval);
-  }, []);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-[#FFF8E1]">
-      {/* Header Sticky */}
-      <header className={`
-        fixed top-0 left-0 right-0 z-50 transition-all duration-300
-        ${isScrolled ? 'bg-white/90 backdrop-blur-md border-b border-gray-200' : 'bg-transparent'}
-      `}>
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-[hsl(195,100%,50%)] to-[hsl(271,76%,53%)] rounded-xl flex items-center justify-center shadow-lg">
-              <Sparkles className="w-5 h-5 text-white" />
+    <div className="min-h-screen bg-white">
+      {/* Header Sticky with backdrop blur */}
+      <nav className="sticky top-0 z-50 backdrop-blur-xl bg-white/80 border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            {/* Logo */}
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-[#5B7FFF] to-[#8B5CF6] rounded-xl flex items-center justify-center shadow-lg">
+                <Building2 className="w-6 h-6 text-white" />
+              </div>
+              <span className="font-bold text-lg text-gray-900 hidden sm:block">
+                Proyecto Emprendedurismo
+              </span>
             </div>
-            <span className="font-bold text-lg text-gray-900">Proyecto Emprendedurismo</span>
-          </div>
-          <div className="flex items-center gap-3">
+
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center gap-3">
+              <Button
+                variant="ghost"
+                onClick={() => navigate('/auth?mode=login')}
+                className="font-medium"
+              >
+                Iniciar Sesión
+              </Button>
+              <Button
+                onClick={() => navigate('/auth?mode=signup')}
+                className="bg-gradient-to-r from-[#5B7FFF] to-[#8B5CF6] text-white font-semibold hover:opacity-90 shadow-md"
+              >
+                Crear Cuenta
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => navigate('/select-role')}
+                className="font-medium"
+              >
+                Ver Demo
+              </Button>
+            </div>
+
+            {/* Mobile menu button */}
             <button
-              onClick={() => navigate('/auth?mode=login')}
-              className="text-gray-700 hover:text-gray-900 font-medium text-sm transition"
+              className="md:hidden p-2"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label="Toggle menu"
             >
-              Login
-            </button>
-            <button
-              onClick={() => navigate('/auth?mode=signup')}
-              className="px-4 py-2 bg-gradient-to-r from-[hsl(150,100%,50%)] to-[hsl(4,100%,70%)] text-white rounded-lg hover:opacity-90 font-semibold text-sm transition shadow-md"
-            >
-              Crear Cuenta
+              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
-        </div>
-      </header>
 
-      {/* Hero Section con animaciones épicas */}
-      <section className="min-h-screen flex flex-col items-center justify-center px-6 pt-20 relative overflow-hidden">
-        {/* Animated gradient background */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div 
-            className="absolute inset-0 bg-gradient-to-br from-cyan-400/10 via-pink-500/10 to-purple-600/10 animate-bg-shift opacity-50"
-          />
-          {/* Floating particles */}
-          <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-br from-cyan-400/15 to-pink-500/15 rounded-full blur-2xl animate-float" style={{ animationDelay: '0s' }} />
-          <div className="absolute top-40 right-20 w-40 h-40 bg-gradient-to-br from-pink-500/15 to-purple-600/15 rounded-full blur-2xl animate-float" style={{ animationDelay: '5s' }} />
-          <div className="absolute bottom-40 left-1/4 w-36 h-36 bg-gradient-to-br from-purple-600/15 to-cyan-400/15 rounded-full blur-2xl animate-float" style={{ animationDelay: '10s' }} />
-          {/* Morphing blob */}
-          <div className="absolute bottom-20 right-10 w-96 h-96 bg-gradient-to-br from-pink-500/5 to-indigo-600/5 blur-3xl animate-blob" />
+          {/* Mobile menu */}
+          {mobileMenuOpen && (
+            <div className="md:hidden pb-4 space-y-2 animate-in slide-in-from-top-5">
+              <Button
+                variant="ghost"
+                onClick={() => {
+                  navigate('/auth?mode=login');
+                  setMobileMenuOpen(false);
+                }}
+                className="w-full justify-center"
+              >
+                Iniciar Sesión
+              </Button>
+              <Button
+                onClick={() => {
+                  navigate('/auth?mode=signup');
+                  setMobileMenuOpen(false);
+                }}
+                className="w-full justify-center bg-gradient-to-r from-[#5B7FFF] to-[#8B5CF6] text-white"
+              >
+                Crear Cuenta
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => {
+                  navigate('/select-role');
+                  setMobileMenuOpen(false);
+                }}
+                className="w-full justify-center"
+              >
+                Ver Demo
+              </Button>
+            </div>
+          )}
         </div>
+      </nav>
 
-        <div className="max-w-3xl text-center space-y-8 relative z-10 animate-fade-in">
-          {/* Micro-label */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-[hsl(195,100%,93%)] border-2 border-[hsl(195,100%,50%)] rounded-full">
-            <Sparkles className="w-4 h-4 text-[hsl(195,100%,50%)]" />
-            <span className="text-xs font-bold text-[hsl(195,100%,30%)] uppercase tracking-wide">
-              ✨ Ecosistema IA para emprendedores
-            </span>
+      {/* Hero Section - Gradient Background */}
+      <section className="relative min-h-screen md:min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 py-20 md:py-0 overflow-hidden bg-gradient-to-br from-[#5B7FFF] via-[#7C5CFF] to-[#8B5CF6]">
+        <div className="relative z-10 max-w-4xl mx-auto text-center space-y-8">
+          {/* Badge */}
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/15 border border-white backdrop-blur-sm">
+            <span className="text-sm font-medium text-white">⚡ IA que entiende Argentina</span>
           </div>
 
-          {/* Typewriter Headline */}
-          <h1 className="text-5xl sm:text-6xl font-bold text-gray-900 leading-tight min-h-[4rem]">
-            {typedText}
-            <span className="animate-pulse">|</span>
+          {/* Headline */}
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-tight text-white">
+            De la idea a los números en días, no meses
           </h1>
 
           {/* Subtitle */}
-          <p className="text-xl sm:text-2xl text-gray-700 leading-relaxed">
-            Ecosistema inteligente que evoluciona con vos: validación, organización y escalamiento con IA local
+          <p className="text-base sm:text-lg md:text-xl text-white/90 max-w-3xl mx-auto leading-relaxed">
+            ¿Tenés una idea? ¿Un negocio que crece? ¿Una empresa que necesita orden?
+            <br className="hidden sm:block" />
+            Acá validás, organizás y escalás TODO en un solo lugar.
           </p>
 
-          {/* CTA Buttons con ripple */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6">
-            <button
-              onClick={() => navigate('/select-role')}
-              className="px-8 py-4 bg-gradient-to-r from-[hsl(150,100%,50%)] to-[hsl(195,100%,50%)] text-white rounded-xl hover:opacity-90 font-bold text-lg transition transform hover:scale-105 shadow-lg ripple-effect"
-            >
-              Explorar Demo →
-            </button>
-            <button
+          {/* Micro-benefits */}
+          <p className="text-sm text-white/80">
+            ✓ Sin tarjeta ✓ Datos seguros ✓ Empezá en 2 min
+          </p>
+
+          {/* CTA Buttons */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+            <Button
+              size="lg"
               onClick={() => navigate('/auth?mode=signup')}
-              className="px-8 py-4 bg-gradient-to-r from-[hsl(4,100%,70%)] to-[hsl(271,76%,53%)] text-white rounded-xl hover:opacity-90 font-bold text-lg transition transform hover:scale-105 shadow-lg"
+              className="w-full sm:w-auto bg-white text-[#5B7FFF] hover:bg-white/90 px-8 py-6 text-lg font-bold rounded-lg shadow-xl hover:shadow-2xl hover:-translate-y-0.5 transition-all duration-200"
             >
-              Crear Cuenta
-            </button>
+              Comenzar Gratis →
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              onClick={() => navigate('/select-role')}
+              className="w-full sm:w-auto px-7 py-5 text-lg font-bold rounded-lg bg-transparent border-2 border-white hover:bg-white/10 text-white backdrop-blur-sm transition-all duration-200"
+            >
+              Ver Demo
+            </Button>
+            <Button
+              size="lg"
+              onClick={() => navigate('/business-ai-bot')}
+              className="w-full sm:w-auto px-8 py-6 text-lg font-bold rounded-lg bg-gradient-to-r from-[#8B5CF6] to-[#6366F1] hover:opacity-90 text-white transition-all duration-200 hover:-translate-y-0.5 shadow-xl hover:shadow-2xl"
+            >
+              Bot IA Empresarial 🤖
+            </Button>
           </div>
-
-          {/* Benefit line */}
-          <p className="text-sm text-gray-600 pt-4 flex items-center justify-center gap-6 flex-wrap">
-            <span className="flex items-center gap-2">
-              <Shield className="w-4 h-4 text-[hsl(195,100%,50%)]" />
-              Sin tarjeta
-            </span>
-            <span className="flex items-center gap-2">
-              <Gift className="w-4 h-4 text-[hsl(150,100%,50%)]" />
-              Gratis empezar
-            </span>
-            <span className="flex items-center gap-2">
-              <Lock className="w-4 h-4 text-[hsl(271,76%,53%)]" />
-              Datos seguros
-            </span>
-          </p>
         </div>
       </section>
 
-      {/* Three Modes Section */}
-      <section className="py-24 px-6 bg-white">
+      {/* ¿En qué etapa estás? Section */}
+      <section className="py-20 sm:py-24 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16 space-y-4">
-            <h2 className="text-4xl font-bold text-gray-900">¿En qué etapa estás?</h2>
-            <p className="text-xl text-gray-600">Herramientas diseñadas para tu momento</p>
+          {/* Section Header */}
+          <div className="text-center space-y-4 mb-16">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900">
+              ¿En qué etapa estás?
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Elegí tu ruta y accedé a herramientas diseñadas específicamente para ti
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Card 1: Emprendedor */}
-            <button
-              onClick={() => navigate('/modo-emprendedor')}
-              className="group bg-gradient-to-br from-cyan-50 to-white border-2 border-cyan-400 rounded-2xl p-8 card-glow-hover text-left"
-            >
-              <div className="w-14 h-14 bg-gradient-to-br from-[hsl(195,100%,50%)] to-[hsl(150,100%,50%)] rounded-xl flex items-center justify-center text-white text-2xl mb-4 shadow-lg">
-                <Lightbulb className="w-7 h-7" />
-              </div>
-              <span className="inline-block px-3 py-1 bg-[hsl(195,100%,50%)] text-white text-xs font-bold rounded mb-3 uppercase">
-                Desde cero
-              </span>
-              <h3 className="text-2xl font-bold text-gray-900 mb-2">Emprendedor</h3>
-              <p className="text-gray-600 text-sm mb-4">
-                ¿Tenés una idea? Validala con IA en minutos
-              </p>
-              <ul className="space-y-2 text-sm text-gray-700">
-                <li className="flex items-center gap-2">
-                  <span className="text-[hsl(150,100%,50%)]">✓</span> Validación rápida
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="text-[hsl(150,100%,50%)]">✓</span> Números reales
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="text-[hsl(150,100%,50%)]">✓</span> Plan de acción
-                </li>
-              </ul>
-              <div className="mt-6 text-[hsl(195,100%,50%)] font-bold flex items-center gap-2 group-hover:gap-3 transition-all">
-                Comenzar <span>→</span>
-              </div>
-            </button>
+          {/* 3 Cards Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-16">
+            {/* Card 1 - EMPRENDEDOR */}
+            <div className="relative group bg-white rounded-xl p-7 border border-gray-200 hover:border-[#5B7FFF]/50 transition-all duration-300 shadow-md hover:shadow-lg hover:scale-[1.02]">
+              <div className="space-y-4">
+                {/* Icon & Badge */}
+                <div className="flex items-start justify-between">
+                  <div className="w-14 h-14 rounded-full bg-[#5B7FFF] flex items-center justify-center">
+                    <Rocket className="h-7 w-7 text-white" />
+                  </div>
+                  <span className="px-3 py-1 bg-gray-100 text-gray-600 text-xs font-semibold rounded uppercase tracking-wide">
+                    DESDE CERO
+                  </span>
+                </div>
 
-            {/* Card 2: Negocio - DESTACADA */}
-            <button
-              onClick={() => navigate('/modo-negocio')}
-              className="group bg-gradient-to-br from-cyan-500 to-pink-500 rounded-2xl p-8 text-white shadow-2xl card-glow-hover md:scale-105 relative text-left"
-              style={{ boxShadow: '0 10px 40px rgba(236, 72, 153, 0.2)' }}
-            >
-              <div className="absolute top-4 right-4 bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold">
-                ⭐ Popular
-              </div>
-              <div className="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center text-white text-2xl mb-4">
-                <TrendingUp className="w-7 h-7" />
-              </div>
-              <span className="inline-block px-3 py-1 bg-white/20 text-white text-xs font-bold rounded mb-3 uppercase">
-                1-3 años
-              </span>
-              <h3 className="text-2xl font-bold mb-2">Negocio</h3>
-              <p className="text-white/90 text-sm mb-4">
-                Vendés pero todo a mano. Necesitás orden
-              </p>
-              <ul className="space-y-2 text-sm text-white/80">
-                <li className="flex items-center gap-2">
-                  <span>✓</span> Dashboard real-time
-                </li>
-                <li className="flex items-center gap-2">
-                  <span>✓</span> CRM simple
-                </li>
-                <li className="flex items-center gap-2">
-                  <span>✓</span> Control gastos
-                </li>
-              </ul>
-              <div className="mt-6 text-white font-bold flex items-center gap-2 group-hover:gap-3 transition-all">
-                Comenzar <span>→</span>
-              </div>
-            </button>
+                {/* Title */}
+                <h3 className="text-2xl font-bold text-gray-900">Emprendedor</h3>
 
-            {/* Card 3: Empresa */}
-            <button
-              onClick={() => navigate('/modo-empresa')}
-              className="group bg-gradient-to-br from-emerald-50 to-white border-2 border-emerald-400 rounded-2xl p-8 card-glow-hover text-left"
-            >
-              <div className="w-14 h-14 bg-gradient-to-br from-[hsl(150,100%,50%)] to-[hsl(4,100%,70%)] rounded-xl flex items-center justify-center text-white text-2xl mb-4 shadow-lg">
-                <Building2 className="w-7 h-7" />
+                {/* Description */}
+                <p className="text-sm text-gray-600 leading-relaxed">
+                  ¿Tenés una idea pero no sabés si funciona?
+                </p>
+
+                {/* Features */}
+                <ul className="space-y-2">
+                  {['Validá con IA', 'Ves números reales', 'Entendé viabilidad'].map((feature, idx) => (
+                    <li key={idx} className="flex items-center gap-2 text-sm text-green-600">
+                      <Check className="h-4 w-4 flex-shrink-0" />
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                {/* Button */}
+                <Button
+                  onClick={() => navigate('/select-role')}
+                  className="w-full bg-[#5B7FFF] hover:bg-[#4A6FEE] text-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 mt-4"
+                >
+                  Validar Idea →
+                </Button>
               </div>
-              <span className="inline-block px-3 py-1 bg-[hsl(150,100%,50%)] text-white text-xs font-bold rounded mb-3 uppercase">
-                +3 años
-              </span>
-              <h3 className="text-2xl font-bold text-gray-900 mb-2">Empresa</h3>
-              <p className="text-gray-600 text-sm mb-4">
-                Creció. Automatizá y escalá
-              </p>
-              <ul className="space-y-2 text-sm text-gray-700">
-                <li className="flex items-center gap-2">
-                  <span className="text-[hsl(4,100%,70%)]">✓</span> Multi-sucursal
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="text-[hsl(4,100%,70%)]">✓</span> Gestión equipo
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="text-[hsl(4,100%,70%)]">✓</span> Automatización IA
-                </li>
-              </ul>
-              <div className="mt-6 text-[hsl(150,100%,50%)] font-bold flex items-center gap-2 group-hover:gap-3 transition-all">
-                Comenzar <span>→</span>
+            </div>
+
+            {/* Card 2 - NEGOCIO (DESTACADA) */}
+            <div className="relative group bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-7 border-2 border-[#5B7FFF] transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02]">
+              {/* Badge "Más Popular" */}
+              <div className="absolute top-3 right-3 px-3 py-1.5 bg-[#5B7FFF] rounded text-xs font-bold text-white shadow-md">
+                ⭐ Más Popular
               </div>
-            </button>
+
+              <div className="space-y-4">
+                {/* Icon & Badge */}
+                <div className="flex items-start justify-between">
+                  <div className="w-14 h-14 rounded-full bg-[#5B7FFF] flex items-center justify-center">
+                    <BarChart3 className="h-7 w-7 text-white" />
+                  </div>
+                  <span className="px-3 py-1 bg-[#5B7FFF]/10 text-[#5B7FFF] text-xs font-semibold rounded uppercase tracking-wide">
+                    1-3 AÑOS
+                  </span>
+                </div>
+
+                {/* Title */}
+                <h3 className="text-2xl font-bold text-gray-900">Negocio</h3>
+
+                {/* Description */}
+                <p className="text-sm text-gray-700 leading-relaxed">
+                  Vendés, pero todo a mano. Necesitás ordenar y crecer.
+                </p>
+
+                {/* Features */}
+                <ul className="space-y-2">
+                  {['Dashboard real-time', 'CRM simple', 'Control gastos'].map((feature, idx) => (
+                    <li key={idx} className="flex items-center gap-2 text-sm text-green-600">
+                      <Check className="h-4 w-4 flex-shrink-0" />
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                {/* Button */}
+                <Button
+                  onClick={() => navigate('/select-role')}
+                  className="w-full bg-[#5B7FFF] hover:bg-[#4A6FEE] text-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 mt-4"
+                >
+                  Organizar Negocio →
+                </Button>
+              </div>
+            </div>
+
+            {/* Card 3 - EMPRESA */}
+            <div className="relative group bg-white rounded-xl p-7 border border-gray-200 hover:border-green-500/50 transition-all duration-300 shadow-md hover:shadow-lg hover:scale-[1.02] md:col-span-2 lg:col-span-1">
+              <div className="space-y-4">
+                {/* Icon & Badge */}
+                <div className="flex items-start justify-between">
+                  <div className="w-14 h-14 rounded-full bg-green-500 flex items-center justify-center">
+                    <Building2 className="h-7 w-7 text-white" />
+                  </div>
+                  <span className="px-3 py-1 bg-gray-100 text-gray-600 text-xs font-semibold rounded uppercase tracking-wide">
+                    +3 AÑOS
+                  </span>
+                </div>
+
+                {/* Title */}
+                <h3 className="text-2xl font-bold text-gray-900">Empresa</h3>
+
+                {/* Description */}
+                <p className="text-sm text-gray-600 leading-relaxed">
+                  Creció tu empresa. Automatizá y escalá con IA.
+                </p>
+
+                {/* Features */}
+                <ul className="space-y-2">
+                  {['Gestión de equipo', 'Automatización', 'Multi-sucursal'].map((feature, idx) => (
+                    <li key={idx} className="flex items-center gap-2 text-sm text-green-600">
+                      <Check className="h-4 w-4 flex-shrink-0" />
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                {/* Button */}
+                <Button
+                  onClick={() => navigate('/select-role')}
+                  className="w-full bg-green-500 hover:bg-green-600 text-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 mt-4"
+                >
+                  Automatizar →
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
+      </section>
+
+      {/* Footer Section */}
+      <section className="py-12 text-center">
+        <p className="text-sm text-gray-500">
+          Probá gratis • Sin tarjeta • Datos seguros • Empezá en 2 min
+        </p>
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-gray-400 py-12 px-6">
-        <div className="max-w-6xl mx-auto text-center text-sm">
-          <p>© 2025 Proyecto Emprendedurismo. Todos los derechos reservados.</p>
-          <div className="flex justify-center gap-4 mt-4">
-            <a href="#" className="hover:text-white transition">Términos</a>
-            <span>•</span>
-            <a href="#" className="hover:text-white transition">Privacidad</a>
-            <span>•</span>
-            <a href="#" className="hover:text-white transition">Soporte</a>
+      <footer className="bg-gray-900 text-white py-10 px-4">
+        <div className="max-w-7xl mx-auto text-center space-y-4">
+          <p className="text-sm">
+            © 2025 Proyecto Emprendedurismo. Todos los derechos reservados.
+          </p>
+          <div className="flex items-center justify-center gap-6 text-sm">
+            <a href="#" className="hover:underline">Términos</a>
+            <a href="#" className="hover:underline">Privacidad</a>
+            <a href="#" className="hover:underline">Soporte</a>
           </div>
         </div>
       </footer>
