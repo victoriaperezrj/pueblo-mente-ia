@@ -54,11 +54,11 @@ export default function Auth() {
   return (
     <div className="min-h-screen flex bg-white">
       {/* LEFT - Gradient (Hidden en mobile) */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-indigo-600 via-purple-600 to-indigo-700 flex-col items-center justify-center p-8 text-white relative overflow-hidden">
+      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-cyan-500 via-pink-500 to-purple-600 flex-col items-center justify-center p-8 text-white relative overflow-hidden">
         {/* Animated background shapes */}
         <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
-          <div className="absolute bottom-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
+          <div className="absolute top-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl animate-float"></div>
+          <div className="absolute bottom-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl animate-float" style={{ animationDelay: '5s' }}></div>
         </div>
 
         <div className="max-w-md text-center relative z-10 space-y-8">
@@ -73,7 +73,7 @@ export default function Auth() {
             </p>
           </div>
 
-          <ul className="text-left space-y-3 text-indigo-50">
+          <ul className="text-left space-y-3 text-cyan-50">
             <li className="flex items-center gap-3">
               <span className="text-xl">✓</span>
               <span>Sin tarjeta de crédito</span>
@@ -91,8 +91,8 @@ export default function Auth() {
       </div>
 
       {/* RIGHT - Form */}
-      <div className="w-full lg:w-1/2 flex flex-col items-center justify-center p-6">
-        <div className="w-full max-w-sm space-y-8">
+      <div className="w-full lg:w-1/2 flex flex-col items-center justify-center p-6 animate-fade-in">
+        <div className="w-full max-w-sm space-y-8 animate-scroll-reveal">
           {/* Back button */}
           <button
             onClick={() => navigate('/')}
@@ -125,7 +125,10 @@ export default function Auth() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="tu@email.com"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition bg-gray-50"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-100 transition bg-gray-50"
+                style={{
+                  boxShadow: email ? '0 0 10px rgba(34, 211, 238, 0.2)' : 'none'
+                }}
               />
             </div>
 
@@ -140,7 +143,7 @@ export default function Auth() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder={isLogin ? '••••••••' : 'Mínimo 8 caracteres'}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition bg-gray-50"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-100 transition bg-gray-50"
                 />
                 <button
                   type="button"
@@ -163,7 +166,7 @@ export default function Auth() {
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="Confirmar contraseña"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition bg-gray-50"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-100 transition bg-gray-50"
                 />
               </div>
             )}
@@ -179,7 +182,10 @@ export default function Auth() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition transform hover:scale-105"
+              className="w-full py-3 bg-gradient-to-r from-cyan-500 to-pink-500 text-white font-semibold rounded-lg hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 transform hover:scale-105"
+              style={{
+                boxShadow: loading ? 'none' : '0 0 25px rgba(236, 72, 153, 0.3)'
+              }}
             >
               {loading
                 ? 'Cargando...'
@@ -222,7 +228,7 @@ export default function Auth() {
                     setPassword('');
                     setConfirmPassword('');
                   }}
-                  className="text-indigo-600 font-semibold hover:underline"
+                  className="text-cyan-600 font-semibold hover:underline hover-underline"
                 >
                   Crear una
                 </button>
@@ -238,7 +244,7 @@ export default function Auth() {
                     setPassword('');
                     setConfirmPassword('');
                   }}
-                  className="text-indigo-600 font-semibold hover:underline"
+                  className="text-cyan-600 font-semibold hover:underline hover-underline"
                 >
                   Iniciar sesión
                 </button>

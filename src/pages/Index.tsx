@@ -59,12 +59,19 @@ export default function Index() {
         </div>
       </header>
 
-      {/* Hero Section con typewriter + partículas sutiles */}
+      {/* Hero Section con animaciones épicas */}
       <section className="min-h-screen flex flex-col items-center justify-center px-6 pt-20 relative overflow-hidden">
-        {/* Gradient background neón sutil */}
+        {/* Animated gradient background */}
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-[hsl(195,100%,50%)]/10 to-[hsl(150,100%,50%)]/10 rounded-full blur-3xl animate-float" />
-          <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-[hsl(271,76%,53%)]/10 to-[hsl(4,100%,70%)]/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }} />
+          <div 
+            className="absolute inset-0 bg-gradient-to-br from-cyan-400/10 via-pink-500/10 to-purple-600/10 animate-bg-shift opacity-50"
+          />
+          {/* Floating particles */}
+          <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-br from-cyan-400/15 to-pink-500/15 rounded-full blur-2xl animate-float" style={{ animationDelay: '0s' }} />
+          <div className="absolute top-40 right-20 w-40 h-40 bg-gradient-to-br from-pink-500/15 to-purple-600/15 rounded-full blur-2xl animate-float" style={{ animationDelay: '5s' }} />
+          <div className="absolute bottom-40 left-1/4 w-36 h-36 bg-gradient-to-br from-purple-600/15 to-cyan-400/15 rounded-full blur-2xl animate-float" style={{ animationDelay: '10s' }} />
+          {/* Morphing blob */}
+          <div className="absolute bottom-20 right-10 w-96 h-96 bg-gradient-to-br from-pink-500/5 to-indigo-600/5 blur-3xl animate-blob" />
         </div>
 
         <div className="max-w-3xl text-center space-y-8 relative z-10 animate-fade-in">
@@ -133,7 +140,7 @@ export default function Index() {
             {/* Card 1: Emprendedor */}
             <button
               onClick={() => navigate('/modo-emprendedor')}
-              className="group bg-gradient-to-br from-[hsl(195,100%,93%)] to-white border-2 border-[hsl(195,100%,50%)] rounded-2xl p-8 hover:shadow-2xl hover-3d transition-all duration-300 text-left"
+              className="group bg-gradient-to-br from-cyan-50 to-white border-2 border-cyan-400 rounded-2xl p-8 card-glow-hover text-left"
             >
               <div className="w-14 h-14 bg-gradient-to-br from-[hsl(195,100%,50%)] to-[hsl(150,100%,50%)] rounded-xl flex items-center justify-center text-white text-2xl mb-4 shadow-lg">
                 <Lightbulb className="w-7 h-7" />
@@ -164,7 +171,8 @@ export default function Index() {
             {/* Card 2: Negocio - DESTACADA */}
             <button
               onClick={() => navigate('/modo-negocio')}
-              className="group bg-gradient-to-br from-[hsl(271,76%,53%)] to-[hsl(4,100%,70%)] rounded-2xl p-8 text-white shadow-2xl hover:shadow-[0_0_30px_rgba(138,43,226,0.5)] hover-3d transition-all duration-300 md:scale-105 relative text-left"
+              className="group bg-gradient-to-br from-cyan-500 to-pink-500 rounded-2xl p-8 text-white shadow-2xl card-glow-hover md:scale-105 relative text-left"
+              style={{ boxShadow: '0 10px 40px rgba(236, 72, 153, 0.2)' }}
             >
               <div className="absolute top-4 right-4 bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold">
                 ⭐ Popular
@@ -198,7 +206,7 @@ export default function Index() {
             {/* Card 3: Empresa */}
             <button
               onClick={() => navigate('/modo-empresa')}
-              className="group bg-gradient-to-br from-[hsl(150,100%,93%)] to-white border-2 border-[hsl(150,100%,50%)] rounded-2xl p-8 hover:shadow-2xl hover-3d transition-all duration-300 text-left"
+              className="group bg-gradient-to-br from-emerald-50 to-white border-2 border-emerald-400 rounded-2xl p-8 card-glow-hover text-left"
             >
               <div className="w-14 h-14 bg-gradient-to-br from-[hsl(150,100%,50%)] to-[hsl(4,100%,70%)] rounded-xl flex items-center justify-center text-white text-2xl mb-4 shadow-lg">
                 <Building2 className="w-7 h-7" />

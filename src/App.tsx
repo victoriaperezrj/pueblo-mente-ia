@@ -3,10 +3,11 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { DemoProvider } from "@/contexts/DemoContext";
 import { GuestSessionProvider } from "@/contexts/GuestSessionProvider";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
+import AIWidget from "@/components/AIWidget";
 
 // Critical pages (loaded immediately)
 import Index from "./pages/Index";
@@ -70,6 +71,29 @@ const PageLoader = () => (
 );
 
 const queryClient = new QueryClient();
+
+// Widget wrapper component to determine mode
+const AIWidgetWrapper = () => {
+  const location = useLocation();
+  
+  // Determine mode based on current route
+  let mode: 'emprendedor' | 'negocio' | 'empresa' = 'emprendedor';
+  
+  if (location.pathname.includes('negocio') || location.pathname.includes('business')) {
+    mode = 'negocio';
+  } else if (location.pathname.includes('empresa') || location.pathname.includes('pyme') || location.pathname.includes('enterprise')) {
+    mode = 'empresa';
+  } else if (location.pathname.includes('emprendedor') || location.pathname.includes('entrepreneur')) {
+    mode = 'emprendedor';
+  }
+  
+  // Don't show on landing or auth pages
+  if (location.pathname === '/' || location.pathname === '/auth' || location.pathname === '/select-role') {
+    return null;
+  }
+  
+  return <AIWidget mode={mode} />;
+};
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -148,6 +172,7 @@ const App = () => (
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
+            <AIWidgetWrapper />
             </Suspense>
           </DemoProvider>
         </GuestSessionProvider>

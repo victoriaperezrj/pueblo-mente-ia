@@ -196,17 +196,20 @@ export default function AIWidget({ mode = 'emprendedor' }: AIWidgetProps) {
         <button
           onClick={() => setIsOpen(true)}
           className={cn(
-            'fixed bottom-4 right-4 z-40',
+            'fixed bottom-5 right-5 z-40',
             'w-[60px] h-[60px] rounded-full',
             'bg-gradient-to-br shadow-2xl',
             modeColors[mode],
             'text-white flex items-center justify-center',
-            'hover:scale-110 transition-all duration-300 cursor-pointer',
-            'neon-pulse'
+            'hover:scale-108 transition-all duration-300 cursor-pointer group',
+            'animate-sparkle-pulse'
           )}
+          style={{
+            boxShadow: '0 0 25px rgba(236, 72, 153, 0.3)'
+          }}
           aria-label="Asistente IA"
         >
-          <Sparkles className="w-6 h-6 animate-pulse" />
+          <Sparkles className="w-6 h-6 group-hover:rotate-12 transition-transform duration-300" />
         </button>
       )}
 
@@ -215,7 +218,7 @@ export default function AIWidget({ mode = 'emprendedor' }: AIWidgetProps) {
         <>
           {/* Backdrop blur NO bloquea scroll */}
           <div 
-            className="fixed inset-0 bg-black/10 backdrop-blur-sm z-40"
+            className="fixed inset-0 bg-black/10 backdrop-blur-sm z-40 animate-fade-in"
             onClick={() => setIsOpen(false)}
           />
           
@@ -224,12 +227,16 @@ export default function AIWidget({ mode = 'emprendedor' }: AIWidgetProps) {
             role="dialog"
             aria-label="Asistente IA"
             className={cn(
-              'fixed bottom-4 right-4 z-40',
-              'w-[380px] max-w-[90vw] h-[80vh]',
-              'bg-white rounded-xl shadow-2xl',
+              'fixed bottom-5 right-5 z-40',
+              'w-[380px] max-w-[88vw] h-[500px] md:h-[600px]',
+              'bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl',
+              'border border-pink-200',
               'flex flex-col overflow-hidden',
               'animate-slide-right'
             )}
+            style={{
+              boxShadow: '0 10px 40px rgba(0, 0, 0, 0.1)'
+            }}
           >
             {/* Header */}
             <div className={cn(

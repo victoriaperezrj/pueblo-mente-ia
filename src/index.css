@@ -215,38 +215,160 @@ All colors MUST be HSL.
     background: var(--gradient-neon-green);
   }
   
-  /* Animaciones Wave (ondas en hero/chat load) */
-  @keyframes wave {
-    0% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
-    100% { transform: translateY(0px); }
+  /* Background gradient shift (ambient animation) */
+  @keyframes bgShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
   }
   
-  .animate-wave {
-    animation: wave 2s ease-in-out infinite;
+  .animate-bg-shift {
+    background-size: 200% 200%;
+    animation: bgShift 20s ease infinite;
   }
   
-  /* Hover 3D Effect con rotateY */
-  .hover-3d {
-    transition: all 0.3s ease;
+  /* Floating particles */
+  @keyframes float {
+    0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.15; }
+    25% { transform: translate(10px, -10px) scale(1.1); opacity: 0.2; }
+    50% { transform: translate(-5px, -20px) scale(0.9); opacity: 0.15; }
+    75% { transform: translate(-10px, -10px) scale(1.05); opacity: 0.18; }
   }
   
-  .hover-3d:hover {
-    transform: translateY(-5px) rotateX(5deg);
+  .animate-float {
+    animation: float 30s ease-in-out infinite;
   }
   
-  /* Pulse Neón */
-  @keyframes neon-pulse {
-    0%, 100% {
-      box-shadow: 0 0 5px hsl(var(--neon-mint) / 0.5), 0 0 10px hsl(var(--neon-mint) / 0.3);
+  /* Blob morphing */
+  @keyframes blob {
+    0%, 100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+    25% { border-radius: 40% 60% 70% 30% / 40% 70% 30% 60%; }
+    50% { border-radius: 70% 30% 40% 60% / 30% 60% 40% 70%; }
+    75% { border-radius: 30% 70% 60% 40% / 70% 40% 60% 30%; }
+  }
+  
+  .animate-blob {
+    animation: blob 15s ease-in-out infinite;
+  }
+  
+  /* Word-by-word fade in (hero headline) */
+  @keyframes wordFadeIn {
+    0% {
+      opacity: 0;
+      transform: translateY(20px) scale(0.9);
     }
-    50% {
-      box-shadow: 0 0 10px hsl(var(--neon-mint) / 0.8), 0 0 20px hsl(var(--neon-mint) / 0.5);
+    100% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
     }
   }
   
-  .neon-pulse {
-    animation: neon-pulse 1s ease-in-out infinite;
+  .animate-word-fade {
+    animation: wordFadeIn 0.6s ease-out forwards;
+  }
+  
+  /* Scroll reveal */
+  @keyframes scrollReveal {
+    0% {
+      opacity: 0;
+      transform: translateY(40px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .animate-scroll-reveal {
+    animation: scrollReveal 0.6s ease-out forwards;
+  }
+  
+  /* Shimmer loading effect */
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  
+  .animate-shimmer {
+    background: linear-gradient(90deg, 
+      transparent 0%, 
+      hsl(var(--primary) / 0.1) 50%, 
+      transparent 100%);
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
+  }
+  
+  /* Button press effect */
+  @keyframes press {
+    0% { transform: scale(1); }
+    50% { transform: scale(0.97); }
+    100% { transform: scale(1); }
+  }
+  
+  .animate-press {
+    animation: press 0.2s ease-out;
+  }
+  
+  /* Sparkle pulse (widget button) */
+  @keyframes sparklePulse {
+    0%, 100% { 
+      transform: rotate(0deg) scale(1); 
+      opacity: 1; 
+    }
+    50% { 
+      transform: rotate(180deg) scale(1.1); 
+      opacity: 0.7; 
+    }
+  }
+  
+  .animate-sparkle-pulse {
+    animation: sparklePulse 6s ease-in-out infinite;
+  }
+  
+  /* Card hover glow */
+  .card-glow-hover {
+    transition: all 0.3s ease-out;
+  }
+  
+  .card-glow-hover:hover {
+    transform: scale(1.03) translateY(-4px);
+    box-shadow: 0 0 30px rgba(236, 72, 153, 0.15);
+  }
+  
+  /* Underline slide */
+  @keyframes underlineSlide {
+    0% { transform: scaleX(0); }
+    100% { transform: scaleX(1); }
+  }
+  
+  .hover-underline {
+    position: relative;
+  }
+  
+  .hover-underline::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--accent)));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease-out;
+  }
+  
+  .hover-underline:hover::after {
+    transform: scaleX(1);
+  }
+  
+  /* Rotate icon on hover */
+  .hover-rotate {
+    transition: transform 0.3s ease-out;
+  }
+  
+  .hover-rotate:hover {
+    transform: rotate(15deg);
   }
   
   /* Ripple Wave */
