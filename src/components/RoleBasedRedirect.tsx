@@ -14,8 +14,10 @@ export function RoleBasedRedirect() {
           navigate('/entrepreneur/dashboard');
           break;
         case 'business':
+          navigate('/negocio/dashboard');
+          break;
         case 'pyme_enterprise':
-          navigate('/dashboard');
+          navigate('/empresa/dashboard');
           break;
         case 'admin':
           navigate('/admin/dashboard');
