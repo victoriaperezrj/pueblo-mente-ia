@@ -1,23 +1,124 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Rocket, BarChart3, Building2, Menu, X, Check } from "lucide-react";
+import { BarChart3, Building2, Menu, X, Check, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
+// ══════════════════════════════════════════════════════════════════════
+// LOGIN MODAL COMPONENT - Estilo Grok
+// ══════════════════════════════════════════════════════════════════════
+function LoginModal({ onClose }: { onClose: () => void }) {
+  return (
+    <div className="modal-grok-overlay" onClick={onClose}>
+      <div className="modal-grok-container" onClick={(e) => e.stopPropagation()}>
+        {/* Fondo animado estilo Grok */}
+        <div className="modal-grok-bg" />
+
+        {/* Botón cerrar */}
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-white/70 hover:text-white transition-colors z-20"
+        >
+          <X className="w-6 h-6" />
+        </button>
+
+        {/* Contenido */}
+        <div className="relative z-10">
+          {/* Logo o título */}
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl mb-4">
+              <span className="text-3xl">⚡</span>
+            </div>
+            <h2 className="text-3xl font-bold text-white mb-2">Ingresá a tu cuenta</h2>
+            <p className="text-white/70 text-sm">Elegí tu método preferido para continuar</p>
+          </div>
+
+          {/* Botones de login */}
+          <div className="space-y-3 mb-6">
+            {/* Google */}
+            <button
+              className="btn-login-grok"
+              onClick={() => {
+                onClose();
+                window.location.href = "/auth?mode=login&provider=google";
+              }}
+            >
+              <svg className="w-5 h-5" viewBox="0 0 24 24">
+                <path
+                  fill="currentColor"
+                  d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                />
+                <path
+                  fill="currentColor"
+                  d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                />
+                <path
+                  fill="currentColor"
+                  d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                />
+                <path
+                  fill="currentColor"
+                  d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                />
+              </svg>
+              <span>Continuar con Google</span>
+            </button>
+
+            {/* Email */}
+            <button
+              className="btn-login-grok"
+              onClick={() => {
+                onClose();
+                window.location.href = "/auth?mode=login";
+              }}
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                />
+              </svg>
+              <span>Continuar con Email</span>
+            </button>
+          </div>
+
+          {/* Divider */}
+          <div className="relative mb-6">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-white/20" />
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-4 bg-transparent text-white/60">¿No tenés cuenta?</span>
+            </div>
+          </div>
+
+          {/* Link a registro */}
+          <button
+            className="w-full text-center text-white/80 hover:text-white transition-colors font-semibold"
+            onClick={() => {
+              onClose();
+              window.location.href = "/auth?mode=signup";
+            }}
+          >
+            Registrarse
+          </button>
+
+          {/* Footer con efectos */}
+          <p className="text-center text-white/50 text-xs mt-8">Al continuar aceptás nuestros Términos y Privacidad</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// MAIN INDEX COMPONENT
+// ══════════════════════════════════════════════════════════════════════
 export default function Index() {
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const heroRef = useRef<HTMLHeadingElement>(null);
-
-  // Word-by-word animation for hero
-  useEffect(() => {
-    if (heroRef.current) {
-      const text = heroRef.current.textContent || "";
-      const words = text.split(" ");
-      heroRef.current.innerHTML = words
-        .map((word, i) => `<span class="word-animate" style="animation-delay: ${i * 0.05}s">${word}</span>`)
-        .join(" ");
-    }
-  }, []);
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   // Scroll fade-in observer
   useEffect(() => {
@@ -44,7 +145,7 @@ export default function Index() {
   return (
     <div className="min-h-screen bg-white">
       {/* ═════════════════════════════════════════════════════════════════
-          HEADER STICKY - Always accessible
+          HEADER STICKY
           ════════════════════════════════════════════════════════════════ */}
       <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-white/95 border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -63,7 +164,7 @@ export default function Index() {
             <div className="hidden md:flex items-center gap-2 lg:gap-3">
               <Button
                 variant="ghost"
-                onClick={() => navigate("/auth?mode=login")}
+                onClick={() => setShowLoginModal(true)}
                 className="text-sm font-semibold text-gray-700 hover:text-blue-600 transition-colors min-h-10"
               >
                 Iniciar Sesión
@@ -99,7 +200,7 @@ export default function Index() {
               <Button
                 variant="ghost"
                 onClick={() => {
-                  navigate("/auth?mode=login");
+                  setShowLoginModal(true);
                   setMobileMenuOpen(false);
                 }}
                 className="w-full justify-center text-base font-semibold min-h-12"
@@ -131,104 +232,78 @@ export default function Index() {
       </nav>
 
       {/* ═════════════════════════════════════════════════════════════════
-          HERO SECTION - Wave Background + Word Animation
+          HERO SECTION - REDISEÑADO CON GRADIENTE EXPLOSIVO
           ════════════════════════════════════════════════════════════════ */}
-      <section className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 py-20 md:pt-24 md:pb-0 overflow-hidden bg-gradient-to-b from-white via-gray-50 to-white wave-background">
-        {/* Decorative waves */}
-        <div className="absolute inset-0 z-0">
-          <svg
-            className="absolute inset-0 w-full h-full opacity-[0.08] pointer-events-none"
-            viewBox="0 0 1200 600"
-            preserveAspectRatio="xMidYMid slice"
-          >
-            <defs>
-              <filter id="blur">
-                <feGaussianBlur in="SourceGraphic" stdDeviation="3" />
-              </filter>
-            </defs>
-            <path
-              d="M0,300 Q300,250 600,300 T1200,300 L1200,600 L0,600 Z"
-              fill="#2563EB"
-              filter="url(#blur)"
-              className="animate-wave"
-            />
-            <path
-              d="M0,350 Q300,300 600,350 T1200,350 L1200,600 L0,600 Z"
-              fill="#2563EB"
-              filter="url(#blur)"
-              opacity="0.6"
-              className="animate-wave"
-              style={{ animationDelay: "1s" }}
-            />
-          </svg>
-        </div>
+      <section className="hero-gradient-bg min-h-screen flex items-center justify-center relative overflow-hidden">
+        {/* Efectos laterales decorativos */}
+        <div className="slide-left-decoration" />
+        <div className="slide-right-decoration" />
+        <div className="floating-particles-left" />
+        <div className="floating-particles-right" />
 
-        {/* Hero Content */}
-        <div className="relative z-10 max-w-4xl mx-auto text-center space-y-6 md:space-y-8 pt-16 md:pt-0">
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg bg-blue-50 border border-blue-200 scroll-fade-in">
-            <span className="text-xs sm:text-sm font-semibold text-blue-600">⚡ IA que entiende Argentina</span>
-          </div>
+        {/* Contenido principal */}
+        <div className="container mx-auto px-6 relative z-10">
+          <div className="max-w-4xl mx-auto text-center">
+            {/* Badge superior */}
+            <div className="badge-glow fade-in mb-8 inline-flex">
+              <Zap className="w-4 h-4" />
+              <span>IA que entiende Argentina</span>
+            </div>
 
-          {/* Headline with word animation */}
-          <h1
-            ref={heroRef}
-            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-gray-900 px-2 sm:px-4"
-          >
-            De la idea a los números en días, no meses
-          </h1>
+            {/* Título principal */}
+            <h1 className="gradient-text-animated fade-in-up mb-6">De la idea a los números en días, no meses</h1>
 
-          {/* Subtitle */}
-          <p
-            className="text-base sm:text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed scroll-fade-in px-2 sm:px-4"
-            style={{ animationDelay: "0.3s" }}
-          >
-            ¿Tenés una idea? ¿Un negocio que crece? ¿Una empresa que necesita orden?
-            <br className="hidden sm:block" />
-            Acá validás, organizás y escalás TODO en un solo lugar.
-          </p>
+            {/* Descripción */}
+            <p className="text-white/90 text-xl md:text-2xl mb-4 fade-in-up" style={{ animationDelay: "0.1s" }}>
+              ¿Tenés una idea? ¿Un negocio que crece? ¿Una empresa que necesita orden?
+            </p>
+            <p className="text-white/80 text-lg md:text-xl mb-12 fade-in-up" style={{ animationDelay: "0.2s" }}>
+              Acá validás, organizás y escalás TODO en un solo lugar.
+            </p>
 
-          {/* Micro-benefits */}
-          <p
-            className="text-xs sm:text-sm text-gray-500 scroll-fade-in font-medium tracking-wide"
-            style={{ animationDelay: "0.5s" }}
-          >
-            ✓ Sin tarjeta • ✓ Datos seguros • ✓ Empezá en 2 min
-          </p>
-
-          {/* CTA Buttons */}
-          <div
-            className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 pt-4 sm:pt-6 scroll-fade-in"
-            style={{ animationDelay: "0.7s" }}
-          >
-            <Button
-              onClick={() => navigate("/auth?mode=signup")}
-              className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200 button-hover min-h-12 sm:min-h-[52px]"
+            {/* Features rápidos */}
+            <div
+              className="flex flex-wrap justify-center gap-8 mb-12 text-white/80 fade-in-up"
+              style={{ animationDelay: "0.3s" }}
             >
-              Comenzar Gratis →
-            </Button>
-            <Button
-              variant="outline"
-              onClick={() => navigate("/select-role")}
-              className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold rounded-lg border-2 border-gray-300 hover:bg-gray-50 transition-colors duration-200 button-hover min-h-12 sm:min-h-[52px]"
+              <div className="flex items-center gap-2">
+                <span className="text-2xl">✓</span>
+                <span>Sin tarjeta</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-2xl">✓</span>
+                <span>Datos seguros</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-2xl">✓</span>
+                <span>Empezá en 2 min</span>
+              </div>
+            </div>
+
+            {/* 2 BOTONES PRINCIPALES */}
+            <div
+              className="flex flex-col sm:flex-row gap-4 justify-center items-center fade-in-up"
+              style={{ animationDelay: "0.4s" }}
             >
-              Ver Demo
-            </Button>
-            <Button
-              onClick={() => navigate("/business-ai-bot")}
-              className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold rounded-lg bg-orange-500 hover:bg-orange-600 text-white shadow-md hover:shadow-lg transition-all duration-200 button-hover min-h-12 sm:min-h-[52px]"
-            >
-              Bot IA 🤖
-            </Button>
+              {/* Botón 1: Probar Demo */}
+              <button className="btn-secondary-glow" onClick={() => navigate("/select-role")}>
+                Ver Demo
+              </button>
+
+              {/* Botón 2: Iniciar Sesión */}
+              <button className="btn-primary-glow" onClick={() => setShowLoginModal(true)}>
+                Iniciar Sesión →
+              </button>
+            </div>
           </div>
         </div>
       </section>
 
       {/* ═════════════════════════════════════════════════════════════════
-          ETAPAS SECTION - 3 Cards with Hover Effects
+          CARDS SECTION - ¿En qué etapa estás?
           ════════════════════════════════════════════════════════════════ */}
-      <section className="py-16 sm:py-20 md:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-white via-gray-50 to-white wave-background-subtle">
-        <div className="max-w-6xl mx-auto">
+      <section className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-gray-50">
+        <div className="max-w-7xl mx-auto">
           {/* Section Header */}
           <div className="text-center space-y-3 sm:space-y-4 mb-12 sm:mb-16 scroll-fade-in">
             <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900">
@@ -247,7 +322,7 @@ export default function Index() {
                 {/* Icon & Badge */}
                 <div className="flex items-start justify-between gap-4">
                   <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-lg bg-gradient-to-br from-blue-600 to-blue-700 flex items-center justify-center flex-shrink-0">
-                    <Rocket className="h-7 w-7 sm:h-8 sm:w-8 text-white" />
+                    <Zap className="h-7 w-7 sm:h-8 sm:w-8 text-white" />
                   </div>
                   <span className="px-3 py-1.5 bg-gray-100 text-gray-600 text-xs font-bold rounded uppercase tracking-wider flex-shrink-0">
                     DESDE CERO
@@ -401,6 +476,18 @@ export default function Index() {
           </div>
         </div>
       </footer>
+
+      {/* ═════════════════════════════════════════════════════════════════
+          BOT WIDGET FLOTANTE - LATERAL
+          ════════════════════════════════════════════════════════════════ */}
+      <div className="bot-widget-float">
+        <span className="text-3xl">🤖</span>
+      </div>
+
+      {/* ═════════════════════════════════════════════════════════════════
+          MODAL LOGIN ESTILO GROK
+          ════════════════════════════════════════════════════════════════ */}
+      {showLoginModal && <LoginModal onClose={() => setShowLoginModal(false)} />}
     </div>
   );
 }
