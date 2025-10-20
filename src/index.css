@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* 🎨 PUEBLOHUB PRO - CSS FINAL SIN ERRORES */
+/* 🎨 PUEBLOHUB PRO - CSS DEFINITIVO Y FUNCIONAL */
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -43,11 +43,18 @@
      ═══════════════════════════════════════ */
 
   .aurora-waves-background {
-    background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 30%, #5b21b6 60%, #2563eb 100%);
+    background: linear-gradient(
+      135deg,
+      #1e3a8a 0%,
+      /* blue-900 */ #3730a3 30%,
+      /* violet-800 */ #5b21b6 60%,
+      /* purple-700 */ #2563eb 100% /* blue-600 */
+    );
     position: relative;
     overflow: hidden;
   }
 
+  /* Capa de aurora animada */
   .aurora-waves-background::before {
     content: "";
     position: absolute;
@@ -61,6 +68,7 @@
     z-index: 1;
   }
 
+  /* Overlay oscuro para contraste del texto */
   .aurora-waves-background::after {
     content: "";
     position: absolute;
@@ -120,7 +128,7 @@
   }
 
   /* ═══════════════════════════════════════
-     2. TÍTULO HERO
+     2. TÍTULO HERO - Máxima legibilidad
      ═══════════════════════════════════════ */
 
   .hero-title-grok {
@@ -131,12 +139,16 @@
     font-weight: 900;
     line-height: 1.1;
     letter-spacing: -2px;
+
+    /* Gradiente animado */
     background: linear-gradient(110deg, #ffffff 0%, #e0e7ff 25%, #c7d2fe 50%, #ffffff 75%, #ffffff 100%);
     background-size: 300% 100%;
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     animation: hero-shimmer 5s linear infinite;
+
+    /* Sombras fuertes para legibilidad */
     filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 1)) drop-shadow(0 2px 6px rgba(0, 0, 0, 0.9))
       drop-shadow(0 0 30px rgba(0, 0, 0, 0.5));
   }
@@ -150,6 +162,7 @@
     }
   }
 
+  /* Highlight para palabras clave */
   .hero-title-grok .highlight {
     -webkit-text-fill-color: #fbbf24;
     animation: glow-pulse-text 2s ease-in-out infinite;
@@ -175,10 +188,13 @@
     background: linear-gradient(145deg, #ffffff, #f8fafc);
     border-radius: 2rem;
     padding: 2rem;
+
+    /* Sombras tipo clay */
     box-shadow:
       12px 12px 35px rgba(0, 0, 0, 0.08),
       -8px -8px 25px rgba(255, 255, 255, 0.9),
       inset 2px 2px 5px rgba(255, 255, 255, 0.5);
+
     border: 2px solid rgba(255, 255, 255, 0.8);
     transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
     overflow: visible;
@@ -192,6 +208,7 @@
       inset 3px 3px 8px rgba(255, 255, 255, 0.7);
   }
 
+  /* Badge "Más Popular" */
   .popular-badge {
     position: absolute;
     top: -15px;
@@ -388,7 +405,7 @@
   }
 
   /* ═══════════════════════════════════════
-     9. CONTENT WRAPPER
+     9. CONTENT WRAPPER (para z-index)
      ═══════════════════════════════════════ */
 
   .content-wrapper {
