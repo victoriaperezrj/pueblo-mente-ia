@@ -167,4 +167,23 @@ export default function Index() {
                 Iniciar Sesión
               </Button>
               <Button
-                onClick={() => {
+              <Button
+  onClick={() => {
+    navigate("/auth?mode=signup");
+    setMobileMenuOpen(false);
+  }}
+  className="w-full justify-center bg-primary hover:bg-primary-hover text-white text-base font-semibold py-3 rounded-md min-h-12 button-hover magnetic-button glow-hover"
+>
+  Crear Cuenta
+</Button>
+
+<Button
+  variant="outline"
+  onClick={() => {
+    navigate("/select-role");
+    setMobileMenuOpen(false);
+  }}
+  className="w-full justify-center text-base font-semibold min-h-12 button-hover"
+>
+  Ver Demo
+</Button>
