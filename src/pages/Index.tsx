@@ -88,7 +88,7 @@ export default function Index() {
       },
       { threshold: 0.3 }
     );
-    document.querySelectorAll(".scroll-fade-in").forEach((el) => observer.observe(el));
+    document.querySelectorAll(".scroll-fade-in, .fade-in-on-scroll").forEach((el) => observer.observe(el));
     return () => observer.disconnect();
   }, []);
 
@@ -99,101 +99,101 @@ export default function Index() {
   ));
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* HEADER */}
-      <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-white/95 border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 md:h-20">
-            <div className="flex items-center gap-2 md:gap-3">
-              <div className="w-9 h-9 md:w-10 md:h-10 bg-primary rounded-lg flex items-center justify-center shadow-sm">
-                <Building2 className="w-5 h-5 md:w-6 md:h-6 text-white" />
-              </div>
-              <span className="font-bold text-sm md:text-base text-foreground hidden xs:block">
-                Proyecto Emprendedurismo
-              </span>
-            </div>
-            <button
-              className="p-2 hover:bg-muted rounded-lg transition-colors button-hover"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            >
-              {mobileMenuOpen ? <X className="w-6 h-6 text-foreground" /> : <Menu className="w-6 h-6 text-foreground" />}
-            </button>
-          </div>
-          {mobileMenuOpen && (
-            <div className="pb-4 space-y-2 border-t border-border pt-4">
-              <Button
-                variant="ghost"
-                onClick={() => {
-                  setShowLoginModal(true);
-                  setMobileMenuOpen(false);
-                }}
-                className="w-full justify-center text-base font-semibold min-h-12 button-hover"
-              >
-                Iniciar Sesión
-              </Button>
-              <Button
-                onClick={() => {
-                  navigate("/auth?mode=signup");
-                  setMobileMenuOpen(false);
-                }}
-                className="w-full justify-center bg-primary hover:bg-primary-hover text-white text-base font-semibold py-3 rounded-md min-h-12 button-hover"
-              >
-                Crear Cuenta
-              </Button>
-              <Button
-                variant="outline"
-                onClick={() => {
-                  navigate("/select-role");
-                  setMobileMenuOpen(false);
-                }}
-                className="w-full justify-center text-base font-semibold min-h-12 button-hover"
-              >
-                Ver Demo
-              </Button>
-            </div>
-          )}
-        </div>
-      </nav>
+    <>
+      {showLoginModal && <LoginModal onClose={() => setShowLoginModal(false)} />}
 
-      {/* HERO */}
-      <section className="hero-gradient-bg min-h-screen flex items-center justify-center relative overflow-hidden pt-20 wave-background">
-        <div className="slide-left-decoration" />
-        <div className="slide-right-decoration" />
-        <div className="container mx-auto px-6 relative z-10">
-          <div className="max-w-5xl mx-auto text-center">
-            <div className="badge-glow fade-in mb-8 inline-flex animate-float">
-              <Zap className="w-4 h-4" />
-              <span>IA que entiende Argentina</span>
-            </div>
-            <h1 className="gradient-text-animated mb-6 text-4xl sm:text-5xl md:text-6xl font-bold leading-tight text-cascade">
-              {heroTitle}
-            </h1>
-            <p
-              className="text-white text-lg md:text-xl mb-8 max-w-3xl mx-auto fade-in-up"
-              style={{ textShadow: "0 1px 2px rgba(0,0,0,0.5)" }}
-            >
-              La plataforma que combina IA + automatización + datos para que emprendedores y PyMEs validen ideas,
-              organicen operaciones y escalen con confianza.
-            </p>
-            <div className="flex flex-wrap justify-center gap-6 mb-12 text-white text-lg fade-in-up">
-              <div className="flex items-center gap-2">
-                <Check className="w-5 h-5" />
-                <span>Sin tarjeta requerida</span>
+      <div className="min-h-screen bg-white">
+        {/* HEADER */}
+        <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-white/95 border-b border-gray-200">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center justify-between h-16 md:h-20">
+              <div className="flex items-center gap-2 md:gap-3">
+                <div className="w-9 h-9 md:w-10 md:h-10 bg-primary rounded-lg flex items-center justify-center shadow-sm">
+                  <Building2 className="w-5 h-5 md:w-6 md:h-6 text-white" />
+                </div>
+                <span className="font-bold text-sm md:text-base text-foreground hidden xs:block">
+                  Proyecto Emprendedurismo
+                </span>
               </div>
-              <div className="flex items-center gap-2">
-                <Check className="w-5 h-5" />
-                <span>Datos 100% seguros</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Check className="w-5 h-5" />
-                <span>Empezá en solo 2 minutos</span>
-              </div>
-            </div>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center fade-in-up">
-              <button className="btn-secondary-glow button-hover" onClick={() => navigate("/select-role")}>
-                Ver Demo
+              <button
+                className="p-2 hover:bg-muted rounded-lg transition-colors button-hover"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              >
+                {mobileMenuOpen ? <X className="w-6 h-6 text-foreground" /> : <Menu className="w-6 h-6 text-foreground" />}
               </button>
-              <button className="btn-primary-glow button-hover" onClick={() => setShowLoginModal(true)}>
-                Iniciar Sesión →
-              </button>
-            </div
+            </div>
+            {mobileMenuOpen && (
+              <div className="pb-4 space-y-2 border-t border-border pt-4">
+                <Button
+                  variant="ghost"
+                  onClick={() => {
+                    setShowLoginModal(true);
+                    setMobileMenuOpen(false);
+                  }}
+                  className="w-full justify-center text-base font-semibold min-h-12 button-hover"
+                >
+                  Iniciar Sesión
+                </Button>
+                <Button
+                  onClick={() => {
+                    navigate("/auth?mode=signup");
+                    setMobileMenuOpen(false);
+                  }}
+                  className="w-full justify-center bg-primary hover:bg-primary-hover text-white text-base font-semibold py-3 rounded-md min-h-12 button-hover"
+                >
+                  Crear Cuenta
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    navigate("/select-role");
+                    setMobileMenuOpen(false);
+                  }}
+                  className="w-full justify-center text-base font-semibold min-h-12 button-hover"
+                >
+                  Ver Demo
+                </Button>
+              </div>
+            )}
+          </div>
+        </nav>
+
+        {/* HERO */}
+        <section className="hero-gradient-bg min-h-screen flex items-center justify-center relative overflow-hidden pt-20 wave-background">
+          <div className="slide-left-decoration" />
+          <div className="slide-right-decoration" />
+          <div className="container mx-auto px-6 relative z-10">
+            <div className="max-w-5xl mx-auto text-center">
+              <div className="badge-glow fade-in mb-8 inline-flex animate-float">
+                <Zap className="w-4 h-4" />
+                <span>IA que entiende Argentina</span>
+              </div>
+              <h1 className="gradient-text-animated mb-6 text-4xl sm:text-5xl md:text-6xl font-bold leading-tight text-cascade">
+                {heroTitle}
+              </h1>
+              <p
+                className="text-white text-lg md:text-xl mb-8 max-w-3xl mx-auto fade-in-up"
+                style={{ textShadow: "0 1px 2px rgba(0,0,0,0.5)" }}
+              >
+                La plataforma que combina IA + automatización + datos para que emprendedores y PyMEs validen ideas,
+                organicen operaciones y escalen con confianza.
+              </p>
+              <div className="flex flex-wrap justify-center gap-6 mb-12 text-white text-lg fade-in-up">
+                <div className="flex items-center gap-2">
+                  <Check className="w-5 h-5" />
+                  <span>Sin tarjeta requerida</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Check className="w-5 h-5" />
+                  <span>Datos 100% seguros</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Check className="w-5 h-5" />
+                  <span>Empezá en solo 2 minutos</span>
+                </div>
+              </div>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center fade-in-up">
+                <button className="btn-secondary-glow button-hover" onClick={() => navigate("/select-role")}>
+                  Ver Demo
+                </button>
+                <button className="btn-primary-glow button-hover
