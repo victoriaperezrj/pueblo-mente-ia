@@ -1,10 +1,11 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, lazy, Suspense } from "react";
 import { Zap, TrendingUp, Building2, Send, Lightbulb, X, Sparkles } from "lucide-react";
-// 🛑 IMPORTANTE: REVISA ESTAS TRES RUTAS 🛑
-// Asegúrate de que las rutas a Supabase, NegocioInterface y EmpresaInterface sean correctas en tu proyecto.
 import { supabase } from "@/integrations/supabase/client"; // RUTA PROBABLEMENTE CORRECTA
-import NegocioInterface from "@/components/business-bot/NegocioInterface"; // AJUSTA ESTA RUTA SI FALLA
-import EmpresaInterface from "@/components/business-bot/EmpresaInterface"; // AJUSTA ESTA RUTA SI FALLA
+
+// 🛑 AJUSTE CRÍTICO: Usamos Lazy Loading para aislar errores en los componentes hijos
+// Si estas rutas fallan, el error de compilación se evita en la carga inicial.
+const NegocioInterface = lazy(() => import("@/components/business-bot/NegocioInterface"));
+const EmpresaInterface = lazy(() => import("@/components/business-bot/EmpresaInterface"));
 
 type Mode = "1" | "2" | "3" | null;
 
@@ -14,6 +15,7 @@ interface Message {
   timestamp: Date;
 }
 
+// ... (El resto de las funciones getSystemPrompt, getInitialMessage, getQuickActions son iguales y correctas) ...
 const getSystemPrompt = (mode: Mode): string => {
   if (mode === "1") {
     return `Eres un MENTOR DE VALIDACIÓN DE IDEAS especializado en startups pre-product.
@@ -488,24 +490,42 @@ const BusinessAIBot = () => {
   const config = modeConfig[currentMode];
   const Icon = config.icon;
 
+  // Funciion para mostrar un error claro si el componente hijo falla o no se carga
+  const ErrorFallback = ({ mode }: { mode: string }) => (
+    <div className="h-screen flex items-center justify-center bg-red-950/90 text-white p-8">
+      <div className="bg-red-900/50 p-10 rounded-xl border border-red-700 max-w-lg text-center shadow-2xl">
+        <X className="w-12 h-12 text-red-400 mx-auto mb-4" />
+        <h2 className="text-2xl font-bold mb-3">Error de Carga del Modo {mode}</h2>
+        <p className="text-red-200 mb-4">No se pudo cargar la interfaz de **"{config.title}"**.</p>
+        <p className="text-sm text-red-300 mb-6">
+          Esto probablemente significa que la ruta de importación de **`
+          {mode === "2" ? "NegocioInterface" : "EmpresaInterface"}.tsx`** es **incorrecta** o el componente tiene un
+          error de sintaxis al inicio.
+        </p>
+        <button
+          onClick={() => setCurrentMode(null)}
+          className="bg-white/20 hover:bg-white/30 text-white font-semibold py-2 px-6 rounded-lg transition-colors"
+        >
+          Volver a Selección
+        </button>
+      </div>
+    </div>
+  );
+
   // Render interfaces especiales para Mode 2 y 3 (delegando la UI de chat)
   if (currentMode === "2") {
     return (
-      <NegocioInterface
-        onBack={() => setCurrentMode(null)}
-        onSendMessage={generateAIResponse} // Pasa la función de envío de mensaje del bot
-        // El componente NegocioInterface debe manejar su propio estado de mensajes
-      />
+      <Suspense fallback={<ErrorFallback mode="2" />}>
+        <NegocioInterface onBack={() => setCurrentMode(null)} onSendMessage={generateAIResponse} />
+      </Suspense>
     );
   }
 
   if (currentMode === "3") {
     return (
-      <EmpresaInterface
-        onBack={() => setCurrentMode(null)}
-        onSendMessage={generateAIResponse} // Pasa la función de envío de mensaje del bot
-        // El componente EmpresaInterface debe manejar su propio estado de mensajes
-      />
+      <Suspense fallback={<ErrorFallback mode="3" />}>
+        <EmpresaInterface onBack={() => setCurrentMode(null)} onSendMessage={generateAIResponse} />
+      </Suspense>
     );
   }
 
