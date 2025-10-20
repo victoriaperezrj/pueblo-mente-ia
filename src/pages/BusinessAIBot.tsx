@@ -1,8 +1,6 @@
 import { useState, useRef, useEffect } from "react";
-import { Zap, TrendingUp, Building2, Menu, Send, Lightbulb, X, Sparkles } from "lucide-react";
+import { Zap, TrendingUp, Building2, X, Send, Sparkles, ArrowLeft } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import NegocioInterface from "@/components/business-bot/NegocioInterface";
-import EmpresaInterface from "@/components/business-bot/EmpresaInterface";
 
 type Mode = "1" | "2" | "3" | null;
 
@@ -14,9 +12,9 @@ interface Message {
 
 const getSystemPrompt = (mode: Mode): string => {
   if (mode === "1") {
-    return `Eres un MENTOR DE VALIDACIÓN DE IDEAS especializado en startups pre-product.
+    return `Sos un MENTOR DE VALIDACIÓN DE IDEAS especializado en startups pre-product.
 
-IMPORTANTE: Debes dar RESPUESTAS CONCRETAS Y ACCIONABLES, no información genérica.
+IMPORTANTE: Das RESPUESTAS CONCRETAS Y ACCIONABLES, no información genérica.
 
 Estructura tus respuestas así:
 1. DIAGNÓSTICO: Identifica el problema específico
@@ -24,139 +22,63 @@ Estructura tus respuestas así:
 3. MÉTRICA: Cómo medir si funcionó
 4. PRÓXIMO PASO: Qué hacer después
 
-Tu objetivo específico:
-- Ayudar a validar ideas de forma rápida y económica
-- Diseñar experimentos para probar supuestos
-- Identificar el verdadero problema que resuelves
-- Definir el MVP más pequeño posible
-
-Cuando pregunten: "¿Es viable mi idea?"
-→ Primero pregunta: ¿Cuál es el problema? ¿Quién lo tiene? ¿Lo validaste con usuarios?
-→ Luego da un plan de 3-4 pasos para validar en 2 semanas
-
-Ejemplo de respuesta CORRECTA:
-"DIAGNÓSTICO: Tu idea de delivery vegano es viable si el mercado real lo quiere.
-PLAN: 1) Contacta 20 veganos en Twitter/FB en 3 días 2) Pregúntales: ¿Gastas >$10 en comida vegana semanal? 3) Si 14+ dicen sí, hay mercado
-MÉTRICA: 70%+ confirmación = validado
-PRÓXIMO PASO: Arma MVP en 2 semanas"`;
+Tu objetivo: ayudar a validar ideas de forma rápida y económica.`;
   } else if (mode === "2") {
-    return `Eres un MENTOR DE ESCALAMIENTO especializado en negocios 1-3 años.
+    return `Sos un MENTOR DE ESCALAMIENTO especializado en negocios 1-3 años.
 
-IMPORTANTE: Debes dar RESPUESTAS CONCRETAS Y ACCIONABLES.
+IMPORTANTE: Das RESPUESTAS CONCRETAS Y ACCIONABLES.
 
-Tu objetivo:
-- Ayudar a escalar ventas y operaciones
-- Optimizar margen y rentabilidad
-- Construir equipo
-- Decisiones basadas en datos
+Tu objetivo: ayudar a escalar ventas, optimizar margen, construir equipo y decisiones basadas en datos.
 
 Estructura respuestas:
 1. DIAGNÓSTICO (basado en datos usuario: MRR, margen, equipo)
 2. PLAN DE ACCIÓN (máx 4 pasos específicos)
-3. MÉTRICA (impacto esperado: +X% revenue, -Y% costos, etc)
-4. PRÓXIMO PASO
-
-IMPORTANTE: Pide DATOS ESPECÍFICOS antes de aconsejar.
-Si usuario no da: MRR, margen, equipo → PREGUNTA primero.
-Solo después responde con números concretos.
-
-Ejemplo CORRECTO:
-'DIAGNÓSTICO: Tu MRR $10k con margen 40% es viable para escalar. Principal bottleneck: ventas (solo 1 persona).
-
-PLAN: 
-1) Mes 1: Contrata 1 sales person full-time ($2k/mes)
-2) Mes 1-2: Implementa CRM (Pipedrive o HubSpot)
-3) Mes 2: Invierte $3k en ads en tu canal mejor
-4) Mes 3: Mide resultados
-
-MÉTRICA: Objetivo +50% clientes nuevos en 3 meses (MRR $15k)
-
-PRÓXIMO PASO: Si se cumple, duplica inversión en mes 4'`;
+3. MÉTRICA (impacto esperado)
+4. PRÓXIMO PASO`;
   } else if (mode === "3") {
-    return `Eres un CONSULTOR EMPRESARIAL especializado en PYMES y empresas grandes.
+    return `Sos un CONSULTOR EMPRESARIAL especializado en PYMES y empresas grandes.
 
-IMPORTANTE: Debes dar RESPUESTAS CONCRETAS, CUANTIFICADAS Y ACCIONABLES.
+IMPORTANTE: Das RESPUESTAS CONCRETAS, CUANTIFICADAS Y ACCIONABLES.
 
-Tu objetivo:
-- Análisis financiero profundo
-- Estrategia de crecimiento rentable
-- Optimización operacional
-- Decisiones basadas en datos y benchmarks
+Tu objetivo: análisis financiero, estrategia de crecimiento, optimización operacional.
 
 Estructura respuestas:
 1. DIAGNÓSTICO (análisis números, comparación vs industria)
 2. PLAN DE ACCIÓN (máx 5 acciones estratégicas con timeline)
-3. MÉTRICA (impacto financiero esperado en $, %, ROI)
-4. PRÓXIMO PASO (implementación inmediata)
-
-IMPORTANTE: Siempre PIDE DATOS ESPECÍFICOS:
-- Ingresos anuales
-- Costos totales y desglose
-- Margen neto actual
-- Estructura de equipo
-- Principales desafíos
-
-SOLO DESPUÉS responde con análisis cuantificado.
-
-Ejemplo CORRECTO:
-'DIAGNÓSTICO: Tu empresa $2M ingresos, 8% margen (debería ser 12-15%). Top 3 oportunidades: 1) Costos operacionales 20% altos vs industria 2) Estructura equipo redundante 3) Procesos manuales.
-
-PLAN:
-Trimestre 1: Audita y renegocia contratos proveedores
-Trimestre 2: Automatiza procesos manuales (CRM, contabilidad)
-Trimestre 3: Reorganiza equipo, elimina redundancias
-Trimestre 4: Analiza portfolio, descontinúa línea de baja rentabilidad
-
-MÉTRICA: 
-- Trimestre 1: Ahorros $40k/año (-$3.3k/mes)
-- Trimestre 2: Ahorros $60k/año (efficiencia)
-- Trimestre 3: Ahorros $50k/año (equipos)
-- Trimestre 4: Ingresos +$100k (nueva línea)
-TOTAL AÑO: +$250k en resultado (margen 8%→20%)
-
-PRÓXIMO PASO: Implementar auditoría de costos en Trimestre 1, designar owner de proyecto'`;
+3. MÉTRICA (impacto financiero esperado)
+4. PRÓXIMO PASO`;
   }
   return "";
 };
 
 const getInitialMessage = (mode: Mode): string => {
   if (mode === "1") {
-    return `¡Hola emprendedor! Soy tu mentor de validación.
+    return `¡Hola! Soy tu mentor de validación 🚀
 
-Estoy aquí para ayudarte a validar tu idea de forma rápida y económica.
+Estoy acá para ayudarte a validar tu idea de forma rápida y económica.
 
-Cuéntame:
+Contame:
 1. ¿Cuál es el problema que resuelves?
-2. ¿Quién lo tiene? (describe a tu usuario ideal)
-3. ¿Ya hablaste con clientes potenciales?
-
-Mientras tanto, usa los botones abajo para explorar cómo validar tu idea.`;
+2. ¿Quién lo tiene?
+3. ¿Ya hablaste con clientes potenciales?`;
   } else if (mode === "2") {
-    return `¡Hola! 🚀 Soy tu mentor de escalamiento.
+    return `¡Hola! Soy tu mentor de escalamiento 💪
 
-Veo que tu negocio está en etapa de crecimiento (1-3 años).
+Veo que tu negocio está creciendo (1-3 años).
 
-Para darte las mejores recomendaciones específicas, dime:
+Para darte las mejores recomendaciones, decime:
 1. ¿Cuál es tu MRR aproximado?
-2. ¿Cuál es tu principal desafío: ventas, operaciones, equipo o margen?
-3. ¿Cuántas personas tienes en tu equipo?
-
-Con esa info, diseñaré un plan personalizado para escalar. 💪`;
+2. ¿Cuál es tu principal desafío?
+3. ¿Cuántas personas tenés en tu equipo?`;
   } else if (mode === "3") {
-    return `¡Hola! 🌱 Soy tu consultor empresarial.
+    return `¡Hola! Soy tu consultor empresarial 📊
 
-Ayudo a empresas establecidas a:
-→ Mejorar rentabilidad y eficiencia
-→ Expandir a nuevos mercados
-→ Optimizar operaciones
-→ Tomar decisiones estratégicas basadas en datos
+Ayudo a empresas establecidas a mejorar rentabilidad, expandir y optimizar.
 
-Para un análisis personalizado, comparte:
-1. ¿Cuáles son tus ingresos anuales aproximados?
+Para un análisis personalizado, compartí:
+1. ¿Cuáles son tus ingresos anuales aprox?
 2. ¿Cuál es tu margen neto actual?
-3. ¿Cuál es tu principal desafío: rentabilidad, crecimiento, eficiencia o equipo?
-
-Con esa información, diseñaré un plan estratégico con impacto financiero cuantificado. 📊`;
+3. ¿Cuál es tu principal desafío?`;
   }
   return "";
 };
@@ -165,21 +87,9 @@ const getQuickActions = (mode: Mode): string[] => {
   if (mode === "1") {
     return ["¿Es viable mi idea?", "Cómo validar supuestos", "Plan de MVP", "Encontrar primeros clientes"];
   } else if (mode === "2") {
-    return [
-      "Cómo escalar ventas",
-      "Optimizar costos operacionales",
-      "Armar equipo",
-      "Métricas que importan",
-      "Estrategia de inversión",
-    ];
+    return ["Cómo escalar ventas", "Optimizar costos", "Armar equipo", "Métricas clave"];
   } else if (mode === "3") {
-    return [
-      "Análisis de rentabilidad",
-      "Plan de expansión",
-      "Optimizar operaciones",
-      "Estrategia competitiva",
-      "Gestión de equipos",
-    ];
+    return ["Análisis de rentabilidad", "Plan de expansión", "Optimizar operaciones", "Estrategia competitiva"];
   }
   return [];
 };
@@ -213,7 +123,7 @@ const BusinessAIBot = () => {
     }
   }, [currentMode]);
 
-  const generateAIResponse = async (userMessage: string) => {
+  const generateAIResponse = async (userMessage: string): Promise<string> => {
     try {
       const conversationHistory = messages.map((msg) => ({
         role: msg.role,
@@ -229,27 +139,10 @@ const BusinessAIBot = () => {
 
       if (error) throw error;
 
-      const aiResponse = data?.response || "Lo siento, hubo un error. Intenta de nuevo.";
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: "assistant",
-          content: aiResponse,
-          timestamp: new Date(),
-        },
-      ]);
+      return data?.response || "Lo siento, hubo un error. Intentá de nuevo.";
     } catch (err) {
       console.error("Error calling AI:", err);
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: "assistant",
-          content: "Lo siento, hubo un problema al conectar con el asistente. Por favor intenta nuevamente.",
-          timestamp: new Date(),
-        },
-      ]);
-    } finally {
-      setIsLoading(false);
+      return "Lo siento, hubo un problema al conectar con el asistente. Por favor intentá nuevamente.";
     }
   };
 
@@ -270,142 +163,140 @@ const BusinessAIBot = () => {
       },
     ]);
 
-    await generateAIResponse(userMessage);
+    const aiResponse = await generateAIResponse(userMessage);
+
+    setMessages((prev) => [
+      ...prev,
+      {
+        role: "assistant",
+        content: aiResponse,
+        timestamp: new Date(),
+      },
+    ]);
+
+    setIsLoading(false);
   };
 
   const handleQuickAction = (action: string) => {
     setInputValue(action);
   };
 
-  // PANTALLA DE SELECCIÓN DE MODO
+  // PANTALLA DE SELECCIÓN
   if (!currentMode) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden">
-        {/* Partículas de fondo */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-blue-500/20 rounded-full blur-3xl animate-pulse"></div>
-          <div
-            className="absolute bottom-20 right-10 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse"
-            style={{ animationDelay: "1s" }}
-          ></div>
-          <div
-            className="absolute top-1/2 left-1/2 w-64 h-64 bg-green-500/10 rounded-full blur-3xl animate-pulse"
-            style={{ animationDelay: "2s" }}
-          ></div>
+      <div className="min-h-screen gradient-loop relative overflow-hidden">
+        {/* Partículas flotantes */}
+        <div className="floating-particles">
+          {Array.from({ length: 30 }).map((_, i) => (
+            <div
+              key={i}
+              className="particle"
+              style={{
+                left: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 15}s`,
+                animationDuration: `${10 + Math.random() * 10}s`,
+              }}
+            />
+          ))}
         </div>
 
-        <div className="relative z-10 container mx-auto px-4 py-12">
-          {/* Header con efecto glassmorphism */}
-          <div className="text-center mb-12 scroll-fade-in">
-            <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/10 backdrop-blur-md border border-white/20 mb-6">
-              <Sparkles className="w-5 h-5 text-yellow-400" />
-              <span className="text-white font-semibold">IA que entiende Argentina</span>
+        <div className="relative z-10 container mx-auto px-4 py-12 min-h-screen flex flex-col items-center justify-center">
+          {/* Header */}
+          <div className="text-center mb-16 scroll-fade-in visible">
+            <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full glass-card mb-6 glow-pulse">
+              <Sparkles className="w-5 h-5 text-yellow-300" />
+              <span className="text-white font-semibold">Tu Asesor IA Personalizado</span>
             </div>
-            <h1 className="text-5xl md:text-6xl font-extrabold text-white mb-4 leading-tight">
-              Tu Asesor IA{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-green-400">
-                Empresarial
-              </span>
+            <h1
+              className="text-5xl md:text-6xl font-extrabold text-white mb-4 leading-tight"
+              style={{ textShadow: "0 4px 20px rgba(0,0,0,0.5)" }}
+            >
+              ¿En qué etapa estás?
             </h1>
-            <p className="text-xl text-gray-300 mb-2 max-w-2xl mx-auto">Respuestas concretas para cada etapa</p>
-            <p className="text-gray-400 max-w-xl mx-auto">
-              Selecciona tu etapa para recibir estrategias personalizadas
+            <p className="text-xl text-white/90 max-w-2xl mx-auto" style={{ textShadow: "0 2px 10px rgba(0,0,0,0.5)" }}>
+              Seleccioná tu etapa para recibir estrategias personalizadas
             </p>
           </div>
 
-          {/* Cards con claymorphism mejorado */}
-          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {/* CARD 1 - AZUL */}
+          {/* Cards */}
+          <div className="grid md:grid-cols-3 gap-8 max-w-6xl w-full">
+            {/* Card 1 - Azul */}
             <div
-              className="clay-card-grok scroll-fade-in group cursor-pointer"
-              style={{ animationDelay: "0.1s" }}
+              className="clay-card-grok scroll-fade-in visible group cursor-pointer"
               onClick={() => setCurrentMode("1")}
             >
-              <div className="relative">
-                <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl opacity-0 group-hover:opacity-100 blur transition duration-500"></div>
-                <div className="relative bg-gradient-to-br from-blue-500 to-blue-600 p-8 rounded-2xl text-white">
-                  <div className="flex items-center justify-center w-16 h-16 bg-white/20 rounded-2xl mb-6 mx-auto group-hover:scale-110 transition-transform">
-                    <Zap className="w-8 h-8" />
-                  </div>
-                  <h2 className="text-2xl font-bold text-center mb-2">Idea Validada</h2>
-                  <p className="text-center text-blue-100 font-semibold mb-4">0-1 año</p>
-                  <p className="text-center text-white/90 mb-6 leading-relaxed">Tienes una idea con potencial</p>
-                  <div className="text-sm space-y-2 opacity-90">
+              <div className="relative p-8">
+                <div className="flex items-center justify-center w-16 h-16 bg-blue-100 rounded-2xl mb-6 mx-auto group-hover:scale-110 transition-transform">
+                  <Zap className="w-8 h-8 text-blue-600" />
+                </div>
+                <div className="text-center">
+                  <h2 className="text-2xl font-extrabold text-gray-900 mb-2">Idea Validada</h2>
+                  <p className="text-blue-600 font-bold mb-4">0-1 año</p>
+                  <p className="text-gray-600 mb-6">Tenés una idea con potencial</p>
+                  <div className="text-sm text-gray-700 space-y-2 mb-6">
                     <p>• Validación de mercado</p>
                     <p>• MVP y Product-Market Fit</p>
                   </div>
-                  <div className="mt-6 text-center">
-                    <div className="inline-flex items-center gap-2 text-sm font-semibold">
-                      Empezar <span className="group-hover:translate-x-1 transition-transform">→</span>
-                    </div>
-                  </div>
+                  <button className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 rounded-xl magnetic-button transition-all">
+                    Empezar →
+                  </button>
                 </div>
               </div>
             </div>
 
-            {/* CARD 2 - PÚRPURA */}
+            {/* Card 2 - Púrpura */}
             <div
-              className="clay-card-grok scroll-fade-in group cursor-pointer"
-              style={{ animationDelay: "0.2s" }}
+              className="clay-card-grok scroll-fade-in visible group cursor-pointer relative"
               onClick={() => setCurrentMode("2")}
             >
-              <div className="popular-badge">⭐ Más usado</div>
-              <div className="relative">
-                <div className="absolute -inset-1 bg-gradient-to-r from-purple-500 to-purple-600 rounded-2xl opacity-0 group-hover:opacity-100 blur transition duration-500"></div>
-                <div className="relative bg-gradient-to-br from-purple-500 to-purple-600 p-8 rounded-2xl text-white">
-                  <div className="flex items-center justify-center w-16 h-16 bg-white/20 rounded-2xl mb-6 mx-auto group-hover:scale-110 transition-transform">
-                    <TrendingUp className="w-8 h-8" />
-                  </div>
-                  <h2 className="text-2xl font-bold text-center mb-2">Negocio en Crecimiento</h2>
-                  <p className="text-center text-purple-100 font-semibold mb-4">1-3 años</p>
-                  <p className="text-center text-white/90 mb-6 leading-relaxed">Tu negocio está validado y creciendo</p>
-                  <div className="text-sm space-y-2 opacity-90">
+              <div className="popular-badge">⭐ Más elegido</div>
+              <div className="relative p-8">
+                <div className="flex items-center justify-center w-16 h-16 bg-purple-100 rounded-2xl mb-6 mx-auto group-hover:scale-110 transition-transform">
+                  <TrendingUp className="w-8 h-8 text-purple-600" />
+                </div>
+                <div className="text-center">
+                  <h2 className="text-2xl font-extrabold text-gray-900 mb-2">Negocio</h2>
+                  <p className="text-purple-600 font-bold mb-4">1-3 años</p>
+                  <p className="text-gray-600 mb-6">Tu negocio está creciendo</p>
+                  <div className="text-sm text-gray-700 space-y-2 mb-6">
                     <p>• Escalamiento de ventas</p>
                     <p>• Optimización operacional</p>
                   </div>
-                  <div className="mt-6 text-center">
-                    <div className="inline-flex items-center gap-2 text-sm font-semibold">
-                      Empezar <span className="group-hover:translate-x-1 transition-transform">→</span>
-                    </div>
-                  </div>
+                  <button className="w-full bg-purple-500 hover:bg-purple-600 text-white font-bold py-3 rounded-xl magnetic-button transition-all">
+                    Empezar →
+                  </button>
                 </div>
               </div>
             </div>
 
-            {/* CARD 3 - VERDE */}
+            {/* Card 3 - Verde */}
             <div
-              className="clay-card-grok scroll-fade-in group cursor-pointer"
-              style={{ animationDelay: "0.3s" }}
+              className="clay-card-grok scroll-fade-in visible group cursor-pointer"
               onClick={() => setCurrentMode("3")}
             >
-              <div className="relative">
-                <div className="absolute -inset-1 bg-gradient-to-r from-green-500 to-green-600 rounded-2xl opacity-0 group-hover:opacity-100 blur transition duration-500"></div>
-                <div className="relative bg-gradient-to-br from-green-500 to-green-600 p-8 rounded-2xl text-white">
-                  <div className="flex items-center justify-center w-16 h-16 bg-white/20 rounded-2xl mb-6 mx-auto group-hover:scale-110 transition-transform">
-                    <Building2 className="w-8 h-8" />
-                  </div>
-                  <h2 className="text-2xl font-bold text-center mb-2">Empresa Establecida</h2>
-                  <p className="text-center text-green-100 font-semibold mb-4">3+ años</p>
-                  <p className="text-center text-white/90 mb-6 leading-relaxed">
-                    Empresa PYME o grande con operaciones
-                  </p>
-                  <div className="text-sm space-y-2 opacity-90">
+              <div className="relative p-8">
+                <div className="flex items-center justify-center w-16 h-16 bg-green-100 rounded-2xl mb-6 mx-auto group-hover:scale-110 transition-transform">
+                  <Building2 className="w-8 h-8 text-green-600" />
+                </div>
+                <div className="text-center">
+                  <h2 className="text-2xl font-extrabold text-gray-900 mb-2">Empresa</h2>
+                  <p className="text-green-600 font-bold mb-4">3+ años</p>
+                  <p className="text-gray-600 mb-6">Empresa PYME establecida</p>
+                  <div className="text-sm text-gray-700 space-y-2 mb-6">
                     <p>• Estrategia empresarial</p>
                     <p>• Rentabilidad y expansión</p>
                   </div>
-                  <div className="mt-6 text-center">
-                    <div className="inline-flex items-center gap-2 text-sm font-semibold">
-                      Empezar <span className="group-hover:translate-x-1 transition-transform">→</span>
-                    </div>
-                  </div>
+                  <button className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-xl magnetic-button transition-all">
+                    Empezar →
+                  </button>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Footer */}
-          <div className="text-center mt-16 text-gray-400">
-            <p className="text-sm">Powered by Claude AI • PuebloHub Pro</p>
+          <div className="text-center mt-16 text-white/80">
+            <p className="text-sm">Powered by Claude AI • Proyecto Emprendedurismo</p>
           </div>
         </div>
       </div>
@@ -418,72 +309,40 @@ const BusinessAIBot = () => {
       icon: Zap,
       title: "Idea Validada",
       subtitle: "0-1 año",
-      borderColor: "border-blue-200",
-      bgColor: "bg-blue-50",
-      textColor: "text-blue-600",
       messageColor: "bg-blue-500",
-      hoverBg: "hover:bg-blue-100",
+      borderColor: "border-blue-200",
     },
     "2": {
       gradient: "from-purple-500 to-purple-600",
       icon: TrendingUp,
       title: "Negocio en Crecimiento",
       subtitle: "1-3 años",
-      borderColor: "border-purple-200",
-      bgColor: "bg-purple-50",
-      textColor: "text-purple-600",
       messageColor: "bg-purple-500",
-      hoverBg: "hover:bg-purple-100",
+      borderColor: "border-purple-200",
     },
     "3": {
       gradient: "from-green-500 to-green-600",
       icon: Building2,
       title: "Empresa Establecida",
       subtitle: "3+ años",
-      borderColor: "border-green-200",
-      bgColor: "bg-green-50",
-      textColor: "text-green-600",
       messageColor: "bg-green-500",
-      hoverBg: "hover:bg-green-100",
+      borderColor: "border-green-200",
     },
   };
 
   const config = modeConfig[currentMode];
   const Icon = config.icon;
 
-  // Render interfaces especiales para Mode 2 y 3
-  if (currentMode === "2") {
-    return (
-      <NegocioInterface
-        onBack={() => setCurrentMode(null)}
-        onSendMessage={generateAIResponse}
-        messages={messages}
-        isLoading={isLoading}
-      />
-    );
-  }
-
-  if (currentMode === "3") {
-    return (
-      <EmpresaInterface
-        onBack={() => setCurrentMode(null)}
-        onSendMessage={generateAIResponse}
-        messages={messages}
-        isLoading={isLoading}
-      />
-    );
-  }
-
-  // Mode 1 - Chat interface mejorada
+  // CHAT INTERFACE
   return (
-    <div className="h-screen flex flex-col bg-slate-50">
-      {/* Header mejorado */}
+    <div className="h-screen flex flex-col bg-gray-50">
+      {/* Header */}
       <div
         className={`bg-gradient-to-r ${config.gradient} p-4 shadow-xl flex items-center justify-between text-white relative overflow-hidden`}
       >
         <div className="absolute inset-0 bg-white/10 backdrop-blur-sm"></div>
         <div className="flex items-center gap-3 relative z-10">
-          <div className="p-2 bg-white/20 rounded-xl">
+          <div className="p-2 bg-white/20 rounded-xl glow-pulse">
             <Icon className="w-6 h-6" />
           </div>
           <div>
@@ -495,17 +354,16 @@ const BusinessAIBot = () => {
           onClick={() => setCurrentMode(null)}
           className="p-2 hover:bg-white/20 rounded-lg transition relative z-10 magnetic-button"
         >
-          <X className="w-6 h-6" />
+          <ArrowLeft className="w-6 h-6" />
         </button>
       </div>
 
-      {/* Chat Area mejorada */}
+      {/* Chat Area */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4 max-w-4xl mx-auto w-full">
         {messages.map((msg, idx) => (
           <div
             key={idx}
-            className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"} scroll-fade-in`}
-            style={{ animationDelay: `${idx * 0.1}s` }}
+            className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"} scroll-fade-in visible`}
           >
             <div
               className={`max-w-2xl p-4 rounded-2xl shadow-lg ${
@@ -523,17 +381,10 @@ const BusinessAIBot = () => {
         {isLoading && (
           <div className="flex justify-start">
             <div className={`max-w-2xl p-4 rounded-2xl bg-white border-2 ${config.borderColor} shadow-lg`}>
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></div>
-                <div
-                  className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"
-                  style={{ animationDelay: "0.2s" }}
-                ></div>
-                <div
-                  className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"
-                  style={{ animationDelay: "0.4s" }}
-                ></div>
-                <span className="ml-2 text-slate-600">Escribiendo...</span>
+              <div className="loading-dots">
+                <span></span>
+                <span></span>
+                <span></span>
               </div>
             </div>
           </div>
@@ -542,43 +393,43 @@ const BusinessAIBot = () => {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Quick Actions mejoradas */}
+      {/* Quick Actions */}
       {messages.length <= 1 && !isLoading && (
-        <div className="bg-white border-t-2 border-slate-200 p-4 max-w-4xl mx-auto w-full">
+        <div className="bg-white border-t-2 border-gray-200 p-4 max-w-4xl mx-auto w-full">
           <div className="flex items-center gap-2 mb-3">
-            <Lightbulb className="w-5 h-5 text-yellow-500" />
-            <p className="text-sm font-bold text-slate-700">Preguntas sugeridas</p>
+            <Sparkles className="w-5 h-5 text-yellow-500" />
+            <p className="text-sm font-bold text-gray-700">Preguntas sugeridas</p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {getQuickActions(currentMode).map((action, idx) => (
               <button
                 key={idx}
                 onClick={() => handleQuickAction(action)}
-                className={`text-left p-4 rounded-xl border-2 ${config.borderColor} ${config.bgColor} ${config.textColor} font-medium text-sm flex items-start gap-3 magnetic-button shadow-sm ${config.hoverBg} transition-all`}
+                className="text-left p-4 rounded-xl bg-gray-50 hover:bg-gray-100 border-2 border-gray-200 font-medium text-sm flex items-start gap-3 magnetic-button transition-all"
               >
-                <Sparkles className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                <span>{action}</span>
+                <Sparkles className="w-4 h-4 mt-0.5 flex-shrink-0 text-gray-500" />
+                <span className="text-gray-700">{action}</span>
               </button>
             ))}
           </div>
         </div>
       )}
 
-      {/* Input Area mejorada */}
-      <div className="bg-white border-t-2 border-slate-200 p-4 max-w-4xl mx-auto w-full shadow-lg">
+      {/* Input Area */}
+      <div className="bg-white border-t-2 border-gray-200 p-4 max-w-4xl mx-auto w-full shadow-lg">
         <form onSubmit={handleSendMessage} className="flex gap-3">
           <input
             type="text"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
-            placeholder="Escribe tu pregunta específica o desafío..."
+            placeholder="Escribe tu pregunta..."
             disabled={isLoading}
-            className="flex-1 border-2 border-slate-300 rounded-xl px-5 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50 transition-all"
+            className="flex-1 border-2 border-gray-300 rounded-xl px-5 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50 transition-all"
           />
           <button
             type="submit"
             disabled={!inputValue.trim() || isLoading}
-            className={`${config.messageColor} text-white px-8 py-3 rounded-xl hover:opacity-90 disabled:bg-slate-400 font-semibold flex items-center gap-2 transition-all magnetic-button shadow-lg`}
+            className={`${config.messageColor} text-white px-8 py-3 rounded-xl hover:opacity-90 disabled:bg-gray-400 font-semibold flex items-center gap-2 transition-all magnetic-button shadow-lg`}
           >
             <Send className="w-5 h-5" />
             Enviar
