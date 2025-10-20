@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect } from "react";
-import { Zap, TrendingUp, Building2, Menu, Send, Lightbulb, X, Sparkles } from "lucide-react";
+import { useState, useRef, useEffect, useCallback } from "react";
+import { Zap, TrendingUp, Building2, Send, Lightbulb, X, Sparkles, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import NegocioInterface from "@/components/business-bot/NegocioInterface";
 import EmpresaInterface from "@/components/business-bot/EmpresaInterface";
@@ -12,6 +12,7 @@ interface Message {
   timestamp: Date;
 }
 
+// [Mantener las mismas funciones getSystemPrompt, getInitialMessage, getQuickActions del archivo original]
 const getSystemPrompt = (mode: Mode): string => {
   if (mode === "1") {
     return `Eres un MENTOR DE VALIDACIÓN DE IDEAS especializado en startups pre-product.
@@ -22,23 +23,7 @@ Estructura tus respuestas así:
 1. DIAGNÓSTICO: Identifica el problema específico
 2. PLAN DE ACCIÓN: Pasos concretos numerados (máximo 5)
 3. MÉTRICA: Cómo medir si funcionó
-4. PRÓXIMO PASO: Qué hacer después
-
-Tu objetivo específico:
-- Ayudar a validar ideas de forma rápida y económica
-- Diseñar experimentos para probar supuestos
-- Identificar el verdadero problema que resuelves
-- Definir el MVP más pequeño posible
-
-Cuando pregunten: "¿Es viable mi idea?"
-→ Primero pregunta: ¿Cuál es el problema? ¿Quién lo tiene? ¿Lo validaste con usuarios?
-→ Luego da un plan de 3-4 pasos para validar en 2 semanas
-
-Ejemplo de respuesta CORRECTA:
-"DIAGNÓSTICO: Tu idea de delivery vegano es viable si el mercado real lo quiere.
-PLAN: 1) Contacta 20 veganos en Twitter/FB en 3 días 2) Pregúntales: ¿Gastas >$10 en comida vegana semanal? 3) Si 14+ dicen sí, hay mercado
-MÉTRICA: 70%+ confirmación = validado
-PRÓXIMO PASO: Arma MVP en 2 semanas"`;
+4. PRÓXIMO PASO: Qué hacer después`;
   } else if (mode === "2") {
     return `Eres un MENTOR DE ESCALAMIENTO especializado en negocios 1-3 años.
 
@@ -48,30 +33,7 @@ Tu objetivo:
 - Ayudar a escalar ventas y operaciones
 - Optimizar margen y rentabilidad
 - Construir equipo
-- Decisiones basadas en datos
-
-Estructura respuestas:
-1. DIAGNÓSTICO (basado en datos usuario: MRR, margen, equipo)
-2. PLAN DE ACCIÓN (máx 4 pasos específicos)
-3. MÉTRICA (impacto esperado: +X% revenue, -Y% costos, etc)
-4. PRÓXIMO PASO
-
-IMPORTANTE: Pide DATOS ESPECÍFICOS antes de aconsejar.
-Si usuario no da: MRR, margen, equipo → PREGUNTA primero.
-Solo después responde con números concretos.
-
-Ejemplo CORRECTO:
-'DIAGNÓSTICO: Tu MRR $10k con margen 40% es viable para escalar. Principal bottleneck: ventas (solo 1 persona).
-
-PLAN: 
-1) Mes 1: Contrata 1 sales person full-time ($2k/mes)
-2) Mes 1-2: Implementa CRM (Pipedrive o HubSpot)
-3) Mes 2: Invierte $3k en ads en tu canal mejor
-4) Mes 3: Mide resultados
-
-MÉTRICA: Objetivo +50% clientes nuevos en 3 meses (MRR $15k)
-
-PRÓXIMO PASO: Si se cumple, duplica inversión en mes 4'`;
+- Decisiones basadas en datos`;
   } else if (mode === "3") {
     return `Eres un CONSULTOR EMPRESARIAL especializado en PYMES y empresas grandes.
 
@@ -81,40 +43,7 @@ Tu objetivo:
 - Análisis financiero profundo
 - Estrategia de crecimiento rentable
 - Optimización operacional
-- Decisiones basadas en datos y benchmarks
-
-Estructura respuestas:
-1. DIAGNÓSTICO (análisis números, comparación vs industria)
-2. PLAN DE ACCIÓN (máx 5 acciones estratégicas con timeline)
-3. MÉTRICA (impacto financiero esperado en $, %, ROI)
-4. PRÓXIMO PASO (implementación inmediata)
-
-IMPORTANTE: Siempre PIDE DATOS ESPECÍFICOS:
-- Ingresos anuales
-- Costos totales y desglose
-- Margen neto actual
-- Estructura de equipo
-- Principales desafíos
-
-SOLO DESPUÉS responde con análisis cuantificado.
-
-Ejemplo CORRECTO:
-'DIAGNÓSTICO: Tu empresa $2M ingresos, 8% margen (debería ser 12-15%). Top 3 oportunidades: 1) Costos operacionales 20% altos vs industria 2) Estructura equipo redundante 3) Procesos manuales.
-
-PLAN:
-Trimestre 1: Audita y renegocia contratos proveedores
-Trimestre 2: Automatiza procesos manuales (CRM, contabilidad)
-Trimestre 3: Reorganiza equipo, elimina redundancias
-Trimestre 4: Analiza portfolio, descontinúa línea de baja rentabilidad
-
-MÉTRICA: 
-- Trimestre 1: Ahorros $40k/año (-$3.3k/mes)
-- Trimestre 2: Ahorros $60k/año (efficiencia)
-- Trimestre 3: Ahorros $50k/año (equipos)
-- Trimestre 4: Ingresos +$100k (nueva línea)
-TOTAL AÑO: +$250k en resultado (margen 8%→20%)
-
-PRÓXIMO PASO: Implementar auditoría de costos en Trimestre 1, designar owner de proyecto'`;
+- Decisiones basadas en datos y benchmarks`;
   }
   return "";
 };
@@ -189,7 +118,9 @@ const BusinessAIBot = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -213,126 +144,168 @@ const BusinessAIBot = () => {
     }
   }, [currentMode]);
 
-  const generateAIResponse = async (userMessage: string) => {
-    try {
-      const conversationHistory = messages.map((msg) => ({
-        role: msg.role,
-        content: msg.content,
-      }));
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+    };
+  }, []);
 
-      const { data, error } = await supabase.functions.invoke("claude-chat", {
-        body: {
-          messages: [...conversationHistory, { role: "user", content: userMessage }],
-          systemPrompt: getSystemPrompt(currentMode),
-        },
-      });
+  const generateAIResponse = useCallback(
+    async (userMessage: string) => {
+      // Cancelar request anterior si existe
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
 
-      if (error) throw error;
+      // Crear nuevo AbortController
+      abortControllerRef.current = new AbortController();
 
-      const aiResponse = data?.response || "Lo siento, hubo un error. Intenta de nuevo.";
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: "assistant",
-          content: aiResponse,
-          timestamp: new Date(),
-        },
-      ]);
-    } catch (err) {
-      console.error("Error calling AI:", err);
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: "assistant",
-          content: "Lo siento, hubo un problema al conectar con el asistente. Por favor intenta nuevamente.",
-          timestamp: new Date(),
-        },
-      ]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleSendMessage = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!inputValue.trim() || isLoading) return;
-
-    const userMessage = inputValue.trim();
-    setInputValue("");
-    setIsLoading(true);
-
-    setMessages((prev) => [
-      ...prev,
-      {
+      // Agregar mensaje del usuario inmediatamente
+      const userMsg: Message = {
         role: "user",
         content: userMessage,
         timestamp: new Date(),
-      },
-    ]);
+      };
 
-    await generateAIResponse(userMessage);
+      setMessages((prev) => [...prev, userMsg]);
+      setInputValue("");
+      setIsLoading(true);
+      setError(null);
+
+      try {
+        const systemPrompt = getSystemPrompt(currentMode);
+        const conversationHistory = [...messages, userMsg].map((m) => ({
+          role: m.role,
+          content: m.content,
+        }));
+
+        const { data, error: supabaseError } = await supabase.functions.invoke("chat", {
+          body: {
+            messages: [{ role: "system", content: systemPrompt }, ...conversationHistory],
+          },
+          signal: abortControllerRef.current.signal,
+        });
+
+        if (supabaseError) {
+          throw supabaseError;
+        }
+
+        if (!data?.choices?.[0]?.message?.content) {
+          throw new Error("Respuesta inválida del servidor");
+        }
+
+        const botResponse: Message = {
+          role: "assistant",
+          content: data.choices[0].message.content,
+          timestamp: new Date(),
+        };
+
+        setMessages((prev) => [...prev, botResponse]);
+      } catch (err: any) {
+        if (err.name === "AbortError") {
+          console.log("Request cancelled");
+          return;
+        }
+
+        console.error("Error generating response:", err);
+
+        const errorMsg =
+          err.message === "Failed to fetch"
+            ? "No se pudo conectar con el servidor. Verificá tu conexión."
+            : "Hubo un error al procesar tu mensaje. Intentá de nuevo.";
+
+        setError(errorMsg);
+
+        // Agregar mensaje de error al chat
+        const errorResponse: Message = {
+          role: "assistant",
+          content: `❌ ${errorMsg}`,
+          timestamp: new Date(),
+        };
+        setMessages((prev) => [...prev, errorResponse]);
+      } finally {
+        setIsLoading(false);
+        abortControllerRef.current = null;
+      }
+    },
+    [currentMode, messages],
+  );
+
+  const handleSendMessage = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (inputValue.trim() && !isLoading) {
+      generateAIResponse(inputValue.trim());
+    }
   };
 
   const handleQuickAction = (action: string) => {
-    setInputValue(action);
+    if (!isLoading) {
+      generateAIResponse(action);
+    }
   };
 
-  // PANTALLA DE SELECCIÓN DE MODO
+  // Selector de modo mejorado con glassmorphism
   if (!currentMode) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden">
-        {/* Partículas de fondo */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-blue-500/20 rounded-full blur-3xl animate-pulse"></div>
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center p-4">
+        {/* Floating particles */}
+        <div className="fixed inset-0 pointer-events-none overflow-hidden">
           <div
-            className="absolute bottom-20 right-10 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse"
-            style={{ animationDelay: "1s" }}
+            className="floating-particle"
+            style={{
+              left: "10%",
+              top: "20%",
+              animationDelay: "0s",
+              width: "150px",
+              height: "150px",
+            }}
           ></div>
           <div
-            className="absolute top-1/2 left-1/2 w-64 h-64 bg-green-500/10 rounded-full blur-3xl animate-pulse"
-            style={{ animationDelay: "2s" }}
+            className="floating-particle"
+            style={{
+              right: "15%",
+              top: "60%",
+              animationDelay: "2s",
+              width: "200px",
+              height: "200px",
+            }}
           ></div>
         </div>
 
-        <div className="relative z-10 container mx-auto px-4 py-12">
-          {/* Header con efecto glassmorphism */}
-          <div className="text-center mb-12 scroll-fade-in">
-            <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/10 backdrop-blur-md border border-white/20 mb-6">
-              <Sparkles className="w-5 h-5 text-yellow-400" />
-              <span className="text-white font-semibold">IA que entiende Argentina</span>
-            </div>
-            <h1 className="text-5xl md:text-6xl font-extrabold text-white mb-4 leading-tight">
-              Tu Asesor IA{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-green-400">
-                Empresarial
-              </span>
+        <div className="max-w-6xl w-full relative z-10">
+          <div className="text-center mb-16 fade-in-up">
+            <h1 className="text-5xl md:text-6xl font-extrabold text-white mb-4 gradient-text-animated">
+              ¿En qué etapa está tu negocio?
             </h1>
-            <p className="text-xl text-gray-300 mb-2 max-w-2xl mx-auto">Respuestas concretas para cada etapa</p>
-            <p className="text-gray-400 max-w-xl mx-auto">
-              Selecciona tu etapa para recibir estrategias personalizadas
+            <p className="text-xl text-blue-200 max-w-2xl mx-auto">
+              Elegí tu etapa para recibir asesoramiento personalizado con IA
             </p>
           </div>
 
-          {/* Cards con claymorphism mejorado */}
-          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {/* CARD 1 - AZUL */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Card 1 - Emprendedor */}
             <div
-              className="clay-card-grok scroll-fade-in group cursor-pointer"
+              className="tilt-card cursor-pointer scroll-reveal fade-in-up"
               style={{ animationDelay: "0.1s" }}
               onClick={() => setCurrentMode("1")}
             >
-              <div className="relative">
+              <div className="relative group glassmorphism-card h-full">
                 <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl opacity-0 group-hover:opacity-100 blur transition duration-500"></div>
                 <div className="relative bg-gradient-to-br from-blue-500 to-blue-600 p-8 rounded-2xl text-white">
                   <div className="flex items-center justify-center w-16 h-16 bg-white/20 rounded-2xl mb-6 mx-auto group-hover:scale-110 transition-transform">
                     <Zap className="w-8 h-8" />
                   </div>
-                  <h2 className="text-2xl font-bold text-center mb-2">Idea Validada</h2>
+                  <h2 className="text-2xl font-bold text-center mb-2">Idea / Emprendedor</h2>
                   <p className="text-center text-blue-100 font-semibold mb-4">0-1 año</p>
-                  <p className="text-center text-white/90 mb-6 leading-relaxed">Tienes una idea con potencial</p>
+                  <p className="text-center text-white/90 mb-6 leading-relaxed">
+                    Validá tu idea antes de invertir tiempo y dinero
+                  </p>
                   <div className="text-sm space-y-2 opacity-90">
-                    <p>• Validación de mercado</p>
-                    <p>• MVP y Product-Market Fit</p>
+                    <p>• Validación de hipótesis</p>
+                    <p>• Plan de MVP mínimo</p>
                   </div>
                   <div className="mt-6 text-center">
                     <div className="inline-flex items-center gap-2 text-sm font-semibold">
@@ -343,25 +316,29 @@ const BusinessAIBot = () => {
               </div>
             </div>
 
-            {/* CARD 2 - PÚRPURA */}
+            {/* Card 2 - Negocio */}
             <div
-              className="clay-card-grok scroll-fade-in group cursor-pointer"
+              className="tilt-card cursor-pointer scroll-reveal fade-in-up"
               style={{ animationDelay: "0.2s" }}
               onClick={() => setCurrentMode("2")}
             >
-              <div className="popular-badge">⭐ Más usado</div>
-              <div className="relative">
+              <div className="relative group glassmorphism-card h-full scale-105">
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-2 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-xl text-xs font-bold text-white shadow-xl pulse-glow">
+                  ⭐ Más Popular
+                </div>
                 <div className="absolute -inset-1 bg-gradient-to-r from-purple-500 to-purple-600 rounded-2xl opacity-0 group-hover:opacity-100 blur transition duration-500"></div>
                 <div className="relative bg-gradient-to-br from-purple-500 to-purple-600 p-8 rounded-2xl text-white">
-                  <div className="flex items-center justify-center w-16 h-16 bg-white/20 rounded-2xl mb-6 mx-auto group-hover:scale-110 transition-transform">
+                  <div className="flex items-center justify-center w-16 h-16 bg-white/20 rounded-2xl mb-6 mx-auto group-hover:scale-110 transition-transform mt-4">
                     <TrendingUp className="w-8 h-8" />
                   </div>
                   <h2 className="text-2xl font-bold text-center mb-2">Negocio en Crecimiento</h2>
                   <p className="text-center text-purple-100 font-semibold mb-4">1-3 años</p>
-                  <p className="text-center text-white/90 mb-6 leading-relaxed">Tu negocio está validado y creciendo</p>
+                  <p className="text-center text-white/90 mb-6 leading-relaxed">
+                    Ya vendés, pero necesitás escalar y profesionalizar
+                  </p>
                   <div className="text-sm space-y-2 opacity-90">
-                    <p>• Escalamiento de ventas</p>
-                    <p>• Optimización operacional</p>
+                    <p>• Estrategia de escalamiento</p>
+                    <p>• Optimización de márgenes</p>
                   </div>
                   <div className="mt-6 text-center">
                     <div className="inline-flex items-center gap-2 text-sm font-semibold">
@@ -372,13 +349,13 @@ const BusinessAIBot = () => {
               </div>
             </div>
 
-            {/* CARD 3 - VERDE */}
+            {/* Card 3 - Empresa */}
             <div
-              className="clay-card-grok scroll-fade-in group cursor-pointer"
+              className="tilt-card cursor-pointer scroll-reveal fade-in-up"
               style={{ animationDelay: "0.3s" }}
               onClick={() => setCurrentMode("3")}
             >
-              <div className="relative">
+              <div className="relative group glassmorphism-card h-full">
                 <div className="absolute -inset-1 bg-gradient-to-r from-green-500 to-green-600 rounded-2xl opacity-0 group-hover:opacity-100 blur transition duration-500"></div>
                 <div className="relative bg-gradient-to-br from-green-500 to-green-600 p-8 rounded-2xl text-white">
                   <div className="flex items-center justify-center w-16 h-16 bg-white/20 rounded-2xl mb-6 mx-auto group-hover:scale-110 transition-transform">
@@ -387,7 +364,7 @@ const BusinessAIBot = () => {
                   <h2 className="text-2xl font-bold text-center mb-2">Empresa Establecida</h2>
                   <p className="text-center text-green-100 font-semibold mb-4">3+ años</p>
                   <p className="text-center text-white/90 mb-6 leading-relaxed">
-                    Empresa PYME o grande con operaciones
+                    Empresa PYME o grande con operaciones consolidadas
                   </p>
                   <div className="text-sm space-y-2 opacity-90">
                     <p>• Estrategia empresarial</p>
@@ -403,8 +380,7 @@ const BusinessAIBot = () => {
             </div>
           </div>
 
-          {/* Footer */}
-          <div className="text-center mt-16 text-gray-400">
+          <div className="text-center mt-16 text-gray-400 fade-in-up" style={{ animationDelay: "0.4s" }}>
             <p className="text-sm">Powered by Claude AI • PuebloHub Pro</p>
           </div>
         </div>
@@ -451,7 +427,7 @@ const BusinessAIBot = () => {
   const config = modeConfig[currentMode];
   const Icon = config.icon;
 
-  // Render interfaces especiales para Mode 2 y 3
+  // Interfaces especiales para Mode 2 y 3
   if (currentMode === "2") {
     return (
       <NegocioInterface
@@ -474,42 +450,40 @@ const BusinessAIBot = () => {
     );
   }
 
-  // Mode 1 - Chat interface mejorada
+  // Mode 1 - Chat interface mejorada con glassmorphism
   return (
-    <div className="h-screen flex flex-col bg-slate-50">
-      {/* Header mejorado */}
-      <div
-        className={`bg-gradient-to-r ${config.gradient} p-4 shadow-xl flex items-center justify-between text-white relative overflow-hidden`}
-      >
-        <div className="absolute inset-0 bg-white/10 backdrop-blur-sm"></div>
+    <div className="h-screen flex flex-col bg-gradient-to-br from-slate-50 to-blue-50">
+      {/* Header glassmorphism */}
+      <div className={`glassmorphism-nav p-4 shadow-xl flex items-center justify-between relative overflow-hidden`}>
+        <div className={`absolute inset-0 bg-gradient-to-r ${config.gradient} opacity-90`}></div>
         <div className="flex items-center gap-3 relative z-10">
-          <div className="p-2 bg-white/20 rounded-xl">
-            <Icon className="w-6 h-6" />
+          <div className="p-2 bg-white/30 rounded-xl backdrop-blur-sm">
+            <Icon className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h1 className="text-lg font-bold">{config.title}</h1>
-            <p className="text-sm opacity-90">{config.subtitle}</p>
+            <h1 className="text-lg font-bold text-white">{config.title}</h1>
+            <p className="text-sm text-white/90">{config.subtitle}</p>
           </div>
         </div>
         <button
           onClick={() => setCurrentMode(null)}
           className="p-2 hover:bg-white/20 rounded-lg transition relative z-10 magnetic-button"
         >
-          <X className="w-6 h-6" />
+          <X className="w-6 h-6 text-white" />
         </button>
       </div>
 
-      {/* Chat Area mejorada */}
+      {/* Chat Area con scroll-reveal */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4 max-w-4xl mx-auto w-full">
         {messages.map((msg, idx) => (
           <div
             key={idx}
-            className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"} scroll-fade-in`}
-            style={{ animationDelay: `${idx * 0.1}s` }}
+            className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"} fade-in-up`}
+            style={{ animationDelay: `${idx * 0.05}s` }}
           >
             <div
-              className={`max-w-2xl p-4 rounded-2xl shadow-lg ${
-                msg.role === "user" ? `${config.messageColor} text-white` : `bg-white border-2 ${config.borderColor}`
+              className={`max-w-2xl p-4 rounded-2xl shadow-lg transition-all hover:scale-[1.02] ${
+                msg.role === "user" ? `${config.messageColor} text-white` : `glassmorphism-card ${config.borderColor}`
               }`}
             >
               <p className="whitespace-pre-line leading-relaxed">{msg.content}</p>
@@ -520,21 +494,27 @@ const BusinessAIBot = () => {
           </div>
         ))}
 
+        {/* Loading mejorado con skeleton */}
         {isLoading && (
           <div className="flex justify-start">
-            <div className={`max-w-2xl p-4 rounded-2xl bg-white border-2 ${config.borderColor} shadow-lg`}>
+            <div className={`max-w-2xl p-4 rounded-2xl glassmorphism-card ${config.borderColor} shadow-lg`}>
               <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></div>
-                <div
-                  className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"
-                  style={{ animationDelay: "0.2s" }}
-                ></div>
-                <div
-                  className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"
-                  style={{ animationDelay: "0.4s" }}
-                ></div>
-                <span className="ml-2 text-slate-600">Escribiendo...</span>
+                <Loader2 className="w-5 h-5 text-blue-500 animate-spin" />
+                <span className="ml-2 text-slate-600">Procesando tu consulta...</span>
               </div>
+              <div className="mt-3 space-y-2">
+                <div className="skeleton-loader h-3 rounded w-3/4"></div>
+                <div className="skeleton-loader h-3 rounded w-full"></div>
+                <div className="skeleton-loader h-3 rounded w-2/3"></div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {error && (
+          <div className="flex justify-center">
+            <div className="max-w-2xl p-4 rounded-2xl bg-red-50 border-2 border-red-200 shadow-lg">
+              <p className="text-red-600 text-sm">{error}</p>
             </div>
           </div>
         )}
@@ -542,9 +522,9 @@ const BusinessAIBot = () => {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Quick Actions mejoradas */}
+      {/* Quick Actions glassmorphism */}
       {messages.length <= 1 && !isLoading && (
-        <div className="bg-white border-t-2 border-slate-200 p-4 max-w-4xl mx-auto w-full">
+        <div className="glassmorphism-nav border-t-2 border-slate-200 p-4 max-w-4xl mx-auto w-full">
           <div className="flex items-center gap-2 mb-3">
             <Lightbulb className="w-5 h-5 text-yellow-500" />
             <p className="text-sm font-bold text-slate-700">Preguntas sugeridas</p>
@@ -554,7 +534,7 @@ const BusinessAIBot = () => {
               <button
                 key={idx}
                 onClick={() => handleQuickAction(action)}
-                className={`text-left p-4 rounded-xl border-2 ${config.borderColor} ${config.bgColor} ${config.textColor} font-medium text-sm flex items-start gap-3 magnetic-button shadow-sm ${config.hoverBg} transition-all`}
+                className={`text-left p-4 rounded-xl glassmorphism-card ${config.borderColor} ${config.textColor} font-medium text-sm flex items-start gap-3 magnetic-button transition-all`}
               >
                 <Sparkles className="w-4 h-4 mt-0.5 flex-shrink-0" />
                 <span>{action}</span>
@@ -564,8 +544,8 @@ const BusinessAIBot = () => {
         </div>
       )}
 
-      {/* Input Area mejorada */}
-      <div className="bg-white border-t-2 border-slate-200 p-4 max-w-4xl mx-auto w-full shadow-lg">
+      {/* Input Area glassmorphism */}
+      <div className="glassmorphism-nav border-t-2 border-slate-200 p-4 max-w-4xl mx-auto w-full shadow-lg">
         <form onSubmit={handleSendMessage} className="flex gap-3">
           <input
             type="text"
@@ -573,15 +553,15 @@ const BusinessAIBot = () => {
             onChange={(e) => setInputValue(e.target.value)}
             placeholder="Escribe tu pregunta específica o desafío..."
             disabled={isLoading}
-            className="flex-1 border-2 border-slate-300 rounded-xl px-5 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50 transition-all"
+            className="flex-1 border-2 border-slate-300 rounded-xl px-5 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50 transition-all backdrop-blur-sm bg-white/50"
           />
           <button
             type="submit"
             disabled={!inputValue.trim() || isLoading}
-            className={`${config.messageColor} text-white px-8 py-3 rounded-xl hover:opacity-90 disabled:bg-slate-400 font-semibold flex items-center gap-2 transition-all magnetic-button shadow-lg`}
+            className={`${config.messageColor} text-white px-8 py-3 rounded-xl hover:opacity-90 disabled:bg-slate-400 disabled:cursor-not-allowed font-semibold flex items-center gap-2 transition-all magnetic-button shadow-lg`}
           >
-            <Send className="w-5 h-5" />
-            Enviar
+            {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
+            {isLoading ? "Enviando..." : "Enviar"}
           </button>
         </form>
       </div>
