@@ -1,547 +1,453 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  Building2,
-  Menu,
-  X,
-  Check,
-  Zap,
-  Target,
-  TrendingUp,
-  Briefcase,
-  Sparkles,
-  Brain,
-  Rocket,
-  ArrowRight,
-  ChevronRight,
-  Star,
-  MessageCircle,
-} from "lucide-react";
+import { Rocket, BarChart3, Building2, Menu, X, Check, Sparkles, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-// ══════════════════════════════════════════════════════════════════════
-// LOGIN MODAL
-// ══════════════════════════════════════════════════════════════════════
-function LoginModal({ onClose }: { onClose: () => void }) {
-  return (
-    <div className="modal-grok-overlay" onClick={onClose}>
-      <div className="modal-grok-container" onClick={(e) => e.stopPropagation()}>
-        <div className="modal-grok-bg" />
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 text-white hover:text-white/80 transition-colors z-20"
-        >
-          <X className="w-6 h-6" />
-        </button>
-        <div className="relative z-10">
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl mb-4 shadow-2xl glow-pulse">
-              <Zap className="w-8 h-8 text-white" />
-            </div>
-            <h2 className="text-3xl font-bold text-white mb-2">Entrá a tu cuenta</h2>
-            <p className="text-white/90 text-base">Empezá a usar IA para tu negocio en 2 minutos</p>
-          </div>
-          <div className="space-y-3 mb-6">
-            <button
-              className="btn-login-grok magnetic-button"
-              onClick={() => {
-                onClose();
-                window.location.href = "/auth?mode=login&provider=google";
-              }}
-            >
-              <svg className="w-5 h-5" viewBox="0 0 24 24">
-                <path
-                  fill="currentColor"
-                  d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                />
-                <path
-                  fill="currentColor"
-                  d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                />
-                <path
-                  fill="currentColor"
-                  d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-                />
-                <path
-                  fill="currentColor"
-                  d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                />
-              </svg>
-              <span>Continuar con Google</span>
-            </button>
-            <button
-              className="btn-login-grok magnetic-button"
-              onClick={() => {
-                onClose();
-                window.location.href = "/auth?mode=login";
-              }}
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                />
-              </svg>
-              <span>Continuar con Email</span>
-            </button>
-          </div>
-          <div className="relative mb-6">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-white/30" />
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-transparent text-white/80">¿Primera vez acá?</span>
-            </div>
-          </div>
-          <button
-            className="w-full text-center text-white hover:text-white/80 transition-colors font-semibold text-lg magnetic-button"
-            onClick={() => {
-              onClose();
-              window.location.href = "/auth?mode=signup";
-            }}
-          >
-            Crear cuenta gratis
-          </button>
-          <p className="text-center text-white/60 text-xs mt-8">Sin tarjeta. Sin trucos. Solo empezá.</p>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// ══════════════════════════════════════════════════════════════════════
-// CHATBOT FLOTANTE
-// ══════════════════════════════════════════════════════════════════════
-function FloatingChatBot() {
-  const navigate = useNavigate();
-  const [showBadge, setShowBadge] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowBadge(false);
-    }, 5000);
-    return () => clearTimeout(timer);
-  }, []);
-
-  return (
-    <>
-      <button
-        onClick={() => navigate("/business-ai-bot")}
-        className="fixed bottom-6 right-6 z-50 w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full shadow-2xl flex items-center justify-center magnetic-button glow-pulse hover:scale-110 transition-transform"
-      >
-        <MessageCircle className="w-8 h-8 text-white" />
-      </button>
-
-      {showBadge && (
-        <div className="floating-chat-badge">
-          <p className="text-xs font-semibold text-gray-800 mb-1">💬 ¿Necesitás ayuda?</p>
-          <p className="text-xs text-gray-600">Hablá con nuestro Asesor IA</p>
-        </div>
-      )}
-    </>
-  );
-}
-
-// ══════════════════════════════════════════════════════════════════════
-// STAGE CARD
-// ══════════════════════════════════════════════════════════════════════
-interface StageCardProps {
-  title: string;
-  stageLabel: string;
-  icon: React.ElementType;
-  description: string;
-  features: string[];
-  buttonText: string;
-  colorScheme: "blue" | "purple" | "green";
-  isPopular?: boolean;
-  onClick: () => void;
-}
-
-function StageCard({
-  title,
-  stageLabel,
-  icon: Icon,
-  description,
-  features,
-  buttonText,
-  colorScheme,
-  isPopular = false,
-  onClick,
-}: StageCardProps) {
-  const colors = {
-    blue: {
-      bg: "from-blue-500 to-blue-600",
-      button: "bg-blue-500 hover:bg-blue-600",
-      icon: "text-blue-500",
-      badge: "bg-blue-500",
-    },
-    purple: {
-      bg: "from-purple-500 to-purple-600",
-      button: "bg-purple-500 hover:bg-purple-600",
-      icon: "text-purple-500",
-      badge: "bg-purple-500",
-    },
-    green: {
-      bg: "from-green-500 to-green-600",
-      button: "bg-green-500 hover:bg-green-600",
-      icon: "text-green-500",
-      badge: "bg-green-500",
-    },
-  };
-
-  const scheme = colors[colorScheme];
-
-  return (
-    <div className="clay-card-grok scroll-fade-in group relative cursor-pointer" onClick={onClick}>
-      {isPopular && (
-        <div className="popular-badge flex items-center gap-1">
-          <Star className="w-4 h-4 fill-current" />
-          Más elegido
-        </div>
-      )}
-
-      <div
-        className={`absolute -inset-1 bg-gradient-to-r ${scheme.bg} rounded-2xl opacity-0 group-hover:opacity-20 blur-xl transition-all duration-500`}
-      ></div>
-
-      <div className="relative p-6 md:p-8">
-        <div className="flex justify-between items-start mb-4">
-          <div className={`text-xs font-bold px-3 py-1.5 rounded-full text-white ${scheme.badge}`}>{stageLabel}</div>
-          <div className={`p-3 rounded-xl bg-gray-100 group-hover:scale-110 transition-transform duration-300`}>
-            <Icon className={`w-7 h-7 ${scheme.icon}`} />
-          </div>
-        </div>
-
-        <h3 className="text-2xl md:text-3xl font-extrabold text-gray-900 mb-3">{title}</h3>
-        <p className="text-gray-600 mb-6 leading-relaxed">{description}</p>
-
-        <ul className="space-y-3 mb-8">
-          {features.map((feature, index) => (
-            <li key={index} className="flex items-start text-sm text-gray-700">
-              <Check className={`w-5 h-5 flex-shrink-0 mr-2 mt-0.5 ${scheme.icon}`} />
-              <span>{feature}</span>
-            </li>
-          ))}
-        </ul>
-
-        <Button
-          className={`w-full text-base font-semibold py-6 ${scheme.button} text-white magnetic-button shadow-lg group-hover:shadow-xl transition-all`}
-        >
-          {buttonText}
-          <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-        </Button>
-      </div>
-    </div>
-  );
-}
-
-// ══════════════════════════════════════════════════════════════════════
-// MAIN INDEX
-// ══════════════════════════════════════════════════════════════════════
 export default function Index() {
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [showLoginModal, setShowLoginModal] = useState(false);
+  const heroRef = useRef<HTMLHeadingElement>(null);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
-  // Scroll reveal observer
+  // Mouse tracking for tilt effects
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("visible");
-          }
-        });
-      },
-      { threshold: 0.15 },
-    );
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
 
-    document.querySelectorAll(".scroll-fade-in").forEach((el) => observer.observe(el));
+  // Typewriter effect for hero text
+  useEffect(() => {
+    if (heroRef.current) {
+      const text = "De la idea a los números en días, no meses";
+      let index = 0;
+      heroRef.current.textContent = "";
+
+      const typeWriter = setInterval(() => {
+        if (index < text.length) {
+          heroRef.current!.textContent += text.charAt(index);
+          index++;
+        } else {
+          clearInterval(typeWriter);
+        }
+      }, 50);
+
+      return () => clearInterval(typeWriter);
+    }
+  }, []);
+
+  // Scroll animations
+  useEffect(() => {
+    const observerOptions = {
+      threshold: 0.2,
+      rootMargin: "0px 0px -100px 0px",
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll(".scroll-reveal").forEach((el) => {
+      observer.observe(el);
+    });
+
     return () => observer.disconnect();
   }, []);
 
   return (
-    <>
-      {showLoginModal && <LoginModal onClose={() => setShowLoginModal(false)} />}
-      <FloatingChatBot />
+    <div className="min-h-screen bg-white relative overflow-hidden">
+      {/* Ambient floating particles */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden">
+        <div
+          className="floating-particle"
+          style={{
+            left: "10%",
+            top: "20%",
+            animationDelay: "0s",
+            width: "150px",
+            height: "150px",
+          }}
+        ></div>
+        <div
+          className="floating-particle"
+          style={{
+            right: "15%",
+            top: "60%",
+            animationDelay: "2s",
+            width: "200px",
+            height: "200px",
+          }}
+        ></div>
+        <div
+          className="floating-particle"
+          style={{
+            left: "70%",
+            bottom: "10%",
+            animationDelay: "4s",
+            width: "120px",
+            height: "120px",
+          }}
+        ></div>
+      </div>
 
-      <div className="min-h-screen bg-white">
-        {/* ═════════════════════════════════════════════════════════════════
-            HEADER
-            ════════════════════════════════════════════════════════════════ */}
-        <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-white/95 border-b border-gray-200 shadow-sm">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between h-16 md:h-20">
-              <div className="flex items-center gap-2 md:gap-3 cursor-pointer" onClick={() => navigate("/")}>
-                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg glow-pulse">
-                  <Building2 className="w-6 h-6 text-white" />
-                </div>
-                <span className="font-extrabold text-base md:text-xl text-gray-900">Proyecto Emprendedurismo</span>
+      {/* ═════════════════════════════════════════════════════════════════
+          HEADER GLASSMORPHISM
+          ════════════════════════════════════════════════════════════════ */}
+      <nav className="fixed top-0 left-0 right-0 z-50 glassmorphism-nav">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16 md:h-20">
+            {/* Logo with glow */}
+            <div className="flex items-center gap-2 md:gap-3">
+              <div className="w-9 h-9 md:w-10 md:h-10 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center shadow-glow magnetic-button">
+                <Building2 className="w-5 h-5 md:w-6 md:h-6 text-white" />
               </div>
-
-              <div className="hidden md:flex items-center gap-4">
-                <Button
-                  variant="outline"
-                  className="text-base font-semibold magnetic-button"
-                  onClick={() => navigate("/select-role")}
-                >
-                  Ver Demo
-                </Button>
-                <Button
-                  className="bg-blue-500 hover:bg-blue-600 text-white text-base font-semibold magnetic-button"
-                  onClick={() => setShowLoginModal(true)}
-                >
-                  Iniciar Sesión
-                </Button>
-              </div>
-
-              <button
-                className="p-2 hover:bg-gray-100 rounded-lg transition-colors md:hidden"
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              >
-                {mobileMenuOpen ? <X className="w-6 h-6 text-gray-900" /> : <Menu className="w-6 h-6 text-gray-900" />}
-              </button>
+              <span className="font-bold text-sm md:text-base text-gray-900 hidden xs:block gradient-text-hover">
+                Proyecto Emprendedurismo
+              </span>
             </div>
 
-            {mobileMenuOpen && (
-              <div className="pb-4 space-y-2 border-t border-gray-200 pt-4 md:hidden">
-                <Button
-                  variant="ghost"
-                  onClick={() => {
-                    setShowLoginModal(true);
-                    setMobileMenuOpen(false);
-                  }}
-                  className="w-full justify-center text-base font-semibold"
-                >
-                  Iniciar Sesión
-                </Button>
-                <Button
-                  onClick={() => {
-                    navigate("/auth?mode=signup");
-                    setMobileMenuOpen(false);
-                  }}
-                  className="w-full justify-center bg-blue-500 hover:bg-blue-600 text-white text-base font-semibold"
-                >
-                  Crear Cuenta
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    navigate("/select-role");
-                    setMobileMenuOpen(false);
-                  }}
-                  className="w-full justify-center text-base font-semibold"
-                >
-                  Ver Demo
-                </Button>
-              </div>
-            )}
-          </div>
-        </nav>
-
-        {/* ═════════════════════════════════════════════════════════════════
-            HERO - Degradado limpio con partículas
-            ════════════════════════════════════════════════════════════════ */}
-        <section className="min-h-screen flex items-center justify-center relative overflow-hidden pt-24 md:pt-20 gradient-loop">
-          {/* Partículas flotantes */}
-          <div className="floating-particles">
-            {Array.from({ length: 40 }).map((_, i) => (
-              <div
-                key={i}
-                className="particle"
-                style={{
-                  left: `${Math.random() * 100}%`,
-                  animationDelay: `${Math.random() * 15}s`,
-                  animationDuration: `${10 + Math.random() * 10}s`,
-                }}
-              />
-            ))}
-          </div>
-
-          <div className="container mx-auto px-6 relative z-10">
-            <div className="max-w-5xl mx-auto text-center">
-              {/* Badge */}
-              <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full glass-card mb-8 scroll-fade-in shadow-lg">
-                <Sparkles className="w-5 h-5 text-yellow-300" />
-                <span className="text-sm font-semibold text-white">IA que entiende Argentina</span>
-              </div>
-
-              {/* Título */}
-              <h1
-                className="text-5xl md:text-7xl font-extrabold text-white mb-6 leading-tight px-4"
-                style={{ textShadow: "0 4px 20px rgba(0,0,0,0.8), 0 2px 10px rgba(0,0,0,0.6)" }}
+            {/* Desktop Navigation with glow buttons */}
+            <div className="hidden md:flex items-center gap-2 lg:gap-3">
+              <Button
+                variant="ghost"
+                onClick={() => navigate("/auth?mode=login")}
+                className="text-sm font-semibold text-gray-700 hover:text-blue-600 transition-all duration-300 magnetic-button hover:scale-105"
               >
-                De la <span className="text-yellow-300">idea</span> a los{" "}
-                <span className="text-green-300">números</span> en días, no meses
-              </h1>
-
-              {/* Descripción */}
-              <p
-                className="text-white text-lg md:text-xl mb-10 max-w-3xl mx-auto leading-relaxed scroll-fade-in font-medium"
-                style={{
-                  textShadow: "0 2px 10px rgba(0,0,0,0.8)",
-                  animationDelay: "0.2s",
-                }}
+                Iniciar Sesión
+              </Button>
+              <Button
+                onClick={() => navigate("/auth?mode=signup")}
+                className="btn-primary-glow text-sm font-semibold px-4 md:px-5 py-2 md:py-2.5"
               >
-                La plataforma que combina <strong className="text-yellow-300">IA + automatización + datos</strong> para
-                que emprendedores y PyMEs <strong className="text-green-300">validen, organicen y escalen</strong>
-              </p>
-
-              {/* Features */}
-              <div
-                className="flex flex-wrap justify-center gap-4 mb-12 scroll-fade-in"
-                style={{ animationDelay: "0.4s" }}
-              >
-                <div className="flex items-center gap-2 px-5 py-3 rounded-full glass-card shadow-lg">
-                  <Check className="w-5 h-5 text-green-300" />
-                  <span className="text-white font-semibold text-sm md:text-base">Sin tarjeta</span>
-                </div>
-                <div className="flex items-center gap-2 px-5 py-3 rounded-full glass-card shadow-lg">
-                  <Check className="w-5 h-5 text-green-300" />
-                  <span className="text-white font-semibold text-sm md:text-base">Datos seguros</span>
-                </div>
-                <div className="flex items-center gap-2 px-5 py-3 rounded-full glass-card shadow-lg">
-                  <Check className="w-5 h-5 text-green-300" />
-                  <span className="text-white font-semibold text-sm md:text-base">Empezá en 2 min</span>
-                </div>
-              </div>
-
-              {/* CTAs */}
-              <div
-                className="flex flex-col sm:flex-row gap-4 justify-center scroll-fade-in"
-                style={{ animationDelay: "0.6s" }}
-              >
-                <Button
-                  size="lg"
-                  className="bg-white text-blue-600 hover:bg-gray-100 text-lg px-10 py-7 magnetic-button font-bold shadow-2xl"
-                  onClick={() => navigate("/select-role")}
-                >
-                  <Rocket className="w-6 h-6 mr-2" />
-                  Ver Demo
-                </Button>
-                <Button
-                  size="lg"
-                  className="glass-card text-white hover:bg-white/30 text-lg px-10 py-7 magnetic-button font-bold shadow-2xl"
-                  onClick={() => setShowLoginModal(true)}
-                >
-                  Iniciar Sesión
-                  <ChevronRight className="w-6 h-6 ml-2" />
-                </Button>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ═════════════════════════════════════════════════════════════════
-            SECCIÓN DE ETAPAS
-            ════════════════════════════════════════════════════════════════ */}
-        <section className="py-20 md:py-32 bg-gradient-to-b from-gray-50 to-white relative overflow-hidden noise-texture">
-          <div className="container mx-auto px-6 relative z-10">
-            <div className="max-w-4xl mx-auto text-center mb-16 scroll-fade-in">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-100 text-blue-600 font-semibold text-sm mb-4">
-                <Target className="w-4 h-4" />
-                Tu camino al éxito
-              </div>
-              <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">
-                ¿En qué{" "}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
-                  etapa
-                </span>{" "}
-                estás?
-              </h2>
-              <p className="text-lg text-gray-600">
-                Elegí tu ruta y accedé a herramientas diseñadas específicamente para ti
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-              <StageCard
-                title="Emprendedor"
-                stageLabel="DESDE CERO"
-                icon={Zap}
-                description="¿Tenés una idea pero no sabés si funciona?"
-                features={["Validá con IA en minutos", "Ves números reales", "Entendé viabilidad"]}
-                buttonText="Validar idea"
-                colorScheme="blue"
-                onClick={() => navigate("/select-role")}
-              />
-
-              <StageCard
-                title="Negocio"
-                stageLabel="1-3 AÑOS"
-                icon={TrendingUp}
-                description="Vendés, pero todo a mano. Necesitás ordenar y crecer."
-                features={["Dashboard real-time", "CRM + Ventas + Gastos", "Control sin planillas"]}
-                buttonText="Organizar negocio"
-                colorScheme="purple"
-                isPopular={true}
-                onClick={() => navigate("/select-role")}
-              />
-
-              <StageCard
-                title="Empresa"
-                stageLabel="+3 AÑOS"
-                icon={Briefcase}
-                description="Tu empresa creció. Automatizá y escalá con IA."
-                features={["Multi-sucursal", "Gestión de equipo", "Automatización con IA"]}
-                buttonText="Automatizar empresa"
-                colorScheme="green"
-                onClick={() => navigate("/select-role")}
-              />
-            </div>
-
-            {/* CTA */}
-            <div className="text-center mt-16 scroll-fade-in">
-              <p className="text-gray-600 mb-4">¿No estás seguro de tu etapa?</p>
+                Crear Cuenta
+              </Button>
               <Button
                 variant="outline"
-                size="lg"
-                className="magnetic-button"
-                onClick={() => navigate("/business-ai-bot")}
+                onClick={() => navigate("/select-role")}
+                className="text-sm font-semibold border-gray-300 hover:bg-gray-50 transition-all duration-300 magnetic-button hover:scale-105"
               >
-                <Brain className="w-5 h-5 mr-2" />
-                Dejá que la IA te ayude a elegir
+                Ver Demo
               </Button>
             </div>
-          </div>
-        </section>
 
-        {/* ═════════════════════════════════════════════════════════════════
-            SOCIAL PROOF
-            ════════════════════════════════════════════════════════════════ */}
-        <section className="py-16 bg-white border-y border-gray-200">
-          <div className="container mx-auto px-6">
-            <div className="max-w-4xl mx-auto text-center scroll-fade-in">
-              <p className="text-gray-500 text-sm uppercase tracking-wide mb-8 font-semibold">
-                Confiado por emprendedores argentinos
-              </p>
-              <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12">
-                <div className="flex items-center gap-2">
-                  <div className="flex -space-x-2">
-                    {[1, 2, 3, 4].map((i) => (
-                      <div
-                        key={i}
-                        className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-purple-600 border-2 border-white"
-                      ></div>
-                    ))}
+            {/* Mobile menu button */}
+            <button
+              className="md:hidden p-2 hover:bg-gray-100 rounded-lg transition-colors magnetic-button"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label="Toggle menu"
+            >
+              {mobileMenuOpen ? <X className="w-6 h-6 text-gray-900" /> : <Menu className="w-6 h-6 text-gray-900" />}
+            </button>
+          </div>
+
+          {/* Mobile menu glassmorphism */}
+          {mobileMenuOpen && (
+            <div className="md:hidden pb-4 space-y-2 border-t border-gray-200 pt-4 fade-in">
+              <Button
+                variant="ghost"
+                onClick={() => {
+                  navigate("/auth?mode=login");
+                  setMobileMenuOpen(false);
+                }}
+                className="w-full justify-center text-base font-semibold"
+              >
+                Iniciar Sesión
+              </Button>
+              <Button
+                onClick={() => {
+                  navigate("/auth?mode=signup");
+                  setMobileMenuOpen(false);
+                }}
+                className="w-full justify-center btn-primary-glow text-base font-semibold"
+              >
+                Crear Cuenta
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => {
+                  navigate("/select-role");
+                  setMobileMenuOpen(false);
+                }}
+                className="w-full justify-center text-base font-semibold"
+              >
+                Ver Demo
+              </Button>
+            </div>
+          )}
+        </div>
+      </nav>
+
+      {/* ═════════════════════════════════════════════════════════════════
+          HERO SECTION - GRADIENT EXPLOSIVO + TEXTO LEGIBLE
+          ════════════════════════════════════════════════════════════════ */}
+      <section className="hero-gradient-bg relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 py-20 md:pt-24 md:pb-0">
+        {/* Glassmorphism overlay para contraste */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/30 pointer-events-none"></div>
+
+        {/* Aurora waves effect */}
+        <div className="aurora-wave"></div>
+
+        {/* Hero Content con glassmorphism */}
+        <div className="relative z-10 max-w-5xl mx-auto text-center space-y-6 md:space-y-8 pt-16 md:pt-0">
+          {/* Badge con glow */}
+          <div className="badge-glow fade-in-up inline-flex items-center gap-2">
+            <Sparkles className="w-4 h-4" />
+            <span className="text-xs sm:text-sm font-semibold">IA que entiende Argentina</span>
+          </div>
+
+          {/* Headline con typewriter effect */}
+          <div
+            className="glassmorphism-card-hero p-8 md:p-12 rounded-3xl fade-in-up"
+            style={{ animationDelay: "0.2s" }}
+          >
+            <h1
+              ref={heroRef}
+              className="text-5xl md:text-7xl lg:text-8xl font-extrabold text-white leading-tight mb-6 text-shadow-glow typewriter"
+            >
+              {/* Texto se genera con efecto typewriter */}
+            </h1>
+
+            {/* Subtítulo con gradient */}
+            <p
+              className="text-xl md:text-2xl lg:text-3xl text-white/95 font-medium leading-relaxed mb-8 fade-in-up"
+              style={{ animationDelay: "0.4s" }}
+            >
+              La plataforma que combina{" "}
+              <span className="gradient-text-animated font-bold">IA + automatización + datos</span> para que
+              emprendedores y PyMEs validen, organicen y escalen
+            </p>
+
+            {/* CTA Buttons con efectos */}
+            <div
+              className="flex flex-col sm:flex-row items-center justify-center gap-4 md:gap-6 fade-in-up"
+              style={{ animationDelay: "0.6s" }}
+            >
+              <button
+                onClick={() => navigate("/select-role")}
+                className="btn-primary-glow w-full sm:w-auto min-w-[200px]"
+              >
+                🚀 Ver Demo
+              </button>
+              <button
+                onClick={() => navigate("/auth?mode=signup")}
+                className="btn-secondary-glow w-full sm:w-auto min-w-[200px]"
+              >
+                Crear Cuenta Gratis
+              </button>
+            </div>
+          </div>
+
+          {/* Stats con morphing cards */}
+          <div className="grid grid-cols-3 gap-4 md:gap-6 mt-12 fade-in-up" style={{ animationDelay: "0.8s" }}>
+            {[
+              { label: "Emprendedores", value: "500+", icon: Rocket },
+              { label: "Ideas Validadas", value: "1,200+", icon: Sparkles },
+              { label: "Satisfacción", value: "98%", icon: Zap },
+            ].map((stat, idx) => (
+              <div key={idx} className="glassmorphism-card p-4 md:p-6 text-center morphing-card group">
+                <stat.icon className="w-8 h-8 md:w-10 md:h-10 mx-auto mb-2 text-white group-hover:scale-110 transition-transform" />
+                <p className="text-2xl md:text-4xl font-bold text-white mb-1">{stat.value}</p>
+                <p className="text-xs md:text-sm text-white/80 font-medium">{stat.label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Scroll indicator con animación */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 scroll-indicator">
+          <div className="w-6 h-10 border-2 border-white/50 rounded-full flex items-start justify-center p-2">
+            <div className="w-1 h-2 bg-white rounded-full animate-bounce"></div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═════════════════════════════════════════════════════════════════
+          CARDS SECTION - TILT 3D + GLASSMORPHISM
+          ════════════════════════════════════════════════════════════════ */}
+      <section className="relative py-20 md:py-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-white via-gray-50 to-white">
+        <div className="max-w-7xl mx-auto">
+          {/* Section Header con scroll reveal */}
+          <div className="text-center space-y-3 sm:space-y-4 mb-12 sm:mb-16 scroll-reveal">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900">
+              ¿En qué etapa estás?
+            </h2>
+            <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
+              Elegí tu ruta y accedé a herramientas diseñadas específicamente para ti
+            </p>
+          </div>
+
+          {/* 3 Cards Grid con efectos 3D */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 mt-12 sm:mt-16">
+            {/* Card 1 - EMPRENDEDOR */}
+            <div className="tilt-card scroll-reveal" style={{ animationDelay: "0.1s" }}>
+              <div className="relative group bg-white rounded-2xl p-6 sm:p-8 border-2 border-gray-200 hover:border-blue-400 transition-all duration-500 shadow-xl hover:shadow-2xl card-glow-blue h-full">
+                <div className="space-y-5 sm:space-y-6">
+                  {/* Icon & Badge */}
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-xl bg-gradient-to-br from-blue-600 to-blue-700 flex items-center justify-center flex-shrink-0 magnetic-button group-hover:scale-110 transition-transform shadow-glow">
+                      <Rocket className="h-7 w-7 sm:h-8 sm:w-8 text-white" />
+                    </div>
+                    <span className="px-3 py-1.5 bg-blue-50 text-blue-600 text-xs font-bold rounded-full uppercase tracking-wider flex-shrink-0 border-2 border-blue-200">
+                      DESDE CERO
+                    </span>
                   </div>
-                  <span className="text-gray-700 font-semibold">+1,000 usuarios</span>
+
+                  {/* Title */}
+                  <h3 className="text-xl sm:text-2xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
+                    Emprendedor
+                  </h3>
+
+                  {/* Description */}
+                  <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
+                    ¿Tenés una idea pero no sabés si funciona?
+                  </p>
+
+                  {/* Features con check animados */}
+                  <ul className="space-y-3">
+                    {["Validá con IA", "Ves números reales", "Entendé viabilidad"].map((feature, idx) => (
+                      <li key={idx} className="flex items-center gap-3 text-sm sm:text-base text-gray-700 group/item">
+                        <Check className="h-5 w-5 text-green-500 flex-shrink-0 group-hover/item:scale-110 transition-transform" />
+                        <span>{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  {/* Button con ripple effect */}
+                  <Button
+                    onClick={() => navigate("/select-role")}
+                    className="w-full btn-primary-glow text-base font-semibold mt-4"
+                  >
+                    Validar Idea →
+                  </Button>
                 </div>
-                <div className="flex items-center gap-2">
-                  <div className="flex text-yellow-400">
-                    {[1, 2, 3, 4, 5].map((i) => (
-                      <Star key={i} className="w-5 h-5 fill-current" />
-                    ))}
+              </div>
+            </div>
+
+            {/* Card 2 - NEGOCIO (HIGHLIGHTED) */}
+            <div className="tilt-card scroll-reveal" style={{ animationDelay: "0.2s" }}>
+              <div className="relative group bg-gradient-to-br from-purple-600 to-purple-700 rounded-2xl p-6 sm:p-8 shadow-2xl hover:shadow-3xl transition-all duration-500 card-glow-purple h-full scale-105 md:scale-110">
+                {/* Badge "Más Popular" con brillo */}
+                <div className="absolute -top-3 sm:-top-4 right-4 sm:right-6 px-3 sm:px-4 py-1.5 sm:py-2 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-xl text-xs sm:text-sm font-bold text-white shadow-xl pulse-glow">
+                  ⭐ Más Popular
+                </div>
+
+                <div className="space-y-5 sm:space-y-6">
+                  {/* Icon & Badge */}
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-xl bg-white flex items-center justify-center flex-shrink-0 magnetic-button group-hover:scale-110 transition-transform">
+                      <BarChart3 className="h-7 w-7 sm:h-8 sm:w-8 text-purple-600" />
+                    </div>
+                    <span className="px-3 py-1.5 bg-purple-800 text-white text-xs font-bold rounded-full uppercase tracking-wider flex-shrink-0">
+                      1-3 AÑOS
+                    </span>
                   </div>
-                  <span className="text-gray-700 font-semibold">4.9/5 rating</span>
+
+                  {/* Title */}
+                  <h3 className="text-xl sm:text-2xl font-bold text-white">Negocio</h3>
+
+                  {/* Description */}
+                  <p className="text-sm sm:text-base text-purple-100 leading-relaxed">
+                    Vendés, pero todo a mano. Necesitás ordenar y crecer.
+                  </p>
+
+                  {/* Features */}
+                  <ul className="space-y-3">
+                    {["Dashboard real-time", "CRM simple", "Control gastos"].map((feature, idx) => (
+                      <li key={idx} className="flex items-center gap-3 text-sm sm:text-base text-purple-50 group/item">
+                        <Check className="h-5 w-5 text-green-300 flex-shrink-0 group-hover/item:scale-110 transition-transform" />
+                        <span>{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  {/* Button */}
+                  <Button
+                    onClick={() => navigate("/select-role")}
+                    className="w-full bg-white hover:bg-purple-50 text-purple-600 rounded-xl py-3 sm:py-3.5 text-base font-semibold shadow-xl transition-all duration-300 mt-4 magnetic-button hover:scale-105"
+                  >
+                    Organizar Negocio →
+                  </Button>
+                </div>
+              </div>
+            </div>
+
+            {/* Card 3 - EMPRESA */}
+            <div className="tilt-card scroll-reveal" style={{ animationDelay: "0.3s" }}>
+              <div className="relative group bg-white rounded-2xl p-6 sm:p-8 border-2 border-gray-200 hover:border-green-400 transition-all duration-500 shadow-xl hover:shadow-2xl card-glow-green h-full">
+                <div className="space-y-5 sm:space-y-6">
+                  {/* Icon & Badge */}
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-xl bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center flex-shrink-0 magnetic-button group-hover:scale-110 transition-transform shadow-glow">
+                      <Building2 className="h-7 w-7 sm:h-8 sm:w-8 text-white" />
+                    </div>
+                    <span className="px-3 py-1.5 bg-green-50 text-green-600 text-xs font-bold rounded-full uppercase tracking-wider flex-shrink-0 border-2 border-green-200">
+                      +3 AÑOS
+                    </span>
+                  </div>
+
+                  {/* Title */}
+                  <h3 className="text-xl sm:text-2xl font-bold text-gray-900 group-hover:text-green-600 transition-colors">
+                    Empresa
+                  </h3>
+
+                  {/* Description */}
+                  <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
+                    Creció tu empresa. Automatizá y escalá con IA.
+                  </p>
+
+                  {/* Features */}
+                  <ul className="space-y-3">
+                    {["Gestión de equipo", "Automatización", "Multi-sucursal"].map((feature, idx) => (
+                      <li key={idx} className="flex items-center gap-3 text-sm sm:text-base text-gray-700 group/item">
+                        <Check className="h-5 w-5 text-green-500 flex-shrink-0 group-hover/item:scale-110 transition-transform" />
+                        <span>{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  {/* Button */}
+                  <Button
+                    onClick={() => navigate("/select-role")}
+                    className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white rounded-xl py-3 sm:py-3.5 text-base font-semibold shadow-xl transition-all duration-300 mt-4 magnetic-button hover:scale-105"
+                  >
+                    Automatizar →
+                  </Button>
                 </div>
               </div>
             </div>
           </div>
-        </section>
-      </div>
-    </>
+        </div>
+      </section>
+
+      {/* ═════════════════════════════════════════════════════════════════
+          FOOTER CON GLASSMORPHISM
+          ════════════════════════════════════════════════════════════════ */}
+      <footer className="glassmorphism-footer text-gray-900 py-8 sm:py-12 px-4 sm:px-6 lg:px-8 border-t border-gray-200">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-6">
+            <p className="text-sm text-gray-600 text-center sm:text-left">
+              © 2025 Proyecto Emprendedurismo. Todos los derechos reservados.
+            </p>
+            <div className="flex items-center justify-center gap-4 sm:gap-6 text-sm">
+              <a href="#" className="text-gray-600 hover:text-blue-600 transition-colors duration-300 magnetic-button">
+                Términos
+              </a>
+              <a href="#" className="text-gray-600 hover:text-blue-600 transition-colors duration-300 magnetic-button">
+                Privacidad
+              </a>
+              <a href="#" className="text-gray-600 hover:text-blue-600 transition-colors duration-300 magnetic-button">
+                Soporte
+              </a>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
   );
 }
