@@ -10,14 +10,13 @@ import {
   TrendingUp,
   Briefcase,
   Shield,
-  Clock,
   Users,
   BarChart3,
   Sparkles,
   Brain,
   Rocket,
-  DollarSign,
   FileText,
+  ArrowRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -214,44 +213,54 @@ export default function Index() {
       </nav>
 
       {/* ═════════════════════════════════════════════════════════════════
-          HERO SECTION - CON EFECTOS EXPLOSIVOS
+          HERO SECTION - EFECTOS BRUTALES + LETRAS LEGIBLES
           ════════════════════════════════════════════════════════════════ */}
       <section className="hero-gradient-bg min-h-screen flex items-center justify-center relative overflow-hidden">
-        {/* Efectos laterales decorativos */}
+        {/* Efectos laterales decorativos MEJORADOS */}
         <div className="slide-left-decoration" />
         <div className="slide-right-decoration" />
         <div className="floating-particles-left" />
         <div className="floating-particles-right" />
 
+        {/* Aurora waves effect */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-30">
+          <div
+            className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-blue-400/20 via-purple-400/20 to-pink-400/20 animate-pulse"
+            style={{ animationDuration: "8s" }}
+          />
+        </div>
+
         {/* Contenido principal */}
         <div className="container mx-auto px-6 relative z-10">
           <div className="max-w-5xl mx-auto text-center">
-            {/* Badge superior */}
+            {/* Badge superior con GLOW */}
             <div className="badge-glow fade-in mb-8 inline-flex">
               <Zap className="w-4 h-4" />
               <span>IA que entiende Argentina</span>
             </div>
 
-            {/* Título principal CON SOMBRA */}
+            {/* Título principal CON SOMBRA BRUTAL para LEGIBILIDAD */}
             <h1
               className="gradient-text-animated fade-in-up mb-6"
               style={{
-                textShadow: "0 4px 20px rgba(0, 0, 0, 0.3), 0 2px 10px rgba(0, 0, 0, 0.2)",
+                textShadow:
+                  "0 8px 32px rgba(0, 0, 0, 0.5), 0 4px 16px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.3)",
+                WebkitTextStroke: "1px rgba(0, 0, 0, 0.1)",
               }}
             >
               De la idea a los números en días, no meses
             </h1>
 
-            {/* Descripción CON SOMBRA */}
+            {/* Descripción CON SOMBRA FUERTE */}
             <p
-              className="text-white text-xl md:text-2xl mb-4 fade-in-up font-semibold"
+              className="text-white text-xl md:text-2xl mb-4 fade-in-up font-bold"
               style={{
                 animationDelay: "0.1s",
-                textShadow: "0 2px 10px rgba(0, 0, 0, 0.4)",
+                textShadow: "0 4px 16px rgba(0, 0, 0, 0.6), 0 2px 8px rgba(0, 0, 0, 0.5), 0 1px 4px rgba(0, 0, 0, 0.4)",
               }}
             >
-              La plataforma que combina <strong>IA + automatización + datos</strong> para que emprendedores y PyMEs{" "}
-              <strong>validen, organicen y escalen</strong>
+              La plataforma que combina <span className="text-yellow-300">IA + automatización + datos</span> para que
+              emprendedores y PyMEs <span className="text-green-300">validen, organicen y escalen</span>
             </p>
 
             {/* Features rápidos CON SOMBRA */}
@@ -259,33 +268,35 @@ export default function Index() {
               className="flex flex-wrap justify-center gap-8 mb-12 text-white fade-in-up"
               style={{
                 animationDelay: "0.2s",
-                textShadow: "0 2px 8px rgba(0, 0, 0, 0.4)",
+                textShadow: "0 3px 12px rgba(0, 0, 0, 0.6), 0 2px 6px rgba(0, 0, 0, 0.5)",
               }}
             >
-              <div className="flex items-center gap-2 font-semibold">
+              <div className="flex items-center gap-2 font-bold text-lg">
                 <span className="text-2xl">✓</span>
                 <span>Sin tarjeta</span>
               </div>
-              <div className="flex items-center gap-2 font-semibold">
+              <div className="flex items-center gap-2 font-bold text-lg">
                 <span className="text-2xl">✓</span>
                 <span>Datos seguros</span>
               </div>
-              <div className="flex items-center gap-2 font-semibold">
+              <div className="flex items-center gap-2 font-bold text-lg">
                 <span className="text-2xl">✓</span>
                 <span>Empezá en 2 min</span>
               </div>
             </div>
 
-            {/* 2 BOTONES PRINCIPALES */}
+            {/* 2 BOTONES PRINCIPALES CON EFECTOS */}
             <div
               className="flex flex-col sm:flex-row gap-4 justify-center items-center fade-in-up"
               style={{ animationDelay: "0.3s" }}
             >
-              <button className="btn-secondary-glow" onClick={() => navigate("/select-role")}>
-                Ver Demo
+              <button className="btn-secondary-glow group" onClick={() => navigate("/select-role")}>
+                <span>Ver Demo</span>
+                <Sparkles className="w-5 h-5 ml-2 group-hover:rotate-12 transition-transform" />
               </button>
-              <button className="btn-primary-glow" onClick={() => setShowLoginModal(true)}>
-                Iniciar Sesión →
+              <button className="btn-primary-glow group" onClick={() => setShowLoginModal(true)}>
+                <span>Iniciar Sesión</span>
+                <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
               </button>
             </div>
           </div>
@@ -293,10 +304,17 @@ export default function Index() {
       </section>
 
       {/* ═════════════════════════════════════════════════════════════════
-          SECCIÓN: 3 BENEFICIOS CLAVE (Inspirado en DualEntry)
+          SECCIÓN: 3 BENEFICIOS CLAVE - Glassmorphism
           ════════════════════════════════════════════════════════════════ */}
-      <section className="py-20 md:py-28 px-4 bg-white">
-        <div className="max-w-7xl mx-auto">
+      <section className="py-20 md:py-28 px-4 bg-gradient-to-br from-gray-50 via-white to-blue-50 relative overflow-hidden">
+        {/* Background morphing blobs */}
+        <div className="absolute top-20 left-10 w-96 h-96 bg-blue-200/30 rounded-full blur-3xl animate-pulse" />
+        <div
+          className="absolute bottom-20 right-10 w-96 h-96 bg-purple-200/30 rounded-full blur-3xl animate-pulse"
+          style={{ animationDelay: "2s" }}
+        />
+
+        <div className="max-w-7xl mx-auto relative z-10">
           <div className="text-center mb-16 scroll-fade-in">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4">
               Todo lo que necesitás, en un solo lugar
@@ -310,41 +328,46 @@ export default function Index() {
             {[
               {
                 icon: Target,
-                title: "Gestioná múltiples entidades",
-                desc: "Manejá todas tus subsidiarias en un solo lugar, con transacciones entre empresas que se eliminan automáticamente y reportes consolidados.",
-                gradient: "from-blue-50 to-white",
-                border: "border-blue-100",
-                iconBg: "from-blue-500 to-blue-600",
+                title: "Validá tu idea con IA",
+                desc: "Antes de invertir un peso, la IA analiza tu mercado, competencia y viabilidad. Te da números reales, no fantasías.",
+                features: ["Análisis de mercado", "Proyecciones financieras", "Plan de acción"],
               },
               {
                 icon: TrendingUp,
-                title: "13.000+ integraciones nativas",
-                desc: "Unificá tus datos y evitá errores con conexiones fluidas y listas para usar en todo tu stack tecnológico.",
-                gradient: "from-purple-50 to-white",
-                border: "border-purple-100",
-                iconBg: "from-purple-500 to-purple-600",
+                title: "Organizá todo en tiempo real",
+                desc: "CRM, ventas, gastos, inventario: todo sincronizado automáticamente. Ves tu negocio en vivo.",
+                features: ["Dashboard actualizado", "CRM integrado", "Control de gastos"],
               },
               {
                 icon: Briefcase,
-                title: "Personalizá tu contabilidad",
-                desc: "Configurá tu sistema con clasificaciones ilimitadas y campos personalizados. Mantené tus datos granulares, informativos y listos para presentar.",
-                gradient: "from-pink-50 to-white",
-                border: "border-pink-100",
-                iconBg: "from-pink-500 to-pink-600",
+                title: "Escalá sin contratar un ejército",
+                desc: "La IA automatiza tareas repetitivas. Vos te enfocás en crecer. Multi-sucursal, equipos, reportes.",
+                features: ["Automatización IA", "Multi-sucursal", "Reportes avanzados"],
               },
             ].map((item, idx) => (
               <div
                 key={idx}
-                className={`relative group bg-gradient-to-br ${item.gradient} p-8 rounded-2xl border ${item.border} hover:shadow-2xl transition-all scroll-fade-in`}
+                className="group relative bg-white/80 backdrop-blur-xl p-8 rounded-3xl border border-white/20 shadow-xl hover:shadow-2xl transition-all scroll-fade-in"
                 style={{ animationDelay: `${idx * 0.1}s` }}
               >
-                <div
-                  className={`w-14 h-14 bg-gradient-to-br ${item.iconBg} rounded-xl flex items-center justify-center mb-6 shadow-lg`}
-                >
-                  <item.icon className="w-7 h-7 text-white" />
+                {/* Glassmorphism effect */}
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-purple-50/50 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity" />
+
+                <div className="relative z-10">
+                  <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform">
+                    <item.icon className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-3">{item.title}</h3>
+                  <p className="text-gray-600 leading-relaxed mb-4">{item.desc}</p>
+                  <ul className="space-y-2">
+                    {item.features.map((feat, i) => (
+                      <li key={i} className="flex items-center gap-2 text-sm text-gray-700">
+                        <Check className="w-4 h-4 text-blue-600" />
+                        <span>{feat}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-3">{item.title}</h3>
-                <p className="text-gray-600 leading-relaxed">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -352,18 +375,20 @@ export default function Index() {
       </section>
 
       {/* ═════════════════════════════════════════════════════════════════
-          SECCIÓN: CONOCÉ TU ALIADO EN CONTABILIDAD (Como DualEntry)
+          SECCIÓN: CAPACIDADES IA - Self-drawing paths
           ════════════════════════════════════════════════════════════════ */}
-      <section className="py-20 md:py-28 px-4 bg-gradient-to-br from-gray-50 to-white">
+      <section className="py-20 md:py-28 px-4 bg-white">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16 scroll-fade-in">
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-100 to-purple-100 rounded-full mb-4">
               <Brain className="w-5 h-5 text-blue-600" />
               <span className="text-sm font-semibold text-blue-600">Powered by AI</span>
             </div>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4">Lográ más en menos tiempo</h2>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+              Tu asistente que nunca duerme
+            </h2>
             <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto">
-              Eliminá el trabajo manual y enfocate en los datos que necesitás para escalar
+              No es magia, es IA entrenada para emprendedores argentinos
             </p>
           </div>
 
@@ -371,42 +396,42 @@ export default function Index() {
             {[
               {
                 icon: FileText,
-                title: "Lectura OCR",
-                desc: "Subí cualquier documento y la IA lo registra como transacción contable. Simple y fluido.",
+                title: "Leé documentos al instante",
+                desc: "Subí facturas, tickets, lo que sea. La IA los procesa automáticamente.",
               },
               {
                 icon: BarChart3,
-                title: "Auto matching bancario",
-                desc: "La IA crea y matchea transacciones automáticamente para que reconcilies en pocos clicks.",
+                title: "Reconciliá en un click",
+                desc: "La IA matchea transacciones y te ahorra horas de trabajo manual.",
               },
               {
                 icon: Brain,
-                title: "Generador de reportes IA",
-                desc: "Definí las reglas una vez y listo. La IA categoriza y rutea transacciones a cualquier escala.",
+                title: "Sugerencias inteligentes",
+                desc: "Te dice dónde ahorrar, qué optimizar y cómo crecer más rápido.",
               },
               {
-                icon: Sparkles,
-                title: "Sugerencias IA",
-                desc: "Conseguí nuevos insights con tu asistente inteligente para análisis rápidos, ideas de ahorro y sugerencias de workflow.",
+                icon: Shield,
+                title: "Detectá gastos raros",
+                desc: "Si algo no cierra, la IA te avisa antes de que sea un problema.",
               },
               {
                 icon: Users,
-                title: "Asignaciones intercompany IA",
-                desc: "Consolidá más rápido con transacciones entre empresas automatizadas. La IA también reconcilia y netea balances.",
+                title: "Automatizá intercompany",
+                desc: "Multi-entidad, eliminaciones automáticas, consolidación sin dolor.",
               },
               {
-                icon: Target,
-                title: "Detección de outliers IA",
-                desc: "La IA detecta valores atípicos en transacciones antes de que las apruebes, manteniéndote en el camino correcto.",
+                icon: TrendingUp,
+                title: "Reportes visuales",
+                desc: "Dashboards actualizados en tiempo real, sin Excel.",
               },
             ].map((feature, idx) => (
               <div
                 key={idx}
-                className="bg-white p-6 rounded-xl border border-gray-200 hover:border-blue-300 hover:shadow-lg transition-all scroll-fade-in"
+                className="group bg-gradient-to-br from-gray-50 to-white p-6 rounded-2xl border border-gray-200 hover:border-blue-300 hover:shadow-xl transition-all scroll-fade-in hover:-translate-y-1"
                 style={{ animationDelay: `${idx * 0.1}s` }}
               >
-                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
-                  <feature.icon className="w-6 h-6 text-blue-600" />
+                <div className="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-blue-200 transition-all">
+                  <feature.icon className="w-7 h-7 text-blue-600" />
                 </div>
                 <h3 className="text-lg font-bold text-gray-900 mb-2">{feature.title}</h3>
                 <p className="text-sm text-gray-600">{feature.desc}</p>
@@ -417,136 +442,110 @@ export default function Index() {
       </section>
 
       {/* ═════════════════════════════════════════════════════════════════
-          SECCIÓN: NÚMEROS REALES
-          ════════════════════════════════════════════════════════════════ */}
-      <section className="py-20 md:py-28 px-4 bg-white">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12 scroll-fade-in">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4">Resultados que importan</h2>
-            <p className="text-lg text-gray-600">No son promesas. Son datos de usuarios reales.</p>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {[
-              { value: "90%", label: "Menos tiempo en tareas manuales", icon: Clock },
-              { value: "2 min", label: "Para empezar a usar la plataforma", icon: Rocket },
-              { value: "10x", label: "Más transacciones procesadas", icon: TrendingUp },
-              { value: "24/7", label: "Tu asistente IA siempre activo", icon: Zap },
-            ].map((stat, idx) => (
-              <div key={idx} className="text-center scroll-fade-in" style={{ animationDelay: `${idx * 0.1}s` }}>
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-100 to-purple-100 rounded-2xl mb-4">
-                  <stat.icon className="w-8 h-8 text-blue-600" />
-                </div>
-                <div className="text-4xl sm:text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
-                  {stat.value}
-                </div>
-                <div className="text-sm text-gray-600 font-medium">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ═════════════════════════════════════════════════════════════════
-          SECCIÓN: ELEGÍ TU ETAPA
+          SECCIÓN: ELEGÍ TU ETAPA - REDISEÑADAS SIN COLORES FUERTES
           ════════════════════════════════════════════════════════════════ */}
       <section className="py-20 md:py-28 px-4 bg-gradient-to-br from-gray-50 to-white">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16 scroll-fade-in">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4">Elegí tu camino</h2>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4">¿En qué etapa estás?</h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
               Desde validar una idea hasta manejar una empresa: estamos para vos.
             </p>
           </div>
+
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {[
-              {
-                icon: Zap,
-                title: "Emprendedor",
-                badge: "DESDE CERO",
-                desc: "Tenés una idea pero no sabés si es viable",
-                features: ["Validá con IA en minutos", "Proyecciones financieras reales", "Plan de acción paso a paso"],
-                btnText: "Validar mi idea →",
-                bgColor: "bg-white",
-                borderColor: "border-blue-200 hover:border-blue-400",
-                iconBg: "from-blue-500 to-blue-600",
-                badgeBg: "bg-blue-100 text-blue-700",
-                btnColor: "bg-blue-600 hover:bg-blue-700",
-              },
-              {
-                icon: BarChart3,
-                title: "Negocio",
-                badge: "1-3 AÑOS",
-                desc: "Ya vendés pero todo está desordenado",
-                features: ["Dashboard en tiempo real", "CRM + Ventas + Gastos", "Control total sin planillas"],
-                btnText: "Organizar mi negocio →",
-                bgColor: "bg-gradient-to-br from-blue-600 to-purple-600",
-                borderColor: "border-blue-600",
-                iconBg: "bg-white",
-                badgeBg: "bg-blue-700 text-white",
-                btnColor: "bg-white hover:bg-blue-50 text-blue-600",
-                isHighlighted: true,
-              },
-              {
-                icon: Building2,
-                title: "Empresa",
-                badge: "+3 AÑOS",
-                desc: "Creció tu empresa y necesitás escalar",
-                features: ["Multi-sucursal automatizado", "Gestión de equipos completa", "Reportes avanzados con IA"],
-                btnText: "Automatizar empresa →",
-                bgColor: "bg-white",
-                borderColor: "border-green-200 hover:border-green-400",
-                iconBg: "from-green-500 to-green-600",
-                badgeBg: "bg-green-100 text-green-700",
-                btnColor: "bg-green-600 hover:bg-green-700",
-              },
-            ].map((card, idx) => (
-              <div
-                key={idx}
-                className={`${card.bgColor} rounded-3xl p-8 border-2 ${card.borderColor} hover:shadow-2xl transition-all scroll-fade-in relative`}
-                style={{ animationDelay: `${idx * 0.1}s` }}
-              >
-                {card.isHighlighted && (
-                  <div className="absolute -top-4 right-6 px-4 py-2 bg-yellow-400 rounded-xl text-sm font-bold text-gray-900 shadow-lg">
-                    ⭐ Más elegido
-                  </div>
-                )}
-                <div className="flex items-start justify-between mb-6">
-                  <div
-                    className={`w-16 h-16 ${card.isHighlighted ? card.iconBg : `bg-gradient-to-br ${card.iconBg}`} rounded-2xl flex items-center justify-center shadow-lg`}
-                  >
-                    <card.icon className={`w-8 h-8 ${card.isHighlighted ? "text-blue-600" : "text-white"}`} />
-                  </div>
-                  <span className={`px-3 py-1.5 ${card.badgeBg} text-xs font-bold rounded-lg uppercase`}>
-                    {card.badge}
-                  </span>
+            {/* Card 1 - Emprendedor */}
+            <div className="group relative bg-white rounded-3xl p-8 border-2 border-gray-200 hover:border-blue-300 hover:shadow-2xl transition-all scroll-fade-in">
+              <div className="flex items-start justify-between mb-6">
+                <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                  <Zap className="w-8 h-8 text-white" />
                 </div>
-                <h3 className={`text-3xl font-bold mb-3 ${card.isHighlighted ? "text-white" : "text-gray-900"}`}>
-                  {card.title}
-                </h3>
-                <p className={`mb-6 text-lg ${card.isHighlighted ? "text-blue-50 font-medium" : "text-gray-600"}`}>
-                  {card.desc}
-                </p>
-                <ul className="space-y-3 mb-8">
-                  {card.features.map((feat, i) => (
-                    <li
-                      key={i}
-                      className={`flex items-start gap-3 ${card.isHighlighted ? "text-white" : "text-gray-700"}`}
-                    >
-                      <Check
-                        className={`w-5 h-5 mt-0.5 flex-shrink-0 ${card.isHighlighted ? "text-green-300" : "text-green-500"}`}
-                      />
-                      <span>{feat}</span>
-                    </li>
-                  ))}
-                </ul>
-                <Button
-                  onClick={() => navigate("/select-role")}
-                  className={`w-full ${card.btnColor} rounded-xl py-4 text-base font-semibold shadow-lg`}
-                >
-                  {card.btnText}
-                </Button>
+                <span className="px-3 py-1.5 bg-blue-50 text-blue-700 text-xs font-bold rounded-lg uppercase border border-blue-200">
+                  Desde cero
+                </span>
               </div>
-            ))}
+              <h3 className="text-3xl font-bold text-gray-900 mb-3">Emprendedor</h3>
+              <p className="text-gray-600 mb-6 text-lg">Tenés una idea pero no sabés si es viable</p>
+              <ul className="space-y-3 mb-8">
+                {["Validá con IA en minutos", "Proyecciones financieras", "Plan de acción"].map((item, i) => (
+                  <li key={i} className="flex items-start gap-3 text-gray-700">
+                    <Check className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+              <Button
+                onClick={() => navigate("/select-role")}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-xl py-4 text-base font-semibold shadow-md group-hover:shadow-lg transition-all"
+              >
+                Validar mi idea →
+              </Button>
+            </div>
+
+            {/* Card 2 - Negocio (Destacada pero sin color fuerte) */}
+            <div
+              className="group relative bg-gradient-to-br from-blue-50 to-purple-50 rounded-3xl p-8 border-2 border-blue-300 shadow-xl hover:shadow-2xl transition-all scroll-fade-in"
+              style={{ animationDelay: "0.1s" }}
+            >
+              <div className="absolute -top-4 right-6 px-4 py-2 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-xl text-sm font-bold text-gray-900 shadow-lg">
+                ⭐ Más elegido
+              </div>
+              <div className="flex items-start justify-between mb-6">
+                <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                  <BarChart3 className="w-8 h-8 text-white" />
+                </div>
+                <span className="px-3 py-1.5 bg-blue-100 text-blue-800 text-xs font-bold rounded-lg uppercase border border-blue-300">
+                  1-3 años
+                </span>
+              </div>
+              <h3 className="text-3xl font-bold text-gray-900 mb-3">Negocio</h3>
+              <p className="text-gray-700 mb-6 text-lg font-medium">Ya vendés pero todo está desordenado</p>
+              <ul className="space-y-3 mb-8">
+                {["Dashboard en tiempo real", "CRM + Ventas + Gastos", "Control sin planillas"].map((item, i) => (
+                  <li key={i} className="flex items-start gap-3 text-gray-800">
+                    <Check className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
+                    <span className="font-medium">{item}</span>
+                  </li>
+                ))}
+              </ul>
+              <Button
+                onClick={() => navigate("/select-role")}
+                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-xl py-4 text-base font-semibold shadow-md group-hover:shadow-lg transition-all"
+              >
+                Organizar mi negocio →
+              </Button>
+            </div>
+
+            {/* Card 3 - Empresa */}
+            <div
+              className="group relative bg-white rounded-3xl p-8 border-2 border-gray-200 hover:border-green-300 hover:shadow-2xl transition-all scroll-fade-in"
+              style={{ animationDelay: "0.2s" }}
+            >
+              <div className="flex items-start justify-between mb-6">
+                <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                  <Building2 className="w-8 h-8 text-white" />
+                </div>
+                <span className="px-3 py-1.5 bg-green-50 text-green-700 text-xs font-bold rounded-lg uppercase border border-green-200">
+                  +3 años
+                </span>
+              </div>
+              <h3 className="text-3xl font-bold text-gray-900 mb-3">Empresa</h3>
+              <p className="text-gray-600 mb-6 text-lg">Tu empresa creció y necesitás escalar</p>
+              <ul className="space-y-3 mb-8">
+                {["Multi-sucursal", "Gestión de equipos", "Reportes con IA"].map((item, i) => (
+                  <li key={i} className="flex items-start gap-3 text-gray-700">
+                    <Check className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+              <Button
+                onClick={() => navigate("/select-role")}
+                className="w-full bg-green-600 hover:bg-green-700 text-white rounded-xl py-4 text-base font-semibold shadow-md group-hover:shadow-lg transition-all"
+              >
+                Automatizar empresa →
+              </Button>
+            </div>
           </div>
         </div>
       </section>
@@ -558,7 +557,7 @@ export default function Index() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
             <h3 className="text-2xl font-bold mb-2">Seguridad y confianza</h3>
-            <p className="text-gray-400">Tus datos están protegidos con los más altos estándares</p>
+            <p className="text-gray-400">Tus datos protegidos con los más altos estándares</p>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-8">
             {[
@@ -566,10 +565,10 @@ export default function Index() {
               { icon: Shield, label: "Datos en Argentina" },
               { icon: Shield, label: "Backup automático" },
               { icon: Shield, label: "GDPR Compliant" },
-              { icon: Shield, label: "99.9% Uptime" },
+              { icon: Shield, label: "Soporte 24/7" },
             ].map((badge, idx) => (
-              <div key={idx} className="text-center">
-                <div className="w-16 h-16 bg-gray-800 rounded-xl flex items-center justify-center mx-auto mb-3">
+              <div key={idx} className="text-center group">
+                <div className="w-16 h-16 bg-gray-800 rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:bg-gray-700 transition-colors">
                   <badge.icon className="w-8 h-8 text-green-400" />
                 </div>
                 <p className="text-sm text-gray-300 font-medium">{badge.label}</p>
@@ -580,22 +579,46 @@ export default function Index() {
       </section>
 
       {/* ═════════════════════════════════════════════════════════════════
+          CTA FINAL
+          ════════════════════════════════════════════════════════════════ */}
+      <section className="py-20 md:py-28 px-4 bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 text-white relative overflow-hidden">
+        <div className="absolute inset-0 bg-grid-white/10" />
+        <div className="relative z-10 max-w-4xl mx-auto text-center">
+          <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6">¿Listo para empezar?</h2>
+          <p className="text-xl sm:text-2xl mb-10 text-white/90">
+            Gratis, sin tarjeta, sin trucos. Empezás en 2 minutos.
+          </p>
+          <Button
+            onClick={() => navigate("/select-role")}
+            className="bg-white text-blue-600 hover:bg-gray-100 text-lg font-bold px-10 py-6 rounded-2xl shadow-2xl hover:shadow-3xl transition-all group"
+          >
+            <span>Empezar ahora</span>
+            <Rocket className="w-6 h-6 ml-2 group-hover:translate-x-1 transition-transform" />
+          </Button>
+        </div>
+      </section>
+
+      {/* ═════════════════════════════════════════════════════════════════
           FOOTER
           ════════════════════════════════════════════════════════════════ */}
-      <footer className="bg-gray-900 text-white py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
+      <footer className="bg-gray-900 text-white py-12 px-4">
         <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-6">
-            <p className="text-sm text-gray-400 text-center sm:text-left">
-              © 2025 Proyecto Emprendedurismo. Todos los derechos reservados.
-            </p>
-            <div className="flex items-center justify-center gap-4 sm:gap-6 text-sm">
-              <a href="#" className="text-gray-400 hover:text-white transition-colors duration-200">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center">
+                <Building2 className="w-6 h-6 text-white" />
+              </div>
+              <span className="font-bold text-lg">Proyecto Emprendedurismo</span>
+            </div>
+            <p className="text-sm text-gray-400">© 2025 Proyecto Emprendedurismo. Hecho con 💙 en Argentina.</p>
+            <div className="flex gap-6 text-sm">
+              <a href="#" className="text-gray-400 hover:text-white transition">
                 Términos
               </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors duration-200">
+              <a href="#" className="text-gray-400 hover:text-white transition">
                 Privacidad
               </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors duration-200">
+              <a href="#" className="text-gray-400 hover:text-white transition">
                 Soporte
               </a>
             </div>
