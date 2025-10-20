@@ -24,92 +24,88 @@ import { Button } from "@/components/ui/button";
 // ══════════════════════════════════════════════════════════════════════
 function LoginModal({ onClose }: { onClose: () => void }) {
   return (
-    <div
-      className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-[9999] animate-in fade-in duration-300"
-      onClick={onClose}
-    >
-      <div
-        className="relative w-[90%] max-w-[450px] bg-gradient-to-br from-blue-600 to-purple-700 rounded-3xl p-8 shadow-2xl animate-in zoom-in duration-300"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <button onClick={onClose} className="absolute top-4 right-4 text-white/80 hover:text-white transition-colors">
+    <div className="modal-grok-overlay" onClick={onClose}>
+      <div className="modal-grok-container" onClick={(e) => e.stopPropagation()}>
+        <div className="modal-grok-bg" />
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-white hover:text-white/80 transition-colors z-20"
+        >
           <X className="w-6 h-6" />
         </button>
-
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-white/20 backdrop-blur-md rounded-2xl mb-4 shadow-xl">
-            <Zap className="w-8 h-8 text-white" />
+        <div className="relative z-10">
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl mb-4 shadow-2xl glow-pulse">
+              <Zap className="w-8 h-8 text-white" />
+            </div>
+            <h2 className="text-3xl font-bold text-white mb-2">Entrá a tu cuenta</h2>
+            <p className="text-white/90 text-base">Empezá a usar IA para tu negocio en 2 minutos</p>
           </div>
-          <h2 className="text-3xl font-bold text-white mb-2">Entrá a tu cuenta</h2>
-          <p className="text-white/90">Empezá a usar IA para tu negocio en 2 minutos</p>
-        </div>
-
-        <div className="space-y-3 mb-6">
+          <div className="space-y-3 mb-6">
+            <button
+              className="btn-login-grok magnetic-button"
+              onClick={() => {
+                onClose();
+                window.location.href = "/auth?mode=login&provider=google";
+              }}
+            >
+              <svg className="w-5 h-5" viewBox="0 0 24 24">
+                <path
+                  fill="currentColor"
+                  d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                />
+                <path
+                  fill="currentColor"
+                  d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                />
+                <path
+                  fill="currentColor"
+                  d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                />
+                <path
+                  fill="currentColor"
+                  d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                />
+              </svg>
+              <span>Continuar con Google</span>
+            </button>
+            <button
+              className="btn-login-grok magnetic-button"
+              onClick={() => {
+                onClose();
+                window.location.href = "/auth?mode=login";
+              }}
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                />
+              </svg>
+              <span>Continuar con Email</span>
+            </button>
+          </div>
+          <div className="relative mb-6">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-white/30" />
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-4 bg-transparent text-white/80">¿Primera vez acá?</span>
+            </div>
+          </div>
           <button
-            className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-white/20 backdrop-blur-md border border-white/30 rounded-xl text-white font-semibold hover:bg-white/30 transition-all"
+            className="w-full text-center text-white hover:text-white/80 transition-colors font-semibold text-lg magnetic-button"
             onClick={() => {
               onClose();
-              window.location.href = "/auth?mode=login&provider=google";
+              window.location.href = "/auth?mode=signup";
             }}
           >
-            <svg className="w-5 h-5" viewBox="0 0 24 24">
-              <path
-                fill="currentColor"
-                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-              />
-              <path
-                fill="currentColor"
-                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-              />
-              <path
-                fill="currentColor"
-                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-              />
-              <path
-                fill="currentColor"
-                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-              />
-            </svg>
-            Continuar con Google
+            Crear cuenta gratis
           </button>
-          <button
-            className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-white/20 backdrop-blur-md border border-white/30 rounded-xl text-white font-semibold hover:bg-white/30 transition-all"
-            onClick={() => {
-              onClose();
-              window.location.href = "/auth?mode=login";
-            }}
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-              />
-            </svg>
-            Continuar con Email
-          </button>
+          <p className="text-center text-white/60 text-xs mt-8">Sin tarjeta. Sin trucos. Solo empezá.</p>
         </div>
-
-        <div className="relative mb-6">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-white/30" />
-          </div>
-          <div className="relative flex justify-center text-sm">
-            <span className="px-4 bg-transparent text-white/80">¿Primera vez acá?</span>
-          </div>
-        </div>
-
-        <button
-          className="w-full text-center text-white hover:text-white/80 transition-colors font-semibold text-lg"
-          onClick={() => {
-            onClose();
-            window.location.href = "/auth?mode=signup";
-          }}
-        >
-          Crear cuenta gratis
-        </button>
-        <p className="text-center text-white/60 text-xs mt-6">Sin tarjeta. Sin trucos. Solo empezá.</p>
       </div>
     </div>
   );
@@ -123,7 +119,9 @@ function FloatingChatBot() {
   const [showBadge, setShowBadge] = useState(true);
 
   useEffect(() => {
-    const timer = setTimeout(() => setShowBadge(false), 5000);
+    const timer = setTimeout(() => {
+      setShowBadge(false);
+    }, 5000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -131,14 +129,14 @@ function FloatingChatBot() {
     <>
       <button
         onClick={() => navigate("/business-ai-bot")}
-        className="fixed bottom-6 right-6 z-50 w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-transform"
+        className="fixed bottom-6 right-6 z-50 w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full shadow-2xl flex items-center justify-center magnetic-button glow-pulse hover:scale-110 transition-transform"
       >
         <MessageCircle className="w-8 h-8 text-white" />
       </button>
 
       {showBadge && (
-        <div className="fixed bottom-24 right-6 z-50 bg-white rounded-xl shadow-xl p-3 max-w-[200px] animate-bounce">
-          <p className="text-xs font-semibold text-gray-800">💬 ¿Necesitás ayuda?</p>
+        <div className="floating-chat-badge">
+          <p className="text-xs font-semibold text-gray-800 mb-1">💬 ¿Necesitás ayuda?</p>
           <p className="text-xs text-gray-600">Hablá con nuestro Asesor IA</p>
         </div>
       )}
@@ -174,64 +172,67 @@ function StageCard({
 }: StageCardProps) {
   const colors = {
     blue: {
+      bg: "from-blue-500 to-blue-600",
       button: "bg-blue-500 hover:bg-blue-600",
       icon: "text-blue-500",
       badge: "bg-blue-500",
-      iconBg: "bg-blue-100",
     },
     purple: {
+      bg: "from-purple-500 to-purple-600",
       button: "bg-purple-500 hover:bg-purple-600",
       icon: "text-purple-500",
       badge: "bg-purple-500",
-      iconBg: "bg-purple-100",
     },
     green: {
+      bg: "from-green-500 to-green-600",
       button: "bg-green-500 hover:bg-green-600",
       icon: "text-green-500",
       badge: "bg-green-500",
-      iconBg: "bg-green-100",
     },
   };
 
   const scheme = colors[colorScheme];
 
   return (
-    <div
-      className="relative bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 cursor-pointer group"
-      onClick={onClick}
-    >
+    <div className="clay-card-grok scroll-fade-in group relative cursor-pointer" onClick={onClick}>
       {isPopular && (
-        <div className="absolute -top-3 right-6 bg-gradient-to-r from-pink-500 to-purple-500 text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-lg flex items-center gap-1">
-          <Star className="w-3 h-3 fill-current" />
+        <div className="popular-badge flex items-center gap-1">
+          <Star className="w-4 h-4 fill-current" />
           Más elegido
         </div>
       )}
 
-      <div className="flex justify-between items-start mb-4">
-        <div className={`text-xs font-bold px-3 py-1.5 rounded-full text-white ${scheme.badge}`}>{stageLabel}</div>
-        <div className={`p-3 rounded-xl ${scheme.iconBg} group-hover:scale-110 transition-transform`}>
-          <Icon className={`w-7 h-7 ${scheme.icon}`} />
+      <div
+        className={`absolute -inset-1 bg-gradient-to-r ${scheme.bg} rounded-2xl opacity-0 group-hover:opacity-20 blur-xl transition-all duration-500`}
+      ></div>
+
+      <div className="relative p-6 md:p-8">
+        <div className="flex justify-between items-start mb-4">
+          <div className={`text-xs font-bold px-3 py-1.5 rounded-full text-white ${scheme.badge}`}>{stageLabel}</div>
+          <div className={`p-3 rounded-xl bg-gray-100 group-hover:scale-110 transition-transform duration-300`}>
+            <Icon className={`w-7 h-7 ${scheme.icon}`} />
+          </div>
         </div>
+
+        <h3 className="text-2xl md:text-3xl font-extrabold text-gray-900 mb-3">{title}</h3>
+        <p className="text-gray-600 mb-6 leading-relaxed">{description}</p>
+
+        <ul className="space-y-3 mb-8">
+          {features.map((feature, index) => (
+            <li key={index} className="flex items-start text-sm text-gray-700">
+              <Check className={`w-5 h-5 flex-shrink-0 mr-2 mt-0.5 ${scheme.icon}`} />
+              <span>{feature}</span>
+            </li>
+          ))}
+        </ul>
+
+        <Button
+          className={`w-full text-base font-semibold py-6 ${scheme.button} text-white magnetic-button shadow-lg group-hover:shadow-xl transition-all`}
+        >
+          {buttonText}
+          <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+        </Button>
       </div>
-
-      <h3 className="text-2xl md:text-3xl font-extrabold text-gray-900 mb-3">{title}</h3>
-      <p className="text-gray-600 mb-6 leading-relaxed">{description}</p>
-
-      <ul className="space-y-3 mb-8">
-        {features.map((feature, index) => (
-          <li key={index} className="flex items-start text-sm text-gray-700">
-            <Check className={`w-5 h-5 flex-shrink-0 mr-2 mt-0.5 ${scheme.icon}`} />
-            <span>{feature}</span>
-          </li>
-        ))}
-      </ul>
-
-      <button
-        className={`w-full text-base font-semibold py-4 ${scheme.button} text-white rounded-xl shadow-lg transition-all flex items-center justify-center gap-2`}
-      >
-        {buttonText}
-        <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-      </button>
     </div>
   );
 }
@@ -244,6 +245,23 @@ export default function Index() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
 
+  // Scroll reveal observer
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+          }
+        });
+      },
+      { threshold: 0.15 },
+    );
+
+    document.querySelectorAll(".scroll-fade-in").forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <>
       {showLoginModal && <LoginModal onClose={() => setShowLoginModal(false)} />}
@@ -255,20 +273,24 @@ export default function Index() {
             ════════════════════════════════════════════════════════════════ */}
         <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-white/95 border-b border-gray-200 shadow-sm">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between h-20">
-              <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate("/")}>
-                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+            <div className="flex items-center justify-between h-16 md:h-20">
+              <div className="flex items-center gap-2 md:gap-3 cursor-pointer" onClick={() => navigate("/")}>
+                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg glow-pulse">
                   <Building2 className="w-6 h-6 text-white" />
                 </div>
-                <span className="font-extrabold text-xl text-gray-900">Proyecto Emprendedurismo</span>
+                <span className="font-extrabold text-base md:text-xl text-gray-900">Proyecto Emprendedurismo</span>
               </div>
 
               <div className="hidden md:flex items-center gap-4">
-                <Button variant="outline" className="font-semibold" onClick={() => navigate("/select-role")}>
+                <Button
+                  variant="outline"
+                  className="text-base font-semibold magnetic-button"
+                  onClick={() => navigate("/select-role")}
+                >
                   Ver Demo
                 </Button>
                 <Button
-                  className="bg-blue-500 hover:bg-blue-600 text-white font-semibold"
+                  className="bg-blue-500 hover:bg-blue-600 text-white text-base font-semibold magnetic-button"
                   onClick={() => setShowLoginModal(true)}
                 >
                   Iniciar Sesión
@@ -291,7 +313,7 @@ export default function Index() {
                     setShowLoginModal(true);
                     setMobileMenuOpen(false);
                   }}
-                  className="w-full justify-center font-semibold"
+                  className="w-full justify-center text-base font-semibold"
                 >
                   Iniciar Sesión
                 </Button>
@@ -300,7 +322,7 @@ export default function Index() {
                     navigate("/auth?mode=signup");
                     setMobileMenuOpen(false);
                   }}
-                  className="w-full justify-center bg-blue-500 hover:bg-blue-600 text-white font-semibold"
+                  className="w-full justify-center bg-blue-500 hover:bg-blue-600 text-white text-base font-semibold"
                 >
                   Crear Cuenta
                 </Button>
@@ -310,7 +332,7 @@ export default function Index() {
                     navigate("/select-role");
                     setMobileMenuOpen(false);
                   }}
-                  className="w-full justify-center font-semibold"
+                  className="w-full justify-center text-base font-semibold"
                 >
                   Ver Demo
                 </Button>
@@ -320,53 +342,80 @@ export default function Index() {
         </nav>
 
         {/* ═════════════════════════════════════════════════════════════════
-            HERO
+            HERO - Degradado limpio con partículas
             ════════════════════════════════════════════════════════════════ */}
-        <section className="min-h-screen flex items-center justify-center relative overflow-hidden pt-20 bg-gradient-to-br from-blue-600 via-purple-600 to-pink-500">
-          <div className="absolute inset-0 bg-black/10"></div>
+        <section className="min-h-screen flex items-center justify-center relative overflow-hidden pt-24 md:pt-20 gradient-loop">
+          {/* Partículas flotantes */}
+          <div className="floating-particles">
+            {Array.from({ length: 40 }).map((_, i) => (
+              <div
+                key={i}
+                className="particle"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  animationDelay: `${Math.random() * 15}s`,
+                  animationDuration: `${10 + Math.random() * 10}s`,
+                }}
+              />
+            ))}
+          </div>
 
           <div className="container mx-auto px-6 relative z-10">
             <div className="max-w-5xl mx-auto text-center">
-              <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/20 backdrop-blur-md border border-white/30 mb-8 shadow-lg">
+              {/* Badge */}
+              <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full glass-card mb-8 scroll-fade-in shadow-lg">
                 <Sparkles className="w-5 h-5 text-yellow-300" />
                 <span className="text-sm font-semibold text-white">IA que entiende Argentina</span>
               </div>
 
+              {/* Título */}
               <h1
-                className="text-5xl md:text-7xl font-extrabold text-white mb-6 leading-tight"
-                style={{ textShadow: "0 4px 20px rgba(0,0,0,0.6), 0 2px 10px rgba(0,0,0,0.4)" }}
+                className="text-5xl md:text-7xl font-extrabold text-white mb-6 leading-tight px-4"
+                style={{ textShadow: "0 4px 20px rgba(0,0,0,0.8), 0 2px 10px rgba(0,0,0,0.6)" }}
               >
                 De la <span className="text-yellow-300">idea</span> a los{" "}
                 <span className="text-green-300">números</span> en días, no meses
               </h1>
 
+              {/* Descripción */}
               <p
-                className="text-white text-lg md:text-xl mb-10 max-w-3xl mx-auto leading-relaxed font-medium"
-                style={{ textShadow: "0 2px 10px rgba(0,0,0,0.6)" }}
+                className="text-white text-lg md:text-xl mb-10 max-w-3xl mx-auto leading-relaxed scroll-fade-in font-medium"
+                style={{
+                  textShadow: "0 2px 10px rgba(0,0,0,0.8)",
+                  animationDelay: "0.2s",
+                }}
               >
                 La plataforma que combina <strong className="text-yellow-300">IA + automatización + datos</strong> para
                 que emprendedores y PyMEs <strong className="text-green-300">validen, organicen y escalen</strong>
               </p>
 
-              <div className="flex flex-wrap justify-center gap-4 mb-12">
-                <div className="flex items-center gap-2 px-5 py-3 rounded-full bg-white/20 backdrop-blur-md border border-white/30 shadow-lg">
+              {/* Features */}
+              <div
+                className="flex flex-wrap justify-center gap-4 mb-12 scroll-fade-in"
+                style={{ animationDelay: "0.4s" }}
+              >
+                <div className="flex items-center gap-2 px-5 py-3 rounded-full glass-card shadow-lg">
                   <Check className="w-5 h-5 text-green-300" />
-                  <span className="text-white font-semibold">Sin tarjeta</span>
+                  <span className="text-white font-semibold text-sm md:text-base">Sin tarjeta</span>
                 </div>
-                <div className="flex items-center gap-2 px-5 py-3 rounded-full bg-white/20 backdrop-blur-md border border-white/30 shadow-lg">
+                <div className="flex items-center gap-2 px-5 py-3 rounded-full glass-card shadow-lg">
                   <Check className="w-5 h-5 text-green-300" />
-                  <span className="text-white font-semibold">Datos seguros</span>
+                  <span className="text-white font-semibold text-sm md:text-base">Datos seguros</span>
                 </div>
-                <div className="flex items-center gap-2 px-5 py-3 rounded-full bg-white/20 backdrop-blur-md border border-white/30 shadow-lg">
+                <div className="flex items-center gap-2 px-5 py-3 rounded-full glass-card shadow-lg">
                   <Check className="w-5 h-5 text-green-300" />
-                  <span className="text-white font-semibold">Empezá en 2 min</span>
+                  <span className="text-white font-semibold text-sm md:text-base">Empezá en 2 min</span>
                 </div>
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              {/* CTAs */}
+              <div
+                className="flex flex-col sm:flex-row gap-4 justify-center scroll-fade-in"
+                style={{ animationDelay: "0.6s" }}
+              >
                 <Button
                   size="lg"
-                  className="bg-white text-blue-600 hover:bg-gray-100 text-lg px-10 py-7 font-bold shadow-2xl"
+                  className="bg-white text-blue-600 hover:bg-gray-100 text-lg px-10 py-7 magnetic-button font-bold shadow-2xl"
                   onClick={() => navigate("/select-role")}
                 >
                   <Rocket className="w-6 h-6 mr-2" />
@@ -374,7 +423,7 @@ export default function Index() {
                 </Button>
                 <Button
                   size="lg"
-                  className="bg-white/20 border-2 border-white text-white hover:bg-white/30 backdrop-blur-sm text-lg px-10 py-7 font-bold shadow-2xl"
+                  className="glass-card text-white hover:bg-white/30 text-lg px-10 py-7 magnetic-button font-bold shadow-2xl"
                   onClick={() => setShowLoginModal(true)}
                 >
                   Iniciar Sesión
@@ -388,9 +437,9 @@ export default function Index() {
         {/* ═════════════════════════════════════════════════════════════════
             SECCIÓN DE ETAPAS
             ════════════════════════════════════════════════════════════════ */}
-        <section className="py-32 bg-gradient-to-b from-gray-50 to-white">
-          <div className="container mx-auto px-6">
-            <div className="max-w-4xl mx-auto text-center mb-16">
+        <section className="py-20 md:py-32 bg-gradient-to-b from-gray-50 to-white relative overflow-hidden noise-texture">
+          <div className="container mx-auto px-6 relative z-10">
+            <div className="max-w-4xl mx-auto text-center mb-16 scroll-fade-in">
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-100 text-blue-600 font-semibold text-sm mb-4">
                 <Target className="w-4 h-4" />
                 Tu camino al éxito
@@ -443,9 +492,15 @@ export default function Index() {
               />
             </div>
 
-            <div className="text-center mt-16">
+            {/* CTA */}
+            <div className="text-center mt-16 scroll-fade-in">
               <p className="text-gray-600 mb-4">¿No estás seguro de tu etapa?</p>
-              <Button variant="outline" size="lg" onClick={() => navigate("/business-ai-bot")}>
+              <Button
+                variant="outline"
+                size="lg"
+                className="magnetic-button"
+                onClick={() => navigate("/business-ai-bot")}
+              >
                 <Brain className="w-5 h-5 mr-2" />
                 Dejá que la IA te ayude a elegir
               </Button>
@@ -458,12 +513,12 @@ export default function Index() {
             ════════════════════════════════════════════════════════════════ */}
         <section className="py-16 bg-white border-y border-gray-200">
           <div className="container mx-auto px-6">
-            <div className="max-w-4xl mx-auto text-center">
+            <div className="max-w-4xl mx-auto text-center scroll-fade-in">
               <p className="text-gray-500 text-sm uppercase tracking-wide mb-8 font-semibold">
                 Confiado por emprendedores argentinos
               </p>
-              <div className="flex flex-wrap justify-center items-center gap-12">
-                <div className="flex items-center gap-3">
+              <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12">
+                <div className="flex items-center gap-2">
                   <div className="flex -space-x-2">
                     {[1, 2, 3, 4].map((i) => (
                       <div
