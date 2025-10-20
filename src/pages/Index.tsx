@@ -21,7 +21,7 @@ import {
 import { Button } from "@/components/ui/button";
 
 // ══════════════════════════════════════════════════════════════════════
-// LOGIN MODAL - DISEÑO ORIGINAL BONITO
+// LOGIN MODAL - DISEÑO PROFESIONAL TONED DOWN
 // ══════════════════════════════════════════════════════════════════════
 function LoginModal({ onClose }: { onClose: () => void }) {
   return (
@@ -36,11 +36,11 @@ function LoginModal({ onClose }: { onClose: () => void }) {
         </button>
         <div className="relative z-10">
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl mb-4 shadow-2xl">
-              <Zap className="w-8 h-8 text-white" />
+            <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-blue-600 to-green-600 rounded-xl mb-4 shadow-xl">
+              <Zap className="w-7 h-7 text-white" />
             </div>
-            <h2 className="text-3xl font-bold text-white mb-2 drop-shadow-lg">Entrá a tu cuenta</h2>
-            <p className="text-white/90 text-base">Empezá a usar IA para tu negocio en 2 minutos</p>
+            <h2 className="text-2xl font-bold text-white mb-2">Iniciá sesión</h2>
+            <p className="text-white/80 text-sm">Comenzá a usar IA para tu negocio en minutos</p>
           </div>
           <div className="space-y-3 mb-6">
             <button
@@ -90,22 +90,22 @@ function LoginModal({ onClose }: { onClose: () => void }) {
           </div>
           <div className="relative mb-6">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-white/30" />
+              <div className="w-full border-t border-white/20" />
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-transparent text-white/80">¿Primera vez acá?</span>
+              <span className="px-4 bg-transparent text-white/70">¿Nuevo usuario?</span>
             </div>
           </div>
           <button
-            className="w-full text-center text-white hover:text-white/80 transition-colors font-semibold text-lg"
+            className="w-full text-center text-white hover:text-white/80 transition-colors font-medium text-base"
             onClick={() => {
               onClose();
               window.location.href = "/auth?mode=signup";
             }}
           >
-            Crear cuenta gratis
+            Crear cuenta gratuita
           </button>
-          <p className="text-center text-white/60 text-xs mt-8">Sin tarjeta. Sin trucos. Solo empezá.</p>
+          <p className="text-center text-white/50 text-xs mt-6">Sin tarjeta requerida.</p>
         </div>
       </div>
     </div>
@@ -113,7 +113,7 @@ function LoginModal({ onClose }: { onClose: () => void }) {
 }
 
 // ══════════════════════════════════════════════════════════════════════
-// MAIN INDEX - DISEÑO ORIGINAL
+// MAIN INDEX - DISEÑO PROFESIONAL TONED DOWN
 // ══════════════════════════════════════════════════════════════════════
 export default function Index() {
   const navigate = useNavigate();
@@ -121,7 +121,7 @@ export default function Index() {
   const [showLoginModal, setShowLoginModal] = useState(false);
 
   useEffect(() => {
-    const observerOptions = { threshold: 0.3, rootMargin: "0px" };
+    const observerOptions = { threshold: 0.2, rootMargin: "0px" };
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) entry.target.classList.add("visible");
@@ -136,7 +136,7 @@ export default function Index() {
       {/* ═══════════════════════════════════════════════════════════
           HEADER
           ══════════════════════════════════════════════════════════ */}
-      <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-white/95 border-b border-gray-200">
+      <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-white/90 border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 md:h-20">
             <div className="flex items-center gap-2 md:gap-3">
@@ -213,60 +213,41 @@ export default function Index() {
       </nav>
 
       {/* ═══════════════════════════════════════════════════════════
-          HERO SECTION - FONDO DEGRADADO BONITO ORIGINAL
+          HERO SECTION - COLORES PROFESIONALES
           ══════════════════════════════════════════════════════════ */}
       <section className="hero-gradient-bg min-h-screen flex items-center justify-center relative overflow-hidden pt-20">
         <div className="slide-left-decoration" />
         <div className="slide-right-decoration" />
-        <div className="floating-particles-left" />
-        <div className="floating-particles-right" />
 
         <div className="container mx-auto px-6 relative z-10">
           <div className="max-w-5xl mx-auto text-center">
-            <div className="badge-glow fade-in mb-8 inline-flex">
+            <div className="badge-glow fade-in mb-6 inline-flex">
               <Zap className="w-4 h-4" />
-              <span>IA que entiende Argentina</span>
+              <span>IA adaptada a Argentina</span>
             </div>
 
-            <h1
-              className="gradient-text-animated fade-in-up mb-6"
-              style={{
-                textShadow:
-                  "0 8px 32px rgba(0, 0, 0, 0.5), 0 4px 16px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.3)",
-              }}
-            >
-              De la idea a los números en días, no meses
-            </h1>
+            <h1 className="gradient-text-animated fade-in-up mb-6">De la idea a los números en días</h1>
 
-            <p
-              className="text-white text-xl md:text-2xl mb-4 fade-in-up font-bold"
-              style={{
-                animationDelay: "0.1s",
-                textShadow: "0 4px 16px rgba(0, 0, 0, 0.6), 0 2px 8px rgba(0, 0, 0, 0.5), 0 1px 4px rgba(0, 0, 0, 0.4)",
-              }}
-            >
-              La plataforma que combina <strong>IA + automatización + datos</strong> para que emprendedores y PyMEs{" "}
+            <p className="text-white text-lg md:text-xl mb-4 fade-in-up font-medium" style={{ animationDelay: "0.1s" }}>
+              Plataforma que une <strong>IA + automatización + datos</strong> para que emprendedores y PyMEs{" "}
               <strong>validen, organicen y escalen</strong>
             </p>
 
             <div
-              className="flex flex-wrap justify-center gap-8 mb-12 text-white fade-in-up"
-              style={{
-                animationDelay: "0.2s",
-                textShadow: "0 3px 12px rgba(0, 0, 0, 0.6), 0 2px 6px rgba(0, 0, 0, 0.5)",
-              }}
+              className="flex flex-wrap justify-center gap-6 mb-10 text-white fade-in-up"
+              style={{ animationDelay: "0.2s" }}
             >
-              <div className="flex items-center gap-2 font-bold text-lg">
-                <span className="text-2xl">✓</span>
+              <div className="flex items-center gap-2 font-medium text-base">
+                <span className="text-xl">✓</span>
                 <span>Sin tarjeta</span>
               </div>
-              <div className="flex items-center gap-2 font-bold text-lg">
-                <span className="text-2xl">✓</span>
+              <div className="flex items-center gap-2 font-medium text-base">
+                <span className="text-xl">✓</span>
                 <span>Datos seguros</span>
               </div>
-              <div className="flex items-center gap-2 font-bold text-lg">
-                <span className="text-2xl">✓</span>
-                <span>Empezá en 2 min</span>
+              <div className="flex items-center gap-2 font-medium text-base">
+                <span className="text-xl">✓</span>
+                <span>Empezá en minutos</span>
               </div>
             </div>
 
@@ -286,19 +267,17 @@ export default function Index() {
       </section>
 
       {/* ═══════════════════════════════════════════════════════════
-          SECCIÓN: BENEFICIOS
+          SECCIÓN: BENEFICIOS - TONED DOWN
           ══════════════════════════════════════════════════════════ */}
       <section className="py-20 md:py-28 px-4 bg-gradient-to-br from-gray-50 via-white to-blue-50 relative overflow-hidden">
-        <div className="absolute top-20 left-10 w-96 h-96 bg-blue-200/30 rounded-full blur-3xl" />
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-purple-200/30 rounded-full blur-3xl" />
+        <div className="absolute top-20 left-10 w-80 h-80 bg-blue-100/20 rounded-full blur-2xl" />
+        <div className="absolute bottom-20 right-10 w-80 h-80 bg-green-100/20 rounded-full blur-2xl" />
 
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="text-center mb-16 scroll-fade-in">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              Todo lo que necesitás, en un solo lugar
-            </h2>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4">Todo en un solo lugar</h2>
             <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto">
-              Dejá de saltar entre apps, planillas y papeles. Acá tenés todo unificado.
+              Unifica apps, planillas y procesos en una plataforma simple.
             </p>
           </div>
 
@@ -306,33 +285,33 @@ export default function Index() {
             {[
               {
                 icon: Target,
-                title: "Validá tu idea con IA",
-                desc: "Antes de invertir un peso, la IA analiza tu mercado, competencia y viabilidad. Te da números reales, no fantasías.",
+                title: "Validá con IA",
+                desc: "Analiza mercado, competencia y viabilidad antes de invertir.",
                 features: ["Análisis de mercado", "Proyecciones financieras", "Plan de acción"],
               },
               {
                 icon: TrendingUp,
-                title: "Organizá todo en tiempo real",
-                desc: "CRM, ventas, gastos, inventario: todo sincronizado automáticamente. Ves tu negocio en vivo.",
-                features: ["Dashboard actualizado", "CRM integrado", "Control de gastos"],
+                title: "Organizá en real time",
+                desc: "CRM, ventas, gastos sincronizados automáticamente.",
+                features: ["Dashboard vivo", "CRM integrado", "Control de gastos"],
               },
               {
                 icon: Briefcase,
-                title: "Escalá sin contratar un ejército",
-                desc: "La IA automatiza tareas repetitivas. Vos te enfocás en crecer. Multi-sucursal, equipos, reportes.",
+                title: "Escalá eficientemente",
+                desc: "Automatiza tareas, maneja multi-sucursal y reportes.",
                 features: ["Automatización IA", "Multi-sucursal", "Reportes avanzados"],
               },
             ].map((item, idx) => (
               <div
                 key={idx}
-                className="group relative bg-white/80 backdrop-blur-xl p-8 rounded-3xl border border-white/20 shadow-xl hover:shadow-2xl transition-all scroll-fade-in"
+                className="group relative bg-white p-6 rounded-2xl border border-gray-100 shadow-md hover:shadow-lg transition-all scroll-fade-in card-hover"
                 style={{ animationDelay: `${idx * 0.1}s` }}
               >
-                <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform">
-                  <item.icon className="w-8 h-8 text-white" />
+                <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-green-500 rounded-xl flex items-center justify-center mb-4 shadow-sm group-hover:scale-105 transition-transform">
+                  <item.icon className="w-7 h-7 text-white" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-3">{item.title}</h3>
-                <p className="text-gray-600 leading-relaxed mb-4">{item.desc}</p>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">{item.title}</h3>
+                <p className="text-gray-600 mb-4">{item.desc}</p>
                 <ul className="space-y-2">
                   {item.features.map((feat, i) => (
                     <li key={i} className="flex items-center gap-2 text-sm text-gray-700">
@@ -348,20 +327,20 @@ export default function Index() {
       </section>
 
       {/* ═══════════════════════════════════════════════════════════
-          SECCIÓN: CAPACIDADES IA
+          SECCIÓN: CAPACIDADES IA - TONED DOWN
           ══════════════════════════════════════════════════════════ */}
       <section className="py-20 md:py-28 px-4 bg-white">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16 scroll-fade-in">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-100 to-purple-100 rounded-full mb-4">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 rounded-full mb-4">
               <Brain className="w-5 h-5 text-blue-600" />
-              <span className="text-sm font-semibold text-blue-600">Powered by AI</span>
+              <span className="text-sm font-semibold text-blue-600">IA Integrada</span>
             </div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              Tu asistente que nunca duerme
+              Asistente inteligente 24/7
             </h2>
             <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto">
-              No es magia, es IA entrenada para emprendedores argentinos
+              IA entrenada para el ecosistema emprendedor argentino.
             </p>
           </div>
 
@@ -369,42 +348,42 @@ export default function Index() {
             {[
               {
                 icon: FileText,
-                title: "Leé documentos al instante",
-                desc: "Subí facturas, tickets, lo que sea. La IA los procesa automáticamente.",
+                title: "Procesá documentos",
+                desc: "Subí facturas y tickets; la IA los lee automáticamente.",
               },
               {
                 icon: BarChart3,
-                title: "Reconciliá en un click",
-                desc: "La IA matchea transacciones y te ahorra horas de trabajo manual.",
+                title: "Reconciliá rápido",
+                desc: "Matchea transacciones sin esfuerzo manual.",
               },
               {
                 icon: Brain,
-                title: "Sugerencias inteligentes",
-                desc: "Te dice dónde ahorrar, qué optimizar y cómo crecer más rápido.",
+                title: "Sugerencias proactivas",
+                desc: "Ideas para ahorrar y optimizar crecimiento.",
               },
               {
                 icon: Shield,
-                title: "Detectá gastos raros",
-                desc: "Si algo no cierra, la IA te avisa antes de que sea un problema.",
+                title: "Detectá anomalías",
+                desc: "Alertas tempranas sobre gastos irregulares.",
               },
               {
                 icon: Users,
-                title: "Automatizá intercompany",
-                desc: "Multi-entidad, eliminaciones automáticas, consolidación sin dolor.",
+                title: "Manejo multi-entidad",
+                desc: "Eliminaciones y consolidación automáticas.",
               },
               {
                 icon: TrendingUp,
-                title: "Reportes visuales",
-                desc: "Dashboards actualizados en tiempo real, sin Excel.",
+                title: "Dashboards visuales",
+                desc: "Reportes en tiempo real sin complicaciones.",
               },
             ].map((feature, idx) => (
               <div
                 key={idx}
-                className="group bg-gradient-to-br from-gray-50 to-white p-6 rounded-2xl border border-gray-200 hover:border-blue-300 hover:shadow-xl transition-all scroll-fade-in hover:-translate-y-1"
+                className="group bg-gray-50 p-6 rounded-xl border border-gray-200 hover:border-blue-200 hover:shadow-md transition-all scroll-fade-in card-hover"
                 style={{ animationDelay: `${idx * 0.1}s` }}
               >
-                <div className="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-blue-200 transition-all">
-                  <feature.icon className="w-7 h-7 text-blue-600" />
+                <div className="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center mb-4 group-hover:bg-blue-100 transition-all">
+                  <feature.icon className="w-6 h-6 text-blue-600" />
                 </div>
                 <h3 className="text-lg font-bold text-gray-900 mb-2">{feature.title}</h3>
                 <p className="text-sm text-gray-600">{feature.desc}</p>
@@ -415,106 +394,100 @@ export default function Index() {
       </section>
 
       {/* ═══════════════════════════════════════════════════════════
-          SECCIÓN: ELEGÍ TU ETAPA - COLORES ORIGINALES BONITOS
+          SECCIÓN: ELEGÍ TU ETAPA - COLORES PROFESIONALES
           ══════════════════════════════════════════════════════════ */}
       <section className="py-20 md:py-28 px-4 bg-gradient-to-br from-gray-50 to-white">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16 scroll-fade-in">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4">¿En qué etapa estás?</h2>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4">Elegí tu etapa</h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              Desde validar una idea hasta manejar una empresa: estamos para vos.
+              Adaptado desde ideas iniciales hasta empresas establecidas.
             </p>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Card 1 - Emprendedor - FONDO BLANCO */}
-            <div className="group relative bg-white rounded-3xl p-8 border-2 border-gray-200 hover:border-blue-300 hover:shadow-2xl transition-all scroll-fade-in">
-              <div className="flex items-start justify-between mb-6">
-                <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-                  <Zap className="w-8 h-8 text-white" />
+            {/* Card 1 - Emprendedor */}
+            <div className="group relative bg-white rounded-2xl p-6 border border-gray-200 hover:border-blue-300 hover:shadow-lg transition-all scroll-fade-in">
+              <div className="flex items-start justify-between mb-4">
+                <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform">
+                  <Zap className="w-7 h-7 text-white" />
                 </div>
-                <span className="px-3 py-1.5 bg-blue-50 text-blue-700 text-xs font-bold rounded-lg uppercase border border-blue-200">
-                  Desde cero
-                </span>
+                <span className="px-2 py-1 bg-blue-50 text-blue-600 text-xs font-medium rounded-md">Desde cero</span>
               </div>
-              <h3 className="text-3xl font-bold text-gray-900 mb-3">Emprendedor</h3>
-              <p className="text-gray-600 mb-6 text-lg">Tenés una idea pero no sabés si es viable</p>
-              <ul className="space-y-3 mb-8">
-                {["Validá con IA en minutos", "Proyecciones financieras", "Plan de acción"].map((item, i) => (
-                  <li key={i} className="flex items-start gap-3 text-gray-700">
-                    <Check className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">Emprendedor</h3>
+              <p className="text-gray-600 mb-4">Idea en mente, validala rápido.</p>
+              <ul className="space-y-2 mb-6">
+                {["Validación IA", "Proyecciones", "Plan inicial"].map((item, i) => (
+                  <li key={i} className="flex items-center gap-2 text-sm text-gray-700">
+                    <Check className="w-4 h-4 text-blue-600" />
                     <span>{item}</span>
                   </li>
                 ))}
               </ul>
               <Button
                 onClick={() => navigate("/select-role")}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-xl py-4 text-base font-semibold shadow-md group-hover:shadow-lg transition-all"
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-lg py-3 text-sm font-medium shadow-sm group-hover:shadow-md transition-all"
               >
-                Validar mi idea →
+                Validar idea →
               </Button>
             </div>
 
-            {/* Card 2 - Negocio - FONDO SUAVE AZUL/MORADO MUY CLARITO */}
+            {/* Card 2 - Negocio */}
             <div
-              className="group relative bg-gradient-to-br from-blue-50/50 to-purple-50/50 rounded-3xl p-8 border-2 border-blue-300 shadow-xl hover:shadow-2xl transition-all scroll-fade-in"
+              className="group relative bg-gradient-to-br from-blue-50/30 to-green-50/30 rounded-2xl p-6 border border-blue-200 shadow-md hover:shadow-lg transition-all scroll-fade-in"
               style={{ animationDelay: "0.1s" }}
             >
-              <div className="absolute -top-4 right-6 px-4 py-2 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-xl text-sm font-bold text-gray-900 shadow-lg">
-                ⭐ Más elegido
+              <div className="absolute -top-3 right-4 px-3 py-1 bg-gradient-to-r from-blue-100 to-green-100 rounded-md text-xs font-medium text-gray-800 shadow-sm">
+                ⭐ Recomendado
               </div>
-              <div className="flex items-start justify-between mb-6">
-                <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-                  <BarChart3 className="w-8 h-8 text-white" />
+              <div className="flex items-start justify-between mb-4">
+                <div className="w-14 h-14 bg-gradient-to-br from-blue-600 to-green-600 rounded-xl flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform">
+                  <BarChart3 className="w-7 h-7 text-white" />
                 </div>
-                <span className="px-3 py-1.5 bg-blue-100 text-blue-800 text-xs font-bold rounded-lg uppercase border border-blue-300">
-                  1-3 años
-                </span>
+                <span className="px-2 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded-md">1-3 años</span>
               </div>
-              <h3 className="text-3xl font-bold text-gray-900 mb-3">Negocio</h3>
-              <p className="text-gray-700 mb-6 text-lg font-medium">Ya vendés pero todo está desordenado</p>
-              <ul className="space-y-3 mb-8">
-                {["Dashboard en tiempo real", "CRM + Ventas + Gastos", "Control sin planillas"].map((item, i) => (
-                  <li key={i} className="flex items-start gap-3 text-gray-800">
-                    <Check className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
-                    <span className="font-medium">{item}</span>
-                  </li>
-                ))}
-              </ul>
-              <Button
-                onClick={() => navigate("/select-role")}
-                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-xl py-4 text-base font-semibold shadow-md group-hover:shadow-lg transition-all"
-              >
-                Organizar mi negocio →
-              </Button>
-            </div>
-
-            {/* Card 3 - Empresa - FONDO BLANCO */}
-            <div
-              className="group relative bg-white rounded-3xl p-8 border-2 border-gray-200 hover:border-green-300 hover:shadow-2xl transition-all scroll-fade-in"
-              style={{ animationDelay: "0.2s" }}
-            >
-              <div className="flex items-start justify-between mb-6">
-                <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-                  <Building2 className="w-8 h-8 text-white" />
-                </div>
-                <span className="px-3 py-1.5 bg-green-50 text-green-700 text-xs font-bold rounded-lg uppercase border border-green-200">
-                  +3 años
-                </span>
-              </div>
-              <h3 className="text-3xl font-bold text-gray-900 mb-3">Empresa</h3>
-              <p className="text-gray-600 mb-6 text-lg">Tu empresa creció y necesitás escalar</p>
-              <ul className="space-y-3 mb-8">
-                {["Multi-sucursal", "Gestión de equipos", "Reportes con IA"].map((item, i) => (
-                  <li key={i} className="flex items-start gap-3 text-gray-700">
-                    <Check className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">Negocio</h3>
+              <p className="text-gray-600 mb-4">Ventas en marcha, organizalo.</p>
+              <ul className="space-y-2 mb-6">
+                {["Dashboard real-time", "CRM + Ventas", "Control simple"].map((item, i) => (
+                  <li key={i} className="flex items-center gap-2 text-sm text-gray-700">
+                    <Check className="w-4 h-4 text-green-600" />
                     <span>{item}</span>
                   </li>
                 ))}
               </ul>
               <Button
                 onClick={() => navigate("/select-role")}
-                className="w-full bg-green-600 hover:bg-green-700 text-white rounded-xl py-4 text-base font-semibold shadow-md group-hover:shadow-lg transition-all"
+                className="w-full bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-white rounded-lg py-3 text-sm font-medium shadow-sm group-hover:shadow-md transition-all"
+              >
+                Organizar negocio →
+              </Button>
+            </div>
+
+            {/* Card 3 - Empresa */}
+            <div
+              className="group relative bg-white rounded-2xl p-6 border border-gray-200 hover:border-green-300 hover:shadow-lg transition-all scroll-fade-in"
+              style={{ animationDelay: "0.2s" }}
+            >
+              <div className="flex items-start justify-between mb-4">
+                <div className="w-14 h-14 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform">
+                  <Building2 className="w-7 h-7 text-white" />
+                </div>
+                <span className="px-2 py-1 bg-green-50 text-green-600 text-xs font-medium rounded-md">+3 años</span>
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">Empresa</h3>
+              <p className="text-gray-600 mb-4">Crecimiento sostenido, escalalo.</p>
+              <ul className="space-y-2 mb-6">
+                {["Multi-sucursal", "Gestión equipos", "Reportes IA"].map((item, i) => (
+                  <li key={i} className="flex items-center gap-2 text-sm text-gray-700">
+                    <Check className="w-4 h-4 text-green-600" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+              <Button
+                onClick={() => navigate("/select-role")}
+                className="w-full bg-green-600 hover:bg-green-700 text-white rounded-lg py-3 text-sm font-medium shadow-sm group-hover:shadow-md transition-all"
               >
                 Automatizar empresa →
               </Button>
@@ -524,27 +497,27 @@ export default function Index() {
       </section>
 
       {/* ═══════════════════════════════════════════════════════════
-          TRUST BADGES
+          TRUST BADGES - TONED DOWN
           ══════════════════════════════════════════════════════════ */}
-      <section className="py-16 px-4 bg-gray-900 text-white">
+      <section className="py-12 px-4 bg-gray-800 text-white">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h3 className="text-2xl font-bold mb-2">Seguridad y confianza</h3>
-            <p className="text-gray-400">Tus datos protegidos con los más altos estándares</p>
+          <div className="text-center mb-8">
+            <h3 className="text-xl font-bold mb-2">Seguridad primero</h3>
+            <p className="text-gray-300 text-sm">Protección de datos con estándares globales.</p>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-8">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6">
             {[
               { icon: Shield, label: "Encriptación SSL" },
-              { icon: Shield, label: "Datos en Argentina" },
-              { icon: Shield, label: "Backup automático" },
-              { icon: Shield, label: "GDPR Compliant" },
-              { icon: Shield, label: "Soporte 24/7" },
+              { icon: Shield, label: "Datos locales" },
+              { icon: Shield, label: "Backups diarios" },
+              { icon: Shield, label: "Cumple GDPR" },
+              { icon: Shield, label: "Soporte constante" },
             ].map((badge, idx) => (
               <div key={idx} className="text-center group">
-                <div className="w-16 h-16 bg-gray-800 rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:bg-gray-700 transition-colors">
-                  <badge.icon className="w-8 h-8 text-green-400" />
+                <div className="w-12 h-12 bg-gray-700 rounded-lg flex items-center justify-center mx-auto mb-2 group-hover:bg-gray-600 transition-colors">
+                  <badge.icon className="w-6 h-6 text-green-400" />
                 </div>
-                <p className="text-sm text-gray-300 font-medium">{badge.label}</p>
+                <p className="text-xs text-gray-300">{badge.label}</p>
               </div>
             ))}
           </div>
@@ -552,19 +525,19 @@ export default function Index() {
       </section>
 
       {/* ═══════════════════════════════════════════════════════════
-          FOOTER
+          FOOTER - SIMPLE
           ══════════════════════════════════════════════════════════ */}
-      <footer className="bg-gray-900 text-white py-12 px-4">
+      <footer className="bg-gray-800 text-white py-8 px-4">
         <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center">
-                <Building2 className="w-6 h-6 text-white" />
+              <div className="w-8 h-8 bg-blue-600 rounded-md flex items-center justify-center">
+                <Building2 className="w-5 h-5 text-white" />
               </div>
-              <span className="font-bold text-lg">Proyecto Emprendedurismo</span>
+              <span className="font-medium">Proyecto Emprendedurismo</span>
             </div>
-            <p className="text-sm text-gray-400">© 2025 Proyecto Emprendedurismo. Hecho con 💙 en Argentina.</p>
-            <div className="flex gap-6 text-sm">
+            <p className="text-gray-400">© 2025. Hecho en Argentina.</p>
+            <div className="flex gap-4">
               <a href="#" className="text-gray-400 hover:text-white transition">
                 Términos
               </a>
@@ -581,7 +554,7 @@ export default function Index() {
 
       {/* BOT WIDGET */}
       <div className="bot-widget-float">
-        <span className="text-3xl">🤖</span>
+        <span className="text-2xl">🤖</span>
       </div>
 
       {/* MODAL LOGIN */}
