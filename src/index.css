@@ -365,7 +365,7 @@
 
   /* Cards - Hover con lift */
   .card-hover {
-    @apply transition-all duration-400 ease-out;
+    @apply transition-all duration-500 ease-out;
     will-change: transform;
   }
 
