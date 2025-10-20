@@ -28,25 +28,13 @@ Tu objetivo: ayudar a validar ideas de forma rápida y económica.`;
 
 IMPORTANTE: Das RESPUESTAS CONCRETAS Y ACCIONABLES.
 
-Tu objetivo: ayudar a escalar ventas, optimizar margen, construir equipo y decisiones basadas en datos.
-
-Estructura respuestas:
-1. DIAGNÓSTICO (basado en datos usuario: MRR, margen, equipo)
-2. PLAN DE ACCIÓN (máx 4 pasos específicos)
-3. MÉTRICA (impacto esperado)
-4. PRÓXIMO PASO`;
+Tu objetivo: ayudar a escalar ventas, optimizar margen, construir equipo y decisiones basadas en datos.`;
   } else if (mode === "3") {
     return `Sos un CONSULTOR EMPRESARIAL especializado en PYMES y empresas grandes.
 
 IMPORTANTE: Das RESPUESTAS CONCRETAS, CUANTIFICADAS Y ACCIONABLES.
 
-Tu objetivo: análisis financiero, estrategia de crecimiento, optimización operacional.
-
-Estructura respuestas:
-1. DIAGNÓSTICO (análisis números, comparación vs industria)
-2. PLAN DE ACCIÓN (máx 5 acciones estratégicas con timeline)
-3. MÉTRICA (impacto financiero esperado)
-4. PRÓXIMO PASO`;
+Tu objetivo: análisis financiero, estrategia de crecimiento, optimización operacional.`;
   }
   return "";
 };
@@ -184,28 +172,16 @@ const BusinessAIBot = () => {
   // PANTALLA DE SELECCIÓN
   if (!currentMode) {
     return (
-      <div className="min-h-screen gradient-loop relative overflow-hidden">
-        {/* Partículas flotantes */}
-        <div className="floating-particles">
-          {Array.from({ length: 30 }).map((_, i) => (
-            <div
-              key={i}
-              className="particle"
-              style={{
-                left: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 15}s`,
-                animationDuration: `${10 + Math.random() * 10}s`,
-              }}
-            />
-          ))}
-        </div>
+      <div className="min-h-screen bg-gradient-to-br from-purple-600 via-blue-600 to-pink-500 relative overflow-hidden">
+        {/* Overlay para mejor contraste */}
+        <div className="absolute inset-0 bg-black/10"></div>
 
         <div className="relative z-10 container mx-auto px-4 py-12 min-h-screen flex flex-col items-center justify-center">
           {/* Header */}
-          <div className="text-center mb-16 scroll-fade-in visible">
-            <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full glass-card mb-6 glow-pulse">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/20 backdrop-blur-md border border-white/30 mb-6 shadow-lg">
               <Sparkles className="w-5 h-5 text-yellow-300" />
-              <span className="text-white font-semibold">Tu Asesor IA Personalizado</span>
+              <span className="text-white font-semibold text-sm">Tu Asesor IA Personalizado</span>
             </div>
             <h1
               className="text-5xl md:text-6xl font-extrabold text-white mb-4 leading-tight"
@@ -219,77 +195,73 @@ const BusinessAIBot = () => {
           </div>
 
           {/* Cards */}
-          <div className="grid md:grid-cols-3 gap-8 max-w-6xl w-full">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl w-full">
             {/* Card 1 - Azul */}
             <div
-              className="clay-card-grok scroll-fade-in visible group cursor-pointer"
               onClick={() => setCurrentMode("1")}
+              className="bg-white rounded-3xl p-8 shadow-2xl hover:shadow-3xl hover:scale-105 transition-all duration-300 cursor-pointer group"
             >
-              <div className="relative p-8">
-                <div className="flex items-center justify-center w-16 h-16 bg-blue-100 rounded-2xl mb-6 mx-auto group-hover:scale-110 transition-transform">
-                  <Zap className="w-8 h-8 text-blue-600" />
+              <div className="flex items-center justify-center w-16 h-16 bg-blue-100 rounded-2xl mb-6 mx-auto group-hover:scale-110 transition-transform">
+                <Zap className="w-8 h-8 text-blue-600" />
+              </div>
+              <div className="text-center">
+                <h2 className="text-2xl font-extrabold text-gray-900 mb-2">Idea Validada</h2>
+                <p className="text-blue-600 font-bold mb-4">0-1 año</p>
+                <p className="text-gray-600 mb-6 text-sm">Tenés una idea con potencial</p>
+                <div className="text-sm text-gray-700 space-y-2 mb-6 text-left">
+                  <p>• Validación de mercado</p>
+                  <p>• MVP y Product-Market Fit</p>
                 </div>
-                <div className="text-center">
-                  <h2 className="text-2xl font-extrabold text-gray-900 mb-2">Idea Validada</h2>
-                  <p className="text-blue-600 font-bold mb-4">0-1 año</p>
-                  <p className="text-gray-600 mb-6">Tenés una idea con potencial</p>
-                  <div className="text-sm text-gray-700 space-y-2 mb-6">
-                    <p>• Validación de mercado</p>
-                    <p>• MVP y Product-Market Fit</p>
-                  </div>
-                  <button className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 rounded-xl magnetic-button transition-all">
-                    Empezar →
-                  </button>
-                </div>
+                <button className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 rounded-xl transition-all shadow-lg">
+                  Empezar →
+                </button>
               </div>
             </div>
 
             {/* Card 2 - Púrpura */}
             <div
-              className="clay-card-grok scroll-fade-in visible group cursor-pointer relative"
               onClick={() => setCurrentMode("2")}
+              className="bg-white rounded-3xl p-8 shadow-2xl hover:shadow-3xl hover:scale-105 transition-all duration-300 cursor-pointer group relative"
             >
-              <div className="popular-badge">⭐ Más elegido</div>
-              <div className="relative p-8">
-                <div className="flex items-center justify-center w-16 h-16 bg-purple-100 rounded-2xl mb-6 mx-auto group-hover:scale-110 transition-transform">
-                  <TrendingUp className="w-8 h-8 text-purple-600" />
+              <div className="absolute -top-3 right-6 bg-gradient-to-r from-pink-500 to-purple-500 text-white px-4 py-1 rounded-full text-xs font-bold shadow-lg flex items-center gap-1">
+                ⭐ Más elegido
+              </div>
+              <div className="flex items-center justify-center w-16 h-16 bg-purple-100 rounded-2xl mb-6 mx-auto group-hover:scale-110 transition-transform">
+                <TrendingUp className="w-8 h-8 text-purple-600" />
+              </div>
+              <div className="text-center">
+                <h2 className="text-2xl font-extrabold text-gray-900 mb-2">Negocio</h2>
+                <p className="text-purple-600 font-bold mb-4">1-3 años</p>
+                <p className="text-gray-600 mb-6 text-sm">Tu negocio está creciendo</p>
+                <div className="text-sm text-gray-700 space-y-2 mb-6 text-left">
+                  <p>• Escalamiento de ventas</p>
+                  <p>• Optimización operacional</p>
                 </div>
-                <div className="text-center">
-                  <h2 className="text-2xl font-extrabold text-gray-900 mb-2">Negocio</h2>
-                  <p className="text-purple-600 font-bold mb-4">1-3 años</p>
-                  <p className="text-gray-600 mb-6">Tu negocio está creciendo</p>
-                  <div className="text-sm text-gray-700 space-y-2 mb-6">
-                    <p>• Escalamiento de ventas</p>
-                    <p>• Optimización operacional</p>
-                  </div>
-                  <button className="w-full bg-purple-500 hover:bg-purple-600 text-white font-bold py-3 rounded-xl magnetic-button transition-all">
-                    Empezar →
-                  </button>
-                </div>
+                <button className="w-full bg-purple-500 hover:bg-purple-600 text-white font-bold py-3 rounded-xl transition-all shadow-lg">
+                  Empezar →
+                </button>
               </div>
             </div>
 
             {/* Card 3 - Verde */}
             <div
-              className="clay-card-grok scroll-fade-in visible group cursor-pointer"
               onClick={() => setCurrentMode("3")}
+              className="bg-white rounded-3xl p-8 shadow-2xl hover:shadow-3xl hover:scale-105 transition-all duration-300 cursor-pointer group"
             >
-              <div className="relative p-8">
-                <div className="flex items-center justify-center w-16 h-16 bg-green-100 rounded-2xl mb-6 mx-auto group-hover:scale-110 transition-transform">
-                  <Building2 className="w-8 h-8 text-green-600" />
+              <div className="flex items-center justify-center w-16 h-16 bg-green-100 rounded-2xl mb-6 mx-auto group-hover:scale-110 transition-transform">
+                <Building2 className="w-8 h-8 text-green-600" />
+              </div>
+              <div className="text-center">
+                <h2 className="text-2xl font-extrabold text-gray-900 mb-2">Empresa</h2>
+                <p className="text-green-600 font-bold mb-4">3+ años</p>
+                <p className="text-gray-600 mb-6 text-sm">Empresa PYME establecida</p>
+                <div className="text-sm text-gray-700 space-y-2 mb-6 text-left">
+                  <p>• Estrategia empresarial</p>
+                  <p>• Rentabilidad y expansión</p>
                 </div>
-                <div className="text-center">
-                  <h2 className="text-2xl font-extrabold text-gray-900 mb-2">Empresa</h2>
-                  <p className="text-green-600 font-bold mb-4">3+ años</p>
-                  <p className="text-gray-600 mb-6">Empresa PYME establecida</p>
-                  <div className="text-sm text-gray-700 space-y-2 mb-6">
-                    <p>• Estrategia empresarial</p>
-                    <p>• Rentabilidad y expansión</p>
-                  </div>
-                  <button className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-xl magnetic-button transition-all">
-                    Empezar →
-                  </button>
-                </div>
+                <button className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-xl transition-all shadow-lg">
+                  Empezar →
+                </button>
               </div>
             </div>
           </div>
@@ -337,12 +309,9 @@ const BusinessAIBot = () => {
   return (
     <div className="h-screen flex flex-col bg-gray-50">
       {/* Header */}
-      <div
-        className={`bg-gradient-to-r ${config.gradient} p-4 shadow-xl flex items-center justify-between text-white relative overflow-hidden`}
-      >
-        <div className="absolute inset-0 bg-white/10 backdrop-blur-sm"></div>
-        <div className="flex items-center gap-3 relative z-10">
-          <div className="p-2 bg-white/20 rounded-xl glow-pulse">
+      <div className={`bg-gradient-to-r ${config.gradient} p-4 shadow-xl flex items-center justify-between text-white`}>
+        <div className="flex items-center gap-3">
+          <div className="p-2 bg-white/20 rounded-xl">
             <Icon className="w-6 h-6" />
           </div>
           <div>
@@ -350,10 +319,7 @@ const BusinessAIBot = () => {
             <p className="text-sm opacity-90">{config.subtitle}</p>
           </div>
         </div>
-        <button
-          onClick={() => setCurrentMode(null)}
-          className="p-2 hover:bg-white/20 rounded-lg transition relative z-10 magnetic-button"
-        >
+        <button onClick={() => setCurrentMode(null)} className="p-2 hover:bg-white/20 rounded-lg transition">
           <ArrowLeft className="w-6 h-6" />
         </button>
       </div>
@@ -361,10 +327,7 @@ const BusinessAIBot = () => {
       {/* Chat Area */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4 max-w-4xl mx-auto w-full">
         {messages.map((msg, idx) => (
-          <div
-            key={idx}
-            className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"} scroll-fade-in visible`}
-          >
+          <div key={idx} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
             <div
               className={`max-w-2xl p-4 rounded-2xl shadow-lg ${
                 msg.role === "user" ? `${config.messageColor} text-white` : `bg-white border-2 ${config.borderColor}`
@@ -381,10 +344,16 @@ const BusinessAIBot = () => {
         {isLoading && (
           <div className="flex justify-start">
             <div className={`max-w-2xl p-4 rounded-2xl bg-white border-2 ${config.borderColor} shadow-lg`}>
-              <div className="loading-dots">
-                <span></span>
-                <span></span>
-                <span></span>
+              <div className="flex gap-2">
+                <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></div>
+                <div
+                  className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"
+                  style={{ animationDelay: "0.2s" }}
+                ></div>
+                <div
+                  className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"
+                  style={{ animationDelay: "0.4s" }}
+                ></div>
               </div>
             </div>
           </div>
@@ -405,9 +374,8 @@ const BusinessAIBot = () => {
               <button
                 key={idx}
                 onClick={() => handleQuickAction(action)}
-                className="text-left p-4 rounded-xl bg-gray-50 hover:bg-gray-100 border-2 border-gray-200 font-medium text-sm flex items-start gap-3 magnetic-button transition-all"
+                className="text-left p-4 rounded-xl bg-gray-50 hover:bg-gray-100 border-2 border-gray-200 font-medium text-sm transition-all"
               >
-                <Sparkles className="w-4 h-4 mt-0.5 flex-shrink-0 text-gray-500" />
                 <span className="text-gray-700">{action}</span>
               </button>
             ))}
@@ -429,7 +397,7 @@ const BusinessAIBot = () => {
           <button
             type="submit"
             disabled={!inputValue.trim() || isLoading}
-            className={`${config.messageColor} text-white px-8 py-3 rounded-xl hover:opacity-90 disabled:bg-gray-400 font-semibold flex items-center gap-2 transition-all magnetic-button shadow-lg`}
+            className={`${config.messageColor} text-white px-8 py-3 rounded-xl hover:opacity-90 disabled:bg-gray-400 font-semibold flex items-center gap-2 transition-all shadow-lg`}
           >
             <Send className="w-5 h-5" />
             Enviar
