@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Building2,
@@ -116,11 +116,17 @@ function LoginModal({ onClose }: { onClose: () => void }) {
 // ══════════════════════════════════════════════════════════════════════
 function FloatingChatBot() {
   const navigate = useNavigate();
-  const [isOpen, setIsOpen] = useState(false);
+  const [showBadge, setShowBadge] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowBadge(false);
+    }, 5000);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <>
-      {/* Botón flotante */}
       <button
         onClick={() => navigate("/business-ai-bot")}
         className="fixed bottom-6 right-6 z-50 w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full shadow-2xl flex items-center justify-center magnetic-button glow-pulse hover:scale-110 transition-transform"
@@ -128,11 +134,12 @@ function FloatingChatBot() {
         <MessageCircle className="w-8 h-8 text-white" />
       </button>
 
-      {/* Badge de notificación */}
-      <div className="fixed bottom-[88px] right-6 z-50 bg-white rounded-lg shadow-xl p-3 max-w-[200px] animate-bounce">
-        <p className="text-xs font-semibold text-gray-800">💬 ¿Necesitás ayuda?</p>
-        <p className="text-xs text-gray-600">Hablá con nuestro Asesor IA</p>
-      </div>
+      {showBadge && (
+        <div className="floating-chat-badge">
+          <p className="text-xs font-semibold text-gray-800 mb-1">💬 ¿Necesitás ayuda?</p>
+          <p className="text-xs text-gray-600">Hablá con nuestro Asesor IA</p>
+        </div>
+      )}
     </>
   );
 }
@@ -335,26 +342,36 @@ export default function Index() {
         </nav>
 
         {/* ═════════════════════════════════════════════════════════════════
-            HERO - Degradado limpio (NO espacial)
+            HERO - Degradado limpio con partículas
             ════════════════════════════════════════════════════════════════ */}
-        <section className="min-h-screen flex items-center justify-center relative overflow-hidden pt-24 md:pt-20 bg-gradient-to-br from-blue-600 via-purple-600 to-pink-500">
-          {/* Overlay para mejor legibilidad */}
-          <div className="absolute inset-0 bg-black/20"></div>
+        <section className="min-h-screen flex items-center justify-center relative overflow-hidden pt-24 md:pt-20 gradient-loop">
+          {/* Partículas flotantes */}
+          <div className="floating-particles">
+            {Array.from({ length: 40 }).map((_, i) => (
+              <div
+                key={i}
+                className="particle"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  animationDelay: `${Math.random() * 15}s`,
+                  animationDuration: `${10 + Math.random() * 10}s`,
+                }}
+              />
+            ))}
+          </div>
 
           <div className="container mx-auto px-6 relative z-10">
             <div className="max-w-5xl mx-auto text-center">
               {/* Badge */}
-              <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/20 backdrop-blur-md border border-white/30 mb-8 scroll-fade-in shadow-lg">
+              <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full glass-card mb-8 scroll-fade-in shadow-lg">
                 <Sparkles className="w-5 h-5 text-yellow-300" />
                 <span className="text-sm font-semibold text-white">IA que entiende Argentina</span>
               </div>
 
-              {/* Título - SIN degradado espacial */}
+              {/* Título */}
               <h1
                 className="text-5xl md:text-7xl font-extrabold text-white mb-6 leading-tight px-4"
-                style={{
-                  textShadow: "0 4px 20px rgba(0,0,0,0.8), 0 2px 10px rgba(0,0,0,0.6)",
-                }}
+                style={{ textShadow: "0 4px 20px rgba(0,0,0,0.8), 0 2px 10px rgba(0,0,0,0.6)" }}
               >
                 De la <span className="text-yellow-300">idea</span> a los{" "}
                 <span className="text-green-300">números</span> en días, no meses
@@ -377,15 +394,15 @@ export default function Index() {
                 className="flex flex-wrap justify-center gap-4 mb-12 scroll-fade-in"
                 style={{ animationDelay: "0.4s" }}
               >
-                <div className="flex items-center gap-2 px-5 py-3 rounded-full bg-white/20 backdrop-blur-md border border-white/30 shadow-lg">
+                <div className="flex items-center gap-2 px-5 py-3 rounded-full glass-card shadow-lg">
                   <Check className="w-5 h-5 text-green-300" />
                   <span className="text-white font-semibold text-sm md:text-base">Sin tarjeta</span>
                 </div>
-                <div className="flex items-center gap-2 px-5 py-3 rounded-full bg-white/20 backdrop-blur-md border border-white/30 shadow-lg">
+                <div className="flex items-center gap-2 px-5 py-3 rounded-full glass-card shadow-lg">
                   <Check className="w-5 h-5 text-green-300" />
                   <span className="text-white font-semibold text-sm md:text-base">Datos seguros</span>
                 </div>
-                <div className="flex items-center gap-2 px-5 py-3 rounded-full bg-white/20 backdrop-blur-md border border-white/30 shadow-lg">
+                <div className="flex items-center gap-2 px-5 py-3 rounded-full glass-card shadow-lg">
                   <Check className="w-5 h-5 text-green-300" />
                   <span className="text-white font-semibold text-sm md:text-base">Empezá en 2 min</span>
                 </div>
@@ -406,7 +423,7 @@ export default function Index() {
                 </Button>
                 <Button
                   size="lg"
-                  className="bg-blue-600/20 border-2 border-white text-white hover:bg-white/30 backdrop-blur-sm text-lg px-10 py-7 magnetic-button font-bold shadow-2xl"
+                  className="glass-card text-white hover:bg-white/30 text-lg px-10 py-7 magnetic-button font-bold shadow-2xl"
                   onClick={() => setShowLoginModal(true)}
                 >
                   Iniciar Sesión
@@ -420,7 +437,7 @@ export default function Index() {
         {/* ═════════════════════════════════════════════════════════════════
             SECCIÓN DE ETAPAS
             ════════════════════════════════════════════════════════════════ */}
-        <section className="py-20 md:py-32 bg-gradient-to-b from-gray-50 to-white relative overflow-hidden">
+        <section className="py-20 md:py-32 bg-gradient-to-b from-gray-50 to-white relative overflow-hidden noise-texture">
           <div className="container mx-auto px-6 relative z-10">
             <div className="max-w-4xl mx-auto text-center mb-16 scroll-fade-in">
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-100 text-blue-600 font-semibold text-sm mb-4">
