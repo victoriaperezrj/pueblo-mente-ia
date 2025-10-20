@@ -314,7 +314,7 @@
     z-index: 100;
     display: flex;
     align-items: center;
-    justify-center;
+    justify-content: center;
     padding: 1rem;
     background: rgba(0, 0, 0, 0.7);
     backdrop-filter: blur(12px) saturate(120%);
