@@ -2,75 +2,76 @@
 @tailwind components;
 @tailwind utilities;
 
-/* PROYECTO EMPRENDEDURISMO - REFINAMIENTO VISUAL
-   Mobile-first, fondos ondulantes, tipografía Apple, colores alegres
-*/
+/* ═══════════════════════════════════════════════════════════════════
+   PROYECTO EMPRENDEDURISMO - CSS COMPLETO DESDE CERO
+   🌊 Olas SVG reales y visibles
+   ✨ Animaciones potentes y suaves
+   🎨 Colores alegres (Azul + Verde + Naranja)
+   📱 Mobile-first responsive
+   ═══════════════════════════════════════════════════════════════════ */
 
 @layer base {
   :root {
-    /* Proyecto Emprendedurismo Design System - Refinado */
+    /* ═══ COLORES BASE ═══ */
+    --background: 0 0% 98%; /* #FAFAFA - Blanco suave */
+    --foreground: 220 13% 9%; /* #111827 - Negro suave */
 
-    /* Base Colors - Clean neutral backgrounds */
-    --background: 0 0% 98%; /* #FAFAFA */
-    --background-gradient: linear-gradient(180deg, #fafafa 0%, #f9fafb 100%);
-    --foreground: 220 13% 9%; /* #111827 */
-
-    /* Card System */
-    --card: 0 0% 100%;
+    /* ═══ CARDS ═══ */
+    --card: 0 0% 100%; /* Blanco puro */
     --card-foreground: 220 13% 9%;
 
-    /* Popover System */
+    /* ═══ POPOVERS ═══ */
     --popover: 0 0% 100%;
     --popover-foreground: 220 13% 9%;
 
-    /* PRIMARY - Azul #2563EB (Core brand) */
-    --primary: 217 91% 60%;
+    /* ═══ PRIMARY - Azul #2563EB (Brand Core) ═══ */
+    --primary: 217 91% 60%; /* #2563EB */
     --primary-foreground: 0 0% 100%;
-    --primary-hover: 217 91% 53%;
-    --primary-light: 217 91% 97%;
+    --primary-hover: 217 91% 53%; /* Más oscuro */
+    --primary-light: 217 91% 97%; /* Muy claro */
 
-    /* SECONDARY - Verde #10B981 (Growth) */
-    --secondary: 160 84% 39%;
+    /* ═══ SECONDARY - Verde #10B981 (Growth) ═══ */
+    --secondary: 160 84% 39%; /* #10B981 */
     --secondary-foreground: 0 0% 100%;
     --secondary-light: 160 84% 97%;
 
-    /* SUCCESS - Verde Natural */
+    /* ═══ SUCCESS ═══ */
     --success: 160 84% 39%;
     --success-foreground: 0 0% 100%;
     --success-light: 160 84% 97%;
 
-    /* WARNING - Naranja #F59E0B */
-    --warning: 38 92% 50%;
+    /* ═══ WARNING - Naranja #F59E0B ═══ */
+    --warning: 38 92% 50%; /* #F59E0B */
     --warning-foreground: 0 0% 100%;
     --warning-light: 38 92% 95%;
 
-    /* INFO - Same as Primary */
+    /* ═══ INFO - Same as Primary ═══ */
     --info: 217 91% 60%;
     --info-foreground: 0 0% 100%;
     --info-light: 217 91% 97%;
 
-    /* MUTED - Apple grays */
-    --muted: 220 14% 96%;
-    --muted-foreground: 220 9% 46%;
+    /* ═══ MUTED - Grises Apple ═══ */
+    --muted: 220 14% 96%; /* #F3F4F6 */
+    --muted-foreground: 220 9% 46%; /* #6B7280 */
 
-    /* ACCENT - Naranja for CTAs */
-    --accent: 38 92% 50%;
+    /* ═══ ACCENT - Naranja para CTAs ═══ */
+    --accent: 38 92% 50%; /* #F59E0B */
     --accent-foreground: 0 0% 100%;
     --accent-light: 38 92% 95%;
 
-    /* DESTRUCTIVE */
-    --destructive: 0 84% 60%;
+    /* ═══ DESTRUCTIVE ═══ */
+    --destructive: 0 84% 60%; /* #EF4444 */
     --destructive-foreground: 0 0% 100%;
 
-    /* Border & Input */
-    --border: 220 13% 91%;
+    /* ═══ BORDER & INPUT ═══ */
+    --border: 220 13% 91%; /* #E5E7EB */
     --input: 220 13% 91%;
-    --ring: 217 91% 60%;
+    --ring: 217 91% 60%; /* Azul primary */
 
-    /* Radius - Apple-style */
-    --radius: 0.375rem;
+    /* ═══ RADIUS - Apple-style ═══ */
+    --radius: 0.75rem; /* 12px - Más redondeado */
 
-    /* Sidebar */
+    /* ═══ SIDEBAR ═══ */
     --sidebar-background: 0 0% 100%;
     --sidebar-foreground: 209 29% 14%;
     --sidebar-primary: 217 91% 60%;
@@ -89,121 +90,150 @@
   }
 }
 
+/* ═══════════════════════════════════════════════════════════════════
+   BASE STYLES - Tipografía Apple
+   ═══════════════════════════════════════════════════════════════════ */
+
 @layer base {
   * {
     @apply border-border;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
   }
 
   body {
     @apply bg-background text-foreground;
     line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
+  h1 {
+    @apply text-4xl md:text-5xl lg:text-6xl;
     font-weight: 700;
-    letter-spacing: -0.5px;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+
+  h2 {
+    @apply text-3xl md:text-4xl lg:text-5xl;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  h3 {
+    @apply text-2xl md:text-3xl lg:text-4xl;
+    font-weight: 600;
+    letter-spacing: -0.01em;
     line-height: 1.3;
   }
 
+  h4 {
+    @apply text-xl md:text-2xl;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
   p {
-    line-height: 1.6;
+    @apply text-base md:text-lg;
+    line-height: 1.7;
+    color: hsl(var(--foreground) / 0.8);
   }
 
   button {
     font-weight: 600;
+    letter-spacing: 0.01em;
   }
 }
 
-/* ═════════════════════════════════════════════════════════════════
-   FONDOS ONDULANTES - CRÍTICO
-   ════════════════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════════
+   🌊 OLAS SVG - REALES Y VISIBLES
+   ═══════════════════════════════════════════════════════════════════ */
 
-@keyframes wave {
+@keyframes wave-move-1 {
   0%,
   100% {
-    transform: translateY(0px) translateX(0px);
+    transform: translateX(0) translateY(0);
   }
   50% {
-    transform: translateY(-12px) translateX(8px);
+    transform: translateX(-25px) translateY(-10px);
   }
 }
 
-@keyframes blobMove1 {
+@keyframes wave-move-2 {
   0%,
   100% {
-    transform: translate(0, 0) rotate(0deg) scale(1);
+    transform: translateX(0) translateY(0);
   }
-  33% {
-    transform: translate(50px, -30px) rotate(120deg) scale(1.1);
-  }
-  66% {
-    transform: translate(-30px, 50px) rotate(240deg) scale(0.9);
-  }
-}
-
-@keyframes blobMove2 {
-  0%,
-  100% {
-    transform: translate(0, 0) rotate(0deg) scale(1);
-  }
-  33% {
-    transform: translate(-50px, 30px) rotate(-120deg) scale(0.9);
-  }
-  66% {
-    transform: translate(30px, -50px) rotate(-240deg) scale(1.1);
+  50% {
+    transform: translateX(25px) translateY(10px);
   }
 }
 
 @layer components {
-  /* Wave Background Container */
+  /* Contenedor de olas */
   .wave-background {
     position: relative;
     overflow: hidden;
+    isolation: isolate;
   }
 
+  /* Primera capa de olas - Azul */
   .wave-background::before {
     content: "";
     position: absolute;
-    top: -50%;
-    left: -50%;
+    bottom: 0;
+    left: 0;
     width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(37, 99, 235, 0.08) 0%, transparent 70%);
-    animation: wave 8s ease-in-out infinite;
+    height: 200px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,50 C150,100 350,0 600,50 C850,100 1050,0 1200,50 L1200,120 L0,120 Z' fill='%232563EB' fill-opacity='0.12'/%3E%3C/svg%3E");
+    background-repeat: repeat-x;
+    background-size: 50% 100%;
+    animation: wave-move-1 10s ease-in-out infinite;
+    z-index: 1;
     pointer-events: none;
-    z-index: 0;
   }
 
+  /* Segunda capa de olas - Verde */
+  .wave-background::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 200%;
+    height: 180px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,70 C200,20 400,120 600,70 C800,20 1000,120 1200,70 L1200,120 L0,120 Z' fill='%2310B981' fill-opacity='0.08'/%3E%3C/svg%3E");
+    background-repeat: repeat-x;
+    background-size: 50% 100%;
+    animation: wave-move-2 8s ease-in-out infinite;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  /* Versión sutil para secciones internas */
   .wave-background-subtle::before {
     opacity: 0.5;
+    height: 150px;
   }
 
-  /* SVG Waves (si se usa directamente) */
-  svg.wave-svg {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    opacity: 0.08;
-    z-index: 0;
+  .wave-background-subtle::after {
+    opacity: 0.4;
+    height: 130px;
   }
+}
 
-  /* ═════════════════════════════════════════════════════════════════
-     ANIMACIONES
-     ════════════════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════════
+   ✨ ANIMACIONES GENERALES
+   ═══════════════════════════════════════════════════════════════════ */
 
-  /* Scroll Fade-in */
+@layer components {
+  /* Fade-in al hacer scroll */
   .scroll-fade-in {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(30px);
     transition:
-      opacity 0.6s ease-out,
-      transform 0.6s ease-out;
+      opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+      transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .scroll-fade-in.visible {
@@ -211,33 +241,15 @@
     transform: translateY(0);
   }
 
-  /* Word-by-word animation */
-  .word-animate {
-    display: inline-block;
-    opacity: 0;
-    animation: wordFadeIn 0.5s ease-out forwards;
-  }
-
-  @keyframes wordFadeIn {
-    0% {
-      opacity: 0;
-      transform: translateY(10px);
-    }
-    100% {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  /* Fade-in general */
+  /* Fade-in desde arriba */
   .animate-fade-in {
-    animation: fadeIn 0.5s ease-out;
+    animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  @keyframes fadeIn {
+  @keyframes fadeInUp {
     0% {
       opacity: 0;
-      transform: translateY(10px);
+      transform: translateY(20px);
     }
     100% {
       opacity: 1;
@@ -254,22 +266,20 @@
     0%,
     100% {
       transform: translateY(0px);
-      opacity: 0.9;
     }
     50% {
-      transform: translateY(-8px);
-      opacity: 1;
+      transform: translateY(-12px);
     }
   }
 
-  /* Scale-in */
+  /* Scale-in (para modales, popovers) */
   .animate-scale-in {
-    animation: scaleIn 0.3s ease-out;
+    animation: scaleIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   @keyframes scaleIn {
     0% {
-      transform: scale(0.9);
+      transform: scale(0.95);
       opacity: 0;
     }
     100% {
@@ -278,69 +288,23 @@
     }
   }
 
-  /* Glow pulse */
+  /* Glow pulse (para CTAs importantes) */
   .animate-glow-pulse {
-    animation: glowPulse 3s ease-in-out infinite;
+    animation: glowPulse 2.5s ease-in-out infinite;
   }
 
   @keyframes glowPulse {
     0%,
     100% {
       box-shadow:
-        0 0 20px rgba(37, 99, 235, 0.2),
-        0 0 40px rgba(37, 99, 235, 0.1);
+        0 0 20px rgba(37, 99, 235, 0.3),
+        0 0 40px rgba(37, 99, 235, 0.15);
     }
     50% {
       box-shadow:
-        0 0 30px rgba(37, 99, 235, 0.3),
-        0 0 60px rgba(37, 99, 235, 0.15);
+        0 0 30px rgba(37, 99, 235, 0.5),
+        0 0 60px rgba(37, 99, 235, 0.25);
     }
-  }
-
-  /* ═════════════════════════════════════════════════════════════════
-     HOVER & INTERACTIVE EFFECTS
-     ════════════════════════════════════════════════════════════════ */
-
-  /* Button Hover - Apple-style */
-  .button-hover {
-    @apply transition-all duration-200 ease-out;
-  }
-
-  .button-hover:hover {
-    transform: scale(1.03);
-  }
-
-  .button-hover:active {
-    transform: scale(0.98);
-  }
-
-  /* Card Hover */
-  .card-hover {
-    @apply transition-all duration-300 ease-out;
-  }
-
-  .card-hover:hover {
-    transform: scale(1.02);
-    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.08);
-  }
-
-  /* General Lift */
-  .hover-lift {
-    @apply transition-all duration-300 ease-out;
-  }
-
-  .hover-lift:hover {
-    transform: scale(1.02);
-    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-  }
-
-  /* ═════════════════════════════════════════════════════════════════
-     UTILITIES
-     ════════════════════════════════════════════════════════════════ */
-
-  /* Glass effect */
-  .glass-effect {
-    @apply backdrop-blur-md bg-background/80 border border-border/50;
   }
 
   /* Shimmer effect */
@@ -359,11 +323,248 @@
     }
   }
 
+  /* Animación palabra por palabra */
+  .word-animate {
+    display: inline-block;
+    opacity: 0;
+    animation: wordFadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+
+  @keyframes wordFadeIn {
+    0% {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   🎯 HOVER & INTERACTIVE EFFECTS
+   ═══════════════════════════════════════════════════════════════════ */
+
+@layer components {
+  /* Botones - Hover potente */
+  .button-hover {
+    @apply transition-all duration-300 ease-out;
+    transform-origin: center;
+  }
+
+  .button-hover:hover {
+    transform: scale(1.05);
+    filter: brightness(1.1);
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.25);
+  }
+
+  .button-hover:active {
+    transform: scale(0.98);
+  }
+
+  /* Cards - Hover con lift */
+  .card-hover {
+    @apply transition-all duration-400 ease-out;
+    will-change: transform;
+  }
+
+  .card-hover:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+  }
+
+  /* Hover general con lift */
+  .hover-lift {
+    @apply transition-all duration-300 ease-out;
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Hover con glow (para elementos importantes) */
+  .hover-glow {
+    @apply transition-all duration-300 ease-out;
+  }
+
+  .hover-glow:hover {
+    box-shadow:
+      0 0 30px rgba(37, 99, 235, 0.4),
+      0 8px 20px rgba(37, 99, 235, 0.2);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   🛠️ UTILITIES
+   ═══════════════════════════════════════════════════════════════════ */
+
+@layer components {
+  /* Glass effect (glassmorphism) */
+  .glass-effect {
+    @apply backdrop-blur-xl bg-background/60 border border-border/50;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  }
+
+  /* Gradient text */
+  .gradient-text {
+    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--secondary)) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
   /* Text truncate multi-line */
   .line-clamp-2 {
-    overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Sombra suave */
+  .shadow-soft {
+    box-shadow:
+      0 4px 12px rgba(0, 0, 0, 0.05),
+      0 2px 4px rgba(0, 0, 0, 0.03);
+  }
+
+  /* Sombra media */
+  .shadow-medium {
+    box-shadow:
+      0 8px 20px rgba(0, 0, 0, 0.08),
+      0 4px 8px rgba(0, 0, 0, 0.05);
+  }
+
+  /* Sombra fuerte */
+  .shadow-strong {
+    box-shadow:
+      0 12px 30px rgba(0, 0, 0, 0.12),
+      0 6px 12px rgba(0, 0, 0, 0.08);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   📱 MOBILE-FIRST RESPONSIVE
+   ═══════════════════════════════════════════════════════════════════ */
+
+@layer base {
+  /* Botones táctiles (mínimo 48px) */
+  button,
+  a[role="button"] {
+    min-height: 48px;
+    padding: 0.75rem 1.5rem;
+  }
+
+  /* Espaciado mobile */
+  @media (max-width: 640px) {
+    h1 {
+      font-size: 2rem;
+    }
+
+    h2 {
+      font-size: 1.75rem;
+    }
+
+    h3 {
+      font-size: 1.5rem;
+    }
+
+    p {
+      font-size: 1rem;
+    }
+
+    /* Padding mobile */
+    .container {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   🎨 ESTILOS ESPECÍFICOS POR COMPONENTE
+   ═══════════════════════════════════════════════════════════════════ */
+
+@layer components {
+  /* Hero Section */
+  .hero-section {
+    @apply wave-background;
+    min-height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Cards Section */
+  .cards-section {
+    @apply wave-background-subtle;
+    padding: 4rem 0;
+  }
+
+  /* Bot Widget */
+  .bot-widget {
+    @apply animate-float;
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 50;
+  }
+
+  /* CTA Buttons */
+  .cta-primary {
+    @apply button-hover animate-glow-pulse;
+    background: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+  }
+
+  .cta-secondary {
+    @apply button-hover;
+    background: hsl(var(--accent));
+    color: hsl(var(--accent-foreground));
+  }
+
+  /* Feature Cards */
+  .feature-card {
+    @apply card-hover shadow-soft;
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+    padding: 2rem;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   🚀 PERFORMANCE OPTIMIZATIONS
+   ═══════════════════════════════════════════════════════════════════ */
+
+@layer base {
+  /* GPU acceleration para animaciones */
+  .card-hover,
+  .button-hover,
+  .animate-float,
+  .wave-background::before,
+  .wave-background::after {
+    will-change: transform;
+    transform: translateZ(0);
+  }
+
+  /* Reducir motion si el usuario lo prefiere */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 }
