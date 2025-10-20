@@ -9,21 +9,18 @@ import {
   Target,
   TrendingUp,
   Briefcase,
-  Shield,
-  Users,
-  BarChart3,
   Sparkles,
   Brain,
   Rocket,
-  FileText,
   ArrowRight,
   ChevronRight,
   Star,
+  MessageCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 // ══════════════════════════════════════════════════════════════════════
-// LOGIN MODAL COMPONENT
+// LOGIN MODAL
 // ══════════════════════════════════════════════════════════════════════
 function LoginModal({ onClose }: { onClose: () => void }) {
   return (
@@ -115,7 +112,33 @@ function LoginModal({ onClose }: { onClose: () => void }) {
 }
 
 // ══════════════════════════════════════════════════════════════════════
-// STAGE CARD COMPONENT - Con diseño mejorado
+// CHATBOT FLOTANTE
+// ══════════════════════════════════════════════════════════════════════
+function FloatingChatBot() {
+  const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <>
+      {/* Botón flotante */}
+      <button
+        onClick={() => navigate("/business-ai-bot")}
+        className="fixed bottom-6 right-6 z-50 w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full shadow-2xl flex items-center justify-center magnetic-button glow-pulse hover:scale-110 transition-transform"
+      >
+        <MessageCircle className="w-8 h-8 text-white" />
+      </button>
+
+      {/* Badge de notificación */}
+      <div className="fixed bottom-[88px] right-6 z-50 bg-white rounded-lg shadow-xl p-3 max-w-[200px] animate-bounce">
+        <p className="text-xs font-semibold text-gray-800">💬 ¿Necesitás ayuda?</p>
+        <p className="text-xs text-gray-600">Hablá con nuestro Asesor IA</p>
+      </div>
+    </>
+  );
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// STAGE CARD
 // ══════════════════════════════════════════════════════════════════════
 interface StageCardProps {
   title: string;
@@ -146,21 +169,18 @@ function StageCard({
       button: "bg-blue-500 hover:bg-blue-600",
       icon: "text-blue-500",
       badge: "bg-blue-500",
-      glow: "group-hover:shadow-blue-500/50",
     },
     purple: {
       bg: "from-purple-500 to-purple-600",
       button: "bg-purple-500 hover:bg-purple-600",
       icon: "text-purple-500",
       badge: "bg-purple-500",
-      glow: "group-hover:shadow-purple-500/50",
     },
     green: {
       bg: "from-green-500 to-green-600",
       button: "bg-green-500 hover:bg-green-600",
       icon: "text-green-500",
       badge: "bg-green-500",
-      glow: "group-hover:shadow-green-500/50",
     },
   };
 
@@ -176,7 +196,7 @@ function StageCard({
       )}
 
       <div
-        className={`absolute -inset-1 bg-gradient-to-r ${scheme.bg} rounded-2xl opacity-0 group-hover:opacity-20 blur-xl transition-all duration-500 ${scheme.glow}`}
+        className={`absolute -inset-1 bg-gradient-to-r ${scheme.bg} rounded-2xl opacity-0 group-hover:opacity-20 blur-xl transition-all duration-500`}
       ></div>
 
       <div className="relative p-6 md:p-8">
@@ -211,36 +231,12 @@ function StageCard({
 }
 
 // ══════════════════════════════════════════════════════════════════════
-// MAIN INDEX COMPONENT
+// MAIN INDEX
 // ══════════════════════════════════════════════════════════════════════
 export default function Index() {
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
-  const heroRef = useRef<HTMLDivElement>(null);
-
-  // Animación de partículas en el hero
-  useEffect(() => {
-    const hero = heroRef.current;
-    if (!hero) return;
-
-    const particlesContainer = document.createElement("div");
-    particlesContainer.className = "floating-particles";
-    hero.appendChild(particlesContainer);
-
-    for (let i = 0; i < 40; i++) {
-      const particle = document.createElement("div");
-      particle.className = "particle";
-      particle.style.left = `${Math.random() * 100}%`;
-      particle.style.animationDelay = `${Math.random() * 15}s`;
-      particle.style.animationDuration = `${10 + Math.random() * 10}s`;
-      particlesContainer.appendChild(particle);
-    }
-
-    return () => {
-      particlesContainer.remove();
-    };
-  }, []);
 
   // Scroll reveal observer
   useEffect(() => {
@@ -262,11 +258,12 @@ export default function Index() {
   return (
     <>
       {showLoginModal && <LoginModal onClose={() => setShowLoginModal(false)} />}
+      <FloatingChatBot />
 
       <div className="min-h-screen bg-white">
-        {/* ═══════════════════════════════════════════════════════════════
-            HEADER STICKY
-            ══════════════════════════════════════════════════════════════ */}
+        {/* ═════════════════════════════════════════════════════════════════
+            HEADER
+            ════════════════════════════════════════════════════════════════ */}
         <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-white/95 border-b border-gray-200 shadow-sm">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between h-16 md:h-20">
@@ -274,7 +271,7 @@ export default function Index() {
                 <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg glow-pulse">
                   <Building2 className="w-6 h-6 text-white" />
                 </div>
-                <span className="font-extrabold text-base md:text-xl text-gray-900">PuebloHub Pro</span>
+                <span className="font-extrabold text-base md:text-xl text-gray-900">Proyecto Emprendedurismo</span>
               </div>
 
               <div className="hidden md:flex items-center gap-4">
@@ -337,67 +334,71 @@ export default function Index() {
           </div>
         </nav>
 
-        {/* ═══════════════════════════════════════════════════════════════
-            HERO SECTION - Con Aurora Waves y partículas
-            ══════════════════════════════════════════════════════════════ */}
-        <section
-          ref={heroRef}
-          className="aurora-waves-background min-h-screen flex items-center justify-center relative overflow-hidden pt-24 md:pt-20"
-        >
-          <div className="container mx-auto px-6 relative z-10 content-wrapper">
+        {/* ═════════════════════════════════════════════════════════════════
+            HERO - Degradado limpio (NO espacial)
+            ════════════════════════════════════════════════════════════════ */}
+        <section className="min-h-screen flex items-center justify-center relative overflow-hidden pt-24 md:pt-20 bg-gradient-to-br from-blue-600 via-purple-600 to-pink-500">
+          {/* Overlay para mejor legibilidad */}
+          <div className="absolute inset-0 bg-black/20"></div>
+
+          <div className="container mx-auto px-6 relative z-10">
             <div className="max-w-5xl mx-auto text-center">
-              {/* Badge superior con glassmorphism */}
-              <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/10 backdrop-blur-md border border-white/20 mb-8 scroll-fade-in">
-                <Sparkles className="w-5 h-5 text-yellow-400" />
+              {/* Badge */}
+              <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/20 backdrop-blur-md border border-white/30 mb-8 scroll-fade-in shadow-lg">
+                <Sparkles className="w-5 h-5 text-yellow-300" />
                 <span className="text-sm font-semibold text-white">IA que entiende Argentina</span>
               </div>
 
-              {/* Título principal - LEGIBLE y CON EFECTO */}
-              <h1 className="hero-title-grok mb-6 px-4">
-                De la <span className="highlight">idea</span> a los <span className="highlight">números</span> en días,{" "}
-                <span className="text-white drop-shadow-[0_0_30px_rgba(255,255,255,0.9)]">no meses</span>
-              </h1>
-
-              {/* Descripción con shadow fuerte */}
-              <p
-                className="text-white text-lg md:text-xl mb-8 max-w-3xl mx-auto leading-relaxed scroll-fade-in font-medium"
+              {/* Título - SIN degradado espacial */}
+              <h1
+                className="text-5xl md:text-7xl font-extrabold text-white mb-6 leading-tight px-4"
                 style={{
-                  textShadow: "0 2px 10px rgba(0,0,0,1), 0 4px 20px rgba(0,0,0,0.8), 0 0 40px rgba(0,0,0,0.5)",
-                  animationDelay: "0.3s",
+                  textShadow: "0 4px 20px rgba(0,0,0,0.8), 0 2px 10px rgba(0,0,0,0.6)",
                 }}
               >
-                La plataforma que combina{" "}
-                <strong className="text-yellow-300 font-bold">IA + automatización + datos</strong> para que
-                emprendedores y PyMEs <strong className="text-green-300 font-bold">validen, organicen y escalen</strong>
+                De la <span className="text-yellow-300">idea</span> a los{" "}
+                <span className="text-green-300">números</span> en días, no meses
+              </h1>
+
+              {/* Descripción */}
+              <p
+                className="text-white text-lg md:text-xl mb-10 max-w-3xl mx-auto leading-relaxed scroll-fade-in font-medium"
+                style={{
+                  textShadow: "0 2px 10px rgba(0,0,0,0.8)",
+                  animationDelay: "0.2s",
+                }}
+              >
+                La plataforma que combina <strong className="text-yellow-300">IA + automatización + datos</strong> para
+                que emprendedores y PyMEs <strong className="text-green-300">validen, organicen y escalen</strong>
               </p>
 
-              {/* Features badges */}
+              {/* Features */}
               <div
                 className="flex flex-wrap justify-center gap-4 mb-12 scroll-fade-in"
-                style={{ animationDelay: "0.5s" }}
+                style={{ animationDelay: "0.4s" }}
               >
-                <div className="flex items-center gap-2 px-5 py-3 rounded-full bg-white/15 backdrop-blur-md border border-white/20 shadow-lg">
-                  <Check className="w-5 h-5 text-green-400" />
+                <div className="flex items-center gap-2 px-5 py-3 rounded-full bg-white/20 backdrop-blur-md border border-white/30 shadow-lg">
+                  <Check className="w-5 h-5 text-green-300" />
                   <span className="text-white font-semibold text-sm md:text-base">Sin tarjeta</span>
                 </div>
-                <div className="flex items-center gap-2 px-5 py-3 rounded-full bg-white/15 backdrop-blur-md border border-white/20 shadow-lg">
-                  <Check className="w-5 h-5 text-green-400" />
+                <div className="flex items-center gap-2 px-5 py-3 rounded-full bg-white/20 backdrop-blur-md border border-white/30 shadow-lg">
+                  <Check className="w-5 h-5 text-green-300" />
                   <span className="text-white font-semibold text-sm md:text-base">Datos seguros</span>
                 </div>
-                <div className="flex items-center gap-2 px-5 py-3 rounded-full bg-white/15 backdrop-blur-md border border-white/20 shadow-lg">
-                  <Check className="w-5 h-5 text-green-400" />
+                <div className="flex items-center gap-2 px-5 py-3 rounded-full bg-white/20 backdrop-blur-md border border-white/30 shadow-lg">
+                  <Check className="w-5 h-5 text-green-300" />
                   <span className="text-white font-semibold text-sm md:text-base">Empezá en 2 min</span>
                 </div>
               </div>
 
-              {/* CTAs con efecto mejorado */}
+              {/* CTAs */}
               <div
                 className="flex flex-col sm:flex-row gap-4 justify-center scroll-fade-in"
-                style={{ animationDelay: "0.7s" }}
+                style={{ animationDelay: "0.6s" }}
               >
                 <Button
                   size="lg"
-                  className="bg-white text-blue-600 hover:bg-gray-100 text-lg px-10 py-7 magnetic-button font-bold shadow-2xl hover:shadow-white/50 transition-all"
+                  className="bg-white text-blue-600 hover:bg-gray-100 text-lg px-10 py-7 magnetic-button font-bold shadow-2xl"
                   onClick={() => navigate("/select-role")}
                 >
                   <Rocket className="w-6 h-6 mr-2" />
@@ -405,8 +406,7 @@ export default function Index() {
                 </Button>
                 <Button
                   size="lg"
-                  variant="outline"
-                  className="border-2 border-white text-white hover:bg-white/20 backdrop-blur-sm text-lg px-10 py-7 magnetic-button font-bold shadow-2xl transition-all"
+                  className="bg-blue-600/20 border-2 border-white text-white hover:bg-white/30 backdrop-blur-sm text-lg px-10 py-7 magnetic-button font-bold shadow-2xl"
                   onClick={() => setShowLoginModal(true)}
                 >
                   Iniciar Sesión
@@ -417,14 +417,10 @@ export default function Index() {
           </div>
         </section>
 
-        {/* ═══════════════════════════════════════════════════════════════
-            SECCIÓN DE ETAPAS - Cards mejoradas
-            ══════════════════════════════════════════════════════════════ */}
-        <section className="py-20 md:py-32 bg-gradient-to-b from-gray-50 to-white relative overflow-hidden noise-texture">
-          {/* Decoración de fondo */}
-          <div className="absolute top-20 left-10 w-72 h-72 bg-blue-200/30 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-20 right-10 w-96 h-96 bg-purple-200/30 rounded-full blur-3xl"></div>
-
+        {/* ═════════════════════════════════════════════════════════════════
+            SECCIÓN DE ETAPAS
+            ════════════════════════════════════════════════════════════════ */}
+        <section className="py-20 md:py-32 bg-gradient-to-b from-gray-50 to-white relative overflow-hidden">
           <div className="container mx-auto px-6 relative z-10">
             <div className="max-w-4xl mx-auto text-center mb-16 scroll-fade-in">
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-100 text-blue-600 font-semibold text-sm mb-4">
@@ -470,7 +466,7 @@ export default function Index() {
               <StageCard
                 title="Empresa"
                 stageLabel="+3 AÑOS"
-                icon={Building2}
+                icon={Briefcase}
                 description="Tu empresa creció. Automatizá y escalá con IA."
                 features={["Multi-sucursal", "Gestión de equipo", "Automatización con IA"]}
                 buttonText="Automatizar empresa"
@@ -479,10 +475,15 @@ export default function Index() {
               />
             </div>
 
-            {/* CTA adicional */}
+            {/* CTA */}
             <div className="text-center mt-16 scroll-fade-in">
               <p className="text-gray-600 mb-4">¿No estás seguro de tu etapa?</p>
-              <Button variant="outline" size="lg" className="magnetic-button" onClick={() => navigate("/select-role")}>
+              <Button
+                variant="outline"
+                size="lg"
+                className="magnetic-button"
+                onClick={() => navigate("/business-ai-bot")}
+              >
                 <Brain className="w-5 h-5 mr-2" />
                 Dejá que la IA te ayude a elegir
               </Button>
@@ -490,9 +491,9 @@ export default function Index() {
           </div>
         </section>
 
-        {/* ═══════════════════════════════════════════════════════════════
-            SECCIÓN DE CONFIANZA - Social proof
-            ══════════════════════════════════════════════════════════════ */}
+        {/* ═════════════════════════════════════════════════════════════════
+            SOCIAL PROOF
+            ════════════════════════════════════════════════════════════════ */}
         <section className="py-16 bg-white border-y border-gray-200">
           <div className="container mx-auto px-6">
             <div className="max-w-4xl mx-auto text-center scroll-fade-in">
