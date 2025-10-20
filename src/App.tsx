@@ -41,8 +41,6 @@ const EntrepreneurBusinessPlan = lazy(() => import("./pages/onboarding/Entrepren
 const EntrepreneurDashboard = lazy(() => import("./pages/entrepreneur/Dashboard"));
 const BusinessDashboard = lazy(() => import("./pages/business/Dashboard"));
 const PymeDashboard = lazy(() => import("./pages/pyme/Dashboard"));
-const EmpresaDashboard = lazy(() => import("./pages/empresa/Dashboard"));
-const NegocioDashboard = lazy(() => import("./pages/negocio/Dashboard"));
 
 // Demo pages
 const DemoIntro = lazy(() => import("./pages/demo/DemoIntro"));
@@ -99,8 +97,6 @@ const App = () => (
               <Route path="/entrepreneur/dashboard" element={<ProtectedRoute><EntrepreneurDashboard /></ProtectedRoute>} />
               <Route path="/business/dashboard" element={<ProtectedRoute><BusinessDashboard /></ProtectedRoute>} />
               <Route path="/pyme/dashboard" element={<ProtectedRoute><PymeDashboard /></ProtectedRoute>} />
-              <Route path="/empresa/dashboard" element={<ProtectedRoute><EmpresaDashboard /></ProtectedRoute>} />
-              <Route path="/negocio/dashboard" element={<ProtectedRoute><NegocioDashboard /></ProtectedRoute>} />
               
               {/* Demo routes */}
               <Route path="/demo/intro" element={<DemoIntro />} />

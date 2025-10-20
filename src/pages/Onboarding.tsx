@@ -44,7 +44,7 @@ const Onboarding = () => {
       if (userType === 'entrepreneur') {
         navigate('/onboarding/entrepreneur/step1');
       } else {
-        navigate('/negocio/dashboard');
+        navigate('/onboarding/business/step1');
       }
     } catch (error: any) {
       console.error('Error updating profile:', error);

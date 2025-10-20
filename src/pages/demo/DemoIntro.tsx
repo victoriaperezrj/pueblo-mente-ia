@@ -6,17 +6,6 @@ import { DemoBottomBar } from "@/components/DemoBottomBar";
 
 export default function DemoIntro() {
   const navigate = useNavigate();
-  const demoRole = sessionStorage.getItem('demoRole') || 'business';
-  
-  const handleNext = () => {
-    if (demoRole === 'pyme') {
-      navigate('/empresa/dashboard');
-    } else if (demoRole === 'business') {
-      navigate('/negocio/dashboard');
-    } else {
-      navigate('/demo/idea-capture');
-    }
-  };
   
   return (
     <div className="min-h-screen bg-background">
@@ -103,7 +92,7 @@ export default function DemoIntro() {
 
       <DemoBottomBar
         onBack={() => navigate('/')}
-        onNext={handleNext}
+        onNext={() => navigate('/demo/idea-capture')}
         backLabel="← VOLVER AL INICIO"
         nextLabel="SIGUIENTE PASO →"
         hideSkip
