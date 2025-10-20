@@ -12,16 +12,20 @@ import {
   Shield,
   Users,
   BarChart3,
+  Sparkles,
   Brain,
+  Rocket,
   FileText,
   ArrowRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-// LOGIN MODAL
+// ══════════════════════════════════════════════════════════════════════
+// LOGIN MODAL COMPONENT
+// ══════════════════════════════════════════════════════════════════════
 function LoginModal({ onClose }: { onClose: () => void }) {
   return (
-    <div className="modal-grok-overlay glass-effect" onClick={onClose}>
+    <div className="modal-grok-overlay" onClick={onClose}>
       <div className="modal-grok-container" onClick={(e) => e.stopPropagation()}>
         <div className="modal-grok-bg" />
         <button
@@ -32,10 +36,10 @@ function LoginModal({ onClose }: { onClose: () => void }) {
         </button>
         <div className="relative z-10">
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-primary to-secondary rounded-2xl mb-4 shadow-2xl">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl mb-4 shadow-2xl">
               <Zap className="w-8 h-8 text-white" />
             </div>
-            <h2 className="text-3xl font-bold text-white mb-2">Entrá a tu cuenta</h2>
+            <h2 className="text-3xl font-bold text-white mb-2 drop-shadow-lg">Entrá a tu cuenta</h2>
             <p className="text-white/90 text-base">Empezá a usar IA para tu negocio en 2 minutos</p>
           </div>
           <div className="space-y-3 mb-6">
@@ -108,43 +112,38 @@ function LoginModal({ onClose }: { onClose: () => void }) {
   );
 }
 
-// MAIN INDEX
+// ══════════════════════════════════════════════════════════════════════
+// MAIN INDEX COMPONENT
+// ══════════════════════════════════════════════════════════════════════
 export default function Index() {
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) entry.target.classList.add("visible");
-        });
-      },
-      { threshold: 0.3 },
-    );
+    const observerOptions = { threshold: 0.3, rootMargin: "0px" };
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) entry.target.classList.add("visible");
+      });
+    }, observerOptions);
     document.querySelectorAll(".scroll-fade-in").forEach((el) => observer.observe(el));
     return () => observer.disconnect();
   }, []);
 
-  // Split title for cascade animation
-  const heroTitle = "De la idea a los números en días, no meses".split(" ").map((word, idx) => (
-    <span key={idx} style={{ animationDelay: `${idx * 0.1}s` }}>
-      {word}{" "}
-    </span>
-  ));
-
   return (
-    <div className="min-h-screen bg-white aurora-background noise-texture">
-      {/* HEADER */}
+    <div className="min-h-screen bg-white">
+      {/* ═════════════════════════════════════════════════════════════════
+          HEADER STICKY
+          ════════════════════════════════════════════════════════════════ */}
       <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-white/95 border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 md:h-20">
             <div className="flex items-center gap-2 md:gap-3">
-              <div className="w-9 h-9 md:w-10 md:h-10 bg-primary rounded-lg flex items-center justify-center shadow-sm">
+              <div className="w-9 h-9 md:w-10 md:h-10 bg-blue-600 rounded-lg flex items-center justify-center shadow-sm">
                 <Building2 className="w-5 h-5 md:w-6 md:h-6 text-white" />
               </div>
-              <span className="font-bold text-sm md:text-base text-foreground hidden xs:block">
+              <span className="font-bold text-sm md:text-base text-gray-900 hidden xs:block">
                 Proyecto Emprendedurismo
               </span>
             </div>
@@ -152,44 +151,40 @@ export default function Index() {
               <Button
                 variant="ghost"
                 onClick={() => setShowLoginModal(true)}
-                className="text-sm font-semibold text-muted-foreground hover:text-primary transition-colors min-h-10 button-hover"
+                className="text-sm font-semibold text-gray-700 hover:text-blue-600 transition-colors min-h-10"
               >
                 Iniciar Sesión
               </Button>
               <Button
                 onClick={() => navigate("/auth?mode=signup")}
-                className="bg-primary hover:bg-primary-hover text-white text-sm font-semibold px-4 md:px-5 py-2 md:py-2.5 rounded-md shadow-sm transition-all duration-200 button-hover min-h-10"
+                className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-4 md:px-5 py-2 md:py-2.5 rounded-md shadow-sm transition-all duration-200 button-hover min-h-10"
               >
                 Crear Cuenta
               </Button>
               <Button
                 variant="outline"
                 onClick={() => navigate("/select-role")}
-                className="text-sm font-semibold border-border hover:bg-muted transition-colors min-h-10 button-hover"
+                className="text-sm font-semibold border-gray-300 hover:bg-gray-50 transition-colors min-h-10"
               >
                 Ver Demo
               </Button>
             </div>
             <button
-              className="md:hidden p-2 hover:bg-muted rounded-lg transition-colors button-hover"
+              className="md:hidden p-2 hover:bg-gray-100 rounded-lg transition-colors"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
-              {mobileMenuOpen ? (
-                <X className="w-6 h-6 text-foreground" />
-              ) : (
-                <Menu className="w-6 h-6 text-foreground" />
-              )}
+              {mobileMenuOpen ? <X className="w-6 h-6 text-gray-900" /> : <Menu className="w-6 h-6 text-gray-900" />}
             </button>
           </div>
           {mobileMenuOpen && (
-            <div className="md:hidden pb-4 space-y-2 border-t border-border pt-4">
+            <div className="md:hidden pb-4 space-y-2 border-t border-gray-200 pt-4">
               <Button
                 variant="ghost"
                 onClick={() => {
                   setShowLoginModal(true);
                   setMobileMenuOpen(false);
                 }}
-                className="w-full justify-center text-base font-semibold min-h-12 button-hover"
+                className="w-full justify-center text-base font-semibold min-h-12"
               >
                 Iniciar Sesión
               </Button>
@@ -198,7 +193,7 @@ export default function Index() {
                   navigate("/auth?mode=signup");
                   setMobileMenuOpen(false);
                 }}
-                className="w-full justify-center bg-primary hover:bg-primary-hover text-white text-base font-semibold py-3 rounded-md min-h-12 button-hover"
+                className="w-full justify-center bg-blue-600 hover:bg-blue-700 text-white text-base font-semibold py-3 rounded-md min-h-12"
               >
                 Crear Cuenta
               </Button>
@@ -208,7 +203,7 @@ export default function Index() {
                   navigate("/select-role");
                   setMobileMenuOpen(false);
                 }}
-                className="w-full justify-center text-base font-semibold min-h-12 button-hover"
+                className="w-full justify-center text-base font-semibold min-h-12"
               >
                 Ver Demo
               </Button>
@@ -217,28 +212,64 @@ export default function Index() {
         </div>
       </nav>
 
-      {/* HERO */}
-      <section className="hero-gradient-bg min-h-screen flex items-center justify-center relative overflow-hidden pt-20">
+      {/* ═════════════════════════════════════════════════════════════════
+          HERO SECTION - EFECTOS BRUTALES + LETRAS LEGIBLES
+          ════════════════════════════════════════════════════════════════ */}
+      <section className="hero-gradient-bg min-h-screen flex items-center justify-center relative overflow-hidden">
+        {/* Efectos laterales decorativos MEJORADOS */}
         <div className="slide-left-decoration" />
         <div className="slide-right-decoration" />
+        <div className="floating-particles-left" />
+        <div className="floating-particles-right" />
 
+        {/* Aurora waves effect */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-30">
+          <div
+            className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-blue-400/20 via-purple-400/20 to-pink-400/20 animate-pulse"
+            style={{ animationDuration: "8s" }}
+          />
+        </div>
+
+        {/* Contenido principal */}
         <div className="container mx-auto px-6 relative z-10">
           <div className="max-w-5xl mx-auto text-center">
-            <div className="badge-glow mb-8 inline-flex animate-float">
+            {/* Badge superior con GLOW */}
+            <div className="badge-glow fade-in mb-8 inline-flex">
               <Zap className="w-4 h-4" />
               <span>IA que entiende Argentina</span>
             </div>
 
-            <h1 className="gradient-text-animated fade-in-up mb-6 text-cascade">{heroTitle}</h1>
+            {/* Título principal CON SOMBRA BRUTAL para LEGIBILIDAD */}
+            <h1
+              className="gradient-text-animated fade-in-up mb-6"
+              style={{
+                textShadow:
+                  "0 8px 32px rgba(0, 0, 0, 0.5), 0 4px 16px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.3)",
+                WebkitTextStroke: "1px rgba(0, 0, 0, 0.1)",
+              }}
+            >
+              De la idea a los números en días, no meses
+            </h1>
 
-            <p className="text-white text-xl md:text-2xl mb-4 fade-in-up font-bold" style={{ animationDelay: "0.5s" }}>
-              La plataforma que combina <strong>IA + automatización + datos</strong> para que emprendedores y PyMEs{" "}
-              <strong>validen, organicen y escalen</strong>
+            {/* Descripción CON SOMBRA FUERTE */}
+            <p
+              className="text-white text-xl md:text-2xl mb-4 fade-in-up font-bold"
+              style={{
+                animationDelay: "0.1s",
+                textShadow: "0 4px 16px rgba(0, 0, 0, 0.6), 0 2px 8px rgba(0, 0, 0, 0.5), 0 1px 4px rgba(0, 0, 0, 0.4)",
+              }}
+            >
+              La plataforma que combina <span className="text-yellow-300">IA + automatización + datos</span> para que
+              emprendedores y PyMEs <span className="text-green-300">validen, organicen y escalen</span>
             </p>
 
+            {/* Features rápidos CON SOMBRA */}
             <div
               className="flex flex-wrap justify-center gap-8 mb-12 text-white fade-in-up"
-              style={{ animationDelay: "0.6s" }}
+              style={{
+                animationDelay: "0.2s",
+                textShadow: "0 3px 12px rgba(0, 0, 0, 0.6), 0 2px 6px rgba(0, 0, 0, 0.5)",
+              }}
             >
               <div className="flex items-center gap-2 font-bold text-lg">
                 <span className="text-2xl">✓</span>
@@ -254,33 +285,41 @@ export default function Index() {
               </div>
             </div>
 
+            {/* 2 BOTONES PRINCIPALES CON EFECTOS */}
             <div
               className="flex flex-col sm:flex-row gap-4 justify-center items-center fade-in-up"
-              style={{ animationDelay: "0.7s" }}
+              style={{ animationDelay: "0.3s" }}
             >
-              <button className="btn-secondary-glow button-hover" onClick={() => navigate("/select-role")}>
-                Ver Demo
+              <button className="btn-secondary-glow group" onClick={() => navigate("/select-role")}>
+                <span>Ver Demo</span>
+                <Sparkles className="w-5 h-5 ml-2 group-hover:rotate-12 transition-transform" />
               </button>
-              <button className="btn-primary-glow button-hover" onClick={() => setShowLoginModal(true)}>
-                Iniciar Sesión →
+              <button className="btn-primary-glow group" onClick={() => setShowLoginModal(true)}>
+                <span>Iniciar Sesión</span>
+                <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
               </button>
             </div>
           </div>
         </div>
       </section>
 
-      {/* BENEFICIOS */}
-      <section className="py-20 md:py-28 px-4 bg-gradient-to-br from-gray-50 via-white to-blue-50 relative overflow-hidden aurora-background noise-texture">
+      {/* ═════════════════════════════════════════════════════════════════
+          SECCIÓN: 3 BENEFICIOS CLAVE - Glassmorphism
+          ════════════════════════════════════════════════════════════════ */}
+      <section className="py-20 md:py-28 px-4 bg-gradient-to-br from-gray-50 via-white to-blue-50 relative overflow-hidden">
+        {/* Background morphing blobs */}
+        <div className="absolute top-20 left-10 w-96 h-96 bg-blue-200/30 rounded-full blur-3xl animate-pulse" />
+        <div
+          className="absolute bottom-20 right-10 w-96 h-96 bg-purple-200/30 rounded-full blur-3xl animate-pulse"
+          style={{ animationDelay: "2s" }}
+        />
+
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="text-center mb-16 scroll-fade-in">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-4 text-cascade">
-              {"Todo lo que necesitás, en un solo lugar".split(" ").map((word, idx) => (
-                <span key={idx} style={{ animationDelay: `${idx * 0.05}s` }}>
-                  {word}{" "}
-                </span>
-              ))}
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+              Todo lo que necesitás, en un solo lugar
             </h2>
-            <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto fade-in-up">
+            <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto">
               Dejá de saltar entre apps, planillas y papeles. Acá tenés todo unificado.
             </p>
           </div>
@@ -308,44 +347,47 @@ export default function Index() {
             ].map((item, idx) => (
               <div
                 key={idx}
-                className="group relative bg-card p-8 rounded-3xl border border-border shadow-xl hover:shadow-2xl transition-all scroll-fade-in tilt-3d glass-effect"
+                className="group relative bg-white/80 backdrop-blur-xl p-8 rounded-3xl border border-white/20 shadow-xl hover:shadow-2xl transition-all scroll-fade-in"
                 style={{ animationDelay: `${idx * 0.1}s` }}
               >
-                <div className="w-16 h-16 bg-gradient-to-br from-primary to-secondary rounded-2xl flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform animate-float">
-                  <item.icon className="w-8 h-8 text-white" />
+                {/* Glassmorphism effect */}
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-purple-50/50 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity" />
+
+                <div className="relative z-10">
+                  <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform">
+                    <item.icon className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-3">{item.title}</h3>
+                  <p className="text-gray-600 leading-relaxed mb-4">{item.desc}</p>
+                  <ul className="space-y-2">
+                    {item.features.map((feat, i) => (
+                      <li key={i} className="flex items-center gap-2 text-sm text-gray-700">
+                        <Check className="w-4 h-4 text-blue-600" />
+                        <span>{feat}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <h3 className="text-2xl font-bold text-foreground mb-3">{item.title}</h3>
-                <p className="text-muted-foreground leading-relaxed mb-4">{item.desc}</p>
-                <ul className="space-y-2">
-                  {item.features.map((feat, i) => (
-                    <li key={i} className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <Check className="w-4 h-4 text-primary" />
-                      <span>{feat}</span>
-                    </li>
-                  ))}
-                </ul>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CAPACIDADES IA */}
-      <section className="py-20 md:py-28 px-4 bg-white aurora-background">
+      {/* ═════════════════════════════════════════════════════════════════
+          SECCIÓN: CAPACIDADES IA - Self-drawing paths
+          ════════════════════════════════════════════════════════════════ */}
+      <section className="py-20 md:py-28 px-4 bg-white">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16 scroll-fade-in">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary-light rounded-full mb-4 animate-float">
-              <Brain className="w-5 h-5 text-primary" />
-              <span className="text-sm font-semibold text-primary">Powered by AI</span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-100 to-purple-100 rounded-full mb-4">
+              <Brain className="w-5 h-5 text-blue-600" />
+              <span className="text-sm font-semibold text-blue-600">Powered by AI</span>
             </div>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-4 text-cascade">
-              {"Tu asistente que nunca duerme".split(" ").map((word, idx) => (
-                <span key={idx} style={{ animationDelay: `${idx * 0.05}s` }}>
-                  {word}{" "}
-                </span>
-              ))}
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+              Tu asistente que nunca duerme
             </h2>
-            <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto fade-in-up">
+            <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto">
               No es magia, es IA entrenada para emprendedores argentinos
             </p>
           </div>
@@ -385,122 +427,121 @@ export default function Index() {
             ].map((feature, idx) => (
               <div
                 key={idx}
-                className="group bg-card p-6 rounded-2xl border border-border hover:border-primary hover:shadow-xl transition-all scroll-fade-in tilt-3d"
+                className="group bg-gradient-to-br from-gray-50 to-white p-6 rounded-2xl border border-gray-200 hover:border-blue-300 hover:shadow-xl transition-all scroll-fade-in hover:-translate-y-1"
                 style={{ animationDelay: `${idx * 0.1}s` }}
               >
-                <div className="w-14 h-14 bg-primary-light rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-primary/20 transition-all animate-float">
-                  <feature.icon className="w-7 h-7 text-primary" />
+                <div className="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 group-hover:bg-blue-200 transition-all">
+                  <feature.icon className="w-7 h-7 text-blue-600" />
                 </div>
-                <h3 className="text-lg font-bold text-foreground mb-2">{feature.title}</h3>
-                <p className="text-sm text-muted-foreground">{feature.desc}</p>
+                <h3 className="text-lg font-bold text-gray-900 mb-2">{feature.title}</h3>
+                <p className="text-sm text-gray-600">{feature.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ELEGÍ TU ETAPA */}
-      <section className="py-20 md:py-28 px-4 bg-gradient-to-br from-gray-50 to-white noise-texture">
+      {/* ═════════════════════════════════════════════════════════════════
+          SECCIÓN: ELEGÍ TU ETAPA - REDISEÑADAS SIN COLORES FUERTES
+          ════════════════════════════════════════════════════════════════ */}
+      <section className="py-20 md:py-28 px-4 bg-gradient-to-br from-gray-50 to-white">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16 scroll-fade-in">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-4 text-cascade">
-              {"¿En qué etapa estás?".split(" ").map((word, idx) => (
-                <span key={idx} style={{ animationDelay: `${idx * 0.05}s` }}>
-                  {word}{" "}
-                </span>
-              ))}
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-3xl mx-auto fade-in-up">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4">¿En qué etapa estás?</h2>
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
               Desde validar una idea hasta manejar una empresa: estamos para vos.
             </p>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="group relative bg-card rounded-3xl p-8 border border-border hover:border-primary hover:shadow-2xl transition-all scroll-fade-in tilt-3d">
+            {/* Card 1 - Emprendedor */}
+            <div className="group relative bg-white rounded-3xl p-8 border-2 border-gray-200 hover:border-blue-300 hover:shadow-2xl transition-all scroll-fade-in">
               <div className="flex items-start justify-between mb-6">
-                <div className="w-16 h-16 bg-gradient-to-br from-primary to-primary-hover rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform animate-float">
+                <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
                   <Zap className="w-8 h-8 text-white" />
                 </div>
-                <span className="px-3 py-1.5 bg-primary-light text-primary text-xs font-bold rounded-lg uppercase">
+                <span className="px-3 py-1.5 bg-blue-50 text-blue-700 text-xs font-bold rounded-lg uppercase border border-blue-200">
                   Desde cero
                 </span>
               </div>
-              <h3 className="text-3xl font-bold text-foreground mb-3">Emprendedor</h3>
-              <p className="text-muted-foreground mb-6 text-lg">Tenés una idea pero no sabés si es viable</p>
+              <h3 className="text-3xl font-bold text-gray-900 mb-3">Emprendedor</h3>
+              <p className="text-gray-600 mb-6 text-lg">Tenés una idea pero no sabés si es viable</p>
               <ul className="space-y-3 mb-8">
                 {["Validá con IA en minutos", "Proyecciones financieras", "Plan de acción"].map((item, i) => (
                   <li key={i} className="flex items-start gap-3 text-gray-700">
-                    <Check className="w-5 h-5 text-primary mt-0.5" />
+                    <Check className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
                     <span>{item}</span>
                   </li>
                 ))}
               </ul>
               <Button
                 onClick={() => navigate("/select-role")}
-                className="w-full bg-primary hover:bg-primary-hover text-white rounded-xl py-4 text-base font-semibold shadow-md group-hover:shadow-lg transition-all button-hover"
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-xl py-4 text-base font-semibold shadow-md group-hover:shadow-lg transition-all"
               >
                 Validar mi idea →
               </Button>
             </div>
 
+            {/* Card 2 - Negocio (Destacada pero sin color fuerte) */}
             <div
-              className="group relative bg-gradient-to-br from-primary-light to-secondary-light rounded-3xl p-8 border border-primary shadow-xl hover:shadow-2xl transition-all scroll-fade-in tilt-3d"
+              className="group relative bg-gradient-to-br from-blue-50 to-purple-50 rounded-3xl p-8 border-2 border-blue-300 shadow-xl hover:shadow-2xl transition-all scroll-fade-in"
               style={{ animationDelay: "0.1s" }}
             >
-              <div className="absolute -top-4 right-6 px-4 py-2 bg-gradient-to-r from-warning to-accent rounded-xl text-sm font-bold text-foreground shadow-lg">
+              <div className="absolute -top-4 right-6 px-4 py-2 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-xl text-sm font-bold text-gray-900 shadow-lg">
                 ⭐ Más elegido
               </div>
               <div className="flex items-start justify-between mb-6">
-                <div className="w-16 h-16 bg-gradient-to-br from-primary to-secondary rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform animate-float">
+                <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
                   <BarChart3 className="w-8 h-8 text-white" />
                 </div>
-                <span className="px-3 py-1.5 bg-secondary-light text-secondary text-xs font-bold rounded-lg uppercase">
+                <span className="px-3 py-1.5 bg-blue-100 text-blue-800 text-xs font-bold rounded-lg uppercase border border-blue-300">
                   1-3 años
                 </span>
               </div>
-              <h3 className="text-3xl font-bold text-foreground mb-3">Negocio</h3>
-              <p className="text-muted-foreground mb-6 text-lg font-medium">Ya vendés pero todo está desordenado</p>
+              <h3 className="text-3xl font-bold text-gray-900 mb-3">Negocio</h3>
+              <p className="text-gray-700 mb-6 text-lg font-medium">Ya vendés pero todo está desordenado</p>
               <ul className="space-y-3 mb-8">
                 {["Dashboard en tiempo real", "CRM + Ventas + Gastos", "Control sin planillas"].map((item, i) => (
-                  <li key={i} className="flex items-start gap-3 text-muted-foreground">
-                    <Check className="w-5 h-5 text-secondary mt-0.5" />
+                  <li key={i} className="flex items-start gap-3 text-gray-800">
+                    <Check className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
                     <span className="font-medium">{item}</span>
                   </li>
                 ))}
               </ul>
               <Button
                 onClick={() => navigate("/select-role")}
-                className="w-full bg-gradient-to-r from-primary to-secondary hover:from-primary-hover hover:to-secondary text-white rounded-xl py-4 text-base font-semibold shadow-md group-hover:shadow-lg transition-all button-hover"
+                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-xl py-4 text-base font-semibold shadow-md group-hover:shadow-lg transition-all"
               >
                 Organizar mi negocio →
               </Button>
             </div>
 
+            {/* Card 3 - Empresa */}
             <div
-              className="group relative bg-card rounded-3xl p-8 border border-border hover:border-success hover:shadow-2xl transition-all scroll-fade-in tilt-3d"
+              className="group relative bg-white rounded-3xl p-8 border-2 border-gray-200 hover:border-green-300 hover:shadow-2xl transition-all scroll-fade-in"
               style={{ animationDelay: "0.2s" }}
             >
               <div className="flex items-start justify-between mb-6">
-                <div className="w-16 h-16 bg-gradient-to-br from-success to-success-light rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform animate-float">
+                <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
                   <Building2 className="w-8 h-8 text-white" />
                 </div>
-                <span className="px-3 py-1.5 bg-success-light text-success text-xs font-bold rounded-lg uppercase">
+                <span className="px-3 py-1.5 bg-green-50 text-green-700 text-xs font-bold rounded-lg uppercase border border-green-200">
                   +3 años
                 </span>
               </div>
-              <h3 className="text-3xl font-bold text-foreground mb-3">Empresa</h3>
-              <p className="text-muted-foreground mb-6 text-lg">Tu empresa creció y necesitás escalar</p>
+              <h3 className="text-3xl font-bold text-gray-900 mb-3">Empresa</h3>
+              <p className="text-gray-600 mb-6 text-lg">Tu empresa creció y necesitás escalar</p>
               <ul className="space-y-3 mb-8">
                 {["Multi-sucursal", "Gestión de equipos", "Reportes con IA"].map((item, i) => (
-                  <li key={i} className="flex items-start gap-3 text-muted-foreground">
-                    <Check className="w-5 h-5 text-success mt-0.5" />
+                  <li key={i} className="flex items-start gap-3 text-gray-700">
+                    <Check className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
                     <span>{item}</span>
                   </li>
                 ))}
               </ul>
               <Button
                 onClick={() => navigate("/select-role")}
-                className="w-full bg-success hover:bg-success-light text-white rounded-xl py-4 text-base font-semibold shadow-md group-hover:shadow-lg transition-all button-hover"
+                className="w-full bg-green-600 hover:bg-green-700 text-white rounded-xl py-4 text-base font-semibold shadow-md group-hover:shadow-lg transition-all"
               >
                 Automatizar empresa →
               </Button>
@@ -509,12 +550,14 @@ export default function Index() {
         </div>
       </section>
 
-      {/* TRUST BADGES */}
-      <section className="py-16 px-4 bg-muted text-foreground">
+      {/* ═════════════════════════════════════════════════════════════════
+          TRUST BADGES
+          ════════════════════════════════════════════════════════════════ */}
+      <section className="py-16 px-4 bg-gray-900 text-white">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
             <h3 className="text-2xl font-bold mb-2">Seguridad y confianza</h3>
-            <p className="text-muted-foreground">Tus datos protegidos con los más altos estándares</p>
+            <p className="text-gray-400">Tus datos protegidos con los más altos estándares</p>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-8">
             {[
@@ -524,38 +567,58 @@ export default function Index() {
               { icon: Shield, label: "GDPR Compliant" },
               { icon: Shield, label: "Soporte 24/7" },
             ].map((badge, idx) => (
-              <div key={idx} className="text-center group tilt-3d">
-                <div className="w-16 h-16 bg-card rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:bg-muted transition-colors animate-float">
-                  <badge.icon className="w-8 h-8 text-success" />
+              <div key={idx} className="text-center group">
+                <div className="w-16 h-16 bg-gray-800 rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:bg-gray-700 transition-colors">
+                  <badge.icon className="w-8 h-8 text-green-400" />
                 </div>
-                <p className="text-sm text-muted-foreground font-medium">{badge.label}</p>
+                <p className="text-sm text-gray-300 font-medium">{badge.label}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* FOOTER */}
-      <footer className="bg-muted text-foreground py-12 px-4">
+      {/* ═════════════════════════════════════════════════════════════════
+          CTA FINAL
+          ════════════════════════════════════════════════════════════════ */}
+      <section className="py-20 md:py-28 px-4 bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 text-white relative overflow-hidden">
+        <div className="absolute inset-0 bg-grid-white/10" />
+        <div className="relative z-10 max-w-4xl mx-auto text-center">
+          <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6">¿Listo para empezar?</h2>
+          <p className="text-xl sm:text-2xl mb-10 text-white/90">
+            Gratis, sin tarjeta, sin trucos. Empezás en 2 minutos.
+          </p>
+          <Button
+            onClick={() => navigate("/select-role")}
+            className="bg-white text-blue-600 hover:bg-gray-100 text-lg font-bold px-10 py-6 rounded-2xl shadow-2xl hover:shadow-3xl transition-all group"
+          >
+            <span>Empezar ahora</span>
+            <Rocket className="w-6 h-6 ml-2 group-hover:translate-x-1 transition-transform" />
+          </Button>
+        </div>
+      </section>
+
+      {/* ═════════════════════════════════════════════════════════════════
+          FOOTER
+          ════════════════════════════════════════════════════════════════ */}
+      <footer className="bg-gray-900 text-white py-12 px-4">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center">
+              <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center">
                 <Building2 className="w-6 h-6 text-white" />
               </div>
               <span className="font-bold text-lg">Proyecto Emprendedurismo</span>
             </div>
-            <p className="text-sm text-muted-foreground">
-              © 2025 Proyecto Emprendedurismo. Hecho con 💙 en Argentina.
-            </p>
+            <p className="text-sm text-gray-400">© 2025 Proyecto Emprendedurismo. Hecho con 💙 en Argentina.</p>
             <div className="flex gap-6 text-sm">
-              <a href="#" className="text-muted-foreground hover:text-foreground transition button-hover">
+              <a href="#" className="text-gray-400 hover:text-white transition">
                 Términos
               </a>
-              <a href="#" className="text-muted-foreground hover:text-foreground transition button-hover">
+              <a href="#" className="text-gray-400 hover:text-white transition">
                 Privacidad
               </a>
-              <a href="#" className="text-muted-foreground hover:text-foreground transition button-hover">
+              <a href="#" className="text-gray-400 hover:text-white transition">
                 Soporte
               </a>
             </div>
@@ -563,12 +626,16 @@ export default function Index() {
         </div>
       </footer>
 
-      {/* BOT WIDGET */}
-      <div className="bot-widget-float animate-float">
+      {/* ═════════════════════════════════════════════════════════════════
+          BOT WIDGET FLOTANTE
+          ════════════════════════════════════════════════════════════════ */}
+      <div className="bot-widget-float">
         <span className="text-3xl">🤖</span>
       </div>
 
-      {/* MODAL */}
+      {/* ═════════════════════════════════════════════════════════════════
+          MODAL LOGIN
+          ════════════════════════════════════════════════════════════════ */}
       {showLoginModal && <LoginModal onClose={() => setShowLoginModal(false)} />}
     </div>
   );
