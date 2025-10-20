@@ -2,10 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Base visual refinado: SF Pro Display es clave para un look profesional */
+/* Base visual refinado */
 @layer base {
   :root {
-    /* Colores de marca unificados */
+    /* Colores de marca unificados (usando HSL para fácil manipulación en CSS/Tailwind) */
     --primary: 217 91% 60%; /* Azul - Validación/Inicio */
     --secondary: 160 84% 39%; /* Verde - Organización/Crecimiento */
     --tertiary: 263 70% 50%; /* Púrpura - Escalabilidad/IA */
@@ -16,7 +16,6 @@
     --radius: 0.75rem;
   }
 
-  /* Usamos Inter como fallback para SF Pro, que es más común en web */
   * {
     font-family: "Inter", "Helvetica Neue", sans-serif;
     @apply border-border;
@@ -25,7 +24,7 @@
   body {
     @apply bg-background text-foreground;
     line-height: 1.6;
-    overflow-x: hidden; /* Evita scroll horizontal por animaciones */
+    overflow-x: hidden;
   }
 
   h1,
@@ -40,30 +39,27 @@
 
 /* 🎨 COMPONENTES DE DISEÑO AVANZADO */
 @layer components {
-  /* 🧩 1. Claymorphism Card: Estética suave y profesional para las etapas */
-  .clay-card-grok {
+  /* 🧩 1. Tarjeta de Etapa - Diseño limpio con hover */
+  .stage-card-grok {
     background: #fff;
-    border-radius: 1.5rem;
-    box-shadow:
-      8px 8px 30px rgba(0, 0, 0, 0.04),
-      /* Sombra inferior */ -4px -4px 15px rgba(255, 255, 255, 0.7); /* Sombra superior para relieve */
-    transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-    border-left: 1px solid rgba(255, 255, 255, 0.5); /* Borde suave para luz */
-    border-top: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 1.25rem;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease-out;
+    border: 1px solid #e5e7eb;
+    position: relative;
+    overflow: hidden;
   }
 
-  .clay-card-grok:hover {
-    transform: translateY(-8px);
-    box-shadow:
-      15px 15px 40px rgba(0, 0, 0, 0.08),
-      -8px -8px 25px rgba(255, 255, 255, 0.8);
+  .hover-scale-grok:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
   }
 
   /* 🧠 2. Scroll Reveal: Fade-in con slide-up */
   .scroll-fade-in {
     opacity: 0;
     transform: translateY(30px);
-    transition: all 0.8s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+    transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
   }
 
   .scroll-fade-in.visible {
@@ -71,7 +67,7 @@
     transform: translateY(0);
   }
 
-  /* 🎬 3. Aurora Waves Background (Hero) */
+  /* 🎬 3. Aurora Waves Background (Hero) - Mantenido para alto impacto */
   .aurora-waves-background {
     background: linear-gradient(135deg, hsl(230, 80%, 30%) 0%, hsl(260, 60%, 40%) 50%, hsl(210, 90%, 50%) 100%);
     position: relative;
@@ -80,7 +76,7 @@
   .aurora-waves-background::before {
     content: "";
     position: absolute;
-    inset: -20%; /* Para que el blur no se corte */
+    inset: -20%;
     background:
       radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 40%),
       radial-gradient(circle at 80% 20%, rgba(100, 200, 255, 0.1) 0%, transparent 40%);
@@ -92,7 +88,7 @@
     content: "";
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.35); /* Capa oscura para mejor contraste del texto */
+    background: rgba(0, 0, 0, 0.4); /* Capa oscura más fuerte para texto blanco */
     z-index: 1;
     pointer-events: none;
   }
@@ -106,19 +102,18 @@
     }
   }
 
-  /* 🖋️ 4. Hero Title (Mejora de Legibilidad y efecto) */
+  /* 🖋️ 4. Hero Title - Contraste y Shimmer */
   .hero-title-grok {
-    color: white; /* Color de fallback */
-    font-size: 4rem; /* Base para el título */
+    color: white;
+    font-size: 4rem;
     line-height: 1.05;
-    /* Shimmer Effect Avanzado para un look premium */
     background: linear-gradient(90deg, #ffffff, #d8e1ff, #ffffff);
     background-size: 250% 100%;
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     animation: text-shimmer-flow 4s linear infinite;
-    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.6); /* Sombra más fuerte para contraste */
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.7); /* Contraste máximo */
   }
 
   @keyframes text-shimmer-flow {
@@ -145,64 +140,65 @@
     }
   }
 
-  /* 🧑‍🎨 6. Microinteracciones */
+  /* 🧑‍🎨 6. Microinteracciones (Magnetic y Glows) */
   .magnetic-button {
-    transition: all 0.2s cubic-bezier(0.3, 0.7, 0.4, 1.5); /* Efecto más elástico */
-  }
-  .magnetic-button:hover {
-    transform: scale(1.03) translateY(-1px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s cubic-bezier(0.3, 0.7, 0.4, 1.5);
   }
 
-  /* 💡 Glow Pulse */
+  /* 💡 Glow Pulse para logo principal */
   .glow-pulse {
     animation: pulse-glow 2.5s infinite ease-in-out;
   }
-  .glow-pulse-small {
-    animation: pulse-glow-small 3s infinite ease-in-out;
+
+  /* 💡 Glow Pulse para Chatbot FAB - más prominente */
+  .glow-pulse-chatbot {
+    animation: pulse-glow-chatbot 3s infinite ease-in-out;
   }
 
-  @keyframes pulse-glow {
+  @keyframes pulse-glow-chatbot {
     0%,
     100% {
-      box-shadow: 0 0 10px rgba(var(--primary), 0.5);
+      box-shadow:
+        0 0 10px rgba(var(--primary), 0.5),
+        0 0 20px rgba(var(--tertiary), 0.3);
     }
     50% {
       box-shadow:
-        0 0 20px rgba(var(--primary), 0.8),
-        0 0 5px rgba(255, 255, 255, 0.5);
-    }
-  }
-  @keyframes pulse-glow-small {
-    0%,
-    100% {
-      opacity: 0.9;
-    }
-    50% {
-      opacity: 1;
+        0 0 15px rgba(var(--primary), 0.8),
+        0 0 30px rgba(var(--tertiary), 0.5);
     }
   }
 
-  /* ⚙️ Botones modales */
+  /* Animación para el tag "Más Elegido" */
+  .animate-pulse-slow {
+    animation: pulse-slow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  @keyframes pulse-slow {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.8;
+    }
+  }
+
+  /* ⚙️ Botones modales (Manteniendo el look oscuro y vibrante) */
   .modal-grok-overlay {
-    @apply fixed inset-0 z-[100] flex items-center justify-center p-4 backdrop-blur-md bg-black/60;
+    @apply fixed inset-0 z-[100] flex items-center justify-center p-4 backdrop-blur-md bg-black/70;
   }
   .modal-grok-container {
     @apply relative w-full max-w-md p-8 rounded-2xl shadow-2xl overflow-hidden transform transition-all;
-    background: linear-gradient(145deg, #1f2937, #111827); /* Fondo oscuro con gradiente */
+    background: #1e293b; /* bg-slate-800 */
+    border: 1px solid rgba(255, 255, 255, 0.1);
   }
   .modal-grok-bg {
     @apply absolute inset-0 opacity-20;
-    background: radial-gradient(circle at top right, var(--primary) 0%, transparent 60%);
+    background: radial-gradient(circle at top right, hsl(var(--primary)) 0%, transparent 60%);
     filter: blur(100px);
   }
   .btn-login-grok {
     @apply w-full flex items-center justify-center p-3 rounded-xl bg-white/10 text-white border border-white/20 hover:bg-white/20 transition-all shadow-lg;
-  }
-
-  /* 3D Tilt Effect (Requiere JS, pero la base CSS está lista) */
-  .tilt-3d {
-    transition: transform 0.3s ease-out;
   }
 
   /* Texto Shimmer Rápido para branding */
@@ -220,15 +216,6 @@
     }
     100% {
       background-position: -200% center;
-    }
-  }
-}
-
-/* RESPONSIVE TAILWIND UTILS ADICIONALES (si no están en tu config) */
-@layer utilities {
-  .xs\:block {
-    @media (min-width: 475px) {
-      display: block;
     }
   }
 }
