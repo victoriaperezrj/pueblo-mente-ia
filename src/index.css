@@ -210,3 +210,50 @@
     opacity: 1;
   }
 }
+/* Mejora de legibilidad en hero */
+.gradient-text-animated {
+  font-size: 3rem;
+  font-weight: 800;
+  line-height: 1.1;
+  background: linear-gradient(90deg, #ffffff, #f0f0f0, #ffffff);
+  background-size: 150% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: text-shimmer-flow 5s linear infinite;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4); /* más fuerte */
+}
+
+/* Fondo extra para hero */
+.hero-gradient-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.2); /* overlay oscuro */
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Botón con efecto magnético */
+.magnetic-button {
+  transition: transform 0.2s ease;
+}
+.magnetic-button:hover {
+  transform: scale(1.05) translateY(-2px);
+}
+
+/* Hover glow */
+.glow-hover:hover {
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.3);
+}
+
+/* Fade-in scroll */
+.fade-in-on-scroll {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s ease-out;
+}
+.fade-in-on-scroll.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
