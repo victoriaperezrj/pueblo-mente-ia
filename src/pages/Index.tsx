@@ -12,9 +12,7 @@ import {
   Shield,
   Users,
   BarChart3,
-  Sparkles,
   Brain,
-  Rocket,
   FileText,
   ArrowRight,
 } from "lucide-react";
@@ -80,7 +78,7 @@ function LoginModal({ onClose }: { onClose: () => void }) {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                  d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
                 />
               </svg>
               <span>Continuar con Email</span>
@@ -148,7 +146,7 @@ export default function Index() {
               </span>
             </div>
             <button
-              className="p-2 hover:bg-muted rounded-lg transition-colors"
+              className="p-2 hover:bg-muted rounded-lg transition-colors button-hover"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
               {mobileMenuOpen ? (
@@ -166,7 +164,7 @@ export default function Index() {
                   setShowLoginModal(true);
                   setMobileMenuOpen(false);
                 }}
-                className="w-full justify-center text-base font-semibold min-h-12"
+                className="w-full justify-center text-base font-semibold min-h-12 button-hover"
               >
                 Iniciar Sesión
               </Button>
@@ -175,7 +173,7 @@ export default function Index() {
                   navigate("/auth?mode=signup");
                   setMobileMenuOpen(false);
                 }}
-                className="w-full justify-center bg-primary hover:bg-primary-hover text-white text-base font-semibold py-3 rounded-md min-h-12"
+                className="w-full justify-center bg-primary hover:bg-primary-hover text-white text-base font-semibold py-3 rounded-md min-h-12 button-hover"
               >
                 Crear Cuenta
               </Button>
@@ -185,7 +183,7 @@ export default function Index() {
                   navigate("/select-role");
                   setMobileMenuOpen(false);
                 }}
-                className="w-full justify-center text-base font-semibold min-h-12"
+                className="w-full justify-center text-base font-semibold min-h-12 button-hover"
               >
                 Ver Demo
               </Button>
@@ -195,13 +193,13 @@ export default function Index() {
       </nav>
 
       {/* HERO SECTION */}
-      <section className="hero-gradient-bg min-h-screen flex items-center justify-center relative overflow-hidden pt-20">
+      <section className="hero-gradient-bg min-h-screen flex items-center justify-center relative overflow-hidden pt-20 wave-background">
         <div className="slide-left-decoration" />
         <div className="slide-right-decoration" />
 
         <div className="container mx-auto px-6 relative z-10">
           <div className="max-w-5xl mx-auto text-center">
-            <div className="badge-glow fade-in mb-8 inline-flex">
+            <div className="badge-glow fade-in mb-8 inline-flex animate-float">
               <Zap className="w-4 h-4" />
               <span>IA que entiende Argentina</span>
             </div>
@@ -210,23 +208,26 @@ export default function Index() {
               {heroTitle}
             </h1>
 
-            <p className="text-white text-lg md:text-xl mb-8 max-w-3xl mx-auto fade-in-up">
-              La plataforma que combina IA + automatización + datos para que emprendedores y PyMEs validen, organicen y
-              escalen.
+            <p
+              className="text-white text-lg md:text-xl mb-8 max-w-3xl mx-auto fade-in-up"
+              style={{ textShadow: "0 1px 2px rgba(0,0,0,0.5)" }}
+            >
+              La plataforma que combina IA + automatización + datos para que emprendedores y PyMEs validen ideas,
+              organicen operaciones y escalen con confianza.
             </p>
 
             <div className="flex flex-wrap justify-center gap-6 mb-12 text-white text-lg fade-in-up">
               <div className="flex items-center gap-2">
                 <Check className="w-5 h-5" />
-                <span>Sin tarjeta</span>
+                <span>Sin tarjeta requerida</span>
               </div>
               <div className="flex items-center gap-2">
                 <Check className="w-5 h-5" />
-                <span>Datos seguros</span>
+                <span>Datos 100% seguros</span>
               </div>
               <div className="flex items-center gap-2">
                 <Check className="w-5 h-5" />
-                <span>Empezá en 2 min</span>
+                <span>Empezá en solo 2 minutos</span>
               </div>
             </div>
 
@@ -243,7 +244,7 @@ export default function Index() {
       </section>
 
       {/* BENEFICIOS SECTION */}
-      <section className="py-20 md:py-28 px-4 bg-gradient-to-br from-gray-50 to-white">
+      <section className="py-20 md:py-28 px-4 bg-gradient-to-br from-gray-50 to-white wave-background">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16 scroll-fade-in">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-4 text-cascade">
@@ -254,7 +255,7 @@ export default function Index() {
               ))}
             </h2>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto fade-in-up">
-              Unifica apps, planillas y procesos en una plataforma simple.
+              Olvidate de saltar entre apps y planillas. Acá tenés todo integrado y simple para enfocarte en crecer.
             </p>
           </div>
 
@@ -262,21 +263,29 @@ export default function Index() {
             {[
               {
                 icon: Target,
-                title: "Validá con IA",
-                desc: "Analiza mercado, competencia y viabilidad antes de invertir.",
-                features: ["Análisis de mercado", "Proyecciones financieras", "Plan de acción"],
+                title: "Validá tu idea con IA",
+                desc: "Antes de invertir tiempo o dinero, usa IA para analizar mercado, competencia y viabilidad real.",
+                features: [
+                  "Análisis de mercado inteligente",
+                  "Proyecciones financieras precisas",
+                  "Plan de acción personalizado",
+                ],
               },
               {
                 icon: TrendingUp,
-                title: "Organizá en real time",
-                desc: "CRM, ventas, gastos sincronizados automáticamente.",
-                features: ["Dashboard vivo", "CRM integrado", "Control de gastos"],
+                title: "Organizá en tiempo real",
+                desc: "CRM, ventas, gastos e inventario sincronizados automáticamente para ver tu negocio en vivo.",
+                features: ["Dashboard dinámico y actualizado", "CRM integrado y fácil", "Control de gastos automático"],
               },
               {
                 icon: Briefcase,
-                title: "Escalá eficientemente",
-                desc: "Automatiza tareas, maneja multi-sucursal y reportes.",
-                features: ["Automatización IA", "Multi-sucursal", "Reportes avanzados"],
+                title: "Escalá con eficiencia",
+                desc: "Automatiza lo repetitivo, maneja múltiples sucursales y genera reportes avanzados con IA.",
+                features: [
+                  "Automatizaciones inteligentes",
+                  "Gestión multi-sucursal",
+                  "Reportes detallados con insights",
+                ],
               },
             ].map((item, idx) => (
               <div
@@ -304,7 +313,7 @@ export default function Index() {
       </section>
 
       {/* CAPACIDADES IA */}
-      <section className="py-20 md:py-28 px-4 bg-gradient-to-br from-gray-50 to-white">
+      <section className="py-20 md:py-28 px-4 bg-gradient-to-br from-gray-50 to-white wave-background">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16 scroll-fade-in">
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary-light rounded-full mb-4 animate-float">
@@ -319,7 +328,7 @@ export default function Index() {
               ))}
             </h2>
             <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto fade-in-up">
-              IA entrenada para el ecosistema emprendedor argentino.
+              IA especializada en el mundo emprendedor argentino, trabajando para vos todo el día.
             </p>
           </div>
 
@@ -327,33 +336,33 @@ export default function Index() {
             {[
               {
                 icon: FileText,
-                title: "Procesá documentos",
-                desc: "Subí facturas y tickets; la IA los lee automáticamente.",
+                title: "Procesá documentos al instante",
+                desc: "Subí facturas o tickets; la IA los analiza y categoriza automáticamente.",
               },
               {
                 icon: BarChart3,
-                title: "Reconciliá rápido",
-                desc: "Matchea transacciones sin esfuerzo manual.",
+                title: "Reconciliá en segundos",
+                desc: "Matchea transacciones bancarias sin esfuerzo manual ni errores.",
               },
               {
                 icon: Brain,
-                title: "Sugerencias proactivas",
-                desc: "Ideas para ahorrar y optimizar crecimiento.",
+                title: "Sugerencias inteligentes",
+                desc: "Recibe recomendaciones para optimizar costos y acelerar crecimiento.",
               },
               {
                 icon: Shield,
-                title: "Detectá anomalías",
-                desc: "Alertas tempranas sobre gastos irregulares.",
+                title: "Detectá anomalías temprano",
+                desc: "Alertas inmediatas sobre gastos inusuales o irregularidades.",
               },
               {
                 icon: Users,
                 title: "Manejo multi-entidad",
-                desc: "Eliminaciones y consolidación automáticas.",
+                desc: "Gestiona múltiples empresas con consolidaciones automáticas.",
               },
               {
                 icon: TrendingUp,
                 title: "Dashboards visuales",
-                desc: "Reportes en tiempo real sin complicaciones.",
+                desc: "Reportes interactivos en tiempo real, sin complicadas planillas.",
               },
             ].map((feature, idx) => (
               <div
@@ -372,8 +381,8 @@ export default function Index() {
         </div>
       </section>
 
-      {/* ELEGÍ TU ETAPA - COLORES DIFERENTES Y DELICADOS */}
-      <section className="py-20 md:py-28 px-4 bg-gradient-to-br from-gray-50 to-white">
+      {/* ELEGÍ TU ETAPA - DISEÑO NUEVO MÁS BONITO CON EFECTOS CHETO */}
+      <section className="py-20 md:py-28 px-4 bg-gradient-to-br from-gray-50 to-white wave-background">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16 scroll-fade-in">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-4 text-cascade">
@@ -384,101 +393,122 @@ export default function Index() {
               ))}
             </h2>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto fade-in-up">
-              Desde validar una idea hasta escalar una empresa: estamos para vos.
+              Seleccioná tu momento actual y desbloqueá herramientas personalizadas para impulsarte al siguiente nivel.
             </p>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Card 1 - Emprendedor - Azul delicado */}
-            <div className="group relative bg-gradient-to-br from-primary-light to-tertiary-light rounded-3xl p-8 border border-primary/20 shadow-md hover:shadow-xl transition-all scroll-fade-in card-hover wave-background">
+            {/* Card 1 - Emprendedor - Gradiente azul-celeste bonito */}
+            <div className="group relative bg-gradient-to-br from-blue-100 to-cyan-100 rounded-3xl p-8 border border-blue-200 shadow-md hover:shadow-xl transition-all scroll-fade-in card-hover wave-background">
+              <div className="absolute top-4 right-4 opacity-50 group-hover:opacity-100 transition-opacity animate-float">
+                <Rocket className="w-12 h-12 text-blue-500 rotate-45" />
+              </div>
               <div className="flex items-start justify-between mb-6">
-                <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform animate-float">
+                <div className="w-16 h-16 bg-blue-500 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform animate-float">
                   <Zap className="w-8 h-8 text-white" />
                 </div>
-                <span className="px-3 py-1.5 bg-primary-light text-primary text-xs font-bold rounded-lg uppercase">
-                  Desde cero
+                <span className="px-3 py-1.5 bg-blue-100 text-blue-600 text-xs font-bold rounded-lg uppercase">
+                  Idea inicial
                 </span>
               </div>
               <h3 className="text-3xl font-bold text-foreground mb-3">Emprendedor</h3>
-              <p className="text-muted-foreground mb-6 text-lg">Tenés una idea pero no sabés si es viable</p>
+              <p className="text-muted-foreground mb-6 text-lg">
+                Convertí tu idea en un plan viable con análisis inteligentes.
+              </p>
               <ul className="space-y-3 mb-8">
-                {["Validá con IA en minutos", "Proyecciones financieras", "Plan de acción"].map((item, i) => (
-                  <li key={i} className="flex items-start gap-3 text-muted-foreground">
-                    <Check className="w-5 h-5 text-primary mt-0.5" />
-                    <span>{item}</span>
-                  </li>
-                ))}
+                {["Validación rápida con IA", "Proyecciones financieras claras", "Guía paso a paso para lanzar"].map(
+                  (item, i) => (
+                    <li key={i} className="flex items-start gap-3 text-muted-foreground">
+                      <Check className="w-5 h-5 text-blue-600 mt-0.5" />
+                      <span>{item}</span>
+                    </li>
+                  ),
+                )}
               </ul>
               <Button
                 onClick={() => navigate("/select-role")}
-                className="w-full bg-primary hover:bg-primary-hover text-white rounded-xl py-4 text-base font-semibold shadow-md group-hover:shadow-lg transition-all button-hover"
+                className="w-full bg-blue-500 hover:bg-blue-600 text-white rounded-xl py-4 text-base font-semibold shadow-md group-hover:shadow-lg transition-all button-hover"
               >
                 Validar mi idea →
               </Button>
             </div>
 
-            {/* Card 2 - Negocio - Púrpura delicado con naranja */}
+            {/* Card 2 - Negocio - Gradiente púrpura-rosa bonito */}
             <div
-              className="group relative bg-gradient-to-br from-tertiary-light to-accent-light rounded-3xl p-8 border border-tertiary/20 shadow-md hover:shadow-xl transition-all scroll-fade-in card-hover wave-background"
+              className="group relative bg-gradient-to-br from-purple-100 to-pink-100 rounded-3xl p-8 border border-purple-200 shadow-md hover:shadow-xl transition-all scroll-fade-in card-hover wave-background"
               style={{ animationDelay: "0.1s" }}
             >
-              <div className="absolute -top-4 right-6 px-4 py-2 bg-gradient-to-r from-accent to-warning rounded-xl text-sm font-bold text-foreground shadow-lg">
-                ⭐ Más elegido
+              <div className="absolute -top-4 right-6 px-4 py-2 bg-gradient-to-r from-pink-300 to-orange-300 rounded-xl text-sm font-bold text-white shadow-lg animate-float">
+                ⭐ Recomendado
+              </div>
+              <div className="absolute top-4 right-4 opacity-50 group-hover:opacity-100 transition-opacity animate-float">
+                <TrendingUp className="w-12 h-12 text-purple-500" />
               </div>
               <div className="flex items-start justify-between mb-6">
-                <div className="w-16 h-16 bg-tertiary rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform animate-float">
+                <div className="w-16 h-16 bg-purple-500 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform animate-float">
                   <BarChart3 className="w-8 h-8 text-white" />
                 </div>
-                <span className="px-3 py-1.5 bg-tertiary-light text-tertiary text-xs font-bold rounded-lg uppercase">
-                  1-3 años
+                <span className="px-3 py-1.5 bg-purple-100 text-purple-600 text-xs font-bold rounded-lg uppercase">
+                  En crecimiento
                 </span>
               </div>
               <h3 className="text-3xl font-bold text-foreground mb-3">Negocio</h3>
-              <p className="text-muted-foreground mb-6 text-lg font-medium">Ya vendés pero todo está desordenado</p>
+              <p className="text-muted-foreground mb-6 text-lg font-medium">
+                Organizá tu operación diaria para maximizar eficiencia y ventas.
+              </p>
               <ul className="space-y-3 mb-8">
-                {["Dashboard en tiempo real", "CRM + Ventas + Gastos", "Control sin planillas"].map((item, i) => (
-                  <li key={i} className="flex items-start gap-3 text-muted-foreground">
-                    <Check className="w-5 h-5 text-tertiary mt-0.5" />
-                    <span className="font-medium">{item}</span>
-                  </li>
-                ))}
+                {["Dashboard intuitivo en tiempo real", "CRM + ventas integradas", "Control de gastos inteligente"].map(
+                  (item, i) => (
+                    <li key={i} className="flex items-start gap-3 text-muted-foreground">
+                      <Check className="w-5 h-5 text-purple-600 mt-0.5" />
+                      <span className="font-medium">{item}</span>
+                    </li>
+                  ),
+                )}
               </ul>
               <Button
                 onClick={() => navigate("/select-role")}
-                className="w-full bg-tertiary hover:bg-tertiary-light text-white rounded-xl py-4 text-base font-semibold shadow-md group-hover:shadow-lg transition-all button-hover"
+                className="w-full bg-purple-500 hover:bg-purple-600 text-white rounded-xl py-4 text-base font-semibold shadow-md group-hover:shadow-lg transition-all button-hover"
               >
                 Organizar mi negocio →
               </Button>
             </div>
 
-            {/* Card 3 - Empresa - Verde delicado */}
+            {/* Card 3 - Empresa - Gradiente verde-lima bonito */}
             <div
-              className="group relative bg-gradient-to-br from-success-light to-white rounded-3xl p-8 border border-success/20 shadow-md hover:shadow-xl transition-all scroll-fade-in card-hover wave-background"
+              className="group relative bg-gradient-to-br from-green-100 to-lime-100 rounded-3xl p-8 border border-green-200 shadow-md hover:shadow-xl transition-all scroll-fade-in card-hover wave-background"
               style={{ animationDelay: "0.2s" }}
             >
+              <div className="absolute top-4 right-4 opacity-50 group-hover:opacity-100 transition-opacity animate-float">
+                <Users className="w-12 h-12 text-green-500" />
+              </div>
               <div className="flex items-start justify-between mb-6">
-                <div className="w-16 h-16 bg-success rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform animate-float">
+                <div className="w-16 h-16 bg-green-500 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform animate-float">
                   <Building2 className="w-8 h-8 text-white" />
                 </div>
-                <span className="px-3 py-1.5 bg-success-light text-success text-xs font-bold rounded-lg uppercase">
-                  +3 años
+                <span className="px-3 py-1.5 bg-green-100 text-green-600 text-xs font-bold rounded-lg uppercase">
+                  Escala avanzada
                 </span>
               </div>
               <h3 className="text-3xl font-bold text-foreground mb-3">Empresa</h3>
-              <p className="text-muted-foreground mb-6 text-lg">Tu empresa creció y necesitás escalar</p>
+              <p className="text-muted-foreground mb-6 text-lg">
+                Expande con herramientas para equipos y operaciones complejas.
+              </p>
               <ul className="space-y-3 mb-8">
-                {["Multi-sucursal", "Gestión de equipos", "Reportes con IA"].map((item, i) => (
-                  <li key={i} className="flex items-start gap-3 text-muted-foreground">
-                    <Check className="w-5 h-5 text-success mt-0.5" />
-                    <span>{item}</span>
-                  </li>
-                ))}
+                {["Gestión multi-sucursal fluida", "Colaboración de equipos", "Insights avanzados con IA"].map(
+                  (item, i) => (
+                    <li key={i} className="flex items-start gap-3 text-muted-foreground">
+                      <Check className="w-5 h-5 text-green-600 mt-0.5" />
+                      <span>{item}</span>
+                    </li>
+                  ),
+                )}
               </ul>
               <Button
                 onClick={() => navigate("/select-role")}
-                className="w-full bg-success hover:bg-success-light text-white rounded-xl py-4 text-base font-semibold shadow-md group-hover:shadow-lg transition-all button-hover"
+                className="w-full bg-green-500 hover:bg-green-600 text-white rounded-xl py-4 text-base font-semibold shadow-md group-hover:shadow-lg transition-all button-hover"
               >
-                Automatizar empresa →
+                Automatizar mi empresa →
               </Button>
             </div>
           </div>
@@ -486,7 +516,7 @@ export default function Index() {
       </section>
 
       {/* TRUST BADGES */}
-      <section className="py-16 px-4 bg-gray-900 text-white">
+      <section className="py-16 px-4 bg-gray-900 text-white wave-background">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
             <h3 className="text-2xl font-bold mb-2">Seguridad y confianza</h3>
