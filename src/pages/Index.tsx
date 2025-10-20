@@ -1,9 +1,18 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { Building2, Menu, X, Check, Zap, Briefcase, TrendingUp } from "lucide-react";
+import {
+  Building2,
+  Menu,
+  X,
+  Check,
+  Zap,
+  Briefcase,
+  TrendingUp,
+  MessageCircle, // Icono para el Chatbot/Asistente
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-// LOGIN MODAL (Mantengo limpio y funcional)
+// LOGIN MODAL (Mantenemos el diseño mejorado)
 function LoginModal({ onClose }: { onClose: () => void }) {
   return (
     <div className="modal-grok-overlay" onClick={onClose}>
@@ -67,7 +76,7 @@ function LoginModal({ onClose }: { onClose: () => void }) {
   );
 }
 
-// COMPONENTE DE TARJETA DE ETAPA (Rediseñado con Claymorphism)
+// COMPONENTE DE TARJETA DE ETAPA (Diseño limpio con bordes y hover)
 interface StageCardProps {
   title: string;
   stageLabel: string;
@@ -75,8 +84,9 @@ interface StageCardProps {
   description: string;
   features: string[];
   buttonText: string;
-  buttonVariant: "primary" | "secondary" | "tertiary";
-  highlightColor: string;
+  buttonColor: string; // Color para el botón y los checks
+  tagColor: string;
+  tagText: string;
 }
 
 function StageCard({
@@ -86,28 +96,28 @@ function StageCard({
   description,
   features,
   buttonText,
-  buttonVariant,
-  highlightColor,
+  buttonColor,
+  tagColor,
+  tagText,
 }: StageCardProps) {
-  const buttonClass =
-    buttonVariant === "primary"
-      ? "bg-primary hover:bg-primary/90 text-white"
-      : buttonVariant === "secondary"
-        ? "bg-secondary hover:bg-secondary/90 text-white"
-        : "bg-tertiary hover:bg-tertiary/90 text-white";
+  const isSpecialTag = tagText === "Más Elegido";
 
   return (
-    <div
-      className={`clay-card-grok tilt-3d scroll-fade-in border-t-4 ${highlightColor} p-6 md:p-8 flex flex-col h-full`}
-    >
-      <div className="flex justify-between items-start mb-4">
+    <div className="stage-card-grok scroll-fade-in hover-scale-grok p-6 md:p-8 flex flex-col h-full border border-gray-200">
+      <div className="relative mb-6">
         <div
-          className={`text-sm font-semibold px-3 py-1 rounded-full text-white`}
-          style={{ backgroundColor: highlightColor }}
+          className={`stage-tag absolute top-0 right-0 text-xs font-bold px-3 py-1 rounded-full ${isSpecialTag ? "bg-accent text-white shadow-lg animate-pulse-slow" : "bg-gray-100 text-gray-600"}`}
         >
-          {stageLabel}
+          {tagText}
         </div>
-        <Icon className={`w-8 h-8`} style={{ color: highlightColor }} />
+
+        {/* Icono Principal */}
+        <div
+          className={`inline-flex items-center justify-center w-12 h-12 rounded-xl mb-4 ${buttonColor} bg-opacity-10`}
+          style={{ color: buttonColor }}
+        >
+          <Icon className="w-6 h-6" />
+        </div>
       </div>
 
       <h3 className="text-2xl font-extrabold text-foreground mb-3">{title}</h3>
@@ -115,17 +125,34 @@ function StageCard({
 
       <ul className="space-y-3 mb-8">
         {features.map((feature, index) => (
-          <li key={index} className="flex items-start text-sm text-foreground">
-            <Check className={`w-5 h-5 flex-shrink-0 mr-2`} style={{ color: highlightColor }} />
+          <li key={index} className="flex items-start text-sm text-foreground/80">
+            <Check className={`w-5 h-5 flex-shrink-0 mr-2`} style={{ color: buttonColor }} />
             {feature}
           </li>
         ))}
       </ul>
 
       <div className="mt-auto">
-        <Button className={`w-full text-base font-semibold py-3 button-hover ${buttonClass}`}>{buttonText}</Button>
+        <Button
+          className={`w-full text-base font-semibold py-3 button-hover magnetic-button`}
+          style={{ backgroundColor: buttonColor, color: "white" }}
+        >
+          {buttonText}
+        </Button>
       </div>
     </div>
+  );
+}
+
+// COMPONENTE FLOTANTE DE ASISTENTE (Chatbot/Ayuda)
+function ChatbotFAB() {
+  return (
+    <button
+      className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-gradient-to-br from-primary to-tertiary text-white shadow-xl flex items-center justify-center glow-pulse-chatbot magnetic-button"
+      title="Asistente de IA (Chatbot)"
+    >
+      <MessageCircle className="w-7 h-7" />
+    </button>
   );
 }
 
@@ -136,21 +163,56 @@ export default function Index() {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const heroRef = useRef<HTMLDivElement>(null);
 
-  // Scroll Reveal Logic
+  // Scroll Reveal Logic (Mejorado)
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add("visible");
-            observer.unobserve(entry.target); // Dejar de observar una vez que es visible
+            observer.unobserve(entry.target);
           }
         });
       },
-      { threshold: 0.2 }, // Un poco menos de umbral
+      { threshold: 0.2, rootMargin: "0px 0px -50px 0px" },
     );
     document.querySelectorAll(".scroll-fade-in").forEach((el) => observer.observe(el));
     return () => observer.disconnect();
+  }, []);
+
+  // Tilt 3D Effect Logic (para botones principales)
+  useEffect(() => {
+    const buttons = document.querySelectorAll(".magnetic-button");
+    buttons.forEach((button) => {
+      const handleMove = (e: MouseEvent) => {
+        const rect = button.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+
+        const rotateX = (y - centerY) / 5; // Más sensible en botones
+        const rotateY = (x - centerX) / 5;
+
+        (button as HTMLElement).style.transform =
+          `scale(1.05) translateX(${(x - centerX) * 0.1}px) translateY(${(y - centerY) * 0.1}px)`;
+      };
+
+      const handleLeave = () => {
+        (button as HTMLElement).style.transform = "scale(1)";
+      };
+
+      // Solo aplica el efecto a los botones del hero/header, no a los de las tarjetas
+      if (button.closest("section") || button.closest("nav")) {
+        button.addEventListener("mousemove", handleMove as EventListener);
+        button.addEventListener("mouseleave", handleLeave);
+      }
+
+      return () => {
+        button.removeEventListener("mousemove", handleMove as EventListener);
+        button.removeEventListener("mouseleave", handleLeave);
+      };
+    });
   }, []);
 
   // Texto Animado en Cascada (Text fade-in cascade)
@@ -163,14 +225,14 @@ export default function Index() {
   return (
     <>
       {showLoginModal && <LoginModal onClose={() => setShowLoginModal(false)} />}
-
+      <ChatbotFAB /> {/* Chatbot flotante */}
       <div className="min-h-screen bg-white">
-        {/* HEADER con backdrop blur y efecto glow */}
-        <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-white/95 border-b border-gray-200 shadow-sm">
+        {/* HEADER con mejor contraste */}
+        <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-white/95 border-b border-gray-100 shadow-md">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between h-16 md:h-20">
               <div className="flex items-center gap-2 md:gap-3 cursor-pointer" onClick={() => navigate("/")}>
-                <div className="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center shadow-lg glow-pulse">
+                <div className="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center shadow-lg hover-scale-grok">
                   <Building2 className="w-6 h-6 text-white" />
                 </div>
                 <span className="font-extrabold text-base md:text-xl text-foreground text-shimmer-fast">
@@ -257,7 +319,7 @@ export default function Index() {
           </div>
         </nav>
 
-        {/* HERO - Fondo con Aurora Waves y Text Shimmer mejorado */}
+        {/* HERO - Mejor contraste y Aurora Waves */}
         <section
           ref={heroRef}
           className="hero-gradient-bg min-h-screen flex items-center justify-center relative overflow-hidden pt-32 md:pt-20 aurora-waves-background"
@@ -320,7 +382,7 @@ export default function Index() {
           </div>
         </section>
 
-        {/* SECCIÓN DE ETAPAS DEL EMPRESARIO - Claymorphism + Narrativa */}
+        {/* SECCIÓN DE ETAPAS DEL EMPRESARIO - Diseño limpio y enfocado */}
         <section className="py-20 md:py-32 bg-gray-50 overflow-hidden">
           <div className="container mx-auto px-6">
             <div className="max-w-4xl mx-auto text-center mb-16 scroll-fade-in">
@@ -328,7 +390,8 @@ export default function Index() {
                 Un Ecosistema para <span className="text-primary">Cada Etapa</span> de tu Negocio
               </h2>
               <p className="text-lg text-gray-600">
-                Desde la validación de la idea inicial hasta la automatización de una corporación multi-sucursal.
+                Desde la validación de la idea inicial hasta la automatización de una corporación multi-sucursal,
+                eliminando lo obsoleto.
               </p>
             </div>
 
@@ -345,8 +408,9 @@ export default function Index() {
                   "Análisis de Competencia y Nicho",
                 ]}
                 buttonText="Validar mi idea →"
-                buttonVariant="primary"
-                highlightColor="var(--primary)"
+                buttonColor="hsl(var(--primary))"
+                tagColor="var(--primary)"
+                tagText="DESDE CERO"
               />
               <StageCard
                 title="Negocio en Crecimiento"
@@ -360,8 +424,9 @@ export default function Index() {
                   "Automatización de Tareas Repetitivas",
                 ]}
                 buttonText="Organizar mi negocio →"
-                buttonVariant="secondary"
-                highlightColor="var(--secondary)"
+                buttonColor="hsl(var(--secondary))"
+                tagColor="var(--secondary)"
+                tagText="Más Elegido"
               />
               <StageCard
                 title="Empresa Escalable"
@@ -374,9 +439,10 @@ export default function Index() {
                   "Reportes predictivos impulsados por IA",
                   "Integración con Sistemas Contables Legales",
                 ]}
-                buttonText="Automatizar empresa →"
-                buttonVariant="tertiary"
-                highlightColor="var(--tertiary)"
+                buttonText="Eliminar Obsoleto y Escalar →"
+                buttonColor="hsl(var(--tertiary))"
+                tagColor="var(--tertiary)"
+                tagText="+ 3 AÑOS"
               />
             </div>
           </div>
