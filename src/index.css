@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* 🎨 PUEBLOHUB PRO - CSS DEFINITIVO Y FUNCIONAL */
+/* 🎨 Proyecto Emprendedurismo - Estilos con Efectos */
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -19,6 +19,8 @@
       "Helvetica Neue",
       sans-serif;
     @apply border-border;
+    /* Suaviza todas las transiciones para microinteracciones */
+    transition: all 0.2s ease-out;
   }
 
   body {
@@ -38,11 +40,12 @@
 }
 
 @layer components {
-  /* ═══════════════════════════════════════
-     1. HERO BACKGROUND - Aurora Waves
-     ═══════════════════════════════════════ */
+  /* ===================================================
+     1. HERO BACKGROUND: Gradient Loop & Particles
+     =================================================== */
 
-  .aurora-waves-background {
+  /* El gradiente animado que se mueve lentamente (Aurora/Gradient Loop) */
+  .gradient-loop {
     background: linear-gradient(
       135deg,
       #1e3a8a 0%,
@@ -51,68 +54,41 @@
       /* purple-700 */ #2563eb 100% /* blue-600 */
     );
     position: relative;
-    overflow: hidden;
+    animation: gradient-flow 15s infinite alternate linear;
   }
 
-  /* Capa de aurora animada */
-  .aurora-waves-background::before {
-    content: "";
-    position: absolute;
-    inset: -30%;
-    background:
-      radial-gradient(circle at 20% 80%, rgba(138, 180, 248, 0.4) 0%, transparent 50%),
-      radial-gradient(circle at 80% 20%, rgba(167, 139, 250, 0.3) 0%, transparent 50%),
-      radial-gradient(circle at 40% 40%, rgba(252, 231, 243, 0.2) 0%, transparent 60%);
-    filter: blur(80px);
-    animation: aurora-flow 20s infinite alternate ease-in-out;
-    z-index: 1;
-  }
-
-  /* Overlay oscuro para contraste del texto */
-  .aurora-waves-background::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.4) 100%);
-    z-index: 2;
-    pointer-events: none;
-  }
-
-  @keyframes aurora-flow {
+  @keyframes gradient-flow {
     0% {
-      transform: translate(0, 0) rotate(0deg) scale(1);
-      opacity: 1;
-    }
-    50% {
-      opacity: 0.8;
+      background-position: 0% 50%;
     }
     100% {
-      transform: translate(30px, 30px) rotate(5deg) scale(1.15);
-      opacity: 1;
+      background-position: 100% 50%;
     }
   }
 
-  /* Partículas flotantes */
+  /* Contenedor de partículas */
   .floating-particles {
     position: absolute;
     inset: 0;
     z-index: 3;
     pointer-events: none;
+    overflow: hidden;
   }
 
+  /* Estilo de cada partícula */
   .particle {
     position: absolute;
     width: 4px;
     height: 4px;
     background: rgba(255, 255, 255, 0.7);
     border-radius: 50%;
-    animation: float-up 15s infinite ease-in-out;
+    animation: float-up 15s infinite linear;
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
   }
 
   @keyframes float-up {
     0% {
-      transform: translateY(100vh) translateX(0) scale(0);
+      transform: translateY(100vh) translateX(0) scale(0.5);
       opacity: 0;
     }
     10% {
@@ -127,20 +103,19 @@
     }
   }
 
-  /* ═══════════════════════════════════════
-     2. TÍTULO HERO - Máxima legibilidad
-     ═══════════════════════════════════════ */
+  /* ===================================================
+     2. TÍTULO HERO: Text Shimmer & Glow
+     =================================================== */
 
   .hero-title-grok {
     position: relative;
     z-index: 10;
-    color: #ffffff;
     font-size: clamp(2.5rem, 8vw, 5rem);
     font-weight: 900;
     line-height: 1.1;
     letter-spacing: -2px;
 
-    /* Gradiente animado */
+    /* Text Shimmer Effect */
     background: linear-gradient(110deg, #ffffff 0%, #e0e7ff 25%, #c7d2fe 50%, #ffffff 75%, #ffffff 100%);
     background-size: 300% 100%;
     background-clip: text;
@@ -148,9 +123,8 @@
     -webkit-text-fill-color: transparent;
     animation: hero-shimmer 5s linear infinite;
 
-    /* Sombras fuertes para legibilidad */
-    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 1)) drop-shadow(0 2px 6px rgba(0, 0, 0, 0.9))
-      drop-shadow(0 0 30px rgba(0, 0, 0, 0.5));
+    /* Sombra para legibilidad sobre el fondo oscuro */
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 1)) drop-shadow(0 2px 6px rgba(0, 0, 0, 0.9));
   }
 
   @keyframes hero-shimmer {
@@ -162,7 +136,7 @@
     }
   }
 
-  /* Highlight para palabras clave */
+  /* Highlight para palabras clave con Glow Pulse */
   .hero-title-grok .highlight {
     -webkit-text-fill-color: #fbbf24;
     animation: glow-pulse-text 2s ease-in-out infinite;
@@ -171,17 +145,16 @@
   @keyframes glow-pulse-text {
     0%,
     100% {
-      filter: drop-shadow(0 0 20px rgba(251, 191, 36, 0.8)) drop-shadow(0 0 40px rgba(251, 191, 36, 0.4));
+      filter: drop-shadow(0 0 10px rgba(251, 191, 36, 0.8));
     }
     50% {
-      filter: drop-shadow(0 0 30px rgba(251, 191, 36, 1)) drop-shadow(0 0 60px rgba(251, 191, 36, 0.6))
-        drop-shadow(0 0 80px rgba(251, 191, 36, 0.3));
+      filter: drop-shadow(0 0 20px rgba(251, 191, 36, 1));
     }
   }
 
-  /* ═══════════════════════════════════════
-     3. CARDS CON CLAYMORPHISM
-     ═══════════════════════════════════════ */
+  /* ===================================================
+     3. CARDS: Claymorphism
+     =================================================== */
 
   .clay-card-grok {
     position: relative;
@@ -201,14 +174,14 @@
   }
 
   .clay-card-grok:hover {
-    transform: translateY(-12px) scale(1.02);
+    transform: translateY(-8px) scale(1.01); /* Movimiento y escala reducida para sutileza */
     box-shadow:
-      20px 20px 50px rgba(0, 0, 0, 0.12),
+      20px 20px 50px rgba(0, 0, 0, 0.15),
       -12px -12px 35px rgba(255, 255, 255, 1),
       inset 3px 3px 8px rgba(255, 255, 255, 0.7);
   }
 
-  /* Badge "Más Popular" */
+  /* Badge "Más Popular" con Bounce */
   .popular-badge {
     position: absolute;
     top: -15px;
@@ -219,9 +192,7 @@
     border-radius: 2rem;
     font-weight: 700;
     font-size: 0.85rem;
-    box-shadow:
-      0 4px 15px rgba(251, 191, 36, 0.5),
-      0 0 20px rgba(251, 191, 36, 0.3);
+    box-shadow: 0 4px 15px rgba(251, 191, 36, 0.5);
     animation: badge-bounce 2s ease-in-out infinite;
     z-index: 10;
   }
@@ -236,9 +207,9 @@
     }
   }
 
-  /* ═══════════════════════════════════════
-     4. BOTONES MAGNÉTICOS
-     ═══════════════════════════════════════ */
+  /* ===================================================
+     4. MICROINTERACCIONES: Magnetic & Glow
+     =================================================== */
 
   .magnetic-button {
     position: relative;
@@ -247,6 +218,7 @@
     isolation: isolate;
   }
 
+  /* Efecto sutil de 'ripple' al hacer hover */
   .magnetic-button::before {
     content: "";
     position: absolute;
@@ -263,33 +235,15 @@
   }
 
   .magnetic-button:hover {
-    transform: translateY(-3px) scale(1.05);
+    transform: translateY(-3px) scale(1.02); /* Escala más sutil */
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
   }
 
   .magnetic-button:active {
-    transform: translateY(-1px) scale(1.02);
+    transform: translateY(-1px) scale(1); /* Vuelve al tamaño normal al presionar */
   }
 
-  /* ═══════════════════════════════════════
-     5. SCROLL REVEAL
-     ═══════════════════════════════════════ */
-
-  .scroll-fade-in {
-    opacity: 0;
-    transform: translateY(40px);
-    transition: all 0.8s cubic-bezier(0.17, 0.67, 0.83, 0.67);
-  }
-
-  .scroll-fade-in.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  /* ═══════════════════════════════════════
-     6. GLOW PULSE
-     ═══════════════════════════════════════ */
-
+  /* Glow Pulse (para logo y Floating Bot) */
   .glow-pulse {
     animation: pulse-glow 2.5s infinite ease-in-out;
   }
@@ -297,18 +251,18 @@
   @keyframes pulse-glow {
     0%,
     100% {
-      box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+      box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
     }
     50% {
       box-shadow:
-        0 0 30px rgba(59, 130, 246, 0.8),
-        0 0 50px rgba(59, 130, 246, 0.4);
+        0 0 20px rgba(59, 130, 246, 0.8),
+        0 0 30px rgba(59, 130, 246, 0.4);
     }
   }
 
-  /* ═══════════════════════════════════════
-     7. MODAL
-     ═══════════════════════════════════════ */
+  /* ===================================================
+     5. MODAL (Glassmorphism)
+     =================================================== */
 
   .modal-grok-overlay {
     position: fixed;
@@ -339,85 +293,106 @@
     max-width: 28rem;
     padding: 2rem;
     border-radius: 1.5rem;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-    background: linear-gradient(145deg, #1f2937, #111827);
-    animation: scale-in 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    overflow: hidden;
+    /* Glassmorphism */
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow:
+      0 15px 30px rgba(0, 0, 0, 0.3),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    animation: modal-slide-in 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
   }
 
-  @keyframes scale-in {
+  @keyframes modal-slide-in {
     from {
-      transform: scale(0.9);
+      transform: translateY(50px) scale(0.9);
       opacity: 0;
     }
     to {
-      transform: scale(1);
+      transform: translateY(0) scale(1);
       opacity: 1;
     }
   }
 
   .modal-grok-bg {
-    position: absolute;
-    inset: 0;
-    opacity: 0.2;
-    background: radial-gradient(circle at top right, #3b82f6 0%, transparent 60%);
-    filter: blur(100px);
-  }
-
-  .btn-login-grok {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.75rem;
-    border-radius: 0.75rem;
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    transition: all 0.3s;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  }
-
-  .btn-login-grok:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: translateY(-2px);
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
-  }
-
-  /* ═══════════════════════════════════════
-     8. NOISE TEXTURE
-     ═══════════════════════════════════════ */
-
-  .noise-texture {
-    position: relative;
-    isolation: isolate;
-  }
-
-  .noise-texture::before {
     content: "";
     position: absolute;
     inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-    opacity: 0.03;
-    pointer-events: none;
-    z-index: 1;
-    mix-blend-mode: overlay;
+    /* Efecto Aurora/Glow en el fondo del modal */
+    background:
+      radial-gradient(circle at top left, rgba(66, 153, 225, 0.3) 0%, transparent 60%),
+      radial-gradient(circle at bottom right, rgba(164, 133, 226, 0.3) 0%, transparent 60%);
+    filter: blur(50px);
+    z-index: 0;
+    border-radius: 1.5rem;
   }
 
-  /* ═══════════════════════════════════════
-     9. CONTENT WRAPPER (para z-index)
-     ═══════════════════════════════════════ */
-
-  .content-wrapper {
-    position: relative;
-    z-index: 10;
+  .btn-login-grok {
+    @apply w-full flex items-center justify-center gap-3 px-6 py-4 text-white font-semibold rounded-xl transition-all duration-300;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
   }
-}
 
-@layer utilities {
-  .xs\:block {
-    @media (min-width: 475px) {
-      display: block;
+  .btn-login-grok:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-2px);
+  }
+
+  /* Estilo Glass para elementos en el Hero */
+  .glass-card-hero {
+    /* Fondo Glassmorphism para el badge del hero */
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .glass-card-cta {
+    /* Fondo Glassmorphism para el CTA secundario */
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
+  /* ===================================================
+     6. SCROLL REVEAL (Reveal on scroll)
+     =================================================== */
+
+  .scroll-fade-in {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 0.8s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+  }
+
+  .scroll-fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ===================================================
+     7. FLOATING CHAT BOT
+     =================================================== */
+  .floating-chat-badge {
+    position: fixed;
+    bottom: 24px;
+    right: 80px; /* Al lado del botón del bot */
+    z-index: 49;
+    padding: 10px 15px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow:
+      0 10px 20px rgba(0, 0, 0, 0.1),
+      0 0 0 1px rgba(0, 0, 0, 0.05);
+    animation: badge-pop 0.5s ease-out;
+  }
+
+  @keyframes badge-pop {
+    from {
+      transform: translateX(10px) scale(0.8);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0) scale(1);
+      opacity: 1;
     }
   }
 }
