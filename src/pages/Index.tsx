@@ -21,7 +21,7 @@ import {
 import { Button } from "@/components/ui/button";
 
 // ======================================================================
-// 1. LOGIN MODAL
+// 1. LOGIN MODAL (Sin cambios necesarios)
 // ======================================================================
 function LoginModal({ onClose }: { onClose: () => void }) {
   return (
@@ -47,6 +47,7 @@ function LoginModal({ onClose }: { onClose: () => void }) {
               className="btn-login-grok magnetic-button"
               onClick={() => {
                 onClose();
+                // NOTA: Ajusta la URL si es necesario
                 window.location.href = "/auth?mode=login&provider=google";
               }}
             >
@@ -63,6 +64,7 @@ function LoginModal({ onClose }: { onClose: () => void }) {
               className="btn-login-grok magnetic-button"
               onClick={() => {
                 onClose();
+                // NOTA: Ajusta la URL si es necesario
                 window.location.href = "/auth?mode=login";
               }}
             >
@@ -90,6 +92,7 @@ function LoginModal({ onClose }: { onClose: () => void }) {
             className="w-full text-center text-white hover:text-white/80 transition-colors font-semibold text-lg magnetic-button"
             onClick={() => {
               onClose();
+              // NOTA: Ajusta la URL si es necesario
               window.location.href = "/auth?mode=signup";
             }}
           >
@@ -103,7 +106,7 @@ function LoginModal({ onClose }: { onClose: () => void }) {
 }
 
 // ======================================================================
-// 2. CHATBOT FLOTANTE
+// 2. CHATBOT FLOTANTE (Sin cambios necesarios)
 // ======================================================================
 function FloatingChatBot() {
   const navigate = useNavigate();
@@ -137,7 +140,7 @@ function FloatingChatBot() {
 }
 
 // ======================================================================
-// 3. STAGE CARD (Claymorphism)
+// 3. STAGE CARD (Claymorphism) (Se usa la clase clay-card-grok)
 // ======================================================================
 interface StageCardProps {
   title: string;
@@ -232,32 +235,35 @@ function StageCard({
 }
 
 // ======================================================================
-// 4. MAIN INDEX
+// 4. MAIN INDEX (Con función de scroll reveal optimizada)
 // ======================================================================
-export default function Index() {
-  const navigate = useNavigate();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [showLoginModal, setShowLoginModal] = useState(false);
 
-  // Implementación del Scroll Reveal
+const useScrollReveal = () => {
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add("visible");
-            // Deja de observar el elemento una vez que se hace visible
             observer.unobserve(entry.target);
           }
         });
       },
-      // Umbral más bajo para una sensación más fluida
       { threshold: 0.05 },
     );
 
     document.querySelectorAll(".scroll-fade-in").forEach((el) => observer.observe(el));
     return () => observer.disconnect();
   }, []);
+};
+
+export default function Index() {
+  const navigate = useNavigate();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+
+  // Implementación del Scroll Reveal
+  useScrollReveal();
 
   return (
     <>
@@ -436,7 +442,7 @@ export default function Index() {
                 features={["Validá con IA en minutos", "Ves números reales", "Entendé viabilidad"]}
                 buttonText="Validar idea"
                 colorScheme="blue"
-                onClick={() => navigate("/select-role")}
+                onClick={() => navigate("/business-ai-bot")} // Dirige al bot directamente
               />
 
               <StageCard
@@ -448,7 +454,7 @@ export default function Index() {
                 buttonText="Organizar negocio"
                 colorScheme="purple"
                 isPopular={true}
-                onClick={() => navigate("/select-role")}
+                onClick={() => navigate("/business-ai-bot")} // Dirige al bot directamente
               />
 
               <StageCard
@@ -459,7 +465,7 @@ export default function Index() {
                 features={["Multi-sucursal", "Gestión de equipo", "Automatización con IA"]}
                 buttonText="Automatizar empresa"
                 colorScheme="green"
-                onClick={() => navigate("/select-role")}
+                onClick={() => navigate("/business-ai-bot")} // Dirige al bot directamente
               />
             </div>
 
