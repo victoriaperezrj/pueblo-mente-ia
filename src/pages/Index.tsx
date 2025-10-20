@@ -401,7 +401,7 @@ export default function Index() {
             {/* Card 1 - Emprendedor - Gradiente azul-celeste bonito */}
             <div className="group relative bg-gradient-to-br from-blue-100 to-cyan-100 rounded-3xl p-8 border border-blue-200 shadow-md hover:shadow-xl transition-all scroll-fade-in card-hover wave-background">
               <div className="absolute top-4 right-4 opacity-50 group-hover:opacity-100 transition-opacity animate-float">
-                <Rocket className="w-12 h-12 text-blue-500 rotate-45" />
+                <Sparkles className="w-12 h-12 text-blue-500" />
               </div>
               <div className="flex items-start justify-between mb-6">
                 <div className="w-16 h-16 bg-blue-500 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform animate-float">
@@ -413,7 +413,7 @@ export default function Index() {
               </div>
               <h3 className="text-3xl font-bold text-foreground mb-3">Emprendedor</h3>
               <p className="text-muted-foreground mb-6 text-lg">
-                Convertí tu idea en un plan viable con análisis inteligentes.
+                Transformá tu idea en un plan sólido con validación inteligente.
               </p>
               <ul className="space-y-3 mb-8">
                 {["Validación rápida con IA", "Proyecciones financieras claras", "Guía paso a paso para lanzar"].map(
@@ -426,7 +426,7 @@ export default function Index() {
                 )}
               </ul>
               <Button
-                onClick={() => navigate("/select-role")}
+                onClick={() => navigate("/dashboard")}
                 className="w-full bg-blue-500 hover:bg-blue-600 text-white rounded-xl py-4 text-base font-semibold shadow-md group-hover:shadow-lg transition-all button-hover"
               >
                 Validar mi idea →
@@ -454,7 +454,7 @@ export default function Index() {
               </div>
               <h3 className="text-3xl font-bold text-foreground mb-3">Negocio</h3>
               <p className="text-muted-foreground mb-6 text-lg font-medium">
-                Organizá tu operación diaria para maximizar eficiencia y ventas.
+                Ordená tu operación diaria para maximizar eficiencia y ventas.
               </p>
               <ul className="space-y-3 mb-8">
                 {["Dashboard intuitivo en tiempo real", "CRM + ventas integradas", "Control de gastos inteligente"].map(
@@ -467,14 +467,14 @@ export default function Index() {
                 )}
               </ul>
               <Button
-                onClick={() => navigate("/select-role")}
+                onClick={() => navigate("/dashboard")}
                 className="w-full bg-purple-500 hover:bg-purple-600 text-white rounded-xl py-4 text-base font-semibold shadow-md group-hover:shadow-lg transition-all button-hover"
               >
                 Organizar mi negocio →
               </Button>
             </div>
 
-            {/* Card 3 - Empresa - Gradiente verde-lima bonito */}
+            {/* Card Empresa - Gradiente verde-lima bonito */}
             <div
               className="group relative bg-gradient-to-br from-green-100 to-lime-100 rounded-3xl p-8 border border-green-200 shadow-md hover:shadow-xl transition-all scroll-fade-in card-hover wave-background"
               style={{ animationDelay: "0.2s" }}
@@ -505,7 +505,7 @@ export default function Index() {
                 )}
               </ul>
               <Button
-                onClick={() => navigate("/select-role")}
+                onClick={() => navigate("/dashboard")}
                 className="w-full bg-green-500 hover:bg-green-600 text-white rounded-xl py-4 text-base font-semibold shadow-md group-hover:shadow-lg transition-all button-hover"
               >
                 Automatizar mi empresa →
@@ -514,66 +514,6 @@ export default function Index() {
           </div>
         </div>
       </section>
-
-      {/* TRUST BADGES */}
-      <section className="py-16 px-4 bg-gray-900 text-white wave-background">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h3 className="text-2xl font-bold mb-2">Seguridad y confianza</h3>
-            <p className="text-gray-400">Tus datos protegidos con los más altos estándares</p>
-          </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-8">
-            {[
-              { icon: Shield, label: "Encriptación SSL" },
-              { icon: Shield, label: "Datos en Argentina" },
-              { icon: Shield, label: "Backup automático" },
-              { icon: Shield, label: "GDPR Compliant" },
-              { icon: Shield, label: "Soporte 24/7" },
-            ].map((badge, idx) => (
-              <div key={idx} className="text-center group">
-                <div className="w-16 h-16 bg-gray-800 rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:bg-gray-700 transition-colors animate-float">
-                  <badge.icon className="w-8 h-8 text-green-400" />
-                </div>
-                <p className="text-sm text-gray-300 font-medium">{badge.label}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* FOOTER */}
-      <footer className="bg-gray-900 text-white py-12 px-4">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center">
-                <Building2 className="w-6 h-6 text-white" />
-              </div>
-              <span className="font-bold text-lg">Proyecto Emprendedurismo</span>
-            </div>
-            <p className="text-sm text-gray-400">© 2025 Proyecto Emprendedurismo. Hecho con 💙 en Argentina.</p>
-            <div className="flex gap-6 text-sm">
-              <a href="#" className="text-gray-400 hover:text-white transition button-hover">
-                Términos
-              </a>
-              <a href="#" className="text-gray-400 hover:text-white transition button-hover">
-                Privacidad
-              </a>
-              <a href="#" className="text-gray-400 hover:text-white transition button-hover">
-                Soporte
-              </a>
-            </div>
-          </div>
-        </div>
-      </footer>
-
-      {/* BOT WIDGET */}
-      <div className="bot-widget-float animate-float">
-        <span className="text-3xl">🤖</span>
-      </div>
-
-      {/* MODAL LOGIN */}
-      {showLoginModal && <LoginModal onClose={() => setShowLoginModal(false)} />}
     </div>
   );
 }
