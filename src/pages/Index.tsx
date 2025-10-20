@@ -166,8 +166,7 @@ export default function Index() {
               >
                 Iniciar Sesión
               </Button>
-              <Button
-              <Button
+             <Button
   onClick={() => {
     navigate("/auth?mode=signup");
     setMobileMenuOpen(false);
