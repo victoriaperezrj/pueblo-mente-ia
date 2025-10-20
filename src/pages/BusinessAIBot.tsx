@@ -1,8 +1,10 @@
 import { useState, useRef, useEffect } from "react";
 import { Zap, TrendingUp, Building2, Send, Lightbulb, X, Sparkles } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client"; // Asegúrate que la ruta sea correcta
-import NegocioInterface from "@/components/business-bot/NegocioInterface"; // Asegúrate que la ruta sea correcta
-import EmpresaInterface from "@/components/business-bot/EmpresaInterface"; // Asegúrate que la ruta sea correcta
+// 🛑 IMPORTANTE: REVISA ESTAS TRES RUTAS 🛑
+// Asegúrate de que las rutas a Supabase, NegocioInterface y EmpresaInterface sean correctas en tu proyecto.
+import { supabase } from "@/integrations/supabase/client"; // RUTA PROBABLEMENTE CORRECTA
+import NegocioInterface from "@/components/business-bot/NegocioInterface"; // AJUSTA ESTA RUTA SI FALLA
+import EmpresaInterface from "@/components/business-bot/EmpresaInterface"; // AJUSTA ESTA RUTA SI FALLA
 
 type Mode = "1" | "2" | "3" | null;
 
@@ -222,6 +224,7 @@ const BusinessAIBot = () => {
         content: msg.content,
       }));
 
+      // NOTA: Asegúrate que 'claude-chat' en Supabase Functions esté configurado correctamente.
       const { data, error } = await supabase.functions.invoke("claude-chat", {
         body: {
           messages: [...conversationHistory, { role: "user", content: userMessage }],
@@ -234,6 +237,7 @@ const BusinessAIBot = () => {
       const aiResponse = data?.response || "Lo siento, hubo un error. Intenta de nuevo.";
 
       if (currentMode === "1") {
+        // En el modo 1, el componente padre actualiza los mensajes
         setMessages((prev) => [
           ...prev,
           {
@@ -244,6 +248,7 @@ const BusinessAIBot = () => {
         ]);
       }
 
+      // Para los modos 2 y 3, la interfaz hija recibe el string y actualiza su propio estado.
       return aiResponse;
     } catch (err) {
       console.error("Error calling AI:", err);
@@ -283,18 +288,20 @@ const BusinessAIBot = () => {
       },
     ]);
 
+    // La función generateAIResponse ya actualiza el estado 'messages' si currentMode === '1'
     await generateAIResponse(userMessage);
   };
 
   const handleQuickAction = (action: string) => {
     setInputValue(action);
+    // Nota: Esto solo setea el valor en el input. El usuario debe presionar "Enviar".
   };
 
   // PANTALLA DE SELECCIÓN DE MODO (Rediseñada con fondo espacial y tarjetas Grok-like)
   if (!currentMode) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-purple-950 via-gray-950 to-indigo-950 relative overflow-hidden">
-        {/* Degradados/partículas animados de fondo */}
+        {/* Degradados/partículas animados de fondo - Requiere el CSS en globals.css */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-1/4 left-1/4 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl animate-blob-slow"></div>
           <div className="absolute bottom-1/3 right-1/4 w-96 h-96 bg-fuchsia-500/10 rounded-full blur-3xl animate-blob-slow delay-1s"></div>
@@ -436,7 +443,7 @@ const BusinessAIBot = () => {
     );
   }
 
-  // Configuración para el chat (Modo 1)
+  // Configuración para el chat (Modo 1, y colores para Modos 2/3 si usaran esta UI)
   const modeConfig = {
     "1": {
       gradient: "from-blue-600 to-indigo-700",
@@ -451,7 +458,7 @@ const BusinessAIBot = () => {
       focusRing: "focus:ring-blue-500",
     },
     "2": {
-      // Estos modos usarán sus propias interfaces, solo se mantienen para consistencia
+      // Configuración para el componente NegocioInterface
       gradient: "from-purple-600 to-fuchsia-700",
       icon: TrendingUp,
       title: "Negocio en Crecimiento",
@@ -464,7 +471,7 @@ const BusinessAIBot = () => {
       focusRing: "focus:ring-purple-500",
     },
     "3": {
-      // Estos modos usarán sus propias interfaces, solo se mantienen para consistencia
+      // Configuración para el componente EmpresaInterface
       gradient: "from-emerald-600 to-teal-700",
       icon: Building2,
       title: "Empresa Establecida",
@@ -481,15 +488,13 @@ const BusinessAIBot = () => {
   const config = modeConfig[currentMode];
   const Icon = config.icon;
 
-  // Render interfaces especiales para Mode 2 y 3
-  // Aquí es donde tus componentes NegocioInterface y EmpresaInterface son renderizados
+  // Render interfaces especiales para Mode 2 y 3 (delegando la UI de chat)
   if (currentMode === "2") {
     return (
       <NegocioInterface
         onBack={() => setCurrentMode(null)}
-        onSendMessage={generateAIResponse}
-        messages={messages} // Puedes decidir si estos componentes usan los `messages` del padre o los suyos propios
-        isLoading={isLoading}
+        onSendMessage={generateAIResponse} // Pasa la función de envío de mensaje del bot
+        // El componente NegocioInterface debe manejar su propio estado de mensajes
       />
     );
   }
@@ -498,9 +503,8 @@ const BusinessAIBot = () => {
     return (
       <EmpresaInterface
         onBack={() => setCurrentMode(null)}
-        onSendMessage={generateAIResponse}
-        messages={messages} // Puedes decidir si estos componentes usan los `messages` del padre o los suyos propios
-        isLoading={isLoading}
+        onSendMessage={generateAIResponse} // Pasa la función de envío de mensaje del bot
+        // El componente EmpresaInterface debe manejar su propio estado de mensajes
       />
     );
   }
@@ -607,7 +611,7 @@ const BusinessAIBot = () => {
             onChange={(e) => setInputValue(e.target.value)}
             placeholder="Escribe tu pregunta específica o desafío..."
             disabled={isLoading}
-            className="flex-1 border border-slate-600 bg-slate-700 text-white rounded-xl px-5 py-3 focus:outline-none focus:ring-2 ${config.focusRing} focus:border-transparent disabled:opacity-50 transition-all placeholder-slate-400"
+            className={`flex-1 border border-slate-600 bg-slate-700 text-white rounded-xl px-5 py-3 focus:outline-none focus:ring-2 ${config.focusRing} focus:border-transparent disabled:opacity-50 transition-all placeholder-slate-400`}
           />
           <button
             type="submit"
