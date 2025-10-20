@@ -1,35 +1,53 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { BarChart3, Building2, Menu, X, Check, Zap } from "lucide-react";
+import {
+  Building2,
+  Menu,
+  X,
+  Check,
+  Zap,
+  Target,
+  TrendingUp,
+  Briefcase,
+  Shield,
+  Clock,
+  Users,
+  BarChart3,
+  Sparkles,
+  Brain,
+  Rocket,
+  DollarSign,
+  FileText,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 // ══════════════════════════════════════════════════════════════════════
-// LOGIN MODAL COMPONENT - Estilo Grok
+// LOGIN MODAL COMPONENT - Estilo minimalista
 // ══════════════════════════════════════════════════════════════════════
 function LoginModal({ onClose }: { onClose: () => void }) {
   return (
     <div className="modal-grok-overlay" onClick={onClose}>
       <div className="modal-grok-container" onClick={(e) => e.stopPropagation()}>
-        {/* Fondo animado estilo Grok */}
+        {/* Fondo animado */}
         <div className="modal-grok-bg" />
 
         {/* Botón cerrar */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-white/70 hover:text-white transition-colors z-20"
+          className="absolute top-4 right-4 text-white hover:text-white/80 transition-colors z-20"
         >
           <X className="w-6 h-6" />
         </button>
 
         {/* Contenido */}
         <div className="relative z-10">
-          {/* Logo o título */}
+          {/* Header */}
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl mb-4">
-              <span className="text-3xl">⚡</span>
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl mb-4 shadow-2xl">
+              <Zap className="w-8 h-8 text-white" />
             </div>
-            <h2 className="text-3xl font-bold text-white mb-2">Ingresá a tu cuenta</h2>
-            <p className="text-white/70 text-sm">Elegí tu método preferido para continuar</p>
+            <h2 className="text-3xl font-bold text-white mb-2 drop-shadow-lg">Entrá a PuebloHub Pro</h2>
+            <p className="text-white/90 text-base">Empezá a usar IA para tu negocio en 2 minutos</p>
           </div>
 
           {/* Botones de login */}
@@ -86,26 +104,26 @@ function LoginModal({ onClose }: { onClose: () => void }) {
           {/* Divider */}
           <div className="relative mb-6">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-white/20" />
+              <div className="w-full border-t border-white/30" />
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-transparent text-white/60">¿No tenés cuenta?</span>
+              <span className="px-4 bg-transparent text-white/80">¿Primera vez acá?</span>
             </div>
           </div>
 
           {/* Link a registro */}
           <button
-            className="w-full text-center text-white/80 hover:text-white transition-colors font-semibold"
+            className="w-full text-center text-white hover:text-white/80 transition-colors font-semibold text-lg"
             onClick={() => {
               onClose();
               window.location.href = "/auth?mode=signup";
             }}
           >
-            Registrarse
+            Crear cuenta gratis
           </button>
 
-          {/* Footer con efectos */}
-          <p className="text-center text-white/50 text-xs mt-8">Al continuar aceptás nuestros Términos y Privacidad</p>
+          {/* Footer */}
+          <p className="text-center text-white/60 text-xs mt-8">Sin tarjeta. Sin trucos. Solo empezá.</p>
         </div>
       </div>
     </div>
@@ -122,109 +140,79 @@ export default function Index() {
 
   // Scroll fade-in observer
   useEffect(() => {
-    const observerOptions = {
-      threshold: 0.3,
-      rootMargin: "0px",
-    };
-
+    const observerOptions = { threshold: 0.3, rootMargin: "0px" };
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("visible");
-        }
+        if (entry.isIntersecting) entry.target.classList.add("visible");
       });
     }, observerOptions);
-
-    document.querySelectorAll(".scroll-fade-in").forEach((el) => {
-      observer.observe(el);
-    });
-
+    document.querySelectorAll(".scroll-fade-in").forEach((el) => observer.observe(el));
     return () => observer.disconnect();
   }, []);
 
   return (
     <div className="min-h-screen bg-white">
       {/* ═════════════════════════════════════════════════════════════════
-          HEADER STICKY
+          HEADER STICKY - Minimalista
           ════════════════════════════════════════════════════════════════ */}
       <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-white/95 border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 md:h-20">
             {/* Logo */}
             <div className="flex items-center gap-2 md:gap-3">
-              <div className="w-9 h-9 md:w-10 md:h-10 bg-blue-600 rounded-lg flex items-center justify-center shadow-sm flex-shrink-0">
-                <Building2 className="w-5 h-5 md:w-6 md:h-6 text-white" />
+              <div className="w-9 h-9 md:w-10 md:h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-md">
+                <Zap className="w-5 h-5 md:w-6 md:h-6 text-white" />
               </div>
-              <span className="font-bold text-sm md:text-base text-gray-900 hidden xs:block">
-                Proyecto Emprendedurismo
-              </span>
+              <span className="font-bold text-base md:text-lg text-gray-900">PuebloHub Pro</span>
             </div>
 
             {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center gap-2 lg:gap-3">
+            <div className="hidden md:flex items-center gap-3">
               <Button
                 variant="ghost"
                 onClick={() => setShowLoginModal(true)}
-                className="text-sm font-semibold text-gray-700 hover:text-blue-600 transition-colors min-h-10"
+                className="text-sm font-semibold text-gray-700 hover:text-blue-600"
               >
                 Iniciar Sesión
               </Button>
               <Button
-                onClick={() => navigate("/auth?mode=signup")}
-                className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-4 md:px-5 py-2 md:py-2.5 rounded-md shadow-sm transition-all duration-200 button-hover min-h-10"
-              >
-                Crear Cuenta
-              </Button>
-              <Button
-                variant="outline"
                 onClick={() => navigate("/select-role")}
-                className="text-sm font-semibold border-gray-300 hover:bg-gray-50 transition-colors min-h-10"
+                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white text-sm font-semibold px-6 py-2.5 rounded-xl shadow-lg hover:shadow-xl transition-all"
               >
-                Ver Demo
+                Empezar gratis
               </Button>
             </div>
 
             {/* Mobile menu button */}
             <button
-              className="md:hidden p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              className="md:hidden p-2 hover:bg-gray-100 rounded-lg"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              aria-label="Toggle menu"
             >
-              {mobileMenuOpen ? <X className="w-6 h-6 text-gray-900" /> : <Menu className="w-6 h-6 text-gray-900" />}
+              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
 
           {/* Mobile menu */}
           {mobileMenuOpen && (
-            <div className="md:hidden pb-4 space-y-2 border-t border-gray-200 pt-4">
+            <div className="md:hidden pb-4 space-y-2 border-t pt-4">
               <Button
                 variant="ghost"
                 onClick={() => {
                   setShowLoginModal(true);
                   setMobileMenuOpen(false);
                 }}
-                className="w-full justify-center text-base font-semibold min-h-12"
+                className="w-full"
               >
                 Iniciar Sesión
               </Button>
               <Button
                 onClick={() => {
-                  navigate("/auth?mode=signup");
-                  setMobileMenuOpen(false);
-                }}
-                className="w-full justify-center bg-blue-600 hover:bg-blue-700 text-white text-base font-semibold py-3 rounded-md min-h-12"
-              >
-                Crear Cuenta
-              </Button>
-              <Button
-                variant="outline"
-                onClick={() => {
                   navigate("/select-role");
                   setMobileMenuOpen(false);
                 }}
-                className="w-full justify-center text-base font-semibold min-h-12"
+                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white"
               >
-                Ver Demo
+                Empezar gratis
               </Button>
             </div>
           )}
@@ -232,244 +220,471 @@ export default function Index() {
       </nav>
 
       {/* ═════════════════════════════════════════════════════════════════
-          HERO SECTION - REDISEÑADO CON GRADIENTE EXPLOSIVO
+          HERO - Minimalista con PUNCH
           ════════════════════════════════════════════════════════════════ */}
-      <section className="hero-gradient-bg min-h-screen flex items-center justify-center relative overflow-hidden">
-        {/* Efectos laterales decorativos */}
-        <div className="slide-left-decoration" />
-        <div className="slide-right-decoration" />
-        <div className="floating-particles-left" />
-        <div className="floating-particles-right" />
+      <section className="relative min-h-screen flex items-center justify-center px-4 pt-32 pb-20 bg-gradient-to-br from-white via-blue-50 to-purple-50 overflow-hidden">
+        {/* Efectos de fondo sutiles */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-20 left-10 w-72 h-72 bg-blue-400/10 rounded-full blur-3xl animate-pulse" />
+          <div
+            className="absolute bottom-20 right-10 w-96 h-96 bg-purple-400/10 rounded-full blur-3xl animate-pulse"
+            style={{ animationDelay: "1s" }}
+          />
+        </div>
 
-        {/* Contenido principal */}
-        <div className="container mx-auto px-6 relative z-10">
-          <div className="max-w-4xl mx-auto text-center">
-            {/* Badge superior */}
-            <div className="badge-glow fade-in mb-8 inline-flex">
-              <Zap className="w-4 h-4" />
-              <span>IA que entiende Argentina</span>
+        <div className="relative z-10 max-w-6xl mx-auto text-center">
+          {/* Badge */}
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-blue-200 rounded-full shadow-md mb-8 scroll-fade-in">
+            <Sparkles className="w-4 h-4 text-blue-600" />
+            <span className="text-sm font-semibold text-blue-600">IA que habla argentino</span>
+          </div>
+
+          {/* Título */}
+          <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold text-gray-900 mb-6 scroll-fade-in leading-tight">
+            De la idea a la
+            <br />
+            <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+              facturación
+            </span>{" "}
+            en días
+          </h1>
+
+          {/* Subtítulo */}
+          <p
+            className="text-xl sm:text-2xl md:text-3xl text-gray-600 mb-12 scroll-fade-in max-w-4xl mx-auto"
+            style={{ animationDelay: "0.1s" }}
+          >
+            La plataforma que combina <strong>IA + automatización + datos</strong> para que emprendedores y PyMEs{" "}
+            <strong>validen, organicen y escalen</strong> sin perder tiempo en tareas manuales
+          </p>
+
+          {/* CTA Principal */}
+          <div
+            className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12 scroll-fade-in"
+            style={{ animationDelay: "0.2s" }}
+          >
+            <button className="btn-primary-glow group" onClick={() => navigate("/select-role")}>
+              <span>Empezar gratis</span>
+              <Rocket className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+            </button>
+            <button className="btn-secondary-glow" onClick={() => setShowLoginModal(true)}>
+              Iniciar Sesión
+            </button>
+          </div>
+
+          {/* Trust badges */}
+          <div
+            className="flex flex-wrap justify-center items-center gap-6 text-sm text-gray-500 scroll-fade-in"
+            style={{ animationDelay: "0.3s" }}
+          >
+            <div className="flex items-center gap-2">
+              <Check className="w-4 h-4 text-green-500" />
+              <span>Gratis para empezar</span>
             </div>
-
-            {/* Título principal */}
-            <h1 className="gradient-text-animated fade-in-up mb-6">De la idea a los números en días, no meses</h1>
-
-            {/* Descripción */}
-            <p className="text-white/90 text-xl md:text-2xl mb-4 fade-in-up" style={{ animationDelay: "0.1s" }}>
-              ¿Tenés una idea? ¿Un negocio que crece? ¿Una empresa que necesita orden?
-            </p>
-            <p className="text-white/80 text-lg md:text-xl mb-12 fade-in-up" style={{ animationDelay: "0.2s" }}>
-              Acá validás, organizás y escalás TODO en un solo lugar.
-            </p>
-
-            {/* Features rápidos */}
-            <div
-              className="flex flex-wrap justify-center gap-8 mb-12 text-white/80 fade-in-up"
-              style={{ animationDelay: "0.3s" }}
-            >
-              <div className="flex items-center gap-2">
-                <span className="text-2xl">✓</span>
-                <span>Sin tarjeta</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-2xl">✓</span>
-                <span>Datos seguros</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-2xl">✓</span>
-                <span>Empezá en 2 min</span>
-              </div>
+            <div className="flex items-center gap-2">
+              <Check className="w-4 h-4 text-green-500" />
+              <span>Sin tarjeta</span>
             </div>
-
-            {/* 2 BOTONES PRINCIPALES */}
-            <div
-              className="flex flex-col sm:flex-row gap-4 justify-center items-center fade-in-up"
-              style={{ animationDelay: "0.4s" }}
-            >
-              {/* Botón 1: Probar Demo */}
-              <button className="btn-secondary-glow" onClick={() => navigate("/select-role")}>
-                Ver Demo
-              </button>
-
-              {/* Botón 2: Iniciar Sesión */}
-              <button className="btn-primary-glow" onClick={() => setShowLoginModal(true)}>
-                Iniciar Sesión →
-              </button>
+            <div className="flex items-center gap-2">
+              <Check className="w-4 h-4 text-green-500" />
+              <span>Setup en 2 minutos</span>
             </div>
           </div>
         </div>
       </section>
 
       {/* ═════════════════════════════════════════════════════════════════
-          CARDS SECTION - ¿En qué etapa estás?
+          SECCIÓN: 3 PROBLEMAS QUE RESOLVEMOS
           ════════════════════════════════════════════════════════════════ */}
-      <section className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-gray-50">
+      <section className="py-20 md:py-28 px-4 bg-white">
         <div className="max-w-7xl mx-auto">
-          {/* Section Header */}
-          <div className="text-center space-y-3 sm:space-y-4 mb-12 sm:mb-16 scroll-fade-in">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900">
-              ¿En qué etapa estás?
+          {/* Header */}
+          <div className="text-center mb-16 scroll-fade-in">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+              Todo lo que necesitás, en un solo lugar
             </h2>
-            <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
-              Elegí tu ruta y accedé a herramientas diseñadas específicamente para ti
+            <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto">
+              Dejá de saltar entre apps, planillas y papeles. PuebloHub Pro unifica todo.
             </p>
           </div>
 
-          {/* 3 Cards Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-7 mt-12 sm:mt-16">
-            {/* Card 1 - EMPRENDEDOR */}
-            <div className="relative group bg-white rounded-xl p-6 sm:p-8 border border-gray-200 hover:border-blue-400 transition-all duration-300 shadow-sm hover:shadow-xl card-hover scroll-fade-in">
-              <div className="space-y-5 sm:space-y-6">
-                {/* Icon & Badge */}
-                <div className="flex items-start justify-between gap-4">
-                  <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-lg bg-gradient-to-br from-blue-600 to-blue-700 flex items-center justify-center flex-shrink-0">
-                    <Zap className="h-7 w-7 sm:h-8 sm:w-8 text-white" />
-                  </div>
-                  <span className="px-3 py-1.5 bg-gray-100 text-gray-600 text-xs font-bold rounded uppercase tracking-wider flex-shrink-0">
-                    DESDE CERO
-                  </span>
-                </div>
-
-                {/* Title */}
-                <h3 className="text-xl sm:text-2xl font-bold text-gray-900">Emprendedor</h3>
-
-                {/* Description */}
-                <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
-                  ¿Tenés una idea pero no sabés si funciona?
-                </p>
-
-                {/* Features */}
-                <ul className="space-y-3">
-                  {["Validá con IA", "Ves números reales", "Entendé viabilidad"].map((feature, idx) => (
-                    <li key={idx} className="flex items-center gap-3 text-sm sm:text-base text-gray-700">
-                      <Check className="h-5 w-5 text-green-500 flex-shrink-0" />
-                      <span>{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-
-                {/* Button */}
-                <Button
-                  onClick={() => navigate("/select-role")}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-lg py-3 sm:py-3.5 text-base font-semibold shadow-md hover:shadow-lg transition-all duration-200 button-hover mt-4 min-h-12"
-                >
-                  Validar Idea →
-                </Button>
+          {/* 3 Features Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Feature 1 */}
+            <div className="relative group bg-gradient-to-br from-blue-50 to-white p-8 rounded-2xl border border-blue-100 hover:border-blue-300 transition-all scroll-fade-in hover:shadow-xl">
+              <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mb-6 shadow-lg">
+                <Target className="w-7 h-7 text-white" />
               </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-3">Validá tu idea con IA</h3>
+              <p className="text-gray-600 mb-6 leading-relaxed">
+                Antes de invertir un peso, la IA analiza tu mercado, competencia y viabilidad. Te da números reales, no
+                fantasías.
+              </p>
+              <ul className="space-y-2 text-sm text-gray-600">
+                <li className="flex items-start gap-2">
+                  <Check className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                  <span>Análisis de mercado en minutos</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <Check className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                  <span>Proyecciones financieras automáticas</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <Check className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                  <span>Plan de acción personalizado</span>
+                </li>
+              </ul>
             </div>
 
-            {/* Card 2 - NEGOCIO (HIGHLIGHTED) */}
+            {/* Feature 2 */}
             <div
-              className="relative group bg-blue-600 rounded-xl p-6 sm:p-8 border-2 border-blue-600 shadow-lg hover:shadow-2xl card-hover scroll-fade-in transition-all duration-300"
+              className="relative group bg-gradient-to-br from-purple-50 to-white p-8 rounded-2xl border border-purple-100 hover:border-purple-300 transition-all scroll-fade-in hover:shadow-xl"
               style={{ animationDelay: "0.1s" }}
             >
-              {/* Badge "Más Popular" */}
-              <div className="absolute -top-3 sm:-top-4 right-4 sm:right-6 px-3 sm:px-4 py-1.5 sm:py-2 bg-white rounded-lg text-xs sm:text-sm font-bold text-blue-600 shadow-md">
-                ⭐ Más Popular
+              <div className="w-14 h-14 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center mb-6 shadow-lg">
+                <TrendingUp className="w-7 h-7 text-white" />
               </div>
-
-              <div className="space-y-5 sm:space-y-6">
-                {/* Icon & Badge */}
-                <div className="flex items-start justify-between gap-4">
-                  <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-lg bg-white flex items-center justify-center flex-shrink-0">
-                    <BarChart3 className="h-7 w-7 sm:h-8 sm:w-8 text-blue-600" />
-                  </div>
-                  <span className="px-3 py-1.5 bg-blue-700 text-white text-xs font-bold rounded uppercase tracking-wider flex-shrink-0">
-                    1-3 AÑOS
-                  </span>
-                </div>
-
-                {/* Title */}
-                <h3 className="text-xl sm:text-2xl font-bold text-white">Negocio</h3>
-
-                {/* Description */}
-                <p className="text-sm sm:text-base text-blue-100 leading-relaxed">
-                  Vendés, pero todo a mano. Necesitás ordenar y crecer.
-                </p>
-
-                {/* Features */}
-                <ul className="space-y-3">
-                  {["Dashboard real-time", "CRM simple", "Control gastos"].map((feature, idx) => (
-                    <li key={idx} className="flex items-center gap-3 text-sm sm:text-base text-blue-50">
-                      <Check className="h-5 w-5 text-green-300 flex-shrink-0" />
-                      <span>{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-
-                {/* Button */}
-                <Button
-                  onClick={() => navigate("/select-role")}
-                  className="w-full bg-white hover:bg-blue-50 text-blue-600 rounded-lg py-3 sm:py-3.5 text-base font-semibold shadow-md transition-all duration-200 button-hover mt-4 min-h-12"
-                >
-                  Organizar Negocio →
-                </Button>
-              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-3">Organizá todo en tiempo real</h3>
+              <p className="text-gray-600 mb-6 leading-relaxed">
+                CRM, ventas, gastos, inventario: todo sincronizado automáticamente. Ves tu negocio en vivo, sin
+                planillas manuales.
+              </p>
+              <ul className="space-y-2 text-sm text-gray-600">
+                <li className="flex items-start gap-2">
+                  <Check className="w-4 h-4 text-purple-600 mt-0.5 flex-shrink-0" />
+                  <span>Dashboard actualizado al segundo</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <Check className="w-4 h-4 text-purple-600 mt-0.5 flex-shrink-0" />
+                  <span>CRM integrado con ventas</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <Check className="w-4 h-4 text-purple-600 mt-0.5 flex-shrink-0" />
+                  <span>Control de gastos automático</span>
+                </li>
+              </ul>
             </div>
 
-            {/* Card 3 - EMPRESA */}
+            {/* Feature 3 */}
             <div
-              className="relative group bg-white rounded-xl p-6 sm:p-8 border border-gray-200 hover:border-green-400 transition-all duration-300 shadow-sm hover:shadow-xl card-hover scroll-fade-in md:col-span-3 lg:col-span-1"
+              className="relative group bg-gradient-to-br from-pink-50 to-white p-8 rounded-2xl border border-pink-100 hover:border-pink-300 transition-all scroll-fade-in hover:shadow-xl"
               style={{ animationDelay: "0.2s" }}
             >
-              <div className="space-y-5 sm:space-y-6">
-                {/* Icon & Badge */}
-                <div className="flex items-start justify-between gap-4">
-                  <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-lg bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center flex-shrink-0">
-                    <Building2 className="h-7 w-7 sm:h-8 sm:w-8 text-white" />
-                  </div>
-                  <span className="px-3 py-1.5 bg-gray-100 text-gray-600 text-xs font-bold rounded uppercase tracking-wider flex-shrink-0">
-                    +3 AÑOS
-                  </span>
-                </div>
-
-                {/* Title */}
-                <h3 className="text-xl sm:text-2xl font-bold text-gray-900">Empresa</h3>
-
-                {/* Description */}
-                <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
-                  Creció tu empresa. Automatizá y escalá con IA.
-                </p>
-
-                {/* Features */}
-                <ul className="space-y-3">
-                  {["Gestión de equipo", "Automatización", "Multi-sucursal"].map((feature, idx) => (
-                    <li key={idx} className="flex items-center gap-3 text-sm sm:text-base text-gray-700">
-                      <Check className="h-5 w-5 text-green-500 flex-shrink-0" />
-                      <span>{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-
-                {/* Button */}
-                <Button
-                  onClick={() => navigate("/select-role")}
-                  className="w-full bg-green-600 hover:bg-green-700 text-white rounded-lg py-3 sm:py-3.5 text-base font-semibold shadow-md hover:shadow-lg transition-all duration-200 button-hover mt-4 min-h-12"
-                >
-                  Automatizar →
-                </Button>
+              <div className="w-14 h-14 bg-gradient-to-br from-pink-500 to-pink-600 rounded-xl flex items-center justify-center mb-6 shadow-lg">
+                <Briefcase className="w-7 h-7 text-white" />
               </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-3">Escalá sin contratar un ejército</h3>
+              <p className="text-gray-600 mb-6 leading-relaxed">
+                La IA automatiza tareas repetitivas. Vos te enfocás en crecer. Multi-sucursal, equipos, reportes: todo
+                incluido.
+              </p>
+              <ul className="space-y-2 text-sm text-gray-600">
+                <li className="flex items-start gap-2">
+                  <Check className="w-4 h-4 text-pink-600 mt-0.5 flex-shrink-0" />
+                  <span>Automatización inteligente</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <Check className="w-4 h-4 text-pink-600 mt-0.5 flex-shrink-0" />
+                  <span>Gestión multi-sucursal</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <Check className="w-4 h-4 text-pink-600 mt-0.5 flex-shrink-0" />
+                  <span>Reportes avanzados con IA</span>
+                </li>
+              </ul>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* ═════════════════════════════════════════════════════════════════
+          SECCIÓN: CONOCÉ TU ASISTENTE IA
+          ════════════════════════════════════════════════════════════════ */}
+      <section className="py-20 md:py-28 px-4 bg-gradient-to-br from-gray-50 to-white">
+        <div className="max-w-7xl mx-auto">
+          {/* Header */}
+          <div className="text-center mb-16 scroll-fade-in">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-100 to-purple-100 rounded-full mb-4">
+              <Brain className="w-5 h-5 text-blue-600" />
+              <span className="text-sm font-semibold text-blue-600">Powered by AI</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+              Tu asistente que nunca duerme
+            </h2>
+            <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto">
+              No es magia, es IA entrenada para emprendedores argentinos. Hacé más en menos tiempo.
+            </p>
+          </div>
+
+          {/* 6 AI Features Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              {
+                icon: FileText,
+                title: "Leé documentos al instante",
+                desc: "Subí facturas, tickets, lo que sea. La IA los procesa automáticamente.",
+                color: "blue",
+              },
+              {
+                icon: BarChart3,
+                title: "Reconciliá en un click",
+                desc: "La IA matchea transacciones y te ahorra horas de trabajo manual.",
+                color: "purple",
+              },
+              {
+                icon: Brain,
+                title: "Sugerencias inteligentes",
+                desc: "Te dice dónde ahorrar, qué optimizar y cómo crecer más rápido.",
+                color: "pink",
+              },
+              {
+                icon: DollarSign,
+                title: "Detectá gastos raros",
+                desc: "Si algo no cierra, la IA te avisa antes de que sea un problema.",
+                color: "green",
+              },
+              {
+                icon: Users,
+                title: "Automatizá intercompany",
+                desc: "Multi-entidad, eliminaciones automáticas, consolidación sin dolor.",
+                color: "orange",
+              },
+              {
+                icon: TrendingUp,
+                title: "Reportes que entiende cualquiera",
+                desc: "Dashboards visuales, actualizados en tiempo real, sin Excel.",
+                color: "indigo",
+              },
+            ].map((feature, idx) => (
+              <div
+                key={idx}
+                className="bg-white p-6 rounded-xl border border-gray-200 hover:border-gray-300 hover:shadow-lg transition-all scroll-fade-in"
+                style={{ animationDelay: `${idx * 0.1}s` }}
+              >
+                <div className={`w-12 h-12 bg-${feature.color}-100 rounded-lg flex items-center justify-center mb-4`}>
+                  <feature.icon className={`w-6 h-6 text-${feature.color}-600`} />
+                </div>
+                <h3 className="text-lg font-bold text-gray-900 mb-2">{feature.title}</h3>
+                <p className="text-sm text-gray-600">{feature.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═════════════════════════════════════════════════════════════════
+          SECCIÓN: NÚMEROS REALES
+          ════════════════════════════════════════════════════════════════ */}
+      <section className="py-20 md:py-28 px-4 bg-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12 scroll-fade-in">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4">Resultados que importan</h2>
+            <p className="text-lg text-gray-600">No son promesas. Son datos de usuarios reales.</p>
+          </div>
+
+          {/* Stats Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {[
+              { value: "90%", label: "Menos tiempo en tareas manuales", icon: Clock },
+              { value: "2 min", label: "Para empezar a usar la plataforma", icon: Rocket },
+              { value: "10x", label: "Más transacciones procesadas", icon: TrendingUp },
+              { value: "24/7", label: "Tu asistente IA siempre activo", icon: Zap },
+            ].map((stat, idx) => (
+              <div key={idx} className="text-center scroll-fade-in" style={{ animationDelay: `${idx * 0.1}s` }}>
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-100 to-purple-100 rounded-2xl mb-4">
+                  <stat.icon className="w-8 h-8 text-blue-600" />
+                </div>
+                <div className="text-4xl sm:text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
+                  {stat.value}
+                </div>
+                <div className="text-sm text-gray-600 font-medium">{stat.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═════════════════════════════════════════════════════════════════
+          SECCIÓN: ELEGÍ TU ETAPA (CARDS MEJORADAS)
+          ════════════════════════════════════════════════════════════════ */}
+      <section className="py-20 md:py-28 px-4 bg-gradient-to-br from-gray-50 to-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16 scroll-fade-in">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4">Elegí tu camino</h2>
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+              Desde validar una idea hasta manejar una empresa con 10 sucursales: estamos para vos.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Card 1 - Emprendedor */}
+            <div className="bg-white rounded-3xl p-8 border-2 border-blue-200 hover:border-blue-400 hover:shadow-2xl transition-all scroll-fade-in">
+              <div className="flex items-start justify-between mb-6">
+                <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg">
+                  <Zap className="w-8 h-8 text-white" />
+                </div>
+                <span className="px-3 py-1.5 bg-blue-100 text-blue-700 text-xs font-bold rounded-lg uppercase">
+                  Desde cero
+                </span>
+              </div>
+              <h3 className="text-3xl font-bold text-gray-900 mb-3">Emprendedor</h3>
+              <p className="text-gray-600 mb-6 text-lg">Tenés una idea pero no sabés si va a funcionar</p>
+              <ul className="space-y-3 mb-8">
+                {["Validá con IA en minutos", "Proyecciones financieras reales", "Plan de acción paso a paso"].map(
+                  (item, i) => (
+                    <li key={i} className="flex items-start gap-3 text-gray-700">
+                      <Check className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
+                      <span>{item}</span>
+                    </li>
+                  ),
+                )}
+              </ul>
+              <Button
+                onClick={() => navigate("/select-role")}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-xl py-4 text-base font-semibold shadow-lg"
+              >
+                Validar mi idea →
+              </Button>
+            </div>
+
+            {/* Card 2 - Negocio (Destacada) */}
+            <div
+              className="bg-gradient-to-br from-blue-600 to-purple-600 rounded-3xl p-8 border-2 border-blue-600 shadow-2xl hover:shadow-3xl transition-all scroll-fade-in relative"
+              style={{ animationDelay: "0.1s" }}
+            >
+              <div className="absolute -top-4 right-6 px-4 py-2 bg-yellow-400 rounded-xl text-sm font-bold text-gray-900 shadow-lg">
+                ⭐ Más elegido
+              </div>
+              <div className="flex items-start justify-between mb-6">
+                <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-lg">
+                  <BarChart3 className="w-8 h-8 text-blue-600" />
+                </div>
+                <span className="px-3 py-1.5 bg-blue-700 text-white text-xs font-bold rounded-lg uppercase">
+                  1-3 años
+                </span>
+              </div>
+              <h3 className="text-3xl font-bold text-white mb-3">Negocio</h3>
+              <p className="text-blue-50 mb-6 text-lg font-medium">Ya vendés pero todo está desorganizado</p>
+              <ul className="space-y-3 mb-8">
+                {["Dashboard en tiempo real", "CRM + Ventas + Gastos", "Control total sin planillas"].map((item, i) => (
+                  <li key={i} className="flex items-start gap-3 text-white">
+                    <Check className="w-5 h-5 text-green-300 mt-0.5 flex-shrink-0" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+              <Button
+                onClick={() => navigate("/select-role")}
+                className="w-full bg-white hover:bg-blue-50 text-blue-600 rounded-xl py-4 text-base font-semibold shadow-lg"
+              >
+                Organizar mi negocio →
+              </Button>
+            </div>
+
+            {/* Card 3 - Empresa */}
+            <div
+              className="bg-white rounded-3xl p-8 border-2 border-green-200 hover:border-green-400 hover:shadow-2xl transition-all scroll-fade-in"
+              style={{ animationDelay: "0.2s" }}
+            >
+              <div className="flex items-start justify-between mb-6">
+                <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center shadow-lg">
+                  <Building2 className="w-8 h-8 text-white" />
+                </div>
+                <span className="px-3 py-1.5 bg-green-100 text-green-700 text-xs font-bold rounded-lg uppercase">
+                  +3 años
+                </span>
+              </div>
+              <h3 className="text-3xl font-bold text-gray-900 mb-3">Empresa</h3>
+              <p className="text-gray-600 mb-6 text-lg">Creció tu empresa y necesitás escalar con IA</p>
+              <ul className="space-y-3 mb-8">
+                {["Multi-sucursal automatizado", "Gestión de equipos completa", "Reportes avanzados con IA"].map(
+                  (item, i) => (
+                    <li key={i} className="flex items-start gap-3 text-gray-700">
+                      <Check className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
+                      <span>{item}</span>
+                    </li>
+                  ),
+                )}
+              </ul>
+              <Button
+                onClick={() => navigate("/select-role")}
+                className="w-full bg-green-600 hover:bg-green-700 text-white rounded-xl py-4 text-base font-semibold shadow-lg"
+              >
+                Automatizar empresa →
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═════════════════════════════════════════════════════════════════
+          SECCIÓN: TRUST BADGES (Como DualEntry)
+          ════════════════════════════════════════════════════════════════ */}
+      <section className="py-16 px-4 bg-gray-900 text-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <h3 className="text-2xl font-bold mb-2">Seguridad y confianza</h3>
+            <p className="text-gray-400">Tus datos están protegidos con los más altos estándares</p>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-8">
+            {[
+              { icon: Shield, label: "Encriptación SSL" },
+              { icon: Shield, label: "Datos en Argentina" },
+              { icon: Shield, label: "Backup automático" },
+              { icon: Shield, label: "GDPR Compliant" },
+              { icon: Shield, label: "99.9% Uptime" },
+            ].map((badge, idx) => (
+              <div key={idx} className="text-center">
+                <div className="w-16 h-16 bg-gray-800 rounded-xl flex items-center justify-center mx-auto mb-3">
+                  <badge.icon className="w-8 h-8 text-green-400" />
+                </div>
+                <p className="text-sm text-gray-300 font-medium">{badge.label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═════════════════════════════════════════════════════════════════
+          CTA FINAL
+          ════════════════════════════════════════════════════════════════ */}
+      <section className="py-20 md:py-28 px-4 bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 text-white relative overflow-hidden">
+        <div className="absolute inset-0 bg-grid-white/10" />
+        <div className="relative z-10 max-w-4xl mx-auto text-center">
+          <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6">¿Listo para empezar?</h2>
+          <p className="text-xl sm:text-2xl mb-10 text-white/90">
+            Gratis, sin tarjeta, sin trucos. Empezás en 2 minutos.
+          </p>
+          <Button
+            onClick={() => navigate("/select-role")}
+            className="bg-white text-blue-600 hover:bg-gray-100 text-lg font-bold px-10 py-6 rounded-2xl shadow-2xl hover:shadow-3xl transition-all"
+          >
+            Empezar ahora →
+          </Button>
         </div>
       </section>
 
       {/* ═════════════════════════════════════════════════════════════════
           FOOTER
           ════════════════════════════════════════════════════════════════ */}
-      <footer className="bg-gray-900 text-white py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
+      <footer className="bg-gray-900 text-white py-12 px-4">
         <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-6">
-            <p className="text-sm text-gray-400 text-center sm:text-left">
-              © 2025 Proyecto Emprendedurismo. Todos los derechos reservados.
-            </p>
-            <div className="flex items-center justify-center gap-4 sm:gap-6 text-sm">
-              <a href="#" className="text-gray-400 hover:text-white transition-colors duration-200">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center">
+                <Zap className="w-6 h-6 text-white" />
+              </div>
+              <span className="font-bold text-lg">PuebloHub Pro</span>
+            </div>
+            <p className="text-sm text-gray-400">© 2025 PuebloHub Pro. Hecho con 💙 en Argentina.</p>
+            <div className="flex gap-6 text-sm">
+              <a href="#" className="text-gray-400 hover:text-white transition">
                 Términos
               </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors duration-200">
+              <a href="#" className="text-gray-400 hover:text-white transition">
                 Privacidad
               </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors duration-200">
+              <a href="#" className="text-gray-400 hover:text-white transition">
                 Soporte
               </a>
             </div>
@@ -478,14 +693,14 @@ export default function Index() {
       </footer>
 
       {/* ═════════════════════════════════════════════════════════════════
-          BOT WIDGET FLOTANTE - LATERAL
+          BOT WIDGET FLOTANTE
           ════════════════════════════════════════════════════════════════ */}
       <div className="bot-widget-float">
         <span className="text-3xl">🤖</span>
       </div>
 
       {/* ═════════════════════════════════════════════════════════════════
-          MODAL LOGIN ESTILO GROK
+          MODAL LOGIN
           ════════════════════════════════════════════════════════════════ */}
       {showLoginModal && <LoginModal onClose={() => setShowLoginModal(false)} />}
     </div>
