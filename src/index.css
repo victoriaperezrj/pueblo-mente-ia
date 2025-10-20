@@ -3,10 +3,12 @@
 @tailwind utilities;
 
 /* -------------------------------------------------------------------------- */
-/* CUSTOM CSS PARA EL DISEÑO ESPACIAL/GROK-LIKE */
+/* CUSTOM CSS PARA EL DISEÑO ESPACIAL/GROK-LIKE & LANDING PAGE */
 /* -------------------------------------------------------------------------- */
 
-/* Animaciones de partículas/blobs de fondo */
+/* === ANIMACIONES DE FONDO Y TEXTO === */
+
+/* Animación de partículas/blobs de fondo */
 @keyframes blob-animation {
   0%,
   100% {
@@ -56,7 +58,106 @@
   animation: gradient-shift 5s ease-in-out infinite;
 }
 
-/* Efecto "Grok Card" para las tarjetas de selección de modo */
+/* Animación de brillo para el botón de login */
+@keyframes glow-pulse-keyframe {
+  0% {
+    box-shadow:
+      0 0 10px theme("colors.blue.500"),
+      0 0 20px theme("colors.purple.600");
+  }
+  50% {
+    box-shadow:
+      0 0 15px theme("colors.blue.400"),
+      0 0 30px theme("colors.purple.500");
+  }
+  100% {
+    box-shadow:
+      0 0 10px theme("colors.blue.500"),
+      0 0 20px theme("colors.purple.600");
+  }
+}
+
+.glow-pulse {
+  animation: glow-pulse-keyframe 3s ease-in-out infinite alternate;
+}
+
+/* === EFECTOS DE TARJETA === */
+
+/* Estilo para el Hero Title (Landing Page) */
+.hero-title-grok {
+  font-size: 3.75rem; /* text-6xl */
+  line-height: 1.1;
+  font-weight: 800; /* font-extrabold */
+  color: white;
+  text-shadow:
+    0 6px 20px rgba(0, 0, 0, 0.5),
+    0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+@media (min-width: 768px) {
+  .hero-title-grok {
+    font-size: 5rem; /* md:text-7xl */
+  }
+}
+
+.hero-title-grok .highlight {
+  color: theme("colors.yellow.300");
+  text-shadow: 0 0 10px theme("colors.yellow.500");
+}
+
+/* Fondo del Hero (Landing Page) */
+.gradient-loop {
+  background: linear-gradient(-45deg, #1f013d, #2d0058, #0b0114, #001247);
+  background-size: 400% 400%;
+  animation: gradient-loop-keyframe 15s ease infinite;
+}
+
+@keyframes gradient-loop-keyframe {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Claymorphism Card para la Landing Page */
+.clay-card-grok {
+  background-color: white;
+  border-radius: 1.5rem;
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.1),
+    /* Sombra principal */ inset 0 0 0 1px rgba(255, 255, 255, 0.5),
+    /* Borde superior claro */ inset 0 -10px 10px rgba(0, 0, 0, 0.05); /* Sombra inferior interna */
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.clay-card-grok:hover {
+  box-shadow:
+    0 30px 60px rgba(0, 0, 0, 0.15),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.7),
+    inset 0 -15px 15px rgba(0, 0, 0, 0.08);
+  transform: translateY(-5px);
+}
+
+/* Glass Card Hero (para CTA y Badge) */
+.glass-card-hero {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.glass-card-cta {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* === BOT SELECTION CARDS (GROK STYLE) === */
 .grok-card {
   position: relative;
   border-radius: 1.5rem; /* rounded-3xl */
@@ -96,18 +197,23 @@
   transform: rotate(5deg);
 }
 
+/* === SCROLL & CHAT ANIMATIONS === */
+
 /* Animación de entrada con desvanecimiento y deslizamiento */
 .scroll-fade-in {
   opacity: 0;
   transform: translateY(20px);
-  animation: fadeInSlideUp 0.6s ease-out forwards;
+  /* La animación se agrega en el JS con un 'visible' si es necesario, pero esto es el default */
+  /* Lo dejo comentado aquí y confío en el JS para manejar el delay */
+  /* animation: fadeInSlideUp 0.6s ease-out forwards; */
+  transition:
+    opacity 0.6s ease-out,
+    transform 0.6s ease-out;
 }
 
-@keyframes fadeInSlideUp {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.scroll-fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* Chat message bubble effect */
@@ -145,6 +251,109 @@
   background: #64748b; /* slate-500 */
 }
 
+/* === MODAL DE LOGIN (GROK STYLE) === */
+.modal-grok-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-grok-container {
+  position: relative;
+  width: 90%;
+  max-width: 400px;
+  padding: 3rem 2rem;
+  border-radius: 1.5rem;
+  background: #1f013d; /* Fondo oscuro morado */
+  box-shadow: 0 10px 50px rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  animation: modal-fade-in 0.3s ease-out;
+}
+
+.modal-grok-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 50% 0%, rgba(79, 70, 229, 0.3) 0%, transparent 70%);
+  opacity: 0.5;
+  z-index: 0;
+}
+
+.btn-login-grok {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 0.8rem 1.5rem;
+  border-radius: 0.75rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  background-color: #3b0066; /* Purple oscuro para el botón */
+  color: white;
+  transition: all 0.2s;
+  border: 1px solid #4f0088;
+}
+
+.btn-login-grok:hover {
+  background-color: #4f0088;
+  border-color: #6a00b0;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(59, 0, 102, 0.5);
+}
+
+/* === CHAT BOT FLOTANTE === */
+.floating-chat-badge {
+  position: fixed;
+  bottom: 60px;
+  right: 90px;
+  z-index: 50;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  background: white;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  border: 1px solid #e5e7eb;
+  animation: bounce-in-right 0.5s ease-out;
+}
+
+@keyframes bounce-in-right {
+  0% {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  60% {
+    opacity: 1;
+    transform: translateX(-5px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* === MAGNETIC BUTTON (Para el efecto de mouse hover) === */
+.magnetic-button {
+  /* Si estás usando un polyfill para el efecto magnético, la clase solo sirve como target */
+  /* Si no, es un simple botón */
+  transition: transform 0.2s;
+}
+
+/* Ejemplo de la animación hover que no requiere JS */
+.magnetic-button:hover {
+  transform: scale(1.03);
+}
+
+/* === MISC === */
+
 /* Simple hover animation for spark icon */
 @keyframes spin-slow {
   from {
@@ -157,23 +366,4 @@
 
 .group-hover\:animate-spin-slow:hover {
   animation: spin-slow 2s linear infinite;
-}
-
-/* Opcional: Estilo para focus visible */
-input.focus\:ring-blue-500:focus-visible,
-button.focus\:ring-blue-500:focus-visible {
-  outline: 2px solid theme("colors.blue.500");
-  outline-offset: 2px;
-}
-
-input.focus\:ring-purple-500:focus-visible,
-button.focus\:ring-purple-500:focus-visible {
-  outline: 2px solid theme("colors.purple.500");
-  outline-offset: 2px;
-}
-
-input.focus\:ring-emerald-500:focus-visible,
-button.focus\:ring-emerald-500:focus-visible {
-  outline: 2px solid theme("colors.emerald.500");
-  outline-offset: 2px;
 }
