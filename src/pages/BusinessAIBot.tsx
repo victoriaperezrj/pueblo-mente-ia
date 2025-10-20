@@ -63,7 +63,7 @@ Solo después responde con números concretos.
 Ejemplo CORRECTO:
 'DIAGNÓSTICO: Tu MRR $10k con margen 40% es viable para escalar. Principal bottleneck: ventas (solo 1 persona).
 
-PLAN: 
+PLAN: 
 1) Mes 1: Contrata 1 sales person full-time ($2k/mes)
 2) Mes 1-2: Implementa CRM (Pipedrive o HubSpot)
 3) Mes 2: Invierte $3k en ads en tu canal mejor
@@ -107,7 +107,7 @@ Trimestre 2: Automatiza procesos manuales (CRM, contabilidad)
 Trimestre 3: Reorganiza equipo, elimina redundancias
 Trimestre 4: Analiza portfolio, descontinúa línea de baja rentabilidad
 
-MÉTRICA: 
+MÉTRICA: 
 - Trimestre 1: Ahorros $40k/año (-$3.3k/mes)
 - Trimestre 2: Ahorros $60k/año (efficiencia)
 - Trimestre 3: Ahorros $50k/año (equipos)
@@ -211,9 +211,13 @@ const BusinessAIBot = () => {
     } else {
       setMessages([]);
     }
-  }, [currentMode]);
+  }, [currentMode]); // ----------------------------------------------------------------------
+  // 🔑 CORRECCIÓN: Ahora devuelve Promise<string> en lugar de Promise<void>
+  // ----------------------------------------------------------------------
 
-  const generateAIResponse = async (userMessage: string) => {
+  const generateAIResponse = async (userMessage: string): Promise<string> => {
+    setIsLoading(true); // Se mantiene aquí para el caso de Mode 1 (Chat propio)
+
     try {
       const conversationHistory = messages.map((msg) => ({
         role: msg.role,
@@ -229,25 +233,33 @@ const BusinessAIBot = () => {
 
       if (error) throw error;
 
-      const aiResponse = data?.response || "Lo siento, hubo un error. Intenta de nuevo.";
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: "assistant",
-          content: aiResponse,
-          timestamp: new Date(),
-        },
-      ]);
+      const aiResponse = data?.response || "Lo siento, hubo un error. Intenta de nuevo."; // SOLO actualizamos el estado aquí si estamos en Mode 1
+      if (currentMode === "1") {
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: "assistant",
+            content: aiResponse,
+            timestamp: new Date(),
+          },
+        ]);
+      }
+
+      return aiResponse; // 👈 RETORNAR la respuesta
     } catch (err) {
       console.error("Error calling AI:", err);
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: "assistant",
-          content: "Lo siento, hubo un problema al conectar con el asistente. Por favor intenta nuevamente.",
-          timestamp: new Date(),
-        },
-      ]);
+      const errorMessage = "Lo siento, hubo un problema al conectar con el asistente. Por favor intenta nuevamente."; // SOLO actualizamos el estado aquí si estamos en Mode 1
+      if (currentMode === "1") {
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: "assistant",
+            content: errorMessage,
+            timestamp: new Date(),
+          },
+        ]);
+      }
+      return errorMessage; // 👈 RETORNAR el mensaje de error
     } finally {
       setIsLoading(false);
     }
@@ -258,9 +270,7 @@ const BusinessAIBot = () => {
     if (!inputValue.trim() || isLoading) return;
 
     const userMessage = inputValue.trim();
-    setInputValue("");
-    setIsLoading(true);
-
+    setInputValue(""); // setIsLoading(true); -> Movido a generateAIResponse
     setMessages((prev) => [
       ...prev,
       {
@@ -270,144 +280,188 @@ const BusinessAIBot = () => {
       },
     ]);
 
-    await generateAIResponse(userMessage);
+    await generateAIResponse(userMessage); // La función generateAIResponse maneja el setIsLoading(false)
   };
 
   const handleQuickAction = (action: string) => {
     setInputValue(action);
-  };
+  }; // PANTALLA DE SELECCIÓN DE MODO
 
-  // PANTALLA DE SELECCIÓN DE MODO
   if (!currentMode) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden">
-        {/* Partículas de fondo */}
+                {/* Partículas de fondo */}       {" "}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-blue-500/20 rounded-full blur-3xl animate-pulse"></div>
+                   {" "}
+          <div className="absolute top-20 left-10 w-72 h-72 bg-blue-500/20 rounded-full blur-3xl animate-pulse"></div> 
+                 {" "}
           <div
             className="absolute bottom-20 right-10 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse"
             style={{ animationDelay: "1s" }}
           ></div>
+                   {" "}
           <div
             className="absolute top-1/2 left-1/2 w-64 h-64 bg-green-500/10 rounded-full blur-3xl animate-pulse"
             style={{ animationDelay: "2s" }}
           ></div>
+                 {" "}
         </div>
-
+               {" "}
         <div className="relative z-10 container mx-auto px-4 py-12">
-          {/* Header con efecto glassmorphism */}
+                    {/* Header con efecto glassmorphism */}         {" "}
           <div className="text-center mb-12 scroll-fade-in">
+                       {" "}
             <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/10 backdrop-blur-md border border-white/20 mb-6">
-              <Sparkles className="w-5 h-5 text-yellow-400" />
-              <span className="text-white font-semibold">IA que entiende Argentina</span>
+                            <Sparkles className="w-5 h-5 text-yellow-400" />             {" "}
+              <span className="text-white font-semibold">IA que entiende Argentina</span>           {" "}
             </div>
+                       {" "}
             <h1 className="text-5xl md:text-6xl font-extrabold text-white mb-4 leading-tight">
-              Tu Asesor IA{" "}
+                            Tu Asesor IA              {" "}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-green-400">
-                Empresarial
+                                Empresarial              {" "}
               </span>
+                         {" "}
             </h1>
-            <p className="text-xl text-gray-300 mb-2 max-w-2xl mx-auto">Respuestas concretas para cada etapa</p>
+                       {" "}
+            <p className="text-xl text-gray-300 mb-2 max-w-2xl mx-auto">Respuestas concretas para cada etapa</p>       
+               {" "}
             <p className="text-gray-400 max-w-xl mx-auto">
-              Selecciona tu etapa para recibir estrategias personalizadas
+                            Selecciona tu etapa para recibir estrategias personalizadas            {" "}
             </p>
+                     {" "}
           </div>
-
-          {/* Cards con claymorphism mejorado */}
+                    {/* Cards con claymorphism mejorado */}         {" "}
           <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {/* CARD 1 - AZUL */}
+                        {/* CARD 1 - AZUL */}           {" "}
             <div
               className="clay-card-grok scroll-fade-in group cursor-pointer"
               style={{ animationDelay: "0.1s" }}
               onClick={() => setCurrentMode("1")}
             >
+                           {" "}
               <div className="relative">
+                               {" "}
                 <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl opacity-0 group-hover:opacity-100 blur transition duration-500"></div>
+                               {" "}
                 <div className="relative bg-gradient-to-br from-blue-500 to-blue-600 p-8 rounded-2xl text-white">
+                                   {" "}
                   <div className="flex items-center justify-center w-16 h-16 bg-white/20 rounded-2xl mb-6 mx-auto group-hover:scale-110 transition-transform">
-                    <Zap className="w-8 h-8" />
+                                        <Zap className="w-8 h-8" />                 {" "}
                   </div>
-                  <h2 className="text-2xl font-bold text-center mb-2">Idea Validada</h2>
-                  <p className="text-center text-blue-100 font-semibold mb-4">0-1 año</p>
-                  <p className="text-center text-white/90 mb-6 leading-relaxed">Tienes una idea con potencial</p>
+                                    <h2 className="text-2xl font-bold text-center mb-2">Idea Validada</h2>             
+                      <p className="text-center text-blue-100 font-semibold mb-4">0-1 año</p>                 {" "}
+                  <p className="text-center text-white/90 mb-6 leading-relaxed">Tienes una idea con potencial</p>       
+                           {" "}
                   <div className="text-sm space-y-2 opacity-90">
-                    <p>• Validación de mercado</p>
-                    <p>• MVP y Product-Market Fit</p>
+                                        <p>• Validación de mercado</p>                   {" "}
+                    <p>• MVP y Product-Market Fit</p>                 {" "}
                   </div>
+                                   {" "}
                   <div className="mt-6 text-center">
+                                       {" "}
                     <div className="inline-flex items-center gap-2 text-sm font-semibold">
-                      Empezar <span className="group-hover:translate-x-1 transition-transform">→</span>
+                                            Empezar{" "}
+                      <span className="group-hover:translate-x-1 transition-transform">→</span>                   {" "}
                     </div>
+                                     {" "}
                   </div>
+                                 {" "}
                 </div>
+                             {" "}
               </div>
+                         {" "}
             </div>
-
-            {/* CARD 2 - PÚRPURA */}
+                        {/* CARD 2 - PÚRPURA */}           {" "}
             <div
               className="clay-card-grok scroll-fade-in group cursor-pointer"
               style={{ animationDelay: "0.2s" }}
               onClick={() => setCurrentMode("2")}
             >
-              <div className="popular-badge">⭐ Más usado</div>
+                            <div className="popular-badge">⭐ Más usado</div>             {" "}
               <div className="relative">
+                               {" "}
                 <div className="absolute -inset-1 bg-gradient-to-r from-purple-500 to-purple-600 rounded-2xl opacity-0 group-hover:opacity-100 blur transition duration-500"></div>
+                               {" "}
                 <div className="relative bg-gradient-to-br from-purple-500 to-purple-600 p-8 rounded-2xl text-white">
+                                   {" "}
                   <div className="flex items-center justify-center w-16 h-16 bg-white/20 rounded-2xl mb-6 mx-auto group-hover:scale-110 transition-transform">
-                    <TrendingUp className="w-8 h-8" />
+                                        <TrendingUp className="w-8 h-8" />                 {" "}
                   </div>
-                  <h2 className="text-2xl font-bold text-center mb-2">Negocio en Crecimiento</h2>
-                  <p className="text-center text-purple-100 font-semibold mb-4">1-3 años</p>
+                                    <h2 className="text-2xl font-bold text-center mb-2">Negocio en Crecimiento</h2>     
+                              <p className="text-center text-purple-100 font-semibold mb-4">1-3 años</p>               
+                   {" "}
                   <p className="text-center text-white/90 mb-6 leading-relaxed">Tu negocio está validado y creciendo</p>
+                                   {" "}
                   <div className="text-sm space-y-2 opacity-90">
-                    <p>• Escalamiento de ventas</p>
-                    <p>• Optimización operacional</p>
+                                        <p>• Escalamiento de ventas</p>                   {" "}
+                    <p>• Optimización operacional</p>                 {" "}
                   </div>
+                                   {" "}
                   <div className="mt-6 text-center">
+                                       {" "}
                     <div className="inline-flex items-center gap-2 text-sm font-semibold">
-                      Empezar <span className="group-hover:translate-x-1 transition-transform">→</span>
+                                            Empezar{" "}
+                      <span className="group-hover:translate-x-1 transition-transform">→</span>                   {" "}
                     </div>
+                                     {" "}
                   </div>
+                                 {" "}
                 </div>
+                             {" "}
               </div>
+                         {" "}
             </div>
-
-            {/* CARD 3 - VERDE */}
+                        {/* CARD 3 - VERDE */}           {" "}
             <div
               className="clay-card-grok scroll-fade-in group cursor-pointer"
               style={{ animationDelay: "0.3s" }}
               onClick={() => setCurrentMode("3")}
             >
+                           {" "}
               <div className="relative">
+                               {" "}
                 <div className="absolute -inset-1 bg-gradient-to-r from-green-500 to-green-600 rounded-2xl opacity-0 group-hover:opacity-100 blur transition duration-500"></div>
+                               {" "}
                 <div className="relative bg-gradient-to-br from-green-500 to-green-600 p-8 rounded-2xl text-white">
+                                   {" "}
                   <div className="flex items-center justify-center w-16 h-16 bg-white/20 rounded-2xl mb-6 mx-auto group-hover:scale-110 transition-transform">
-                    <Building2 className="w-8 h-8" />
+                                        <Building2 className="w-8 h-8" />                 {" "}
                   </div>
-                  <h2 className="text-2xl font-bold text-center mb-2">Empresa Establecida</h2>
-                  <p className="text-center text-green-100 font-semibold mb-4">3+ años</p>
+                                    <h2 className="text-2xl font-bold text-center mb-2">Empresa Establecida</h2>       
+                            <p className="text-center text-green-100 font-semibold mb-4">3+ años</p>                 {" "}
                   <p className="text-center text-white/90 mb-6 leading-relaxed">
-                    Empresa PYME o grande con operaciones
+                                        Empresa PYME o grande con operaciones                  {" "}
                   </p>
+                                   {" "}
                   <div className="text-sm space-y-2 opacity-90">
-                    <p>• Estrategia empresarial</p>
-                    <p>• Rentabilidad y expansión</p>
+                                        <p>• Estrategia empresarial</p>                   {" "}
+                    <p>• Rentabilidad y expansión</p>                 {" "}
                   </div>
+                                   {" "}
                   <div className="mt-6 text-center">
+                                       {" "}
                     <div className="inline-flex items-center gap-2 text-sm font-semibold">
-                      Empezar <span className="group-hover:translate-x-1 transition-transform">→</span>
+                                            Empezar{" "}
+                      <span className="group-hover:translate-x-1 transition-transform">→</span>                   {" "}
                     </div>
+                                     {" "}
                   </div>
+                                 {" "}
                 </div>
+                             {" "}
               </div>
+                         {" "}
             </div>
+                     {" "}
           </div>
-
-          {/* Footer */}
+                    {/* Footer */}         {" "}
           <div className="text-center mt-16 text-gray-400">
-            <p className="text-sm">Powered by Claude AI • PuebloHub Pro</p>
+                        <p className="text-sm">Powered by Claude AI • PuebloHub Pro</p>         {" "}
           </div>
+                 {" "}
         </div>
+             {" "}
       </div>
     );
   }
@@ -449,14 +503,13 @@ const BusinessAIBot = () => {
   };
 
   const config = modeConfig[currentMode];
-  const Icon = config.icon;
+  const Icon = config.icon; // Render interfaces especiales para Mode 2 y 3
 
-  // Render interfaces especiales para Mode 2 y 3
   if (currentMode === "2") {
     return (
       <NegocioInterface
         onBack={() => setCurrentMode(null)}
-        onSendMessage={generateAIResponse}
+        onSendMessage={generateAIResponse} // 👈 generateAIResponse ahora devuelve Promise<string>
         messages={messages}
         isLoading={isLoading}
       />
@@ -467,106 +520,122 @@ const BusinessAIBot = () => {
     return (
       <EmpresaInterface
         onBack={() => setCurrentMode(null)}
-        onSendMessage={generateAIResponse}
+        onSendMessage={generateAIResponse} // 👈 generateAIResponse ahora devuelve Promise<string>
         messages={messages}
         isLoading={isLoading}
       />
     );
-  }
+  } // Mode 1 - Chat interface mejorada
 
-  // Mode 1 - Chat interface mejorada
   return (
     <div className="h-screen flex flex-col bg-slate-50">
-      {/* Header mejorado */}
+            {/* Header mejorado */}     {" "}
       <div
         className={`bg-gradient-to-r ${config.gradient} p-4 shadow-xl flex items-center justify-between text-white relative overflow-hidden`}
       >
-        <div className="absolute inset-0 bg-white/10 backdrop-blur-sm"></div>
+                <div className="absolute inset-0 bg-white/10 backdrop-blur-sm"></div>       {" "}
         <div className="flex items-center gap-3 relative z-10">
+                   {" "}
           <div className="p-2 bg-white/20 rounded-xl">
-            <Icon className="w-6 h-6" />
+                        <Icon className="w-6 h-6" />         {" "}
           </div>
+                   {" "}
           <div>
-            <h1 className="text-lg font-bold">{config.title}</h1>
-            <p className="text-sm opacity-90">{config.subtitle}</p>
+                        <h1 className="text-lg font-bold">{config.title}</h1>           {" "}
+            <p className="text-sm opacity-90">{config.subtitle}</p>         {" "}
           </div>
+                 {" "}
         </div>
+               {" "}
         <button
           onClick={() => setCurrentMode(null)}
           className="p-2 hover:bg-white/20 rounded-lg transition relative z-10 magnetic-button"
         >
-          <X className="w-6 h-6" />
+                    <X className="w-6 h-6" />       {" "}
         </button>
+             {" "}
       </div>
-
-      {/* Chat Area mejorada */}
+            {/* Chat Area mejorada */}     {" "}
       <div className="flex-1 overflow-y-auto p-4 space-y-4 max-w-4xl mx-auto w-full">
+               {" "}
         {messages.map((msg, idx) => (
           <div
             key={idx}
             className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"} scroll-fade-in`}
             style={{ animationDelay: `${idx * 0.1}s` }}
           >
+                       {" "}
             <div
               className={`max-w-2xl p-4 rounded-2xl shadow-lg ${
                 msg.role === "user" ? `${config.messageColor} text-white` : `bg-white border-2 ${config.borderColor}`
               }`}
             >
-              <p className="whitespace-pre-line leading-relaxed">{msg.content}</p>
+                            <p className="whitespace-pre-line leading-relaxed">{msg.content}</p>             {" "}
               <p className={`text-xs mt-2 ${msg.role === "user" ? "opacity-70" : "opacity-50"}`}>
-                {msg.timestamp.toLocaleTimeString()}
+                                {msg.timestamp.toLocaleTimeString()}             {" "}
               </p>
+                         {" "}
             </div>
+                     {" "}
           </div>
         ))}
-
+               {" "}
         {isLoading && (
           <div className="flex justify-start">
+                       {" "}
             <div className={`max-w-2xl p-4 rounded-2xl bg-white border-2 ${config.borderColor} shadow-lg`}>
+                           {" "}
               <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></div>
+                                <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></div>               {" "}
                 <div
                   className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"
                   style={{ animationDelay: "0.2s" }}
                 ></div>
+                               {" "}
                 <div
                   className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"
                   style={{ animationDelay: "0.4s" }}
                 ></div>
-                <span className="ml-2 text-slate-600">Escribiendo...</span>
+                                <span className="ml-2 text-slate-600">Escribiendo...</span>             {" "}
               </div>
+                         {" "}
             </div>
+                     {" "}
           </div>
         )}
-
-        <div ref={messagesEndRef} />
+                <div ref={messagesEndRef} />     {" "}
       </div>
-
-      {/* Quick Actions mejoradas */}
+            {/* Quick Actions mejoradas */}     {" "}
       {messages.length <= 1 && !isLoading && (
         <div className="bg-white border-t-2 border-slate-200 p-4 max-w-4xl mx-auto w-full">
+                   {" "}
           <div className="flex items-center gap-2 mb-3">
-            <Lightbulb className="w-5 h-5 text-yellow-500" />
-            <p className="text-sm font-bold text-slate-700">Preguntas sugeridas</p>
+                        <Lightbulb className="w-5 h-5 text-yellow-500" />           {" "}
+            <p className="text-sm font-bold text-slate-700">Preguntas sugeridas</p>         {" "}
           </div>
+                   {" "}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                       {" "}
             {getQuickActions(currentMode).map((action, idx) => (
               <button
                 key={idx}
                 onClick={() => handleQuickAction(action)}
                 className={`text-left p-4 rounded-xl border-2 ${config.borderColor} ${config.bgColor} ${config.textColor} font-medium text-sm flex items-start gap-3 magnetic-button shadow-sm ${config.hoverBg} transition-all`}
               >
-                <Sparkles className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                <span>{action}</span>
+                                <Sparkles className="w-4 h-4 mt-0.5 flex-shrink-0" />               {" "}
+                <span>{action}</span>             {" "}
               </button>
             ))}
+                     {" "}
           </div>
+                 {" "}
         </div>
       )}
-
-      {/* Input Area mejorada */}
+            {/* Input Area mejorada */}     {" "}
       <div className="bg-white border-t-2 border-slate-200 p-4 max-w-4xl mx-auto w-full shadow-lg">
+               {" "}
         <form onSubmit={handleSendMessage} className="flex gap-3">
+                   {" "}
           <input
             type="text"
             value={inputValue}
@@ -575,16 +644,19 @@ const BusinessAIBot = () => {
             disabled={isLoading}
             className="flex-1 border-2 border-slate-300 rounded-xl px-5 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50 transition-all"
           />
+                   {" "}
           <button
             type="submit"
             disabled={!inputValue.trim() || isLoading}
             className={`${config.messageColor} text-white px-8 py-3 rounded-xl hover:opacity-90 disabled:bg-slate-400 font-semibold flex items-center gap-2 transition-all magnetic-button shadow-lg`}
           >
-            <Send className="w-5 h-5" />
-            Enviar
+                        <Send className="w-5 h-5" />            Enviar          {" "}
           </button>
+                 {" "}
         </form>
+             {" "}
       </div>
+         {" "}
     </div>
   );
 };
