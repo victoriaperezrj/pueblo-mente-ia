@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import {
   Building2,
   Menu,
@@ -18,6 +19,11 @@ import {
   MessageCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { supabase } from '@/integrations/supabase/client';
+import { FloatingOrbs } from '@/components/business-bot/FloatingOrbs';
+import { ImprovedFloatingBot } from '@/components/business-bot/ImprovedFloatingBot';
+import { AnimatedHero } from '@/components/animations/AnimatedHero';
+import { FloatingParticles } from '@/components/animations/FloatingParticles';
 
 // ══════════════════════════════════════════════════════════════════════
 // LOGIN MODAL
@@ -71,9 +77,36 @@ function LoginModal({ onClose }: { onClose: () => void }) {
             </button>
             <button
               className="btn-login-grok magnetic-button"
-              onClick={() => {
+              onClick={async () => {
                 onClose();
-                window.location.href = "/auth?mode=login";
+                
+                // Verificar si hay usuario autenticado
+                const { data: { user } } = await supabase.auth.getUser();
+                
+                if (!user) {
+                  // Usuario nuevo - mostrar formulario de registro/login
+                  window.location.href = "/auth";
+                  return;
+                }
+                
+                // Verificar si el usuario ya completó onboarding
+                const { data: perfil } = await supabase
+                  .from('profiles')
+                  .select('user_type')
+                  .eq('id', user.id)
+                  .single();
+                
+                if (!perfil || !perfil.user_type) {
+                  // Primera vez - preguntarle en qué etapa está
+                  window.location.href = "/onboarding/business-stage";
+                } else {
+                  // Usuario existente con perfil completo - directo al ecosistema
+                  if (perfil.user_type === 'entrepreneur') {
+                    window.location.href = "/entrepreneur/dashboard";
+                  } else {
+                    window.location.href = "/dashboard";
+                  }
+                }
               }}
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -112,37 +145,8 @@ function LoginModal({ onClose }: { onClose: () => void }) {
 }
 
 // ══════════════════════════════════════════════════════════════════════
-// CHATBOT FLOTANTE
+// REMOVED - Now using ImprovedFloatingBot component
 // ══════════════════════════════════════════════════════════════════════
-function FloatingChatBot() {
-  const navigate = useNavigate();
-  const [showBadge, setShowBadge] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowBadge(false);
-    }, 5000);
-    return () => clearTimeout(timer);
-  }, []);
-
-  return (
-    <>
-      <button
-        onClick={() => navigate("/business-ai-bot")}
-        className="fixed bottom-6 right-6 z-50 w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full shadow-2xl flex items-center justify-center magnetic-button glow-pulse hover:scale-110 transition-transform"
-      >
-        <MessageCircle className="w-8 h-8 text-white" />
-      </button>
-
-      {showBadge && (
-        <div className="floating-chat-badge">
-          <p className="text-xs font-semibold text-gray-800 mb-1">💬 ¿Necesitás ayuda?</p>
-          <p className="text-xs text-gray-600">Hablá con nuestro Asesor IA</p>
-        </div>
-      )}
-    </>
-  );
-}
 
 // ══════════════════════════════════════════════════════════════════════
 // STAGE CARD
@@ -265,9 +269,11 @@ export default function Index() {
   return (
     <>
       {showLoginModal && <LoginModal onClose={() => setShowLoginModal(false)} />}
-      <FloatingChatBot />
+      <ImprovedFloatingBot />
+      <FloatingOrbs />
+      <FloatingParticles />
 
-      <div className="min-h-screen bg-white">
+      <div className="min-h-screen bg-white relative">
         {/* ═════════════════════════════════════════════════════════════════
             HEADER
             ════════════════════════════════════════════════════════════════ */}
@@ -369,13 +375,18 @@ export default function Index() {
               </div>
 
               {/* Título */}
-              <h1
-                className="text-5xl md:text-7xl font-extrabold text-white mb-6 leading-tight px-4"
-                style={{ textShadow: "0 4px 20px rgba(0,0,0,0.8), 0 2px 10px rgba(0,0,0,0.6)" }}
-              >
-                De la <span className="text-yellow-300">idea</span> a los{" "}
-                <span className="text-green-300">números</span> en días, no meses
-              </h1>
+              <div className="mb-6 px-4">
+                <AnimatedHero />
+                <motion.p
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.8 }}
+                  className="text-white text-xl md:text-2xl mt-4"
+                  style={{ textShadow: "0 4px 20px rgba(0,0,0,0.8)" }}
+                >
+                  en días, no meses
+                </motion.p>
+              </div>
 
               {/* Descripción */}
               <p
