@@ -292,36 +292,37 @@ const BusinessAIBot = () => {
       <div className="min-h-screen aurora-waves-background relative overflow-hidden">
         {/* Partículas flotantes elegantes */}
         <div className="floating-particles">
-          {[...Array(15)].map((_, i) => (
+          {[...Array(20)].map((_, i) => (
             <div
               key={i}
               className="particle"
               style={{
                 left: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 10}s`,
-                animationDuration: `${10 + Math.random() * 10}s`,
+                top: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 15}s`,
+                animationDuration: `${15 + Math.random() * 10}s`,
               }}
             />
           ))}
         </div>
 
-        <div className="content-wrapper container mx-auto px-4 py-12">
+        <div className="content-wrapper container mx-auto px-4 py-12 animate-fade-in">
           {/* Header con efecto glassmorphism y animaciones */}
-          <div className="text-center mb-16 scroll-fade-in">
-            <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/10 backdrop-blur-md border border-white/20 mb-8 magnetic-button">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/10 backdrop-blur-md border border-white/20 mb-8 magnetic-button animate-scale-in">
               <Sparkles className="w-5 h-5 text-yellow-400 animate-pulse" />
               <span className="text-white font-semibold">IA que entiende Argentina</span>
             </div>
-            <h1 className="hero-title-grok mb-6">
+            <h1 className="hero-title-grok mb-6 animate-fade-in">
               Tu Asesor IA{" "}
               <span className="highlight">
                 Empresarial
               </span>
             </h1>
-            <p className="text-xl text-white/90 mb-3 max-w-2xl mx-auto font-light tracking-wide">
+            <p className="text-xl text-white/90 mb-3 max-w-2xl mx-auto font-light tracking-wide animate-fade-in" style={{ animationDelay: "0.2s" }}>
               Respuestas concretas para cada etapa
             </p>
-            <p className="text-white/60 max-w-xl mx-auto text-sm">
+            <p className="text-white/60 max-w-xl mx-auto text-sm animate-fade-in" style={{ animationDelay: "0.3s" }}>
               Selecciona tu etapa para recibir estrategias personalizadas
             </p>
           </div>
@@ -330,8 +331,8 @@ const BusinessAIBot = () => {
           <div className="grid md:grid-cols-3 gap-10 max-w-7xl mx-auto">
             {/* CARD 1 - AZUL */}
             <div
-              className="clay-card-grok scroll-fade-in group cursor-pointer noise-texture"
-              style={{ animationDelay: "0.1s" }}
+              className="clay-card-grok animate-fade-in group cursor-pointer noise-texture"
+              style={{ animationDelay: "0.4s" }}
               onClick={() => setCurrentMode("1")}
             >
               <div className="relative">
@@ -364,8 +365,8 @@ const BusinessAIBot = () => {
 
             {/* CARD 2 - PÚRPURA */}
             <div
-              className="clay-card-grok scroll-fade-in group cursor-pointer noise-texture"
-              style={{ animationDelay: "0.2s" }}
+              className="clay-card-grok animate-fade-in group cursor-pointer noise-texture"
+              style={{ animationDelay: "0.6s" }}
               onClick={() => setCurrentMode("2")}
             >
               <div className="popular-badge">⭐ Más usado</div>
@@ -399,8 +400,8 @@ const BusinessAIBot = () => {
 
             {/* CARD 3 - VERDE */}
             <div
-              className="clay-card-grok scroll-fade-in group cursor-pointer noise-texture"
-              style={{ animationDelay: "0.3s" }}
+              className="clay-card-grok animate-fade-in group cursor-pointer noise-texture"
+              style={{ animationDelay: "0.8s" }}
               onClick={() => setCurrentMode("3")}
             >
               <div className="relative">
