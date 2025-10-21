@@ -1,10 +1,29 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageCircle, X, Send } from 'lucide-react';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export const ImprovedFloatingBot = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState('');
+  const navigate = useNavigate();
+
+  const handleOptionClick = (option: string) => {
+    switch(option) {
+      case 'Validar idea':
+        navigate('/select-role');
+        break;
+      case 'Análisis financiero':
+        navigate('/select-role');
+        break;
+      case 'Plan de negocios':
+        navigate('/select-role');
+        break;
+      default:
+        navigate('/select-role');
+    }
+    setIsOpen(false);
+  };
 
   return (
     <>
@@ -108,7 +127,8 @@ export const ImprovedFloatingBot = () => {
                     transition={{ delay: i * 0.1 }}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className="px-4 py-2 bg-purple-100 hover:bg-purple-200 text-purple-700 rounded-full text-sm font-medium transition"
+                    onClick={() => handleOptionClick(option)}
+                    className="px-4 py-2 bg-purple-100 hover:bg-purple-200 text-purple-700 rounded-full text-sm font-medium transition cursor-pointer"
                   >
                     {option}
                   </motion.button>
