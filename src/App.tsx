@@ -38,7 +38,6 @@ const EntrepreneurStep1 = lazy(() => import("./pages/onboarding/EntrepreneurStep
 const EntrepreneurAnalyzing = lazy(() => import("./pages/onboarding/EntrepreneurAnalyzing"));
 const EntrepreneurResults = lazy(() => import("./pages/onboarding/EntrepreneurResults"));
 const EntrepreneurBusinessPlan = lazy(() => import("./pages/onboarding/EntrepreneurBusinessPlan"));
-const BusinessStage = lazy(() => import("./pages/onboarding/BusinessStage"));
 const EntrepreneurDashboard = lazy(() => import("./pages/entrepreneur/Dashboard"));
 const BusinessDashboard = lazy(() => import("./pages/business/Dashboard"));
 const PymeDashboard = lazy(() => import("./pages/pyme/Dashboard"));
@@ -88,7 +87,6 @@ const App = () => (
               {/* Onboarding routes - classify is public for demo, rest are protected */}
               <Route path="/onboarding" element={<ProtectedRoute><Onboarding /></ProtectedRoute>} />
               <Route path="/onboarding/classify" element={<Classify />} />
-              <Route path="/onboarding/business-stage" element={<ProtectedRoute><BusinessStage /></ProtectedRoute>} />
               <Route path="/onboarding/entrepreneur/step1" element={<ProtectedRoute><EntrepreneurStep1 /></ProtectedRoute>} />
               <Route path="/onboarding/entrepreneur/analyzing" element={<ProtectedRoute><EntrepreneurAnalyzing /></ProtectedRoute>} />
               <Route path="/onboarding/entrepreneur/results" element={<ProtectedRoute><EntrepreneurResults /></ProtectedRoute>} />
