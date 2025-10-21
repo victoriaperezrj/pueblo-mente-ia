@@ -1,8 +1,11 @@
 import { useState, useRef, useEffect } from "react";
 import { Zap, TrendingUp, Building2, Menu, Send, Lightbulb, X, Sparkles } from "lucide-react";
+import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import NegocioInterface from "@/components/business-bot/NegocioInterface";
 import EmpresaInterface from "@/components/business-bot/EmpresaInterface";
+import AnimatedBackground from "@/components/business-bot/AnimatedBackground";
+import FloatingBot from "@/components/business-bot/FloatingBot";
 
 type Mode = "1" | "2" | "3" | null;
 
@@ -290,160 +293,348 @@ const BusinessAIBot = () => {
   if (!currentMode) {
     return (
       <div className="min-h-screen aurora-waves-background relative overflow-hidden">
-        {/* Partículas flotantes elegantes */}
-        <div className="floating-particles">
-          {[...Array(20)].map((_, i) => (
-            <div
-              key={i}
-              className="particle"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 15}s`,
-                animationDuration: `${15 + Math.random() * 10}s`,
-              }}
-            />
-          ))}
-        </div>
+        <AnimatedBackground />
+        <FloatingBot />
 
-        <div className="content-wrapper container mx-auto px-4 py-12 animate-fade-in">
+        <div className="content-wrapper container mx-auto px-4 py-12">
           {/* Header con efecto glassmorphism y animaciones */}
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/10 backdrop-blur-md border border-white/20 mb-8 magnetic-button animate-scale-in">
-              <Sparkles className="w-5 h-5 text-yellow-400 animate-pulse" />
+          <motion.div
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          >
+            <motion.div
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/10 backdrop-blur-md border border-white/20 mb-8"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <motion.div
+                animate={{
+                  rotate: [0, 360],
+                  scale: [1, 1.2, 1],
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              >
+                <Sparkles className="w-5 h-5 text-yellow-400" />
+              </motion.div>
               <span className="text-white font-semibold">IA que entiende Argentina</span>
-            </div>
-            <h1 className="hero-title-grok mb-6 animate-fade-in">
+            </motion.div>
+            
+            <motion.h1
+              className="hero-title-grok mb-6"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
               Tu Asesor IA{" "}
-              <span className="highlight">
-                Empresarial
-              </span>
-            </h1>
-            <p className="text-xl text-white/90 mb-3 max-w-2xl mx-auto font-light tracking-wide animate-fade-in" style={{ animationDelay: "0.2s" }}>
+              <span className="highlight">Empresarial</span>
+            </motion.h1>
+            
+            <motion.p
+              className="text-xl text-white/90 mb-3 max-w-2xl mx-auto font-light tracking-wide"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+            >
               Respuestas concretas para cada etapa
-            </p>
-            <p className="text-white/60 max-w-xl mx-auto text-sm animate-fade-in" style={{ animationDelay: "0.3s" }}>
+            </motion.p>
+            
+            <motion.p
+              className="text-white/60 max-w-xl mx-auto text-sm"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
+            >
               Selecciona tu etapa para recibir estrategias personalizadas
-            </p>
-          </div>
+            </motion.p>
+          </motion.div>
 
           {/* Cards con claymorphism mejorado y efectos elegantes */}
           <div className="grid md:grid-cols-3 gap-10 max-w-7xl mx-auto">
             {/* CARD 1 - AZUL */}
-            <div
-              className="clay-card-grok animate-fade-in group cursor-pointer noise-texture"
-              style={{ animationDelay: "0.4s" }}
+            <motion.div
+              className="clay-card-grok group cursor-pointer noise-texture"
+              initial={{ opacity: 0, y: 50, rotateX: -15 }}
+              animate={{ opacity: 1, y: 0, rotateX: 0 }}
+              transition={{
+                duration: 0.7,
+                delay: 0.4,
+                type: "spring",
+                stiffness: 100,
+              }}
+              whileHover={{
+                y: -20,
+                scale: 1.03,
+                rotateX: 5,
+                rotateY: 3,
+                transition: { duration: 0.3 },
+              }}
+              whileTap={{ scale: 0.98 }}
               onClick={() => setCurrentMode("1")}
             >
               <div className="relative">
-                <div className="absolute -inset-1 bg-gradient-to-r from-blue-400 to-cyan-500 rounded-2xl opacity-0 group-hover:opacity-75 blur-xl transition duration-700 glow-pulse"></div>
+                <motion.div
+                  className="absolute -inset-1 bg-gradient-to-r from-blue-400 to-cyan-500 rounded-2xl opacity-0 group-hover:opacity-75 blur-xl transition duration-700"
+                />
                 <div className="relative bg-gradient-to-br from-blue-500 via-blue-600 to-cyan-600 p-10 rounded-3xl text-white shadow-2xl">
-                  <div className="flex items-center justify-center w-20 h-20 bg-white/20 backdrop-blur-sm rounded-3xl mb-8 mx-auto group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
+                  <motion.div
+                    className="flex items-center justify-center w-20 h-20 bg-white/20 backdrop-blur-sm rounded-3xl mb-8 mx-auto"
+                    whileHover={{ scale: 1.1, rotate: 6 }}
+                    transition={{ duration: 0.3 }}
+                  >
                     <Zap className="w-10 h-10" />
-                  </div>
-                  <h2 className="text-3xl font-extrabold text-center mb-3 tracking-tight">Idea Validada</h2>
+                  </motion.div>
+                  <motion.h2
+                    className="text-3xl font-extrabold text-center mb-3 tracking-tight"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.6 }}
+                  >
+                    Idea Validada
+                  </motion.h2>
                   <p className="text-center text-blue-100 font-semibold mb-5 text-lg">0-1 año</p>
-                  <p className="text-center text-white/95 mb-8 leading-relaxed text-base">Tienes una idea con potencial</p>
+                  <p className="text-center text-white/95 mb-8 leading-relaxed text-base">
+                    Tienes una idea con potencial
+                  </p>
                   <div className="text-sm space-y-3 opacity-95 mb-6">
-                    <p className="flex items-center gap-2">
+                    <motion.p
+                      className="flex items-center gap-2"
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.7 }}
+                    >
                       <span className="w-1.5 h-1.5 bg-white rounded-full"></span>
                       Validación de mercado
-                    </p>
-                    <p className="flex items-center gap-2">
+                    </motion.p>
+                    <motion.p
+                      className="flex items-center gap-2"
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.8 }}
+                    >
                       <span className="w-1.5 h-1.5 bg-white rounded-full"></span>
                       MVP y Product-Market Fit
-                    </p>
+                    </motion.p>
                   </div>
-                  <div className="mt-8 text-center">
-                    <div className="inline-flex items-center gap-3 text-base font-bold group-hover:gap-5 transition-all">
+                  <motion.div
+                    className="mt-8 text-center"
+                    whileHover={{ x: 5 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <div className="inline-flex items-center gap-3 text-base font-bold">
                       Empezar <span className="text-xl">→</span>
                     </div>
-                  </div>
+                  </motion.div>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
             {/* CARD 2 - PÚRPURA */}
-            <div
-              className="clay-card-grok animate-fade-in group cursor-pointer noise-texture"
-              style={{ animationDelay: "0.6s" }}
+            <motion.div
+              className="clay-card-grok group cursor-pointer noise-texture"
+              initial={{ opacity: 0, y: 50, rotateX: -15 }}
+              animate={{ opacity: 1, y: 0, rotateX: 0 }}
+              transition={{
+                duration: 0.7,
+                delay: 0.6,
+                type: "spring",
+                stiffness: 100,
+              }}
+              whileHover={{
+                y: -20,
+                scale: 1.03,
+                rotateX: 5,
+                rotateY: 3,
+                transition: { duration: 0.3 },
+              }}
+              whileTap={{ scale: 0.98 }}
               onClick={() => setCurrentMode("2")}
             >
               <div className="popular-badge">⭐ Más usado</div>
               <div className="relative">
-                <div className="absolute -inset-1 bg-gradient-to-r from-purple-400 to-pink-500 rounded-2xl opacity-0 group-hover:opacity-75 blur-xl transition duration-700 glow-pulse"></div>
+                <motion.div
+                  className="absolute -inset-1 bg-gradient-to-r from-purple-400 to-pink-500 rounded-2xl opacity-0 group-hover:opacity-75 blur-xl transition duration-700"
+                />
                 <div className="relative bg-gradient-to-br from-purple-500 via-purple-600 to-pink-600 p-10 rounded-3xl text-white shadow-2xl">
-                  <div className="flex items-center justify-center w-20 h-20 bg-white/20 backdrop-blur-sm rounded-3xl mb-8 mx-auto group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
+                  <motion.div
+                    className="flex items-center justify-center w-20 h-20 bg-white/20 backdrop-blur-sm rounded-3xl mb-8 mx-auto"
+                    whileHover={{ scale: 1.1, rotate: 6 }}
+                    transition={{ duration: 0.3 }}
+                  >
                     <TrendingUp className="w-10 h-10" />
-                  </div>
-                  <h2 className="text-3xl font-extrabold text-center mb-3 tracking-tight">Negocio en Crecimiento</h2>
+                  </motion.div>
+                  <motion.h2
+                    className="text-3xl font-extrabold text-center mb-3 tracking-tight"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.8 }}
+                  >
+                    Negocio en Crecimiento
+                  </motion.h2>
                   <p className="text-center text-purple-100 font-semibold mb-5 text-lg">1-3 años</p>
-                  <p className="text-center text-white/95 mb-8 leading-relaxed text-base">Tu negocio está validado y creciendo</p>
+                  <p className="text-center text-white/95 mb-8 leading-relaxed text-base">
+                    Tu negocio está validado y creciendo
+                  </p>
                   <div className="text-sm space-y-3 opacity-95 mb-6">
-                    <p className="flex items-center gap-2">
+                    <motion.p
+                      className="flex items-center gap-2"
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.9 }}
+                    >
                       <span className="w-1.5 h-1.5 bg-white rounded-full"></span>
                       Escalamiento de ventas
-                    </p>
-                    <p className="flex items-center gap-2">
+                    </motion.p>
+                    <motion.p
+                      className="flex items-center gap-2"
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 1.0 }}
+                    >
                       <span className="w-1.5 h-1.5 bg-white rounded-full"></span>
                       Optimización operacional
-                    </p>
+                    </motion.p>
                   </div>
-                  <div className="mt-8 text-center">
-                    <div className="inline-flex items-center gap-3 text-base font-bold group-hover:gap-5 transition-all">
+                  <motion.div
+                    className="mt-8 text-center"
+                    whileHover={{ x: 5 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <div className="inline-flex items-center gap-3 text-base font-bold">
                       Empezar <span className="text-xl">→</span>
                     </div>
-                  </div>
+                  </motion.div>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
             {/* CARD 3 - VERDE */}
-            <div
-              className="clay-card-grok animate-fade-in group cursor-pointer noise-texture"
-              style={{ animationDelay: "0.8s" }}
+            <motion.div
+              className="clay-card-grok group cursor-pointer noise-texture"
+              initial={{ opacity: 0, y: 50, rotateX: -15 }}
+              animate={{ opacity: 1, y: 0, rotateX: 0 }}
+              transition={{
+                duration: 0.7,
+                delay: 0.8,
+                type: "spring",
+                stiffness: 100,
+              }}
+              whileHover={{
+                y: -20,
+                scale: 1.03,
+                rotateX: 5,
+                rotateY: 3,
+                transition: { duration: 0.3 },
+              }}
+              whileTap={{ scale: 0.98 }}
               onClick={() => setCurrentMode("3")}
             >
               <div className="relative">
-                <div className="absolute -inset-1 bg-gradient-to-r from-green-400 to-emerald-500 rounded-2xl opacity-0 group-hover:opacity-75 blur-xl transition duration-700 glow-pulse"></div>
+                <motion.div
+                  className="absolute -inset-1 bg-gradient-to-r from-green-400 to-emerald-500 rounded-2xl opacity-0 group-hover:opacity-75 blur-xl transition duration-700"
+                />
                 <div className="relative bg-gradient-to-br from-green-500 via-green-600 to-emerald-600 p-10 rounded-3xl text-white shadow-2xl">
-                  <div className="flex items-center justify-center w-20 h-20 bg-white/20 backdrop-blur-sm rounded-3xl mb-8 mx-auto group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
+                  <motion.div
+                    className="flex items-center justify-center w-20 h-20 bg-white/20 backdrop-blur-sm rounded-3xl mb-8 mx-auto"
+                    whileHover={{ scale: 1.1, rotate: 6 }}
+                    transition={{ duration: 0.3 }}
+                  >
                     <Building2 className="w-10 h-10" />
-                  </div>
-                  <h2 className="text-3xl font-extrabold text-center mb-3 tracking-tight">Empresa Establecida</h2>
+                  </motion.div>
+                  <motion.h2
+                    className="text-3xl font-extrabold text-center mb-3 tracking-tight"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 1.0 }}
+                  >
+                    Empresa Establecida
+                  </motion.h2>
                   <p className="text-center text-green-100 font-semibold mb-5 text-lg">3+ años</p>
                   <p className="text-center text-white/95 mb-8 leading-relaxed text-base">
                     Empresa PYME o grande con operaciones
                   </p>
                   <div className="text-sm space-y-3 opacity-95 mb-6">
-                    <p className="flex items-center gap-2">
+                    <motion.p
+                      className="flex items-center gap-2"
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 1.1 }}
+                    >
                       <span className="w-1.5 h-1.5 bg-white rounded-full"></span>
                       Estrategia empresarial
-                    </p>
-                    <p className="flex items-center gap-2">
+                    </motion.p>
+                    <motion.p
+                      className="flex items-center gap-2"
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 1.2 }}
+                    >
                       <span className="w-1.5 h-1.5 bg-white rounded-full"></span>
                       Rentabilidad y expansión
-                    </p>
+                    </motion.p>
                   </div>
-                  <div className="mt-8 text-center">
-                    <div className="inline-flex items-center gap-3 text-base font-bold group-hover:gap-5 transition-all">
+                  <motion.div
+                    className="mt-8 text-center"
+                    whileHover={{ x: 5 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <div className="inline-flex items-center gap-3 text-base font-bold">
                       Empezar <span className="text-xl">→</span>
                     </div>
-                  </div>
+                  </motion.div>
                 </div>
               </div>
-            </div>
+            </motion.div>
           </div>
 
-          {/* Footer elegante */}
-          <div className="text-center mt-20 text-white/40">
+          {/* Footer elegante con animaciones */}
+          <motion.div
+            className="text-center mt-20 text-white/40"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 1.2 }}
+          >
             <div className="flex items-center justify-center gap-3 mb-4">
-              <div className="w-12 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent"></div>
-              <Sparkles className="w-4 h-4" />
-              <div className="w-12 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent"></div>
+              <motion.div
+                className="w-12 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent"
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ duration: 0.8, delay: 1.4 }}
+              />
+              <motion.div
+                animate={{
+                  rotate: [0, 360],
+                  scale: [1, 1.2, 1],
+                }}
+                transition={{
+                  duration: 4,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              >
+                <Sparkles className="w-4 h-4" />
+              </motion.div>
+              <motion.div
+                className="w-12 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent"
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ duration: 0.8, delay: 1.4 }}
+              />
             </div>
-            <p className="text-sm font-light tracking-wider">Powered by Claude AI • PuebloHub Pro</p>
-          </div>
+            <motion.p
+              className="text-sm font-light tracking-wider"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1.6 }}
+            >
+              Powered by Claude AI • PuebloHub Pro
+            </motion.p>
+          </motion.div>
         </div>
       </div>
     );
