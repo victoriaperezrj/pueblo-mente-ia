@@ -213,7 +213,9 @@ const BusinessAIBot = () => {
     }
   }, [currentMode]);
 
-  const generateAIResponse = async (userMessage: string) => {
+  const generateAIResponse = async (userMessage: string): Promise<string> => {
+    setIsLoading(true);
+    
     try {
       const conversationHistory = messages.map((msg) => ({
         role: msg.role,
@@ -230,26 +232,43 @@ const BusinessAIBot = () => {
       if (error) throw error;
 
       const aiResponse = data?.response || "Lo siento, hubo un error. Intenta de nuevo.";
+      
       setMessages((prev) => [
         ...prev,
+        {
+          role: "user",
+          content: userMessage,
+          timestamp: new Date(),
+        },
         {
           role: "assistant",
           content: aiResponse,
           timestamp: new Date(),
         },
       ]);
+      
+      setIsLoading(false);
+      return aiResponse;
     } catch (err) {
       console.error("Error calling AI:", err);
+      const errorMessage = "Lo siento, hubo un problema al conectar con el asistente. Por favor intenta nuevamente.";
+      
       setMessages((prev) => [
         ...prev,
         {
+          role: "user",
+          content: userMessage,
+          timestamp: new Date(),
+        },
+        {
           role: "assistant",
-          content: "Lo siento, hubo un problema al conectar con el asistente. Por favor intenta nuevamente.",
+          content: errorMessage,
           timestamp: new Date(),
         },
       ]);
-    } finally {
+      
       setIsLoading(false);
+      return errorMessage;
     }
   };
 
@@ -259,16 +278,6 @@ const BusinessAIBot = () => {
 
     const userMessage = inputValue.trim();
     setInputValue("");
-    setIsLoading(true);
-
-    setMessages((prev) => [
-      ...prev,
-      {
-        role: "user",
-        content: userMessage,
-        timestamp: new Date(),
-      },
-    ]);
 
     await generateAIResponse(userMessage);
   };
@@ -280,63 +289,73 @@ const BusinessAIBot = () => {
   // PANTALLA DE SELECCIÓN DE MODO
   if (!currentMode) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden">
-        {/* Partículas de fondo */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-blue-500/20 rounded-full blur-3xl animate-pulse"></div>
-          <div
-            className="absolute bottom-20 right-10 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse"
-            style={{ animationDelay: "1s" }}
-          ></div>
-          <div
-            className="absolute top-1/2 left-1/2 w-64 h-64 bg-green-500/10 rounded-full blur-3xl animate-pulse"
-            style={{ animationDelay: "2s" }}
-          ></div>
+      <div className="min-h-screen aurora-waves-background relative overflow-hidden">
+        {/* Partículas flotantes elegantes */}
+        <div className="floating-particles">
+          {[...Array(15)].map((_, i) => (
+            <div
+              key={i}
+              className="particle"
+              style={{
+                left: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 10}s`,
+                animationDuration: `${10 + Math.random() * 10}s`,
+              }}
+            />
+          ))}
         </div>
 
-        <div className="relative z-10 container mx-auto px-4 py-12">
-          {/* Header con efecto glassmorphism */}
-          <div className="text-center mb-12 scroll-fade-in">
-            <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/10 backdrop-blur-md border border-white/20 mb-6">
-              <Sparkles className="w-5 h-5 text-yellow-400" />
+        <div className="content-wrapper container mx-auto px-4 py-12">
+          {/* Header con efecto glassmorphism y animaciones */}
+          <div className="text-center mb-16 scroll-fade-in">
+            <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/10 backdrop-blur-md border border-white/20 mb-8 magnetic-button">
+              <Sparkles className="w-5 h-5 text-yellow-400 animate-pulse" />
               <span className="text-white font-semibold">IA que entiende Argentina</span>
             </div>
-            <h1 className="text-5xl md:text-6xl font-extrabold text-white mb-4 leading-tight">
+            <h1 className="hero-title-grok mb-6">
               Tu Asesor IA{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-green-400">
+              <span className="highlight">
                 Empresarial
               </span>
             </h1>
-            <p className="text-xl text-gray-300 mb-2 max-w-2xl mx-auto">Respuestas concretas para cada etapa</p>
-            <p className="text-gray-400 max-w-xl mx-auto">
+            <p className="text-xl text-white/90 mb-3 max-w-2xl mx-auto font-light tracking-wide">
+              Respuestas concretas para cada etapa
+            </p>
+            <p className="text-white/60 max-w-xl mx-auto text-sm">
               Selecciona tu etapa para recibir estrategias personalizadas
             </p>
           </div>
 
-          {/* Cards con claymorphism mejorado */}
-          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          {/* Cards con claymorphism mejorado y efectos elegantes */}
+          <div className="grid md:grid-cols-3 gap-10 max-w-7xl mx-auto">
             {/* CARD 1 - AZUL */}
             <div
-              className="clay-card-grok scroll-fade-in group cursor-pointer"
+              className="clay-card-grok scroll-fade-in group cursor-pointer noise-texture"
               style={{ animationDelay: "0.1s" }}
               onClick={() => setCurrentMode("1")}
             >
               <div className="relative">
-                <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl opacity-0 group-hover:opacity-100 blur transition duration-500"></div>
-                <div className="relative bg-gradient-to-br from-blue-500 to-blue-600 p-8 rounded-2xl text-white">
-                  <div className="flex items-center justify-center w-16 h-16 bg-white/20 rounded-2xl mb-6 mx-auto group-hover:scale-110 transition-transform">
-                    <Zap className="w-8 h-8" />
+                <div className="absolute -inset-1 bg-gradient-to-r from-blue-400 to-cyan-500 rounded-2xl opacity-0 group-hover:opacity-75 blur-xl transition duration-700 glow-pulse"></div>
+                <div className="relative bg-gradient-to-br from-blue-500 via-blue-600 to-cyan-600 p-10 rounded-3xl text-white shadow-2xl">
+                  <div className="flex items-center justify-center w-20 h-20 bg-white/20 backdrop-blur-sm rounded-3xl mb-8 mx-auto group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
+                    <Zap className="w-10 h-10" />
                   </div>
-                  <h2 className="text-2xl font-bold text-center mb-2">Idea Validada</h2>
-                  <p className="text-center text-blue-100 font-semibold mb-4">0-1 año</p>
-                  <p className="text-center text-white/90 mb-6 leading-relaxed">Tienes una idea con potencial</p>
-                  <div className="text-sm space-y-2 opacity-90">
-                    <p>• Validación de mercado</p>
-                    <p>• MVP y Product-Market Fit</p>
+                  <h2 className="text-3xl font-extrabold text-center mb-3 tracking-tight">Idea Validada</h2>
+                  <p className="text-center text-blue-100 font-semibold mb-5 text-lg">0-1 año</p>
+                  <p className="text-center text-white/95 mb-8 leading-relaxed text-base">Tienes una idea con potencial</p>
+                  <div className="text-sm space-y-3 opacity-95 mb-6">
+                    <p className="flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 bg-white rounded-full"></span>
+                      Validación de mercado
+                    </p>
+                    <p className="flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 bg-white rounded-full"></span>
+                      MVP y Product-Market Fit
+                    </p>
                   </div>
-                  <div className="mt-6 text-center">
-                    <div className="inline-flex items-center gap-2 text-sm font-semibold">
-                      Empezar <span className="group-hover:translate-x-1 transition-transform">→</span>
+                  <div className="mt-8 text-center">
+                    <div className="inline-flex items-center gap-3 text-base font-bold group-hover:gap-5 transition-all">
+                      Empezar <span className="text-xl">→</span>
                     </div>
                   </div>
                 </div>
@@ -345,27 +364,33 @@ const BusinessAIBot = () => {
 
             {/* CARD 2 - PÚRPURA */}
             <div
-              className="clay-card-grok scroll-fade-in group cursor-pointer"
+              className="clay-card-grok scroll-fade-in group cursor-pointer noise-texture"
               style={{ animationDelay: "0.2s" }}
               onClick={() => setCurrentMode("2")}
             >
               <div className="popular-badge">⭐ Más usado</div>
               <div className="relative">
-                <div className="absolute -inset-1 bg-gradient-to-r from-purple-500 to-purple-600 rounded-2xl opacity-0 group-hover:opacity-100 blur transition duration-500"></div>
-                <div className="relative bg-gradient-to-br from-purple-500 to-purple-600 p-8 rounded-2xl text-white">
-                  <div className="flex items-center justify-center w-16 h-16 bg-white/20 rounded-2xl mb-6 mx-auto group-hover:scale-110 transition-transform">
-                    <TrendingUp className="w-8 h-8" />
+                <div className="absolute -inset-1 bg-gradient-to-r from-purple-400 to-pink-500 rounded-2xl opacity-0 group-hover:opacity-75 blur-xl transition duration-700 glow-pulse"></div>
+                <div className="relative bg-gradient-to-br from-purple-500 via-purple-600 to-pink-600 p-10 rounded-3xl text-white shadow-2xl">
+                  <div className="flex items-center justify-center w-20 h-20 bg-white/20 backdrop-blur-sm rounded-3xl mb-8 mx-auto group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
+                    <TrendingUp className="w-10 h-10" />
                   </div>
-                  <h2 className="text-2xl font-bold text-center mb-2">Negocio en Crecimiento</h2>
-                  <p className="text-center text-purple-100 font-semibold mb-4">1-3 años</p>
-                  <p className="text-center text-white/90 mb-6 leading-relaxed">Tu negocio está validado y creciendo</p>
-                  <div className="text-sm space-y-2 opacity-90">
-                    <p>• Escalamiento de ventas</p>
-                    <p>• Optimización operacional</p>
+                  <h2 className="text-3xl font-extrabold text-center mb-3 tracking-tight">Negocio en Crecimiento</h2>
+                  <p className="text-center text-purple-100 font-semibold mb-5 text-lg">1-3 años</p>
+                  <p className="text-center text-white/95 mb-8 leading-relaxed text-base">Tu negocio está validado y creciendo</p>
+                  <div className="text-sm space-y-3 opacity-95 mb-6">
+                    <p className="flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 bg-white rounded-full"></span>
+                      Escalamiento de ventas
+                    </p>
+                    <p className="flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 bg-white rounded-full"></span>
+                      Optimización operacional
+                    </p>
                   </div>
-                  <div className="mt-6 text-center">
-                    <div className="inline-flex items-center gap-2 text-sm font-semibold">
-                      Empezar <span className="group-hover:translate-x-1 transition-transform">→</span>
+                  <div className="mt-8 text-center">
+                    <div className="inline-flex items-center gap-3 text-base font-bold group-hover:gap-5 transition-all">
+                      Empezar <span className="text-xl">→</span>
                     </div>
                   </div>
                 </div>
@@ -374,28 +399,34 @@ const BusinessAIBot = () => {
 
             {/* CARD 3 - VERDE */}
             <div
-              className="clay-card-grok scroll-fade-in group cursor-pointer"
+              className="clay-card-grok scroll-fade-in group cursor-pointer noise-texture"
               style={{ animationDelay: "0.3s" }}
               onClick={() => setCurrentMode("3")}
             >
               <div className="relative">
-                <div className="absolute -inset-1 bg-gradient-to-r from-green-500 to-green-600 rounded-2xl opacity-0 group-hover:opacity-100 blur transition duration-500"></div>
-                <div className="relative bg-gradient-to-br from-green-500 to-green-600 p-8 rounded-2xl text-white">
-                  <div className="flex items-center justify-center w-16 h-16 bg-white/20 rounded-2xl mb-6 mx-auto group-hover:scale-110 transition-transform">
-                    <Building2 className="w-8 h-8" />
+                <div className="absolute -inset-1 bg-gradient-to-r from-green-400 to-emerald-500 rounded-2xl opacity-0 group-hover:opacity-75 blur-xl transition duration-700 glow-pulse"></div>
+                <div className="relative bg-gradient-to-br from-green-500 via-green-600 to-emerald-600 p-10 rounded-3xl text-white shadow-2xl">
+                  <div className="flex items-center justify-center w-20 h-20 bg-white/20 backdrop-blur-sm rounded-3xl mb-8 mx-auto group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
+                    <Building2 className="w-10 h-10" />
                   </div>
-                  <h2 className="text-2xl font-bold text-center mb-2">Empresa Establecida</h2>
-                  <p className="text-center text-green-100 font-semibold mb-4">3+ años</p>
-                  <p className="text-center text-white/90 mb-6 leading-relaxed">
+                  <h2 className="text-3xl font-extrabold text-center mb-3 tracking-tight">Empresa Establecida</h2>
+                  <p className="text-center text-green-100 font-semibold mb-5 text-lg">3+ años</p>
+                  <p className="text-center text-white/95 mb-8 leading-relaxed text-base">
                     Empresa PYME o grande con operaciones
                   </p>
-                  <div className="text-sm space-y-2 opacity-90">
-                    <p>• Estrategia empresarial</p>
-                    <p>• Rentabilidad y expansión</p>
+                  <div className="text-sm space-y-3 opacity-95 mb-6">
+                    <p className="flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 bg-white rounded-full"></span>
+                      Estrategia empresarial
+                    </p>
+                    <p className="flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 bg-white rounded-full"></span>
+                      Rentabilidad y expansión
+                    </p>
                   </div>
-                  <div className="mt-6 text-center">
-                    <div className="inline-flex items-center gap-2 text-sm font-semibold">
-                      Empezar <span className="group-hover:translate-x-1 transition-transform">→</span>
+                  <div className="mt-8 text-center">
+                    <div className="inline-flex items-center gap-3 text-base font-bold group-hover:gap-5 transition-all">
+                      Empezar <span className="text-xl">→</span>
                     </div>
                   </div>
                 </div>
@@ -403,9 +434,14 @@ const BusinessAIBot = () => {
             </div>
           </div>
 
-          {/* Footer */}
-          <div className="text-center mt-16 text-gray-400">
-            <p className="text-sm">Powered by Claude AI • PuebloHub Pro</p>
+          {/* Footer elegante */}
+          <div className="text-center mt-20 text-white/40">
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <div className="w-12 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent"></div>
+              <Sparkles className="w-4 h-4" />
+              <div className="w-12 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent"></div>
+            </div>
+            <p className="text-sm font-light tracking-wider">Powered by Claude AI • PuebloHub Pro</p>
           </div>
         </div>
       </div>
