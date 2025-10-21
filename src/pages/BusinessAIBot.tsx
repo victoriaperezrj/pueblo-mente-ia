@@ -1,25 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { supabase } from "../lib/supabaseClient"; // Asumiendo que esta es tu importación
-// Importa las interfaces de tus componentes (ajusta la ruta si es necesario)
-import { NegocioInterfaceProps } from "../components/NegocioInterface";
-import { EmpresaInterfaceProps } from "../components/EmpresaInterface";
-
-// **********************************************
-// ** NOTA: Necesitas reemplazar estos placeholders
-// ** con tus componentes reales:
-const NegocioInterface: React.FC<NegocioInterfaceProps> = (props) => (
-  <div className="chat-interface">{/* Tu JSX de NegocioInterface */}</div>
-);
-const EmpresaInterface: React.FC<EmpresaInterfaceProps> = (props) => (
-  <div className="chat-interface">{/* Tu JSX de EmpresaInterface */}</div>
-);
-// **********************************************
+import React, { useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import NegocioInterface from "@/components/business-bot/NegocioInterface";
+import EmpresaInterface from "@/components/business-bot/EmpresaInterface";
 
 // Define la estructura de un mensaje
 interface Message {
-  id: number;
-  text: string;
-  sender: "user" | "bot"; // 'user' para el usuario, 'bot' para la respuesta del AI
+  role: "user" | "assistant";
+  content: string;
+  timestamp: Date;
 }
 
 const BusinessAIBot: React.FC = () => {
@@ -33,7 +21,7 @@ const BusinessAIBot: React.FC = () => {
     if (isLoading) return "El bot ya está procesando una solicitud.";
 
     // Añadir el mensaje del usuario inmediatamente
-    const newUserMessage: Message = { id: Date.now(), text: userMessage, sender: "user" };
+    const newUserMessage: Message = { role: "user", content: userMessage, timestamp: new Date() };
     setMessages((prevMessages) => [...prevMessages, newUserMessage]);
     setIsLoading(true); // Activar carga
 
@@ -55,7 +43,7 @@ const BusinessAIBot: React.FC = () => {
     }
 
     // Añadir la respuesta del bot
-    const newBotMessage: Message = { id: Date.now() + 1, text: botResponseText, sender: "bot" };
+    const newBotMessage: Message = { role: "assistant", content: botResponseText, timestamp: new Date() };
     setMessages((prevMessages) => [...prevMessages, newBotMessage]);
 
     return botResponseText;
