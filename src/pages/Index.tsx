@@ -16,9 +16,11 @@ import {
   Star,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { FloatingBot } from "@/components/business-bot/FloatingBot";
+import { ImprovedFloatingBot } from "@/components/business-bot/ImprovedFloatingBot";
 import { FloatingOrbs } from "@/components/business-bot/FloatingOrbs";
 import { FloatingParticles } from "@/components/animations/FloatingParticles";
+import AnimatedHero from "@/components/animations/AnimatedHero";
+import { SqueezeButton } from "@/components/animations/SqueezeButton";
 
 // ══════════════════════════════════════════════════════════════════════
 // LOGIN MODAL
@@ -218,7 +220,7 @@ export default function Index() {
   return (
     <>
       {showLoginModal && <LoginModal onClose={() => setShowLoginModal(false)} />}
-      <FloatingBot />
+      <ImprovedFloatingBot />
       <FloatingOrbs />
       <FloatingParticles />
 
@@ -296,63 +298,7 @@ export default function Index() {
           <div className="absolute top-1/2 left-1/2 w-[400px] h-[400px] bg-pink-500/30 rounded-full blur-[100px] animate-float-slow" style={{ animationDelay: '2s' }}></div>
 
           <div className="container mx-auto px-6 relative z-10">
-            <div className="max-w-5xl mx-auto text-center">
-              {/* Badge */}
-              <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/10 backdrop-blur-md mb-8 shadow-lg border border-white/20 animate-fade-in">
-                <Sparkles className="w-5 h-5 text-yellow-300" />
-                <span className="text-sm font-semibold text-white">IA que entiende Argentina</span>
-              </div>
-
-              {/* Título */}
-              <h1 className="text-5xl md:text-7xl font-extrabold text-white mb-6 leading-tight animate-fade-in-up">
-                De la <span className="text-yellow-300 drop-shadow-glow">idea</span> a los{" "}
-                <span className="text-green-300 drop-shadow-glow">números</span>
-                <br />
-                en días, no meses
-              </h1>
-
-              {/* Descripción */}
-              <p className="text-white/90 text-lg md:text-xl mb-10 max-w-3xl mx-auto leading-relaxed animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
-                La plataforma que combina <strong className="text-yellow-300">IA + automatización + datos</strong> para
-                que emprendedores y PyMEs <strong className="text-green-300">validen, organicen y escalen</strong>
-              </p>
-
-              {/* Features */}
-              <div className="flex flex-wrap justify-center gap-4 mb-12 animate-fade-in-up" style={{ animationDelay: "0.4s" }}>
-                <div className="flex items-center gap-2 px-5 py-3 rounded-full bg-white/10 backdrop-blur-md shadow-lg border border-white/20">
-                  <Check className="w-5 h-5 text-green-300" />
-                  <span className="text-white font-semibold text-sm md:text-base">Sin tarjeta</span>
-                </div>
-                <div className="flex items-center gap-2 px-5 py-3 rounded-full bg-white/10 backdrop-blur-md shadow-lg border border-white/20">
-                  <Check className="w-5 h-5 text-green-300" />
-                  <span className="text-white font-semibold text-sm md:text-base">Datos seguros</span>
-                </div>
-                <div className="flex items-center gap-2 px-5 py-3 rounded-full bg-white/10 backdrop-blur-md shadow-lg border border-white/20">
-                  <Check className="w-5 h-5 text-green-300" />
-                  <span className="text-white font-semibold text-sm md:text-base">Empezá en 2 min</span>
-                </div>
-              </div>
-
-              {/* CTAs */}
-              <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up" style={{ animationDelay: "0.6s" }}>
-                <Button
-                  size="lg"
-                  className="bg-white text-blue-600 hover:bg-gray-100 text-lg px-10 py-7 font-bold shadow-2xl hover:scale-105 transition-transform"
-                  onClick={() => navigate("/select-role")}
-                >
-                  <Rocket className="w-6 h-6 mr-2" />
-                  Ver Demo
-                </Button>
-                <Button
-                  size="lg"
-                  className="bg-white/10 backdrop-blur-md border-2 border-white/30 text-white hover:bg-white/20 text-lg px-10 py-7 font-bold shadow-2xl hover:scale-105 transition-transform"
-                  onClick={() => setShowLoginModal(true)}
-                >
-                  Iniciar Sesión
-                  <ChevronRight className="w-6 h-6 ml-2" />
-                </Button>
-              </div>
-            </div>
+            <AnimatedHero />
           </div>
         </section>
 
