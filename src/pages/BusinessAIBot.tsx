@@ -1,8 +1,8 @@
-import { useState, useRef, useEffect, useCallback, memo } from "react";
-import { Zap, TrendingUp, Building2, Send, Lightbulb, X, Sparkles, ArrowLeft } from "lucide-react";
+import { useState, useRef, useEffect, useCallback } from "react";
+import { Zap, TrendingUp, Building2, Send, Lightbulb, ArrowLeft, Sparkles } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import NegocioInterface from "@/components/business-bot/NegocioInterface";
-import EmpresaInterface from "@/components/business-bot/EmpresaInterface";
+import { FloatingOrbs } from "@/components/business-bot/FloatingOrbs";
+import { FloatingParticles } from "@/components/animations/FloatingParticles";
 
 type Mode = "1" | "2" | "3" | null;
 
@@ -200,7 +200,7 @@ const BusinessAIBot = () => {
       const systemPrompt = getSystemPrompt(currentMode);
 
       // Llamada a la función Edge de Supabase
-      const { data, error } = await supabase.functions.invoke("chat", {
+      const { data, error } = await supabase.functions.invoke("claude-chat", {
         body: {
           messages: [
             { role: "system", content: systemPrompt },
@@ -275,15 +275,17 @@ const BusinessAIBot = () => {
   // ══════════════════════════════════════════════════════════════════════
   if (!currentMode) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4 relative overflow-hidden">
-        {/* Background optimizado */}
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4 relative overflow-hidden">
+        <FloatingOrbs />
+        <FloatingParticles />
+        
         <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
         
         <div className="max-w-6xl mx-auto relative z-10">
           {/* Header */}
           <div className="text-center mb-16">
             <h1 className="text-5xl md:text-6xl font-bold text-white mb-4">
-              Tu Asesor IA <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">Empresarial</span>
+              Tu Asesor IA <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">Empresarial</span>
             </h1>
             <p className="text-white/80 text-xl">
               Elegí tu etapa y recibí recomendaciones personalizadas
@@ -312,12 +314,12 @@ const BusinessAIBot = () => {
             {/* NEGOCIO */}
             <button
               onClick={() => setCurrentMode("2")}
-              className="group p-8 bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl hover:bg-white/10 hover:border-purple-400/50 transition-all duration-300 hover:scale-105 relative"
+              className="group p-8 bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl hover:bg-white/10 hover:border-cyan-400/50 transition-all duration-300 hover:scale-105 relative"
             >
               <div className="absolute -top-3 right-4 px-3 py-1 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-full text-xs font-bold text-black">
                 MÁS USADO
               </div>
-              <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+              <div className="w-16 h-16 bg-gradient-to-br from-cyan-500 to-cyan-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                 <TrendingUp className="w-8 h-8 text-white" />
               </div>
               <h3 className="text-2xl font-bold text-white mb-2">Negocio</h3>
@@ -339,7 +341,7 @@ const BusinessAIBot = () => {
               </div>
               <h3 className="text-2xl font-bold text-white mb-2">Empresa</h3>
               <p className="text-white/60 text-sm mb-4">3+ años</p>
-              <p className="text-white/80 mb-4">Empresa PYME o grande con operaciones</p>
+              <p className="text-white/80 mb-4">Empresa PYME con operaciones</p>
               <div className="space-y-2 text-left text-sm text-white/70">
                 <p>• Estrategia empresarial</p>
                 <p>• Rentabilidad y expansión</p>
@@ -349,7 +351,7 @@ const BusinessAIBot = () => {
 
           {/* Footer */}
           <div className="text-center text-white/60 text-sm">
-            <p>Powered by Claude AI • PuebloHub Pro</p>
+            <p>Powered by Claude AI • Proyecto Emprendedurismo</p>
           </div>
         </div>
       </div>
@@ -369,15 +371,15 @@ const BusinessAIBot = () => {
       hoverBg: "hover:bg-blue-100",
     },
     "2": {
-      gradient: "from-purple-500 to-purple-600",
+      gradient: "from-cyan-500 to-cyan-600",
       icon: TrendingUp,
       title: "Negocio",
       subtitle: "1-3 años",
-      borderColor: "border-purple-200",
-      bgColor: "bg-purple-50",
-      textColor: "text-purple-600",
-      messageColor: "bg-purple-500",
-      hoverBg: "hover:bg-purple-100",
+      borderColor: "border-cyan-200",
+      bgColor: "bg-cyan-50",
+      textColor: "text-cyan-600",
+      messageColor: "bg-cyan-500",
+      hoverBg: "hover:bg-cyan-100",
     },
     "3": {
       gradient: "from-green-500 to-green-600",
@@ -394,29 +396,6 @@ const BusinessAIBot = () => {
 
   const config = modeConfig[currentMode];
   const Icon = config.icon;
-
-  // Interfaces especiales para Mode 2 y 3
-  if (currentMode === "2") {
-    return (
-      <NegocioInterface
-        onBack={() => setCurrentMode(null)}
-        onSendMessage={generateAIResponse}
-        messages={messages}
-        isLoading={isLoading}
-      />
-    );
-  }
-
-  if (currentMode === "3") {
-    return (
-      <EmpresaInterface
-        onBack={() => setCurrentMode(null)}
-        onSendMessage={generateAIResponse}
-        messages={messages}
-        isLoading={isLoading}
-      />
-    );
-  }
 
   // ══════════════════════════════════════════════════════════════════════
   // MODE 1 - Chat Interface Optimizada
