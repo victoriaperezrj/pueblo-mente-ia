@@ -1,0 +1,284 @@
+// ============================================
+// ✨ EFECTOS EXTRA - PROYECTO EMPRENDEDURISMO
+// ============================================
+// Componentes adicionales para más vida visual
+// Compatible con Lovable (React + Framer Motion)
+// ============================================
+
+import { motion } from 'framer-motion';
+
+// ============================================
+// 🌟 Efecto: Floating Particles Premium
+// ============================================
+export const FloatingParticles = ({ count = 30 }) => {
+  return (
+    <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
+      {[...Array(count)].map((_, i) => {
+        const size = Math.random() * 4 + 1;
+        const duration = Math.random() * 15 + 10;
+        const delay = Math.random() * 5;
+        const xOffset = Math.random() * 100 - 50;
+        
+        return (
+          <motion.div
+            key={i}
+            className="absolute rounded-full"
+            style={{
+              width: size,
+              height: size,
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              background: [
+                'rgba(59, 130, 246, 0.6)',    // Azul
+                'rgba(139, 92, 246, 0.6)',    // Púrpura
+                'rgba(16, 185, 129, 0.6)',    // Esmeralda
+                'rgba(245, 158, 11, 0.6)',    // Ámbar
+              ][Math.floor(Math.random() * 4)],
+              filter: 'blur(1px)',
+              boxShadow: '0 0 10px currentColor',
+            }}
+            animate={{
+              y: [0, -150, 0],
+              x: [0, xOffset, 0],
+              opacity: [0.2, 0.8, 0.2],
+              scale: [0.5, 1.2, 0.5],
+            }}
+            transition={{
+              duration,
+              delay,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />
+        );
+      })}
+    </div>
+  );
+};
+
+// ============================================
+// 💫 Efecto: Glow Orbs Dinámicos
+// ============================================
+export const DynamicGlowOrbs = () => {
+  const orbs = [
+    {
+      size: 400,
+      color: 'rgba(59, 130, 246, 0.3)',
+      startX: '10%',
+      startY: '20%',
+      endX: '15%',
+      endY: '25%',
+    },
+    {
+      size: 350,
+      color: 'rgba(16, 185, 129, 0.3)',
+      startX: '70%',
+      startY: '40%',
+      endX: '75%',
+      endY: '45%',
+    },
+    {
+      size: 300,
+      color: 'rgba(139, 92, 246, 0.25)',
+      startX: '40%',
+      startY: '70%',
+      endX: '45%',
+      endY: '65%',
+    },
+  ];
+  
+  return (
+    <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
+      {orbs.map((orb, i) => (
+        <motion.div
+          key={i}
+          className="absolute rounded-full"
+          style={{
+            width: orb.size,
+            height: orb.size,
+            background: `radial-gradient(circle, ${orb.color} 0%, transparent 70%)`,
+            filter: 'blur(80px)',
+          }}
+          animate={{
+            left: [orb.startX, orb.endX, orb.startX],
+            top: [orb.startY, orb.endY, orb.startY],
+            scale: [1, 1.2, 1],
+          }}
+          transition={{
+            duration: 20 + i * 3,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: i * 2,
+          }}
+        />
+      ))}
+    </div>
+  );
+};
+
+// ============================================
+// ⚡ Efecto: Grid Animado de Fondo
+// ============================================
+export const AnimatedGrid = () => {
+  return (
+    <motion.div
+      className="fixed inset-0 pointer-events-none z-0"
+      style={{
+        backgroundImage: `
+          linear-gradient(rgba(59, 130, 246, 0.03) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(59, 130, 246, 0.03) 1px, transparent 1px)
+        `,
+        backgroundSize: '60px 60px',
+      }}
+      animate={{
+        backgroundPosition: ['0px 0px', '60px 60px'],
+      }}
+      transition={{
+        duration: 20,
+        repeat: Infinity,
+        ease: "linear",
+      }}
+    />
+  );
+};
+
+// ============================================
+// 🌈 Efecto: Gradient Beam (Rayo de luz)
+// ============================================
+export const GradientBeam = () => {
+  return (
+    <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
+      <motion.div
+        className="absolute top-0 left-1/2 w-[500px] h-full -translate-x-1/2"
+        style={{
+          background: 'linear-gradient(to bottom, rgba(59, 130, 246, 0.1) 0%, transparent 50%)',
+          filter: 'blur(60px)',
+        }}
+        animate={{
+          opacity: [0.3, 0.6, 0.3],
+          scaleX: [1, 1.2, 1],
+        }}
+        transition={{
+          duration: 8,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+      />
+    </div>
+  );
+};
+
+// ============================================
+// 🎆 Efecto: Sparkles en Hero
+// ============================================
+export const HeroSparkles = () => {
+  return (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden">
+      {[...Array(8)].map((_, i) => (
+        <motion.div
+          key={i}
+          className="absolute text-2xl"
+          style={{
+            left: `${20 + Math.random() * 60}%`,
+            top: `${20 + Math.random() * 60}%`,
+          }}
+          animate={{
+            scale: [0, 1, 0],
+            rotate: [0, 180, 360],
+            opacity: [0, 1, 0],
+          }}
+          transition={{
+            duration: 3,
+            delay: i * 0.5,
+            repeat: Infinity,
+            repeatDelay: 2,
+          }}
+        >
+          ✨
+        </motion.div>
+      ))}
+    </div>
+  );
+};
+
+// ============================================
+// 🌊 Efecto: Wave Background
+// ============================================
+export const WaveBackground = () => {
+  return (
+    <div className="fixed bottom-0 left-0 right-0 h-64 pointer-events-none overflow-hidden z-0">
+      <motion.div
+        className="absolute bottom-0 left-0 right-0 h-full"
+        style={{
+          background: 'linear-gradient(to top, rgba(59, 130, 246, 0.1) 0%, transparent 100%)',
+        }}
+        animate={{
+          transform: [
+            'translateY(0%) scaleX(1)',
+            'translateY(-10%) scaleX(1.1)',
+            'translateY(0%) scaleX(1)',
+          ],
+        }}
+        transition={{
+          duration: 10,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+      />
+    </div>
+  );
+};
+
+// ============================================
+// 🎯 Efecto: Cursor Glow (Opcional)
+// ============================================
+export const CursorGlow = () => {
+  return (
+    <motion.div
+      className="fixed w-96 h-96 rounded-full pointer-events-none z-50 mix-blend-screen"
+      style={{
+        background: 'radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%)',
+        filter: 'blur(40px)',
+      }}
+      animate={{
+        x: -192, // Centrar (-width/2)
+        y: -192,
+      }}
+      transition={{
+        type: "spring",
+        damping: 30,
+        stiffness: 200,
+      }}
+    />
+  );
+};
+
+// ============================================
+// 📦 Componente de combinación: All Effects
+// ============================================
+export const AllVisualEffects = () => {
+  return (
+    <>
+      <DynamicGlowOrbs />
+      <AnimatedGrid />
+      <FloatingParticles count={25} />
+      <GradientBeam />
+    </>
+  );
+};
+
+// ============================================
+// 💡 EJEMPLO DE USO
+// ============================================
+// En tu App.tsx, importá y usá así:
+//
+// import { AllVisualEffects } from './VisualEffects';
+//
+// function App() {
+//   return (
+//     <div className="relative">
+//       <AllVisualEffects />
+//       {/* Tu contenido aquí */}
+//     </div>
+//   );
+// }
