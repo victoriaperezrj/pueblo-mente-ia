@@ -1,0 +1,42 @@
+// ============================================
+// 🚀 APP PRINCIPAL - PROYECTO EMPRENDEDURISMO
+// ============================================
+// Integración completa de todos los componentes
+// Compatible con Lovable - Copiar y pegar directo
+// ============================================
+
+import AnimatedBackground from './AnimatedBackground';
+import Navigation from './Navigation';
+import HeroSection from './HeroSection';
+import StageCards from './StageCards';
+
+function App() {
+  return (
+    <div className="min-h-screen bg-slate-950 text-white overflow-x-hidden">
+      {/* Background animado */}
+      <AnimatedBackground />
+      
+      {/* Navegación */}
+      <Navigation />
+      
+      {/* Contenido principal */}
+      <main className="pt-20">
+        <HeroSection />
+        <StageCards />
+        
+        {/* Aquí podés agregar más secciones */}
+      </main>
+      
+      {/* Footer opcional */}
+      <footer className="relative py-12 px-6 border-t border-white/10 backdrop-blur-sm">
+        <div className="max-w-7xl mx-auto text-center">
+          <p className="text-white/60 text-sm">
+            © 2025 Proyecto Emprendedurismo. Hecho con 💙 en Argentina.
+          </p>
+        </div>
+      </footer>
+    </div>
+  );
+}
+
+export default App;
