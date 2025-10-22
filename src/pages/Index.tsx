@@ -14,9 +14,11 @@ import {
   Rocket,
   ChevronRight,
   Star,
-  MessageCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { FloatingBot } from "@/components/business-bot/FloatingBot";
+import { FloatingOrbs } from "@/components/business-bot/FloatingOrbs";
+import { FloatingParticles } from "@/components/animations/FloatingParticles";
 
 // ══════════════════════════════════════════════════════════════════════
 // LOGIN MODAL
@@ -116,34 +118,7 @@ function LoginModal({ onClose }: { onClose: () => void }) {
   );
 }
 
-// ══════════════════════════════════════════════════════════════════════
-// FLOATING BOT - Optimizado y clickeable
-// ══════════════════════════════════════════════════════════════════════
-function FloatingChatBot() {
-  const navigate = useNavigate();
-  const [showTooltip, setShowTooltip] = useState(true);
-
-  return (
-    <>
-      <button
-        onClick={() => navigate("/business-ai-bot")}
-        onMouseEnter={() => setShowTooltip(false)}
-        className="fixed bottom-8 right-8 z-50 w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-transform group"
-      >
-        {/* Pulse effect */}
-        <span className="absolute inset-0 rounded-full bg-purple-400 animate-ping opacity-40"></span>
-        <MessageCircle className="w-8 h-8 text-white relative z-10 group-hover:scale-110 transition-transform" />
-      </button>
-
-      {showTooltip && (
-        <div className="fixed bottom-28 right-8 z-50 bg-white px-4 py-3 rounded-2xl shadow-xl border border-gray-200 animate-slide-up max-w-xs">
-          <p className="text-sm font-semibold text-gray-900 mb-1">💬 ¿Necesitás ayuda?</p>
-          <p className="text-xs text-gray-600">Hablá con nuestro Asesor IA</p>
-        </div>
-      )}
-    </>
-  );
-}
+// Removed old FloatingChatBot - using new FloatingBot component
 
 // ══════════════════════════════════════════════════════════════════════
 // STAGE CARD - Optimizado
@@ -243,9 +218,11 @@ export default function Index() {
   return (
     <>
       {showLoginModal && <LoginModal onClose={() => setShowLoginModal(false)} />}
-      <FloatingChatBot />
+      <FloatingBot />
+      <FloatingOrbs />
+      <FloatingParticles />
 
-      <div className="min-h-screen bg-white">
+      <div className="min-h-screen bg-white relative">
         {/* ═════════════════════════════════════════════════════════════════
             NAVBAR
             ════════════════════════════════════════════════════════════════ */}
@@ -306,16 +283,17 @@ export default function Index() {
         </nav>
 
         {/* ═════════════════════════════════════════════════════════════════
-            HERO SECTION - OPTIMIZADO
+            HERO SECTION - CON EFECTOS DRAMÁTICOS
             ════════════════════════════════════════════════════════════════ */}
         <section className="pt-32 pb-20 md:pt-40 md:pb-32 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden">
-          {/* Background effects - OPTIMIZADOS con CSS puro */}
-          <div className="absolute inset-0 bg-gradient-radial from-purple-500/20 via-transparent to-transparent"></div>
-          <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
+          {/* Background effects mejorados */}
+          <div className="absolute inset-0 bg-gradient-radial from-purple-500/30 via-transparent to-transparent"></div>
+          <div className="absolute inset-0 bg-grid-pattern opacity-20"></div>
           
-          {/* Orbes animados - CSS PURO, no JS */}
-          <div className="absolute top-20 left-10 w-96 h-96 bg-blue-500/30 rounded-full blur-3xl animate-float-slow"></div>
-          <div className="absolute bottom-20 right-10 w-96 h-96 bg-purple-500/30 rounded-full blur-3xl animate-float-slower"></div>
+          {/* Orbes animados MÁS VISIBLES */}
+          <div className="absolute top-20 left-10 w-[500px] h-[500px] bg-blue-500/40 rounded-full blur-[100px] animate-float-slow"></div>
+          <div className="absolute bottom-20 right-10 w-[500px] h-[500px] bg-purple-500/40 rounded-full blur-[100px] animate-float-slower"></div>
+          <div className="absolute top-1/2 left-1/2 w-[400px] h-[400px] bg-pink-500/30 rounded-full blur-[100px] animate-float-slow" style={{ animationDelay: '2s' }}></div>
 
           <div className="container mx-auto px-6 relative z-10">
             <div className="max-w-5xl mx-auto text-center">
