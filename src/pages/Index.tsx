@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import {
   Building2,
   Menu,
@@ -19,7 +20,6 @@ import { Button } from "@/components/ui/button";
 import { ImprovedFloatingBot } from "@/components/business-bot/ImprovedFloatingBot";
 import { FloatingOrbs } from "@/components/business-bot/FloatingOrbs";
 import { FloatingParticles } from "@/components/animations/FloatingParticles";
-import AnimatedHero from "@/components/animations/AnimatedHero";
 import { SqueezeButton } from "@/components/animations/SqueezeButton";
 
 // ══════════════════════════════════════════════════════════════════════
@@ -120,7 +120,191 @@ function LoginModal({ onClose }: { onClose: () => void }) {
   );
 }
 
-// Removed old FloatingChatBot - using new FloatingBot component
+// ══════════════════════════════════════════════════════════════════════
+// HERO SECTION MEJORADO - CON BOTONES CON VIDA
+// ══════════════════════════════════════════════════════════════════════
+function ImprovedAnimatedHero({ onLoginClick }: { onLoginClick: () => void }) {
+  const navigate = useNavigate();
+
+  const words = [
+    { text: "De la", color: "text-white/90" },
+    { text: "idea", color: "text-amber-400" },
+    { text: "a los", color: "text-white/90" },
+    { text: "números", color: "text-emerald-400" },
+  ];
+
+  return (
+    <div className="text-center max-w-5xl mx-auto">
+      {/* Badge superior */}
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7 }}
+        className="inline-block mb-8"
+      >
+        <div className="px-6 py-2.5 rounded-full bg-gradient-to-r from-blue-500/10 via-cyan-500/10 to-emerald-500/10 
+                        border border-white/10 backdrop-blur-xl">
+          <div className="flex items-center gap-2 text-sm font-medium">
+            <Sparkles className="w-4 h-4 text-amber-400 animate-pulse" />
+            <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-emerald-400 bg-clip-text text-transparent font-semibold">
+              IA que entiende Argentina
+            </span>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Título animado */}
+      <h1 className="text-5xl md:text-7xl lg:text-8xl font-extrabold mb-6 leading-tight">
+        {words.map((word, i) => (
+          <motion.span
+            key={i}
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ 
+              delay: i * 0.15, 
+              duration: 0.8,
+              ease: [0.22, 1, 0.36, 1]
+            }}
+            className={`${word.color} inline-block mx-2`}
+            style={{
+              textShadow: word.color.includes('amber') || word.color.includes('emerald')
+                ? '0 0 40px currentColor'
+                : 'none'
+            }}
+          >
+            {word.text}
+          </motion.span>
+        ))}
+        <br />
+        <motion.span
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6, duration: 0.8 }}
+          className="text-white/80"
+        >
+          en días, no meses
+        </motion.span>
+      </h1>
+
+      {/* Subtítulo */}
+      <motion.p
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.9, duration: 0.8 }}
+        className="text-lg md:text-xl text-white/60 max-w-3xl mx-auto mb-10 leading-relaxed"
+      >
+        La plataforma que combina{' '}
+        <span className="text-blue-400 font-semibold">IA</span>
+        {' + '}
+        <span className="text-amber-400 font-semibold">automatización</span>
+        {' + '}
+        <span className="text-emerald-400 font-semibold">datos</span>
+        {' '}para que emprendedores y PyMEs{' '}
+        <span className="text-white/90 font-semibold">validen, organicen y escalen</span>
+      </motion.p>
+
+      {/* Features rápidos */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1.2, duration: 0.6 }}
+        className="flex flex-wrap justify-center gap-3 mb-12"
+      >
+        {[
+          { text: 'Sin tarjeta' },
+          { text: 'Datos seguros' },
+          { text: 'Empezá en 2 min' },
+        ].map((feature, i) => (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 1.2 + i * 0.1, duration: 0.5 }}
+            whileHover={{ scale: 1.05, y: -3 }}
+            className="px-5 py-2.5 rounded-full bg-white/[0.06] backdrop-blur-sm border border-white/10
+                       hover:bg-white/[0.1] hover:border-white/20 transition-all duration-300 cursor-default"
+          >
+            <div className="flex items-center gap-2 text-sm font-medium text-white/80">
+              <Check className="w-4 h-4 text-emerald-400" />
+              {feature.text}
+            </div>
+          </motion.div>
+        ))}
+      </motion.div>
+
+      {/* ════════════════════════════════════════════════════════════
+          BOTONES PRINCIPALES - ¡CON VIDA!
+          ════════════════════════════════════════════════════════════ */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1.5, duration: 0.6 }}
+        className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+      >
+        {/* Botón Iniciar Sesión - ULTRA VIBRANTE */}
+        <motion.button
+          onClick={onLoginClick}
+          whileHover={{ 
+            scale: 1.08,
+            boxShadow: '0 25px 70px rgba(59, 130, 246, 0.6)'
+          }}
+          whileTap={{ scale: 0.96 }}
+          className="group relative px-10 py-5 rounded-2xl overflow-hidden font-bold text-white text-lg
+                     shadow-2xl transition-all duration-300"
+        >
+          {/* Gradiente base vibrante */}
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-cyan-600 to-blue-600" />
+          
+          {/* Efecto hover animado */}
+          <motion.div
+            className="absolute inset-0 bg-gradient-to-r from-cyan-500 via-blue-500 to-cyan-500 opacity-0 
+                       group-hover:opacity-100 transition-opacity duration-700"
+            animate={{
+              backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
+            }}
+            transition={{
+              duration: 3,
+              repeat: Infinity,
+              ease: "linear"
+            }}
+            style={{ backgroundSize: '200% 100%' }}
+          />
+          
+          {/* Glow animado */}
+          <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 
+                          transition-opacity duration-300 blur-xl bg-gradient-to-r from-blue-400 to-cyan-400" />
+          
+          {/* Contenido */}
+          <span className="relative z-10 flex items-center gap-3 drop-shadow-lg">
+            <Rocket className="w-6 h-6 group-hover:scale-110 transition-transform" />
+            Iniciar Sesión
+            <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+          </span>
+        </motion.button>
+
+        {/* Botón Ver Demo - GLASSMORPHISM PREMIUM */}
+        <motion.button
+          onClick={() => navigate('/select-role')}
+          whileHover={{ 
+            scale: 1.08,
+            backgroundColor: 'rgba(255, 255, 255, 0.15)',
+            borderColor: 'rgba(255, 255, 255, 0.4)'
+          }}
+          whileTap={{ scale: 0.96 }}
+          className="group px-10 py-5 rounded-2xl bg-white/[0.08] backdrop-blur-2xl border-2 border-white/20
+                     font-bold text-white text-lg hover:border-white/40
+                     transition-all duration-300 shadow-xl hover:shadow-2xl"
+        >
+          <span className="flex items-center gap-3">
+            <Sparkles className="w-6 h-6 group-hover:rotate-12 transition-transform" />
+            Ver Demo
+            <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+          </span>
+        </motion.button>
+      </motion.div>
+    </div>
+  );
+}
 
 // ══════════════════════════════════════════════════════════════════════
 // STAGE CARD - Optimizado
@@ -184,26 +368,28 @@ function StageCard({
       </div>
 
       <div className="mb-2">
-        <span className={`text-xs font-bold ${scheme.text} uppercase tracking-wide`}>{stageLabel}</span>
+        <span className={`text-xs font-bold ${scheme.text} uppercase tracking-wider`}>
+          {stageLabel}
+        </span>
       </div>
 
       <h3 className="text-2xl font-bold text-gray-900 mb-3">{title}</h3>
-      <p className="text-gray-600 mb-6">{description}</p>
 
-      <div className="space-y-2 mb-6">
-        {features.map((feature, idx) => (
-          <div key={idx} className="flex items-center gap-2 text-sm text-gray-700">
-            <div className={`w-1.5 h-1.5 rounded-full ${scheme.bg}`}></div>
+      <p className="text-gray-600 mb-6 leading-relaxed">{description}</p>
+
+      <ul className="space-y-3 mb-6">
+        {features.map((feature, index) => (
+          <li key={index} className="flex items-start gap-2 text-sm text-gray-700">
+            <Check className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
             <span>{feature}</span>
-          </div>
+          </li>
         ))}
-      </div>
+      </ul>
 
       <button
-        className={`w-full py-3 px-6 bg-gradient-to-r ${scheme.bg} text-white rounded-xl font-semibold hover:opacity-90 transition-all shadow-md flex items-center justify-center gap-2 group-hover:gap-3`}
+        className={`w-full py-3 rounded-xl bg-gradient-to-r ${scheme.bg} text-white font-semibold shadow-md group-hover:shadow-lg transition-all hover:scale-105`}
       >
-        {buttonText}
-        <ChevronRight className="w-5 h-5" />
+        {buttonText} →
       </button>
     </div>
   );
@@ -219,22 +405,15 @@ export default function Index() {
 
   return (
     <>
-      {showLoginModal && <LoginModal onClose={() => setShowLoginModal(false)} />}
       <FloatingOrbs />
-      <FloatingParticles />
+      <FloatingParticles count={30} />
+      <ImprovedFloatingBot />
 
-      {/* Floating Bot Button */}
-      <button
-        onClick={() => navigate("/business-ai-bot")}
-        className="fixed bottom-8 right-8 z-50 w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-transform group"
-      >
-        <span className="absolute inset-0 rounded-full bg-blue-400 animate-ping opacity-40"></span>
-        <Sparkles className="w-8 h-8 text-white relative z-10 group-hover:scale-110 transition-transform" />
-      </button>
+      {showLoginModal && <LoginModal onClose={() => setShowLoginModal(false)} />}
 
-      <div className="min-h-screen bg-white relative">
+      <div className="min-h-screen">
         {/* ═════════════════════════════════════════════════════════════════
-            NAVBAR
+            NAVIGATION
             ════════════════════════════════════════════════════════════════ */}
         <nav className="fixed top-0 left-0 right-0 z-40 bg-white/80 backdrop-blur-md border-b border-gray-200 shadow-sm">
           <div className="container mx-auto px-6 py-4">
@@ -302,11 +481,11 @@ export default function Index() {
           
           {/* Orbes animados MÁS VISIBLES */}
           <div className="absolute top-20 left-10 w-[500px] h-[500px] bg-blue-500/40 rounded-full blur-[100px] animate-float-slow"></div>
-          <div className="absolute bottom-20 right-10 w-[500px] h-[500px] bg-slate-500/30 rounded-full blur-[100px] animate-float-slower"></div>
-          <div className="absolute top-1/2 left-1/2 w-[400px] h-[400px] bg-cyan-500/25 rounded-full blur-[100px] animate-float-slow" style={{ animationDelay: '2s' }}></div>
+          <div className="absolute bottom-20 right-10 w-[500px] h-[500px] bg-cyan-500/30 rounded-full blur-[100px] animate-float-slower"></div>
+          <div className="absolute top-1/2 left-1/2 w-[400px] h-[400px] bg-emerald-500/25 rounded-full blur-[100px] animate-float-slow" style={{ animationDelay: '2s' }}></div>
 
           <div className="container mx-auto px-6 relative z-10">
-            <AnimatedHero />
+            <ImprovedAnimatedHero onLoginClick={() => setShowLoginModal(true)} />
           </div>
         </section>
 
