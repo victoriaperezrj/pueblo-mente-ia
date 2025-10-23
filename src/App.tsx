@@ -119,6 +119,8 @@ const App = () => (
               <Route path="/demo/emprendedor/documentacion" element={<DemoEntrepreneurPlaceholder />} />
               
               {/* Demo Business/PYME routes */}
+              <Route path="/demo/business-dashboard" element={<Suspense fallback={<PageLoader />}>{React.createElement(lazy(() => import("./pages/demo/BusinessDashboard")))}</Suspense>} />
+              <Route path="/demo/company-dashboard" element={<Suspense fallback={<PageLoader />}>{React.createElement(lazy(() => import("./pages/demo/CompanyDashboard")))}</Suspense>} />
               <Route path="/demo/negocio/dashboard" element={<DemoEntrepreneurDashboard />} />
               <Route path="/demo/pyme/dashboard" element={<DemoEntrepreneurDashboard />} />
               

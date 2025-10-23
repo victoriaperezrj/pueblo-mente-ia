@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Zap, TrendingUp, Building2, Send, Lightbulb, ArrowLeft, Sparkles } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import { FloatingOrbs } from "@/components/business-bot/FloatingOrbs";
 import { FloatingParticles } from "@/components/animations/FloatingParticles";
 
@@ -157,6 +159,7 @@ const getQuickActions = (mode: Mode): string[] => {
 // COMPONENTE PRINCIPAL
 // ══════════════════════════════════════════════════════════════════════
 const BusinessAIBot = () => {
+  const navigate = useNavigate();
   const [currentMode, setCurrentMode] = useState<Mode>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState("");
@@ -274,6 +277,15 @@ const BusinessAIBot = () => {
   // SELECTOR DE ETAPA (cuando no hay mode seleccionado)
   // ══════════════════════════════════════════════════════════════════════
   if (!currentMode) {
+    const [isNavigating, setIsNavigating] = useState(false);
+    
+    const handleNavigate = async (path: string) => {
+      if (isNavigating) return; // Prevenir doble click
+      setIsNavigating(true);
+      await new Promise(resolve => setTimeout(resolve, 300)); // Animación
+      navigate(path);
+    };
+
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4 relative overflow-hidden">
         <FloatingOrbs />
@@ -295,9 +307,12 @@ const BusinessAIBot = () => {
           {/* Cards Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
             {/* EMPRENDEDOR */}
-            <button
-              onClick={() => setCurrentMode("1")}
-              className="group p-8 bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl hover:bg-white/10 hover:border-blue-400/50 transition-all duration-300 hover:scale-105"
+            <motion.button
+              onClick={() => handleNavigate("/demo/idea-capture")}
+              disabled={isNavigating}
+              whileHover={{ scale: 1.05, y: -4 }}
+              whileTap={{ scale: 0.98 }}
+              className="group p-8 bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl hover:bg-white/10 hover:border-blue-400/50 transition-all duration-300 disabled:opacity-50"
             >
               <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                 <Zap className="w-8 h-8 text-white" />
@@ -309,12 +324,15 @@ const BusinessAIBot = () => {
                 <p>• Validación de mercado</p>
                 <p>• MVP y Product-Market Fit</p>
               </div>
-            </button>
+            </motion.button>
 
             {/* NEGOCIO */}
-            <button
-              onClick={() => setCurrentMode("2")}
-              className="group p-8 bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl hover:bg-white/10 hover:border-cyan-400/50 transition-all duration-300 hover:scale-105 relative"
+            <motion.button
+              onClick={() => handleNavigate("/demo/business-dashboard")}
+              disabled={isNavigating}
+              whileHover={{ scale: 1.05, y: -4 }}
+              whileTap={{ scale: 0.98 }}
+              className="group p-8 bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl hover:bg-white/10 hover:border-cyan-400/50 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/20 relative disabled:opacity-50"
             >
               <div className="absolute -top-3 right-4 px-3 py-1 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-full text-xs font-bold text-black">
                 MÁS USADO
@@ -329,12 +347,15 @@ const BusinessAIBot = () => {
                 <p>• Escalamiento de ventas</p>
                 <p>• Optimización operacional</p>
               </div>
-            </button>
+            </motion.button>
 
             {/* EMPRESA */}
-            <button
-              onClick={() => setCurrentMode("3")}
-              className="group p-8 bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl hover:bg-white/10 hover:border-green-400/50 transition-all duration-300 hover:scale-105"
+            <motion.button
+              onClick={() => handleNavigate("/demo/company-dashboard")}
+              disabled={isNavigating}
+              whileHover={{ scale: 1.05, y: -4 }}
+              whileTap={{ scale: 0.98 }}
+              className="group p-8 bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl hover:bg-white/10 hover:border-green-400/50 transition-all duration-300 hover:shadow-2xl hover:shadow-green-500/20 disabled:opacity-50"
             >
               <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                 <Building2 className="w-8 h-8 text-white" />
@@ -346,7 +367,7 @@ const BusinessAIBot = () => {
                 <p>• Estrategia empresarial</p>
                 <p>• Rentabilidad y expansión</p>
               </div>
-            </button>
+            </motion.button>
           </div>
 
           {/* Footer */}
