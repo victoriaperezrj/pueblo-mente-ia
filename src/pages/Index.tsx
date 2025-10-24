@@ -663,7 +663,7 @@ export default function Index() {
   return (
     <>
       <FloatingOrbs />
-      <FloatingParticles count={30} />
+      <FloatingParticles />
       <ImprovedFloatingBot />
 
       {showLoginModal && <LoginModal onClose={() => setShowLoginModal(false)} />}
@@ -740,6 +740,122 @@ export default function Index() {
           </div>
         </section>
 
+        {/* ══════════════════════════════════════════════════════════════════════
+            BENEFITS SECTION - "¿QUÉ VAS A LOGRAR?"
+            ══════════════════════════════════════════════════════════════════════ */}
+        <section className="py-20 md:py-32 bg-white relative overflow-hidden">
+          <div className="container mx-auto px-6 relative z-10">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7 }}
+              className="max-w-4xl mx-auto text-center mb-16"
+            >
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-100 text-emerald-600 font-semibold text-sm mb-4">
+                <Target className="w-4 h-4" />
+                Beneficios reales
+              </div>
+              <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">
+                ¿Qué vas a{" "}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-blue-600">
+                  lograr
+                </span>
+                ?
+              </h2>
+              <p className="text-lg text-gray-600">
+                Resultados concretos que vas a ver desde el primer día
+              </p>
+            </motion.div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-7xl mx-auto">
+              {/* Benefit 1 - Validación Rápida */}
+              <motion.div
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.1, duration: 0.6 }}
+                whileHover={{ y: -8, scale: 1.02 }}
+                className="group relative bg-gradient-to-br from-blue-50 to-cyan-50 rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border border-blue-100"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-cyan-500/5 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="relative">
+                  <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform shadow-lg">
+                    <Rocket className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                    Validá tu idea en 1 semana
+                  </h3>
+                  <p className="text-gray-600 leading-relaxed mb-4">
+                    Descubrí si tu idea es viable <span className="font-semibold text-blue-600">antes de invertir</span> tiempo y dinero. 
+                    La IA analiza mercado, competencia y rentabilidad en minutos.
+                  </p>
+                  <div className="flex items-center gap-2 text-sm font-semibold text-blue-600">
+                    <Check className="w-5 h-5" />
+                    Evitá perder meses
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Benefit 2 - Lanzamiento Rápido */}
+              <motion.div
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2, duration: 0.6 }}
+                whileHover={{ y: -8, scale: 1.02 }}
+                className="group relative bg-gradient-to-br from-purple-50 to-pink-50 rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border border-purple-100"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-pink-500/5 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="relative">
+                  <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform shadow-lg">
+                    <Target className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                    Lanzá tu producto en 30 días
+                  </h3>
+                  <p className="text-gray-600 leading-relaxed mb-4">
+                    Del plan al lanzamiento en <span className="font-semibold text-purple-600">1 mes</span>. 
+                    Seguí el roadmap paso a paso: producto mínimo, pricing, primeras ventas.
+                  </p>
+                  <div className="flex items-center gap-2 text-sm font-semibold text-purple-600">
+                    <Check className="w-5 h-5" />
+                    Sin vueltas, directo al resultado
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Benefit 3 - Primeros Clientes */}
+              <motion.div
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.3, duration: 0.6 }}
+                whileHover={{ y: -8, scale: 1.02 }}
+                className="group relative bg-gradient-to-br from-emerald-50 to-teal-50 rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border border-emerald-100"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-teal-500/5 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="relative">
+                  <div className="w-16 h-16 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform shadow-lg">
+                    <TrendingUp className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                    Conseguí tus primeros clientes
+                  </h3>
+                  <p className="text-gray-600 leading-relaxed mb-4">
+                    Estrategias <span className="font-semibold text-emerald-600">probadas</span> para atraer clientes: 
+                    canales, mensajes, tácticas low-cost de adquisición.
+                  </p>
+                  <div className="flex items-center gap-2 text-sm font-semibold text-emerald-600">
+                    <Check className="w-5 h-5" />
+                    De 0 a tus primeras ventas
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+          </div>
+        </section>
+
         {/* SECCIÓN DE ETAPAS */}
         <section className="py-20 md:py-32 bg-gradient-to-b from-gray-50 to-white relative overflow-hidden">
           <div className="container mx-auto px-6 relative z-10">
@@ -811,6 +927,185 @@ export default function Index() {
           </div>
         </section>
 
+        {/* ══════════════════════════════════════════════════════════════════════
+            CÓMO FUNCIONA - 3 PASOS
+            ══════════════════════════════════════════════════════════════════════ */}
+        <section className="py-20 md:py-32 bg-gradient-to-b from-slate-50 to-white relative overflow-hidden">
+          <div className="container mx-auto px-6 relative z-10">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7 }}
+              className="max-w-4xl mx-auto text-center mb-16"
+            >
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-100 text-blue-600 font-semibold text-sm mb-4">
+                <Sparkles className="w-4 h-4" />
+                Simple y efectivo
+              </div>
+              <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">
+                Tu camino al éxito en{" "}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
+                  3 pasos
+                </span>
+              </h2>
+              <p className="text-lg text-gray-600">
+                Desde la idea hasta las primeras ventas con un método probado
+              </p>
+            </motion.div>
+
+            <div className="max-w-5xl mx-auto space-y-12">
+              {/* Step 1 - Validación */}
+              <motion.div
+                initial={{ opacity: 0, x: -50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.1, duration: 0.7 }}
+                className="flex flex-col md:flex-row items-start gap-8 group"
+              >
+                <div className="flex-shrink-0">
+                  <div className="relative">
+                    <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-3xl blur-2xl opacity-30 group-hover:opacity-50 transition-opacity"></div>
+                    <div className="relative w-24 h-24 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-3xl flex items-center justify-center text-5xl font-black text-white shadow-2xl group-hover:scale-110 transition-transform">
+                      1
+                    </div>
+                  </div>
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-3xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
+                    Validación
+                  </h3>
+                  <p className="text-lg text-gray-600 leading-relaxed mb-4">
+                    <span className="font-semibold text-gray-900">Respondé 5 preguntas sobre tu idea</span> y la IA analiza:
+                  </p>
+                  <ul className="space-y-2 text-gray-700">
+                    <li className="flex items-start gap-3">
+                      <Check className="w-5 h-5 text-blue-500 flex-shrink-0 mt-1" />
+                      <span><strong>Viabilidad de mercado:</strong> ¿Hay demanda real?</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <Check className="w-5 h-5 text-blue-500 flex-shrink-0 mt-1" />
+                      <span><strong>Análisis de competencia:</strong> ¿Qué están haciendo otros?</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <Check className="w-5 h-5 text-blue-500 flex-shrink-0 mt-1" />
+                      <span><strong>Estimación de costos:</strong> ¿Cuánto necesitás invertir?</span>
+                    </li>
+                  </ul>
+                </div>
+              </motion.div>
+
+              {/* Connector Line */}
+              <div className="flex justify-center">
+                <div className="w-1 h-12 bg-gradient-to-b from-blue-300 to-purple-300 rounded-full"></div>
+              </div>
+
+              {/* Step 2 - Construcción */}
+              <motion.div
+                initial={{ opacity: 0, x: 50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2, duration: 0.7 }}
+                className="flex flex-col md:flex-row items-start gap-8 group"
+              >
+                <div className="flex-shrink-0">
+                  <div className="relative">
+                    <div className="absolute inset-0 bg-gradient-to-br from-purple-500 to-pink-500 rounded-3xl blur-2xl opacity-30 group-hover:opacity-50 transition-opacity"></div>
+                    <div className="relative w-24 h-24 bg-gradient-to-br from-purple-500 to-pink-600 rounded-3xl flex items-center justify-center text-5xl font-black text-white shadow-2xl group-hover:scale-110 transition-transform">
+                      2
+                    </div>
+                  </div>
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-3xl font-bold text-gray-900 mb-3 group-hover:text-purple-600 transition-colors">
+                    Construcción
+                  </h3>
+                  <p className="text-lg text-gray-600 leading-relaxed mb-4">
+                    <span className="font-semibold text-gray-900">Seguí el plan de acción personalizado</span> que te generamos:
+                  </p>
+                  <ul className="space-y-2 text-gray-700">
+                    <li className="flex items-start gap-3">
+                      <Check className="w-5 h-5 text-purple-500 flex-shrink-0 mt-1" />
+                      <span><strong>Roadmap semanal:</strong> Tareas concretas, no teoría</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <Check className="w-5 h-5 text-purple-500 flex-shrink-0 mt-1" />
+                      <span><strong>MVP definido:</strong> Qué construir primero</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <Check className="w-5 h-5 text-purple-500 flex-shrink-0 mt-1" />
+                      <span><strong>Recursos y herramientas:</strong> Links, templates, tutoriales</span>
+                    </li>
+                  </ul>
+                </div>
+              </motion.div>
+
+              {/* Connector Line */}
+              <div className="flex justify-center">
+                <div className="w-1 h-12 bg-gradient-to-b from-purple-300 to-emerald-300 rounded-full"></div>
+              </div>
+
+              {/* Step 3 - Lanzamiento */}
+              <motion.div
+                initial={{ opacity: 0, x: -50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.3, duration: 0.7 }}
+                className="flex flex-col md:flex-row items-start gap-8 group"
+              >
+                <div className="flex-shrink-0">
+                  <div className="relative">
+                    <div className="absolute inset-0 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-3xl blur-2xl opacity-30 group-hover:opacity-50 transition-opacity"></div>
+                    <div className="relative w-24 h-24 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-3xl flex items-center justify-center text-5xl font-black text-white shadow-2xl group-hover:scale-110 transition-transform">
+                      3
+                    </div>
+                  </div>
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-3xl font-bold text-gray-900 mb-3 group-hover:text-emerald-600 transition-colors">
+                    Lanzamiento
+                  </h3>
+                  <p className="text-lg text-gray-600 leading-relaxed mb-4">
+                    <span className="font-semibold text-gray-900">Ejecutá tu estrategia de go-to-market</span> con el soporte de IA:
+                  </p>
+                  <ul className="space-y-2 text-gray-700">
+                    <li className="flex items-start gap-3">
+                      <Check className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-1" />
+                      <span><strong>Canales de adquisición:</strong> Dónde encontrar clientes</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <Check className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-1" />
+                      <span><strong>Mensajes de venta:</strong> Qué decir y cómo decirlo</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <Check className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-1" />
+                      <span><strong>Métricas de éxito:</strong> Cómo medir y optimizar</span>
+                    </li>
+                  </ul>
+                </div>
+              </motion.div>
+            </div>
+
+            {/* CTA después de los pasos */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.4, duration: 0.6 }}
+              className="text-center mt-16"
+            >
+              <motion.button
+                onClick={() => navigate('/select-role')}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.98 }}
+                className="px-10 py-5 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white text-lg font-bold rounded-2xl shadow-2xl hover:shadow-purple-500/50 transition-all"
+              >
+                Empezar ahora →
+              </motion.button>
+            </motion.div>
+          </div>
+        </section>
+
         {/* SOCIAL PROOF */}
         <section className="py-16 bg-white border-y border-gray-200">
           <div className="container mx-auto px-6">
@@ -842,6 +1137,159 @@ export default function Index() {
             </div>
           </div>
         </section>
+
+        {/* ══════════════════════════════════════════════════════════════════════
+            FINAL CTA SECTION
+            ══════════════════════════════════════════════════════════════════════ */}
+        <section className="py-20 md:py-32 bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 relative overflow-hidden">
+          {/* Background effects */}
+          <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
+          <div className="absolute top-20 left-20 w-[600px] h-[600px] bg-blue-500/30 rounded-full blur-[120px] animate-float-slow"></div>
+          <div className="absolute bottom-20 right-20 w-[500px] h-[500px] bg-purple-500/30 rounded-full blur-[120px] animate-float-slower"></div>
+
+          <div className="container mx-auto px-6 relative z-10">
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              className="max-w-4xl mx-auto text-center"
+            >
+              {/* Badge */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2, duration: 0.6 }}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 mb-8"
+              >
+                <Sparkles className="w-4 h-4 text-yellow-400 animate-pulse" />
+                <span className="text-white font-semibold text-sm">Sin tarjeta • Empezá gratis</span>
+              </motion.div>
+
+              {/* Title */}
+              <motion.h2
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.3, duration: 0.7 }}
+                className="text-4xl md:text-6xl font-extrabold text-white mb-6 leading-tight"
+              >
+                ¿Listo para{" "}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400">
+                  empezar
+                </span>
+                ?
+              </motion.h2>
+
+              {/* Subtitle */}
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.4, duration: 0.6 }}
+                className="text-xl text-white/80 mb-10 max-w-2xl mx-auto leading-relaxed"
+              >
+                Unite a los <span className="font-bold text-white">1,000+ emprendedores</span> que ya están construyendo su futuro con nuestra plataforma
+              </motion.p>
+
+              {/* CTA Buttons */}
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.5, duration: 0.6 }}
+                className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8"
+              >
+                {/* Primary CTA */}
+                <motion.button
+                  onClick={() => navigate('/select-role')}
+                  whileHover={{ scale: 1.08, boxShadow: '0 30px 80px rgba(59, 130, 246, 0.7)' }}
+                  whileTap={{ scale: 0.96 }}
+                  className="group relative px-12 py-6 rounded-2xl overflow-hidden font-bold text-white text-lg shadow-2xl transition-all"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600"></div>
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-700"
+                    animate={{
+                      backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
+                    }}
+                    transition={{
+                      duration: 3,
+                      repeat: Infinity,
+                      ease: "linear"
+                    }}
+                    style={{ backgroundSize: '200% 100%' }}
+                  />
+                  <span className="relative z-10 flex items-center gap-3 drop-shadow-lg">
+                    <Rocket className="w-6 h-6 group-hover:scale-110 group-hover:rotate-12 transition-transform" />
+                    Comenzar ahora
+                    <ChevronRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
+                  </span>
+                </motion.button>
+
+                {/* Secondary CTA */}
+                <motion.button
+                  onClick={() => navigate('/business-ai-bot')}
+                  whileHover={{ scale: 1.05, backgroundColor: 'rgba(255, 255, 255, 0.15)' }}
+                  whileTap={{ scale: 0.96 }}
+                  className="px-10 py-6 rounded-2xl font-semibold text-white text-lg bg-white/10 backdrop-blur-xl border-2 border-white/20 hover:border-white/40 transition-all"
+                >
+                  <span className="flex items-center gap-2">
+                    <Brain className="w-5 h-5" />
+                    Hablar con IA
+                  </span>
+                </motion.button>
+              </motion.div>
+
+              {/* Alternative link */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.6, duration: 0.6 }}
+              >
+                <button
+                  onClick={() => setShowLoginModal(true)}
+                  className="text-white/70 hover:text-white font-medium underline underline-offset-4 transition-colors"
+                >
+                  ¿Tenés dudas? Hablemos →
+                </button>
+              </motion.div>
+
+              {/* Trust indicators */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.7, duration: 0.6 }}
+                className="flex flex-wrap justify-center items-center gap-8 mt-12 pt-12 border-t border-white/10"
+              >
+                <div className="flex items-center gap-2 text-white/80">
+                  <Check className="w-5 h-5 text-emerald-400" />
+                  <span className="text-sm font-medium">Datos seguros</span>
+                </div>
+                <div className="flex items-center gap-2 text-white/80">
+                  <Check className="w-5 h-5 text-emerald-400" />
+                  <span className="text-sm font-medium">Sin permanencia</span>
+                </div>
+                <div className="flex items-center gap-2 text-white/80">
+                  <Check className="w-5 h-5 text-emerald-400" />
+                  <span className="text-sm font-medium">Soporte en español</span>
+                </div>
+              </motion.div>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* FOOTER SIMPLE */}
+        <footer className="bg-slate-950 border-t border-slate-800 py-8">
+          <div className="container mx-auto px-6">
+            <div className="text-center text-slate-400 text-sm">
+              <p>&copy; 2025 Proyecto Emprendedurismo. Todos los derechos reservados.</p>
+            </div>
+          </div>
+        </footer>
       </div>
     </>
   );
