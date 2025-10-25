@@ -16,15 +16,16 @@ import {
   ChevronRight,
   Star,
   Mail,
+  Lightbulb,
+  Store,
+  TrendingUpIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ImprovedFloatingBot } from "@/components/business-bot/ImprovedFloatingBot";
 import { FloatingOrbs } from "@/components/business-bot/FloatingOrbs";
 import { FloatingParticles } from "@/components/animations/FloatingParticles";
 
-// ══════════════════════════════════════════════════════════════════════
-// LOGIN MODAL - ULTRA PROFESIONAL (COLORES NEUTROS)
-// ══════════════════════════════════════════════════════════════════════
+// LoginModal component
 function LoginModal({ onClose }: { onClose: () => void }) {
   return (
     <AnimatePresence>
@@ -373,17 +374,10 @@ function LoginModal({ onClose }: { onClose: () => void }) {
 }
 
 // ══════════════════════════════════════════════════════════════════════
-// HERO SECTION CON AMBOS BOTONES ARREGLADOS
+// HERO SECTION 
 // ══════════════════════════════════════════════════════════════════════
 function ImprovedAnimatedHero({ onLoginClick }: { onLoginClick: () => void }) {
   const navigate = useNavigate();
-
-  const words = [
-    { text: "De la", color: "text-white/90" },
-    { text: "idea", color: "text-amber-400" },
-    { text: "a los", color: "text-white/90" },
-    { text: "números", color: "text-emerald-400" },
-  ];
 
   return (
     <div className="text-center max-w-5xl mx-auto">
@@ -405,73 +399,48 @@ function ImprovedAnimatedHero({ onLoginClick }: { onLoginClick: () => void }) {
         </div>
       </motion.div>
 
-      {/* Título animado */}
-      <h1 className="text-5xl md:text-7xl lg:text-8xl font-extrabold mb-6 leading-tight">
-        {words.map((word, i) => (
-          <motion.span
-            key={i}
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ 
-              delay: i * 0.15, 
-              duration: 0.8,
-              ease: [0.22, 1, 0.36, 1]
-            }}
-            className={`${word.color} inline-block mx-2`}
-            style={{
-              textShadow: word.color.includes('amber') || word.color.includes('emerald')
-                ? '0 0 40px currentColor'
-                : 'none'
-            }}
-          >
-            {word.text}
-          </motion.span>
-        ))}
-        <br />
-        <motion.span
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6, duration: 0.8 }}
-          className="text-white/80"
-        >
-          en días, no meses
-        </motion.span>
-      </h1>
+      {/* Título principal */}
+      <motion.h1 
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        className="text-5xl md:text-7xl lg:text-8xl font-extrabold mb-6 leading-tight"
+      >
+        <span className="text-white/90">Tomá decisiones inteligentes con </span>
+        <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-emerald-400 bg-clip-text text-transparent">
+          datos, no intuición
+        </span>
+      </motion.h1>
 
       {/* Subtítulo */}
       <motion.p
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.9, duration: 0.8 }}
-        className="text-lg md:text-xl text-white/60 max-w-3xl mx-auto mb-10 leading-relaxed"
+        transition={{ delay: 0.3, duration: 0.8 }}
+        className="text-xl md:text-2xl text-white/70 mb-8 leading-relaxed max-w-4xl mx-auto font-light"
       >
-        La plataforma que combina{' '}
-        <span className="text-blue-400 font-semibold">IA</span>
-        {' + '}
-        <span className="text-amber-400 font-semibold">automatización</span>
-        {' + '}
-        <span className="text-emerald-400 font-semibold">datos</span>
-        {' '}para que emprendedores y PyMEs{' '}
-        <span className="text-white/90 font-semibold">validen, organicen y escalen</span>
+        La plataforma que combina{" "}
+        <span className="font-bold text-white/90">IA + automatización + datos</span>{" "}
+        para que emprendedores, negocios y PyMEs validen ideas, optimicen procesos y escalen de forma inteligente
       </motion.p>
 
-      {/* Features rápidos */}
+      {/* Badges */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1.2, duration: 0.6 }}
-        className="flex flex-wrap justify-center gap-3 mb-12"
+        transition={{ delay: 0.5, duration: 0.6 }}
+        className="flex flex-wrap justify-center gap-4 mb-12"
       >
         {[
           { text: 'Sin tarjeta' },
           { text: 'Datos seguros' },
-          { text: 'Empezá en 2 min' },
+          { text: 'Empezás en 2 min' },
         ].map((feature, i) => (
           <motion.div
             key={i}
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 1.2 + i * 0.1, duration: 0.5 }}
+            transition={{ delay: 0.5 + i * 0.1, duration: 0.5 }}
             whileHover={{ scale: 1.05, y: -3 }}
             className="px-5 py-2.5 rounded-full bg-white/[0.06] backdrop-blur-sm border border-white/10
                        hover:bg-white/[0.1] hover:border-white/20 transition-all duration-300 cursor-default"
@@ -488,10 +457,10 @@ function ImprovedAnimatedHero({ onLoginClick }: { onLoginClick: () => void }) {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1.5, duration: 0.6 }}
+        transition={{ delay: 0.8, duration: 0.6 }}
         className="flex flex-col sm:flex-row gap-4 justify-center items-center"
       >
-        {/* Botón Iniciar Sesión */}
+        {/* Botón Iniciar Sesión - AZUL */}
         <motion.button
           onClick={onLoginClick}
           whileHover={{ 
@@ -525,9 +494,9 @@ function ImprovedAnimatedHero({ onLoginClick }: { onLoginClick: () => void }) {
           </span>
         </motion.button>
 
-        {/* Botón Ver Demo - ARREGLADO */}
+        {/* Botón Ver Demo - VERDE */}
         <motion.button
-          onClick={() => navigate('/select-role')}
+          onClick={() => navigate('/demo/intro')}
           whileHover={{ 
             scale: 1.08,
             boxShadow: '0 25px 70px rgba(16, 185, 129, 0.6)'
@@ -753,8 +722,7 @@ export default function Index() {
               className="max-w-4xl mx-auto text-center mb-16"
             >
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-100 text-emerald-600 font-semibold text-sm mb-4">
-                <Target className="w-4 h-4" />
-                Beneficios reales
+                🟢 Beneficios reales
               </div>
               <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">
                 ¿Qué vas a{" "}
@@ -764,12 +732,12 @@ export default function Index() {
                 ?
               </h2>
               <p className="text-lg text-gray-600">
-                Resultados concretos que vas a ver desde el primer día
+                Herramientas diseñadas para cada momento: validar, optimizar o escalar
               </p>
             </motion.div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-7xl mx-auto">
-              {/* Benefit 1 - Validación Rápida */}
+              {/* Benefit 1 - Validá antes de invertir */}
               <motion.div
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -784,48 +752,46 @@ export default function Index() {
                     <Rocket className="w-8 h-8 text-white" />
                   </div>
                   <h3 className="text-2xl font-bold text-gray-900 mb-3">
-                    Validá tu idea en 1 semana
+                    Validá antes de invertir
                   </h3>
                   <p className="text-gray-600 leading-relaxed mb-4">
-                    Descubrí si tu idea es viable <span className="font-semibold text-blue-600">antes de invertir</span> tiempo y dinero. 
-                    La IA analiza mercado, competencia y rentabilidad en minutos.
+                    Analizá tu idea, proyecto o plan de expansión antes de poner tiempo y plata. La IA evalúa mercado, competencia y viabilidad en minutos. Para el que arranca y para el que ya tiene un negocio y quiere crecer.
                   </p>
                   <div className="flex items-center gap-2 text-sm font-semibold text-blue-600">
                     <Check className="w-5 h-5" />
-                    Evitá perder meses
+                    Tomá decisiones con datos, no intuición
                   </div>
                 </div>
               </motion.div>
 
-              {/* Benefit 2 - Lanzamiento Rápido */}
+              {/* Benefit 2 - Organizá tu negocio */}
               <motion.div
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.2, duration: 0.6 }}
                 whileHover={{ y: -8, scale: 1.02 }}
-                className="group relative bg-gradient-to-br from-purple-50 to-pink-50 rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border border-purple-100"
+                className="group relative bg-gradient-to-br from-pink-50 to-rose-50 rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border border-pink-100"
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-pink-500/5 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-pink-500/5 to-rose-500/5 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <div className="relative">
-                  <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform shadow-lg">
+                  <div className="w-16 h-16 bg-gradient-to-br from-pink-500 to-rose-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform shadow-lg">
                     <Target className="w-8 h-8 text-white" />
                   </div>
                   <h3 className="text-2xl font-bold text-gray-900 mb-3">
-                    Lanzá tu producto en 30 días
+                    Organizá tu negocio en 30 días
                   </h3>
                   <p className="text-gray-600 leading-relaxed mb-4">
-                    Del plan al lanzamiento en <span className="font-semibold text-purple-600">1 mes</span>. 
-                    Seguí el roadmap paso a paso: producto mínimo, pricing, primeras ventas.
+                    Plan de acción personalizado según tu etapa: desde armar tu primer producto hasta optimizar procesos en tu negocio actual. Tareas claras, priorizadas, sin teoría de relleno.
                   </p>
-                  <div className="flex items-center gap-2 text-sm font-semibold text-purple-600">
+                  <div className="flex items-center gap-2 text-sm font-semibold text-pink-600">
                     <Check className="w-5 h-5" />
-                    Sin vueltas, directo al resultado
+                    Del caos al control en 1 mes
                   </div>
                 </div>
               </motion.div>
 
-              {/* Benefit 3 - Primeros Clientes */}
+              {/* Benefit 3 - Escalá sin colapsar */}
               <motion.div
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -840,15 +806,14 @@ export default function Index() {
                     <TrendingUp className="w-8 h-8 text-white" />
                   </div>
                   <h3 className="text-2xl font-bold text-gray-900 mb-3">
-                    Conseguí tus primeros clientes
+                    Escalá sin colapsar
                   </h3>
                   <p className="text-gray-600 leading-relaxed mb-4">
-                    Estrategias <span className="font-semibold text-emerald-600">probadas</span> para atraer clientes: 
-                    canales, mensajes, tácticas low-cost de adquisición.
+                    Sistemas, automatizaciones y métricas para crecer de forma sostenible. Desde conseguir tus primeros clientes hasta estructurar procesos en PyMEs que facturan millones. Todo sin perder el control.
                   </p>
                   <div className="flex items-center gap-2 text-sm font-semibold text-emerald-600">
                     <Check className="w-5 h-5" />
-                    De 0 a tus primeras ventas
+                    Crecimiento real, no fuegos artificiales
                   </div>
                 </div>
               </motion.div>
@@ -856,79 +821,95 @@ export default function Index() {
           </div>
         </section>
 
-        {/* SECCIÓN DE ETAPAS */}
+        {/* ══════════════════════════════════════════════════════════════════════
+            NUEVA SECCIÓN: "¿PARA QUIÉN ES ESTO?"
+            ══════════════════════════════════════════════════════════════════════ */}
         <section className="py-20 md:py-32 bg-gradient-to-b from-gray-50 to-white relative overflow-hidden">
           <div className="container mx-auto px-6 relative z-10">
-            <div className="max-w-4xl mx-auto text-center mb-16 animate-fade-in">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7 }}
+              className="max-w-4xl mx-auto text-center mb-16"
+            >
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-100 text-blue-600 font-semibold text-sm mb-4">
-                <Target className="w-4 h-4" />
-                Tu camino al éxito
+                👥 Para vos, estés donde estés
               </div>
               <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">
-                ¿En qué{" "}
+                Funciona en{" "}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
-                  etapa
-                </span>{" "}
-                estás?
+                  cualquier etapa
+                </span>
               </h2>
               <p className="text-lg text-gray-600">
-                Elegí tu ruta y accedé a herramientas diseñadas específicamente para ti
+                Elegí tu camino y accedé a las herramientas que necesitás ahora
               </p>
-            </div>
+            </motion.div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-              <StageCard
-                title="Emprendedor"
-                stageLabel="DESDE CERO"
-                icon={Zap}
-                description="¿Tenés una idea pero no sabés si funciona?"
-                features={["Validá con IA en minutos", "Ves números reales", "Entendé viabilidad"]}
-                buttonText="Validar idea"
-                colorScheme="blue"
-                onClick={() => navigate("/select-role")}
-              />
-
-              <StageCard
-                title="Negocio"
-                stageLabel="1-3 AÑOS"
-                icon={TrendingUp}
-                description="Vendés, pero todo a mano. Necesitás ordenar y crecer."
-                features={["Dashboard real-time", "CRM + Ventas + Gastos", "Control sin planillas"]}
-                buttonText="Organizar negocio"
-                colorScheme="purple"
-                isPopular={true}
-                onClick={() => navigate("/select-role")}
-              />
-
-              <StageCard
-                title="Empresa"
-                stageLabel="+3 AÑOS"
-                icon={Briefcase}
-                description="Tu empresa creció. Automatizá y escalá con IA."
-                features={["Multi-sucursal", "Gestión de equipo", "Automatización con IA"]}
-                buttonText="Automatizar empresa"
-                colorScheme="green"
-                onClick={() => navigate("/select-role")}
-              />
-            </div>
-
-            <div className="text-center mt-16 animate-fade-in">
-              <p className="text-gray-600 mb-4">¿No estás seguro de tu etapa?</p>
-              <Button
-                variant="outline"
-                size="lg"
-                className="hover:scale-105 transition-transform"
-                onClick={() => navigate("/business-ai-bot")}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+              {/* Card A - Tengo una idea */}
+              <motion.div
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.1, duration: 0.6 }}
+                whileHover={{ y: -8, scale: 1.02 }}
+                onClick={() => navigate("/demo/idea-capture")}
+                className="group relative bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 cursor-pointer"
               >
-                <Brain className="w-5 h-5 mr-2" />
-                Dejá que la IA te ayude a elegir
-              </Button>
+                <div className="text-5xl mb-4">💡</div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                  Tengo una idea
+                </h3>
+                <p className="text-gray-600 leading-relaxed">
+                  Validá tu idea antes de arrancar. Mercado, competencia, costos. Todo claro antes de invertir un peso.
+                </p>
+              </motion.div>
+
+              {/* Card B - Tengo un negocio */}
+              <motion.div
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2, duration: 0.6 }}
+                whileHover={{ y: -8, scale: 1.02 }}
+                onClick={() => navigate("/demo/business-dashboard")}
+                className="group relative bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 cursor-pointer"
+              >
+                <div className="text-5xl mb-4">🏪</div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                  Tengo un negocio
+                </h3>
+                <p className="text-gray-600 leading-relaxed">
+                  Optimizá, automatizá y conseguí más clientes. Herramientas para hacer crecer lo que ya funciona.
+                </p>
+              </motion.div>
+
+              {/* Card C - Tengo una PyME */}
+              <motion.div
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.3, duration: 0.6 }}
+                whileHover={{ y: -8, scale: 1.02 }}
+                onClick={() => navigate("/demo/company-dashboard")}
+                className="group relative bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 cursor-pointer"
+              >
+                <div className="text-5xl mb-4">🏢</div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                  Tengo una PyME
+                </h3>
+                <p className="text-gray-600 leading-relaxed">
+                  Estructura, datos y sistemas para escalar sin colapsar. Del caos a la organización.
+                </p>
+              </motion.div>
             </div>
           </div>
         </section>
 
         {/* ══════════════════════════════════════════════════════════════════════
-            CÓMO FUNCIONA - 3 PASOS
+            TU MÉTODO EN 3 PASOS
             ══════════════════════════════════════════════════════════════════════ */}
         <section className="py-20 md:py-32 bg-gradient-to-b from-slate-50 to-white relative overflow-hidden">
           <div className="container mx-auto px-6 relative z-10">
@@ -939,18 +920,17 @@ export default function Index() {
               transition={{ duration: 0.7 }}
               className="max-w-4xl mx-auto text-center mb-16"
             >
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-100 text-blue-600 font-semibold text-sm mb-4">
-                <Sparkles className="w-4 h-4" />
-                Simple y efectivo
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-100 text-purple-600 font-semibold text-sm mb-4">
+                ⚡ Método probado
               </div>
               <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">
-                Tu camino al éxito en{" "}
+                Tu método en{" "}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
                   3 pasos
                 </span>
               </h2>
               <p className="text-lg text-gray-600">
-                Desde la idea hasta las primeras ventas con un método probado
+                Validá, ejecutá, medí — sin importar tu etapa
               </p>
             </motion.div>
 
@@ -976,20 +956,20 @@ export default function Index() {
                     Validación
                   </h3>
                   <p className="text-lg text-gray-600 leading-relaxed mb-4">
-                    <span className="font-semibold text-gray-900">Respondé 5 preguntas sobre tu idea</span> y la IA analiza:
+                    Respondé 5 preguntas sobre tu proyecto y obtené un análisis claro:
                   </p>
                   <ul className="space-y-2 text-gray-700">
                     <li className="flex items-start gap-3">
                       <Check className="w-5 h-5 text-blue-500 flex-shrink-0 mt-1" />
-                      <span><strong>Viabilidad de mercado:</strong> ¿Hay demanda real?</span>
+                      <span>✓ ¿Vale la pena? Demanda, oportunidad, tamaño de mercado</span>
                     </li>
                     <li className="flex items-start gap-3">
                       <Check className="w-5 h-5 text-blue-500 flex-shrink-0 mt-1" />
-                      <span><strong>Análisis de competencia:</strong> ¿Qué están haciendo otros?</span>
+                      <span>✓ ¿Qué hace la competencia? Estrategias, precios, posicionamiento</span>
                     </li>
                     <li className="flex items-start gap-3">
                       <Check className="w-5 h-5 text-blue-500 flex-shrink-0 mt-1" />
-                      <span><strong>Estimación de costos:</strong> ¿Cuánto necesitás invertir?</span>
+                      <span>✓ ¿Cuánto necesito invertir? Costos estimados según tu caso</span>
                     </li>
                   </ul>
                 </div>
@@ -1000,7 +980,7 @@ export default function Index() {
                 <div className="w-1 h-12 bg-gradient-to-b from-blue-300 to-purple-300 rounded-full"></div>
               </div>
 
-              {/* Step 2 - Construcción */}
+              {/* Step 2 - Ejecución */}
               <motion.div
                 initial={{ opacity: 0, x: 50 }}
                 whileInView={{ opacity: 1, x: 0 }}
@@ -1018,23 +998,23 @@ export default function Index() {
                 </div>
                 <div className="flex-1">
                   <h3 className="text-3xl font-bold text-gray-900 mb-3 group-hover:text-purple-600 transition-colors">
-                    Construcción
+                    Ejecución
                   </h3>
                   <p className="text-lg text-gray-600 leading-relaxed mb-4">
-                    <span className="font-semibold text-gray-900">Seguí el plan de acción personalizado</span> que te generamos:
+                    Plan de acción adaptado a tu situación:
                   </p>
                   <ul className="space-y-2 text-gray-700">
                     <li className="flex items-start gap-3">
                       <Check className="w-5 h-5 text-purple-500 flex-shrink-0 mt-1" />
-                      <span><strong>Roadmap semanal:</strong> Tareas concretas, no teoría</span>
+                      <span>✓ Tareas semanales: Concretas, priorizadas, sin pérdida de tiempo</span>
                     </li>
                     <li className="flex items-start gap-3">
                       <Check className="w-5 h-5 text-purple-500 flex-shrink-0 mt-1" />
-                      <span><strong>MVP definido:</strong> Qué construir primero</span>
+                      <span>✓ Próximos pasos claros: Sabés exactamente qué hacer ahora</span>
                     </li>
                     <li className="flex items-start gap-3">
                       <Check className="w-5 h-5 text-purple-500 flex-shrink-0 mt-1" />
-                      <span><strong>Recursos y herramientas:</strong> Links, templates, tutoriales</span>
+                      <span>✓ Recursos útiles: Plantillas, ejemplos, herramientas reales</span>
                     </li>
                   </ul>
                 </div>
@@ -1045,7 +1025,7 @@ export default function Index() {
                 <div className="w-1 h-12 bg-gradient-to-b from-purple-300 to-emerald-300 rounded-full"></div>
               </div>
 
-              {/* Step 3 - Lanzamiento */}
+              {/* Step 3 - Tracción */}
               <motion.div
                 initial={{ opacity: 0, x: -50 }}
                 whileInView={{ opacity: 1, x: 0 }}
@@ -1063,23 +1043,23 @@ export default function Index() {
                 </div>
                 <div className="flex-1">
                   <h3 className="text-3xl font-bold text-gray-900 mb-3 group-hover:text-emerald-600 transition-colors">
-                    Lanzamiento
+                    Tracción
                   </h3>
                   <p className="text-lg text-gray-600 leading-relaxed mb-4">
-                    <span className="font-semibold text-gray-900">Ejecutá tu estrategia de go-to-market</span> con el soporte de IA:
+                    Convertí esfuerzo en resultados medibles:
                   </p>
                   <ul className="space-y-2 text-gray-700">
                     <li className="flex items-start gap-3">
                       <Check className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-1" />
-                      <span><strong>Canales de adquisición:</strong> Dónde encontrar clientes</span>
+                      <span>✓ Estrategias adaptadas: Qué hacer según tu etapa (arrancar, crecer, escalar)</span>
                     </li>
                     <li className="flex items-start gap-3">
                       <Check className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-1" />
-                      <span><strong>Mensajes de venta:</strong> Qué decir y cómo decirlo</span>
+                      <span>✓ Herramientas concretas: Automatizaciones, plantillas, sistemas probados</span>
                     </li>
                     <li className="flex items-start gap-3">
                       <Check className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-1" />
-                      <span><strong>Métricas de éxito:</strong> Cómo medir y optimizar</span>
+                      <span>✓ Métricas que importan: Los números que te dicen si vas por buen camino</span>
                     </li>
                   </ul>
                 </div>
@@ -1095,7 +1075,7 @@ export default function Index() {
               className="text-center mt-16"
             >
               <motion.button
-                onClick={() => navigate('/select-role')}
+                onClick={() => navigate('/demo/intro')}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.98 }}
                 className="px-10 py-5 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white text-lg font-bold rounded-2xl shadow-2xl hover:shadow-purple-500/50 transition-all"
@@ -1106,35 +1086,31 @@ export default function Index() {
           </div>
         </section>
 
-        {/* SOCIAL PROOF */}
-        <section className="py-16 bg-white border-y border-gray-200">
+        {/* ══════════════════════════════════════════════════════════════════════
+            SOCIAL PROOF - EN CONSTRUCCIÓN
+            ══════════════════════════════════════════════════════════════════════ */}
+        <section className="py-20 bg-gradient-to-b from-white to-slate-50 border-y border-gray-200">
           <div className="container mx-auto px-6">
-            <div className="max-w-4xl mx-auto text-center animate-fade-in">
-              <p className="text-gray-500 text-sm uppercase tracking-wide mb-8 font-semibold">
-                Confiado por emprendedores argentinos
-              </p>
-              <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12">
-                <div className="flex items-center gap-2">
-                  <div className="flex -space-x-2">
-                    {[1, 2, 3, 4].map((i) => (
-                      <div
-                        key={i}
-                        className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-purple-600 border-2 border-white"
-                      ></div>
-                    ))}
-                  </div>
-                  <span className="text-gray-700 font-semibold">+1,000 usuarios</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="flex text-yellow-400">
-                    {[1, 2, 3, 4, 5].map((i) => (
-                      <Star key={i} className="w-5 h-5 fill-current" />
-                    ))}
-                  </div>
-                  <span className="text-gray-700 font-semibold">4.9/5 rating</span>
-                </div>
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7 }}
+              className="max-w-4xl mx-auto text-center"
+            >
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-100 text-amber-600 font-semibold text-sm mb-6">
+                🚀 En construcción con vos
               </div>
-            </div>
+              <h3 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                Estamos creciendo juntos
+              </h3>
+              <p className="text-lg text-gray-600 leading-relaxed mb-6 max-w-3xl mx-auto">
+                Esta plataforma está en fase beta. Los primeros usuarios tienen acceso prioritario, influyen en las nuevas funcionalidades y pagan menos cuando lancemos precios oficiales.
+              </p>
+              <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-emerald-100 text-emerald-700 font-semibold">
+                ✅ Sé de los primeros • Acceso anticipado
+              </div>
+            </motion.div>
           </div>
         </section>
 
@@ -1163,8 +1139,8 @@ export default function Index() {
                 transition={{ delay: 0.2, duration: 0.6 }}
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 mb-8"
               >
-                <Sparkles className="w-4 h-4 text-yellow-400 animate-pulse" />
-                <span className="text-white font-semibold text-sm">Sin tarjeta • Empezá gratis</span>
+                <Check className="w-4 h-4 text-emerald-400" />
+                <span className="text-white font-semibold text-sm">Sin tarjeta • Gratis para probar</span>
               </motion.div>
 
               {/* Title */}
@@ -1175,11 +1151,10 @@ export default function Index() {
                 transition={{ delay: 0.3, duration: 0.7 }}
                 className="text-4xl md:text-6xl font-extrabold text-white mb-6 leading-tight"
               >
-                ¿Listo para{" "}
+                Probá sin{" "}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400">
-                  empezar
+                  compromiso
                 </span>
-                ?
               </motion.h2>
 
               {/* Subtitle */}
@@ -1190,7 +1165,7 @@ export default function Index() {
                 transition={{ delay: 0.4, duration: 0.6 }}
                 className="text-xl text-white/80 mb-10 max-w-2xl mx-auto leading-relaxed"
               >
-                Unite a los <span className="font-bold text-white">1,000+ emprendedores</span> que ya están construyendo su futuro con nuestra plataforma
+                Acceso completo, sin tarjeta. Si te funciona, te quedás. Simple.
               </motion.p>
 
               {/* CTA Buttons */}
@@ -1201,10 +1176,10 @@ export default function Index() {
                 transition={{ delay: 0.5, duration: 0.6 }}
                 className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8"
               >
-                {/* Primary CTA */}
+                {/* Primary CTA - Gradiente azul-rosa */}
                 <motion.button
-                  onClick={() => navigate('/select-role')}
-                  whileHover={{ scale: 1.08, boxShadow: '0 30px 80px rgba(59, 130, 246, 0.7)' }}
+                  onClick={() => navigate('/demo/intro')}
+                  whileHover={{ scale: 1.08, boxShadow: '0 30px 80px rgba(219, 39, 119, 0.5)' }}
                   whileTap={{ scale: 0.96 }}
                   className="group relative px-12 py-6 rounded-2xl overflow-hidden font-bold text-white text-lg shadow-2xl transition-all"
                 >
@@ -1223,12 +1198,12 @@ export default function Index() {
                   />
                   <span className="relative z-10 flex items-center gap-3 drop-shadow-lg">
                     <Rocket className="w-6 h-6 group-hover:scale-110 group-hover:rotate-12 transition-transform" />
-                    Comenzar ahora
+                    Comenzar gratis
                     <ChevronRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
                   </span>
                 </motion.button>
 
-                {/* Secondary CTA */}
+                {/* Secondary CTA - Outline blanco */}
                 <motion.button
                   onClick={() => navigate('/business-ai-bot')}
                   whileHover={{ scale: 1.05, backgroundColor: 'rgba(255, 255, 255, 0.15)' }}
@@ -1237,7 +1212,7 @@ export default function Index() {
                 >
                   <span className="flex items-center gap-2">
                     <Brain className="w-5 h-5" />
-                    Hablar con IA
+                    Ver cómo funciona
                   </span>
                 </motion.button>
               </motion.div>
@@ -1253,7 +1228,7 @@ export default function Index() {
                   onClick={() => setShowLoginModal(true)}
                   className="text-white/70 hover:text-white font-medium underline underline-offset-4 transition-colors"
                 >
-                  ¿Tenés dudas? Hablemos →
+                  ¿Tenés preguntas? Hablemos →
                 </button>
               </motion.div>
 
@@ -1267,26 +1242,27 @@ export default function Index() {
               >
                 <div className="flex items-center gap-2 text-white/80">
                   <Check className="w-5 h-5 text-emerald-400" />
-                  <span className="text-sm font-medium">Datos seguros</span>
+                  <span className="text-sm font-medium">✓ Datos seguros</span>
                 </div>
                 <div className="flex items-center gap-2 text-white/80">
                   <Check className="w-5 h-5 text-emerald-400" />
-                  <span className="text-sm font-medium">Sin permanencia</span>
+                  <span className="text-sm font-medium">✓ Cancelá cuando quieras</span>
                 </div>
                 <div className="flex items-center gap-2 text-white/80">
                   <Check className="w-5 h-5 text-emerald-400" />
-                  <span className="text-sm font-medium">Soporte en español</span>
+                  <span className="text-sm font-medium">✓ Soporte en español</span>
                 </div>
               </motion.div>
             </motion.div>
           </div>
         </section>
 
-        {/* FOOTER SIMPLE */}
+        {/* FOOTER */}
         <footer className="bg-slate-950 border-t border-slate-800 py-8">
           <div className="container mx-auto px-6">
             <div className="text-center text-slate-400 text-sm">
-              <p>&copy; 2025 Proyecto Emprendedurismo. Todos los derechos reservados.</p>
+              <p>© 2025 Proyecto Emprendedurismo. Todos los derechos reservados.</p>
+              <p className="mt-2">Hecho con ❤️ en Buenos Aires</p>
             </div>
           </div>
         </footer>
