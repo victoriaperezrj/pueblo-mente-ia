@@ -1,0 +1,307 @@
+// src/pages/DashboardPages/CompanyDashboard.tsx
+import { motion } from 'framer-motion';
+import { useState } from 'react';
+import {
+  BarChart, Bar, LineChart, Line, AreaChart, Area,
+  XAxis, YAxis, CartesianGrid, Tooltip, Legend,
+  ResponsiveContainer, ScatterChart, Scatter
+} from 'recharts';
+import { Sidebar } from '@/components/dashboard/Sidebar';
+import { MetricCard } from '@/components/dashboard/MetricCard';
+import { ToolsGrid } from '@/components/dashboard/ToolsGrid';
+import { TeamTable } from '@/components/dashboard/TeamTable';
+// import { useUser } from '@/hooks/useUser';
+
+// Mock de useUser para evitar errores de compilación si no existe
+const useUser = () => ({
+  profile: { full_name: 'Usuario' }
+});
+
+// Mock Data
+const kpiData = [
+  { quarter: 'Q1', revenue: 45000, target: 50000, growth: 8 },
+  { quarter: 'Q2', revenue: 52000, target: 50000, growth: 15 },
+  { quarter: 'Q3', revenue: 61000, target: 60000, growth: 17 },
+  { quarter: 'Q4', revenue: 78000, target: 75000, growth: 28 },
+];
+
+const teamData = [
+  { id: 1, name: 'María García', role: 'Gerente General', status: 'Activo', performance: 95 },
+  { id: 2, name: 'Juan Pérez', role: 'Jefe de Ventas', status: 'Activo', performance: 88 },
+  { id: 3, name: 'Sofia López', role: 'Coordinadora', status: 'Activo', performance: 92 },
+  { id: 4, name: 'Carlos Ruiz', role: 'Técnico', status: 'Activo', performance: 85 },
+];
+
+const companyTools = [
+  {
+    id: 1,
+    icon: '📊',
+    name: 'Dashboard en Tiempo Real',
+    description: 'Métricas live y alertas automáticas',
+    path: '/tools/realtime-dashboard',
+    color: 'from-blue-500 to-blue-600',
+  },
+  {
+    id: 2,
+    icon: '👥',
+    name: 'Estructurador de Equipos',
+    description: 'Organigrama y gestión de roles',
+    path: '/tools/team-structure',
+    color: 'from-purple-500 to-purple-600',
+  },
+  {
+    id: 3,
+    icon: '📈',
+    name: 'Sistema de KPIs',
+    description: 'Definición y tracking de objetivos',
+    path: '/tools/kpi-system',
+    color: 'from-green-500 to-green-600',
+  },
+  {
+    id: 4,
+    icon: '🎯',
+    name: 'Planificador Estratégico',
+    description: 'OKRs, roadmap y timeline',
+    path: '/tools/strategic-planner',
+    color: 'from-orange-500 to-orange-600',
+  },
+];
+
+export function CompanyDashboard() {
+  const { profile } = useUser();
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [selectedView, setSelectedView] = useState('overview');
+
+  const metrics = [
+    {
+      label: 'Facturación Anual',
+      value: '$236K',
+      change: '+28%',
+      icon: '💵',
+      color: 'from-blue-500 to-blue-600',
+    },
+    {
+      label: 'Empleados Activos',
+      value: '12',
+      change: '+2 nuevos',
+      icon: '👥',
+      color: 'from-green-500 to-green-600',
+    },
+    {
+      label: 'Cumplimiento OKRs',
+      value: '87%',
+      change: '+5%',
+      icon: '🎯',
+      color: 'from-purple-500 to-purple-600',
+    },
+    {
+      label: 'Crecimiento Trimestral',
+      value: '28%',
+      change: '+8%',
+      icon: '📈',
+      color: 'from-orange-500 to-orange-600',
+    },
+  ];
+
+  return (
+    <div className="flex h-screen bg-gray-50 dark:bg-slate-900">
+      <Sidebar
+        stage="pyme"
+        open={sidebarOpen}
+        onToggle={() => setSidebarOpen(!sidebarOpen)}
+      />
+
+      <main
+        className={`flex-1 overflow-auto transition-all duration-300 ${
+          sidebarOpen ? 'lg:ml-64' : 'lg:ml-20'
+        } pt-16`}
+      >
+        <div className="p-8">
+          {/* Header */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-8"
+          >
+            <h1 className="text-4xl font-black text-gray-900 dark:text-white mb-2">
+              Dashboard Ejecutivo
+            </h1>
+            <p className="text-gray-600 dark:text-gray-400">
+              Control integral de tu PyME (10+ empleados)
+            </p>
+          </motion.div>
+
+          {/* View Selector */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="flex gap-4 mb-8"
+          >
+            {['overview', 'team', 'kpis'].map((view) => (
+              <button
+                key={view}
+                onClick={() => setSelectedView(view)}
+                className={`px-6 py-2 rounded-lg font-semibold transition-all ${
+                  selectedView === view
+                    ? 'bg-blue-500 text-white'
+                    : 'bg-white dark:bg-slate-800 text-gray-900 dark:text-white'
+                }`}
+              >
+                {view === 'overview' && 'Resumen'}
+                {view === 'team' && 'Equipo'}
+                {view === 'kpis' && 'KPIs'}
+              </button>
+            ))}
+          </motion.div>
+
+          {/* Overview Tab */}
+          {selectedView === 'overview' && (
+            <>
+              {/* Metrics Grid */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8"
+              >
+                {metrics.map((metric, index) => (
+                  <MetricCard key={index} {...metric} />
+                ))}
+              </motion.div>
+
+              {/* Charts */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                {/* Revenue Chart */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                  className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-lg"
+                >
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
+                    Facturación por Trimestre
+                  </h3>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <AreaChart data={kpiData}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+                      <XAxis dataKey="quarter" stroke="#6B7280" />
+                      <YAxis stroke="#6B7280" />
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: '#1F2937',
+                          border: 'none',
+                          borderRadius: '8px',
+                          color: '#fff',
+                        }}
+                      />
+                      <Area
+                        type="monotone"
+                        dataKey="revenue"
+                        fill="#3B82F6"
+                        stroke="#1E40AF"
+                        fillOpacity={0.6}
+                      />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </motion.div>
+
+                {/* Growth Chart */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4 }}
+                  className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-lg"
+                >
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
+                    Crecimiento Trimestral
+                  </h3>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <BarChart data={kpiData}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+                      <XAxis dataKey="quarter" stroke="#6B7280" />
+                      <YAxis stroke="#6B7280" />
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: '#1F2937',
+                          border: 'none',
+                          borderRadius: '8px',
+                          color: '#fff',
+                        }}
+                      />
+                      <Bar dataKey="growth" fill="#10B981" radius={[8, 8, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </motion.div>
+              </div>
+            </>
+          )}
+
+          {/* Team Tab */}
+          {selectedView === 'team' && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+            >
+              <TeamTable data={teamData} />
+            </motion.div>
+          )}
+
+          {/* KPIs Tab */}
+          {selectedView === 'kpis' && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="bg-white dark:bg-slate-800 rounded-2xl p-8 shadow-lg"
+            >
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+                Objetivos Clave (OKRs)
+              </h3>
+              <div className="space-y-6">
+                {[
+                  { goal: 'Aumentar facturación', progress: 87, target: '100%' },
+                  { goal: 'Expandir equipo', progress: 75, target: '100%' },
+                  { goal: 'Mejorar retención', progress: 92, target: '100%' },
+                ].map((okr, index) => (
+                  <div key={index}>
+                    <div className="flex justify-between mb-2">
+                      <span className="font-semibold text-gray-900 dark:text-white">
+                        {okr.goal}
+                      </span>
+                      <span className="text-blue-600 dark:text-blue-400 font-bold">
+                        {okr.progress}%
+                      </span>
+                    </div>
+                    <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
+                      <motion.div
+                        initial={{ width: 0 }}
+                        animate={{ width: `${okr.progress}%` }}
+                        transition={{ duration: 1, delay: index * 0.2 }}
+                        className="bg-gradient-to-r from-blue-500 to-purple-600 h-3 rounded-full"
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          )}
+
+          {/* Tools Grid */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            className="mt-8"
+          >
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+              Tus Herramientas Enterprise
+            </h2>
+            <ToolsGrid tools={companyTools} />
+          </motion.div>
+        </div>
+      </main>
+    </div>
+  );
+}
