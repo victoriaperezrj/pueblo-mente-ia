@@ -86,6 +86,8 @@ const App = () => (
               <Route path="/select-role" element={<SelectRole />} />
               <Route path="/demo/select-role" element={<DemoSelectRole />} />
               <Route path="/onboarding-new" element={<Suspense fallback={<PageLoader />}>{React.createElement(lazy(() => import("./pages/NewOnboarding")))}</Suspense>} />
+              <Route path="/dashboard" element={<Suspense fallback={<PageLoader />}>{React.createElement(lazy(() => import("./pages/dashboards/EntrepreneurDashboard")))}</Suspense>} />
+              <Route path="/tools/idea-validator" element={<Suspense fallback={<PageLoader />}>{React.createElement(lazy(() => import("./pages/IdeaValidator")))}</Suspense>} />
               <Route path="/auth" element={<ProtectedRoute requireAuth={false}><Auth /></ProtectedRoute>} />
                 <Route path="/business-ai-bot" element={<BusinessAIBot />} />
                 <Route path="/demo-start" element={<DemoStart />} />

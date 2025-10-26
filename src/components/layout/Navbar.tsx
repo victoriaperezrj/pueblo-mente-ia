@@ -2,11 +2,12 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ThemeSwitcher } from "./ThemeSwitcher";
 import { Rocket } from "lucide-react";
-import { useState } from "react";
 
-export function Navbar() {
-  const [showAuthModal, setShowAuthModal] = useState(false);
+interface NavbarProps {
+  onAuthClick?: () => void;
+}
 
+export function Navbar({ onAuthClick }: NavbarProps) {
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between">
@@ -29,7 +30,7 @@ export function Navbar() {
           <ThemeSwitcher />
           
           <Button
-            onClick={() => setShowAuthModal(true)}
+            onClick={onAuthClick}
             className="bg-gradient-to-r from-[hsl(var(--primary))] to-[hsl(var(--pyme))] text-white hover:opacity-90"
           >
             Iniciar Sesión

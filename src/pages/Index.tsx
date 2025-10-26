@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Navbar } from "@/components/layout/Navbar";
+import { AuthModal } from "@/components/auth/AuthModal";
 import {
   Building2,
   Menu,
@@ -627,11 +628,14 @@ function StageCard({
 // ══════════════════════════════════════════════════════════════════════
 export default function Index() {
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   return (
     <>
+      <Navbar onAuthClick={() => setShowAuthModal(true)} />
+      <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
       <FloatingOrbs />
       <FloatingParticles />
       <ImprovedFloatingBot />
