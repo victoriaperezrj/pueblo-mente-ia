@@ -87,7 +87,9 @@ const App = () => (
               <Route path="/demo/select-role" element={<DemoSelectRole />} />
               <Route path="/onboarding-new" element={<Suspense fallback={<PageLoader />}>{React.createElement(lazy(() => import("./pages/NewOnboarding")))}</Suspense>} />
               <Route path="/dashboard" element={<Suspense fallback={<PageLoader />}>{React.createElement(lazy(() => import("./pages/dashboards/EntrepreneurDashboard")))}</Suspense>} />
-              <Route path="/tools/idea-validator" element={<Suspense fallback={<PageLoader />}>{React.createElement(lazy(() => import("./pages/IdeaValidator")))}</Suspense>} />
+              <Route path="/dashboard/business" element={<Suspense fallback={<PageLoader />}>{React.createElement(lazy(() => import("./pages/dashboards/BusinessDashboard")))}</Suspense>} />
+              <Route path="/dashboard/pyme" element={<Suspense fallback={<PageLoader />}>{React.createElement(lazy(() => import("./pages/dashboards/PymeDashboard")))}</Suspense>} />
+              <Route path="/tools/idea-validator" element={<Suspense fallback={<PageLoader />}>{React.createElement(lazy(() => import("./pages/tools/IdeaValidatorPage")))}</Suspense>} />
               <Route path="/auth" element={<ProtectedRoute requireAuth={false}><Auth /></ProtectedRoute>} />
                 <Route path="/business-ai-bot" element={<BusinessAIBot />} />
                 <Route path="/demo-start" element={<DemoStart />} />
