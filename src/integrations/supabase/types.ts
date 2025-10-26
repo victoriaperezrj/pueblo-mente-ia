@@ -516,6 +516,66 @@ export type Database = {
           },
         ]
       }
+      onboarding_data: {
+        Row: {
+          available_time: string | null
+          business_type: string | null
+          company_description: string | null
+          created_at: string | null
+          employee_count: string | null
+          id: string
+          initial_budget: string | null
+          main_challenge: string | null
+          main_problem: string | null
+          monthly_customers: string | null
+          monthly_revenue: string | null
+          problem_description: string | null
+          stage: string
+          target_customer: string | null
+          time_in_business: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          available_time?: string | null
+          business_type?: string | null
+          company_description?: string | null
+          created_at?: string | null
+          employee_count?: string | null
+          id?: string
+          initial_budget?: string | null
+          main_challenge?: string | null
+          main_problem?: string | null
+          monthly_customers?: string | null
+          monthly_revenue?: string | null
+          problem_description?: string | null
+          stage: string
+          target_customer?: string | null
+          time_in_business?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          available_time?: string | null
+          business_type?: string | null
+          company_description?: string | null
+          created_at?: string | null
+          employee_count?: string | null
+          id?: string
+          initial_budget?: string | null
+          main_challenge?: string | null
+          main_problem?: string | null
+          monthly_customers?: string | null
+          monthly_revenue?: string | null
+          problem_description?: string | null
+          stage?: string
+          target_customer?: string | null
+          time_in_business?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       outbox_events: {
         Row: {
           aggregate_id: string
@@ -630,6 +690,7 @@ export type Database = {
           full_name: string | null
           id: string
           location: string | null
+          onboarding_completed: boolean | null
           phone: string | null
           updated_at: string | null
           user_type: Database["public"]["Enums"]["app_role"] | null
@@ -641,6 +702,7 @@ export type Database = {
           full_name?: string | null
           id: string
           location?: string | null
+          onboarding_completed?: boolean | null
           phone?: string | null
           updated_at?: string | null
           user_type?: Database["public"]["Enums"]["app_role"] | null
@@ -652,6 +714,7 @@ export type Database = {
           full_name?: string | null
           id?: string
           location?: string | null
+          onboarding_completed?: boolean | null
           phone?: string | null
           updated_at?: string | null
           user_type?: Database["public"]["Enums"]["app_role"] | null
@@ -777,6 +840,33 @@ export type Database = {
           },
         ]
       }
+      user_tools: {
+        Row: {
+          created_at: string | null
+          enabled: boolean | null
+          id: string
+          tool_key: string
+          tool_name: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          enabled?: boolean | null
+          id?: string
+          tool_key: string
+          tool_name: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          enabled?: boolean | null
+          id?: string
+          tool_key?: string
+          tool_name?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       appointments_safe: {
@@ -834,10 +924,7 @@ export type Database = {
       }
     }
     Functions: {
-      cleanup_old_rate_limits: {
-        Args: Record<PropertyKey, never>
-        Returns: undefined
-      }
+      cleanup_old_rate_limits: { Args: never; Returns: undefined }
       get_user_role: {
         Args: { _user_id: string }
         Returns: Database["public"]["Enums"]["app_role"]

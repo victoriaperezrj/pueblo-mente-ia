@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { DemoProvider } from "@/contexts/DemoContext";
 import { GuestSessionProvider } from "@/contexts/GuestSessionProvider";
+import { ThemeProvider } from "@/contexts/ThemeContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 
 // Critical pages (loaded immediately)
@@ -13,6 +14,7 @@ import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 import SelectRole from "./pages/SelectRole";
+import DemoSelectRole from "./pages/DemoSelectRole";
 
 // Lazy-loaded pages
 const DemoStart = lazy(() => import("./pages/DemoStart"));
@@ -71,19 +73,22 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <GuestSessionProvider>
-          <DemoProvider>
-            <Suspense fallback={<PageLoader />}>
-            <Routes>
+    <ThemeProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <GuestSessionProvider>
+            <DemoProvider>
+              <Suspense fallback={<PageLoader />}>
+              <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/select-role" element={<SelectRole />} />
+              <Route path="/demo/select-role" element={<DemoSelectRole />} />
+              <Route path="/onboarding-new" element={<Suspense fallback={<PageLoader />}>{React.createElement(lazy(() => import("./pages/NewOnboarding")))}</Suspense>} />
               <Route path="/auth" element={<ProtectedRoute requireAuth={false}><Auth /></ProtectedRoute>} />
-              <Route path="/business-ai-bot" element={<BusinessAIBot />} />
-              <Route path="/demo-start" element={<DemoStart />} />
+                <Route path="/business-ai-bot" element={<BusinessAIBot />} />
+                <Route path="/demo-start" element={<DemoStart />} />
               
               {/* Onboarding routes - classify is public for demo, rest are protected */}
               <Route path="/onboarding" element={<ProtectedRoute><Onboarding /></ProtectedRoute>} />
@@ -149,6 +154,7 @@ const App = () => (
         </GuestSessionProvider>
       </BrowserRouter>
     </TooltipProvider>
+  </ThemeProvider>
   </QueryClientProvider>
 );
 
