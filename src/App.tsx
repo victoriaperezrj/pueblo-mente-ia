@@ -41,9 +41,9 @@ const EntrepreneurAnalyzing = lazy(() => import("./pages/onboarding/Entrepreneur
 const EntrepreneurResults = lazy(() => import("./pages/onboarding/EntrepreneurResults"));
 const EntrepreneurBusinessPlan = lazy(() => import("./pages/onboarding/EntrepreneurBusinessPlan"));
 const BusinessStage = lazy(() => import("./pages/onboarding/BusinessStage"));
-const EntrepreneurDashboard = lazy(() => import("./pages/entrepreneur/Dashboard"));
-const BusinessDashboard = lazy(() => import("./pages/business/Dashboard"));
-const PymeDashboard = lazy(() => import("./pages/pyme/Dashboard"));
+// const EntrepreneurDashboard = lazy(() => import("./pages/entrepreneur/Dashboard")); // Reemplazado por nueva estructura
+// const BusinessDashboard = lazy(() => import("./pages/business/Dashboard")); // Reemplazado por nueva estructura
+// const PymeDashboard = lazy(() => import("./pages/pyme/Dashboard")); // Reemplazado por nueva estructura
 
 // Demo pages
 const DemoIntro = lazy(() => import("./pages/demo/DemoIntro"));
@@ -86,9 +86,9 @@ const App = () => (
               <Route path="/select-role" element={<SelectRole />} />
               <Route path="/demo/select-role" element={<DemoSelectRole />} />
               <Route path="/onboarding-new" element={<Suspense fallback={<PageLoader />}>{React.createElement(lazy(() => import("./pages/NewOnboarding")))}</Suspense>} />
-              <Route path="/dashboard" element={<Suspense fallback={<PageLoader />}>{React.createElement(lazy(() => import("./pages/dashboards/EntrepreneurDashboard")))}</Suspense>} />
-              <Route path="/dashboard/business" element={<Suspense fallback={<PageLoader />}>{React.createElement(lazy(() => import("./pages/dashboards/BusinessDashboard")))}</Suspense>} />
-              <Route path="/dashboard/pyme" element={<Suspense fallback={<PageLoader />}>{React.createElement(lazy(() => import("./pages/dashboards/PymeDashboard")))}</Suspense>} />
+              <Route path="/dashboard" element={<Suspense fallback={<PageLoader />}>{React.createElement(lazy(() => import("./pages/DashboardPages/EntrepreneurDashboard")))}</Suspense>} />
+              <Route path="/dashboard/business" element={<Suspense fallback={<PageLoader />}>{React.createElement(lazy(() => import("./pages/DashboardPages/BusinessDashboard")))}</Suspense>} />
+              <Route path="/dashboard/pyme" element={<Suspense fallback={<PageLoader />}>{React.createElement(lazy(() => import("./pages/DashboardPages/CompanyDashboard")))}</Suspense>} />
               <Route path="/tools/idea-validator" element={<Suspense fallback={<PageLoader />}>{React.createElement(lazy(() => import("./pages/tools/IdeaValidatorPage")))}</Suspense>} />
               <Route path="/auth" element={<ProtectedRoute requireAuth={false}><Auth /></ProtectedRoute>} />
                 <Route path="/business-ai-bot" element={<BusinessAIBot />} />
@@ -104,10 +104,10 @@ const App = () => (
               <Route path="/onboarding/entrepreneur/business-plan" element={<ProtectedRoute><EntrepreneurBusinessPlan /></ProtectedRoute>} />
               <Route path="/onboarding/entrepreneur/financial-simulator" element={<ProtectedRoute><FinancialSimulator /></ProtectedRoute>} />
               
-              {/* Role-specific dashboards - protected */}
-              <Route path="/entrepreneur/dashboard" element={<ProtectedRoute><EntrepreneurDashboard /></ProtectedRoute>} />
-              <Route path="/business/dashboard" element={<ProtectedRoute><BusinessDashboard /></ProtectedRoute>} />
-              <Route path="/pyme/dashboard" element={<ProtectedRoute><PymeDashboard /></ProtectedRoute>} />
+              {/* Role-specific dashboards - protected (Rutas antiguas, se asume que las nuevas rutas /dashboard, /dashboard/business, /dashboard/pyme las reemplazan) */}
+              {/* <Route path="/entrepreneur/dashboard" element={<ProtectedRoute><EntrepreneurDashboard /></ProtectedRoute>} /> */}
+              {/* <Route path="/business/dashboard" element={<ProtectedRoute><BusinessDashboard /></ProtectedRoute>} /> */}
+              {/* <Route path="/pyme/dashboard" element={<ProtectedRoute><PymeDashboard /></ProtectedRoute>} /> */}
               
               {/* Demo routes */}
               <Route path="/demo/intro" element={<DemoIntro />} />
