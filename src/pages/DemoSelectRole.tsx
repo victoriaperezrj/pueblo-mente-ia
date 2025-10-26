@@ -12,7 +12,7 @@ export default function DemoSelectRole() {
       description: "Tengo una idea pero no la he bajado a tierra",
       icon: Lightbulb,
       color: "from-[hsl(var(--entrepreneur))] to-blue-600",
-      route: "/demo/entrepreneur-dashboard",
+      route: "/demo/entrepreneur",
     },
     {
       id: "business",
@@ -20,7 +20,7 @@ export default function DemoSelectRole() {
       description: "Ya tengo un negocio funcionando",
       icon: Store,
       color: "from-[hsl(var(--business))] to-green-600",
-      route: "/demo/business-dashboard",
+      route: "/demo/business",
     },
     {
       id: "pyme",
@@ -28,7 +28,7 @@ export default function DemoSelectRole() {
       description: "Tengo una empresa con equipo",
       icon: Building2,
       color: "from-[hsl(var(--pyme))] to-purple-600",
-      route: "/demo/company-dashboard",
+      route: "/demo/pyme",
     },
   ];
 
