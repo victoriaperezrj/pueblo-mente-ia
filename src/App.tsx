@@ -10,16 +10,11 @@ import { ThemeProvider } from "@/contexts/ThemeContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 
 // Critical pages (loaded immediately)
-import IndexNew from "./pages/IndexNew"; // Using new landing page
+import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 import SelectRole from "./pages/SelectRole";
 import DemoSelectRole from "./pages/DemoSelectRole";
-
-// Demo pages
-const EntrepreneurDemo = lazy(() => import("./pages/demo/EntrepreneurDemo"));
-const BusinessDemo = lazy(() => import("./pages/demo/BusinessDemo"));
-const PymeDemo = lazy(() => import("./pages/demo/PymeDemo"));
 
 // Lazy-loaded pages
 const DemoStart = lazy(() => import("./pages/DemoStart"));
@@ -87,12 +82,9 @@ const App = () => (
             <DemoProvider>
               <Suspense fallback={<PageLoader />}>
               <Routes>
-              <Route path="/" element={<IndexNew />} />
+              <Route path="/" element={<Index />} />
               <Route path="/select-role" element={<SelectRole />} />
-        <Route path="/demo/select-role" element={<DemoSelectRole />} />
-        <Route path="/demo/entrepreneur" element={<EntrepreneurDemo />} />
-        <Route path="/demo/business" element={<BusinessDemo />} />
-        <Route path="/demo/pyme" element={<PymeDemo />} />
+              <Route path="/demo/select-role" element={<DemoSelectRole />} />
               <Route path="/onboarding-new" element={<Suspense fallback={<PageLoader />}>{React.createElement(lazy(() => import("./pages/NewOnboarding")))}</Suspense>} />
               <Route path="/dashboard" element={<Suspense fallback={<PageLoader />}>{React.createElement(lazy(() => import("./pages/dashboards/EntrepreneurDashboard")))}</Suspense>} />
               <Route path="/dashboard/business" element={<Suspense fallback={<PageLoader />}>{React.createElement(lazy(() => import("./pages/dashboards/BusinessDashboard")))}</Suspense>} />
