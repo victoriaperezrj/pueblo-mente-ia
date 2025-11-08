@@ -1,7 +1,11 @@
-import { ThemeSwitcher } from '@/components/ThemeSwitcher';
+import { ThemeSwitcher } from '@/components/layout/ThemeSwitcher';
 import { useNavigate } from 'react-router-dom';
 
-export function Navbar() {
+interface NavbarProps {
+  onAuthClick?: () => void;
+}
+
+export function Navbar({ onAuthClick }: NavbarProps) {
   const navigate = useNavigate();
   
   return (
@@ -11,7 +15,7 @@ export function Navbar() {
       <div className="flex items-center gap-4">
         <ThemeSwitcher />
         
-        <button onClick={() => navigate('/auth')}>
+        <button onClick={onAuthClick || (() => navigate('/auth'))}>
           Crear cuenta
         </button>
         
