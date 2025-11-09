@@ -2,3 +2,6 @@ project_id = "ntuikrlveqppwaitawol"
 
 [functions.analyze-business-idea]
 verify_jwt = false
+
+[functions.optimize-price]
+verify_jwt = true

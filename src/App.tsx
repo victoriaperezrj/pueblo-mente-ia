@@ -109,6 +109,13 @@ const App = () => (
               <Route path="/business/dashboard" element={<ProtectedRoute><BusinessDashboard /></ProtectedRoute>} />
               <Route path="/pyme/dashboard" element={<ProtectedRoute><PymeDashboard /></ProtectedRoute>} />
               
+              {/* Business ecosystem routes */}
+              <Route path="/business/crm" element={<ProtectedRoute><Suspense fallback={<PageLoader />}>{React.createElement(lazy(() => import("./pages/business/CRM")))}</Suspense></ProtectedRoute>} />
+              <Route path="/business/analytics" element={<ProtectedRoute><Suspense fallback={<PageLoader />}>{React.createElement(lazy(() => import("./pages/business/Analytics")))}</Suspense></ProtectedRoute>} />
+              <Route path="/business/inventory" element={<ProtectedRoute><Inventory /></ProtectedRoute>} />
+              <Route path="/business/profitability" element={<ProtectedRoute><Suspense fallback={<PageLoader />}>{React.createElement(lazy(() => import("./pages/business/Profitability")))}</Suspense></ProtectedRoute>} />
+              <Route path="/business/price-optimizer" element={<ProtectedRoute><Suspense fallback={<PageLoader />}>{React.createElement(lazy(() => import("./pages/business/PriceOptimizer")))}</Suspense></ProtectedRoute>} />
+              
               {/* Demo routes */}
               <Route path="/demo/intro" element={<DemoIntro />} />
               <Route path="/demo/idea-capture" element={<DemoIdeaCapture />} />

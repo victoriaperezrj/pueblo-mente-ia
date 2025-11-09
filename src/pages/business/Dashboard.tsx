@@ -80,32 +80,46 @@ export default function BusinessDashboard() {
 
   const quickActions = [
     {
-      title: 'Nueva Venta',
-      icon: ShoppingCart,
-      color: 'from-business-500 to-business-600',
-      path: '/sales',
-      description: 'Registrar una venta'
-    },
-    {
-      title: 'Gestión de Clientes',
+      title: 'CRM Completo',
       icon: Users,
       color: 'from-blue-500 to-blue-600',
-      path: '/customers',
-      description: 'Ver y gestionar clientes'
+      path: '/business/crm',
+      description: 'Gestión avanzada de clientes'
+    },
+    {
+      title: 'Analytics de Ventas',
+      icon: TrendingUp,
+      color: 'from-business-500 to-business-600',
+      path: '/business/analytics',
+      description: 'Reportes detallados'
     },
     {
       title: 'Inventario',
       icon: Package,
       color: 'from-purple-500 to-purple-600',
-      path: '/inventory',
+      path: '/business/inventory',
       description: 'Control de stock'
     },
     {
-      title: 'Agenda',
-      icon: Calendar,
+      title: 'Rentabilidad',
+      icon: DollarSign,
       color: 'from-green-500 to-green-600',
-      path: '/appointments',
-      description: 'Gestionar turnos'
+      path: '/business/profitability',
+      description: 'Análisis de ganancias'
+    },
+    {
+      title: 'Optimizador de Precios IA',
+      icon: DollarSign,
+      color: 'from-amber-500 to-amber-600',
+      path: '/business/price-optimizer',
+      description: 'Precios óptimos con IA'
+    },
+    {
+      title: 'Nueva Venta',
+      icon: ShoppingCart,
+      color: 'from-pink-500 to-pink-600',
+      path: '/sales',
+      description: 'Registrar venta'
     }
   ];
 
@@ -217,12 +231,12 @@ export default function BusinessDashboard() {
           </Card>
         )}
 
-        {/* Quick Actions */}
+        {/* Ecosystem Tools */}
         <div>
           <h2 className="text-2xl font-bold text-text-primary mb-4">
-            Acciones Rápidas
+            Herramientas del Ecosistema
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {quickActions.map((action, index) => {
               const Icon = action.icon;
               return (
