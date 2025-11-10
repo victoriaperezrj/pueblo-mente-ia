@@ -11,13 +11,126 @@ serve(async (req) => {
   }
 
   try {
-    const { businessIdea, targetMarket, problem, solution, budget } = await req.json();
+    const body = await req.json();
+    const { businessIdea, targetMarket, problem, solution, budget, idea, answers, mode } = body;
     
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) {
       throw new Error("LOVABLE_API_KEY not configured");
     }
 
+    // Modo Shark Tank
+    if (mode === 'shark-tank' && idea && answers) {
+      const sharkTankPrompt = `Actúa como un panel experto de inversionistas (estilo Shark Tank) analizando una idea de negocio.
+
+IDEA DEL EMPRENDEDOR:
+"""
+${idea}
+"""
+
+RESPUESTAS A LAS 5 PREGUNTAS CRÍTICAS:
+
+1. Cliente ideal y problema específico:
+${answers[0]}
+
+2. Disposición a pagar y evidencia:
+${answers[1]}
+
+3. Competidores y diferenciación:
+${answers[2]}
+
+4. Inversión necesaria y desglose:
+${answers[3]}
+
+5. Plan de validación con $1000 en 2 semanas:
+${answers[4]}
+
+INSTRUCCIONES:
+Analiza esta idea con el rigor de un inversionista profesional. Evalúa:
+- Problema real: ¿Es un dolor genuino?
+- Mercado: ¿Tamaño, crecimiento, accesibilidad?
+- Competencia: ¿Ventaja defendible?
+- Monetización: ¿Modelo claro y probado?
+
+Responde en formato JSON con esta estructura EXACTA:
+
+{
+  "viabilityScore": [número entre 0-100],
+  "categories": {
+    "problema": [número entre 0-100],
+    "mercado": [número entre 0-100],
+    "competencia": [número entre 0-100],
+    "monetizacion": [número entre 0-100]
+  },
+  "recommendations": [array de 3-4 insights críticos sobre por qué es o no viable],
+  "nextSteps": [array de 3-5 acciones concretas y específicas para validar la idea, cada una con tiempo y costo estimado]
+}
+
+Sé directo, honesto y específico. Si algo no está claro en las respuestas, mencionalo.`;
+
+      const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${LOVABLE_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: "google/gemini-2.5-flash",
+          messages: [
+            {
+              role: "system",
+              content: "Eres un panel experto de inversionistas estilo Shark Tank. Respondes siempre en formato JSON válido con análisis honestos y directos."
+            },
+            {
+              role: "user",
+              content: sharkTankPrompt
+            }
+          ],
+          response_format: { type: "json_object" }
+        }),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("AI Gateway error:", response.status, errorText);
+        
+        if (response.status === 429) {
+          return new Response(
+            JSON.stringify({ error: "Límite de solicitudes excedido. Intentá de nuevo en unos momentos." }),
+            { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+          );
+        }
+        
+        if (response.status === 402) {
+          return new Response(
+            JSON.stringify({ error: "Créditos agotados. Por favor, recargá tu cuenta." }),
+            { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+          );
+        }
+        
+        throw new Error(`AI Gateway error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      const content = data.choices[0].message.content;
+      
+      let result;
+      try {
+        result = JSON.parse(content);
+      } catch (e) {
+        console.error("Failed to parse AI response:", content);
+        throw new Error("Invalid AI response format");
+      }
+
+      return new Response(
+        JSON.stringify(result),
+        {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        }
+      );
+    }
+
+    // Modo original (legacy)
     const prompt = `Actúa como un experto en análisis de negocios y validación de emprendimientos en Argentina, específicamente San Luis.
 
 ⚠️ CONTEXTO DE NEGOCIO PRINCIPAL (CRÍTICO - ANCLA TODA TU RESPUESTA EN ESTO):
