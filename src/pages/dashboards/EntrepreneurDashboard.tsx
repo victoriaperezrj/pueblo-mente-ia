@@ -1,179 +1,181 @@
 import { motion } from "framer-motion";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
-import { Lightbulb, Target, DollarSign, FileText, ArrowRight, CheckCircle2 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Lightbulb, Target, DollarSign, Users, Clock, Calculator, Grid3x3, Rocket, Search, FileText, Calendar, Beaker } from "lucide-react";
 import { useUser } from "@/hooks/useUser";
-import { Navbar } from "@/components/layout/Navbar";
+import { EntrepreneurSidebar } from "@/components/entrepreneur/EntrepreneurSidebar";
+import { StatCard } from "@/components/entrepreneur/StatCard";
+import { ToolCard } from "@/components/entrepreneur/ToolCard";
+import { QuickActionsBar } from "@/components/entrepreneur/QuickActionsBar";
 
 export default function EntrepreneurDashboard() {
-  const navigate = useNavigate();
   const { profile } = useUser();
 
   const tools = [
     {
+      id: 1,
       icon: Lightbulb,
-      title: "Validador de Ideas",
-      description: "Analiza tu idea antes de invertir",
-      route: "/tools/idea-validator",
+      title: "Validador de Ideas IA",
+      description: "Modo Shark Tank: IA te hace 5 preguntas difíciles",
+      badge: "Popular",
       color: "from-[hsl(var(--entrepreneur))] to-blue-600",
+      route: "/entrepreneur/validation",
     },
     {
-      icon: Target,
-      title: "Análisis de Mercado",
-      description: "Conoce tu competencia y oportunidades",
-      route: "/tools/market-analysis",
-      color: "from-[hsl(var(--pyme))] to-purple-600",
+      id: 2,
+      icon: Calculator,
+      title: "Simulador Financiero",
+      description: "Proyecciones en tiempo real con sliders interactivos",
+      badge: "Nuevo",
+      color: "from-green-500 to-emerald-600",
+      route: "/entrepreneur/simulator",
     },
     {
-      icon: DollarSign,
-      title: "Calculadora de Presupuesto",
-      description: "Estima tus costos iniciales",
-      route: "/tools/budget-calculator",
-      color: "from-[hsl(var(--business))] to-green-600",
+      id: 3,
+      icon: Grid3x3,
+      title: "Lean Canvas IA",
+      description: "Canvas pre-llenado con sugerencias inteligentes",
+      color: "from-purple-500 to-purple-600",
+      route: "/entrepreneur/lean-canvas",
     },
     {
+      id: 4,
+      icon: Rocket,
+      title: "Generador de MVP",
+      description: "Qué construir primero + timeline de 4 semanas",
+      color: "from-orange-500 to-red-500",
+      route: "/entrepreneur/mvp",
+    },
+    {
+      id: 5,
+      icon: Search,
+      title: "Detective de Mercado",
+      description: "Tamaño, competidores, tendencias automáticas",
+      color: "from-cyan-500 to-blue-500",
+      route: "/entrepreneur/market",
+    },
+    {
+      id: 6,
       icon: FileText,
-      title: "Plan de Negocio",
-      description: "Arma tu plan paso a paso",
-      route: "/tools/business-plan",
-      color: "from-[hsl(var(--accent-pink))] to-pink-600",
+      title: "Pitch Deck Generator",
+      description: "10 slides profesionales en 5 minutos",
+      badge: "IA",
+      color: "from-pink-500 to-rose-600",
+      route: "/entrepreneur/pitch",
     },
-  ];
-
-  const nextSteps = [
-    { completed: false, text: "Validar tu idea de negocio" },
-    { completed: false, text: "Analizar el mercado y competencia" },
-    { completed: false, text: "Definir tu presupuesto inicial" },
-    { completed: false, text: "Crear tu plan de negocio" },
+    {
+      id: 7,
+      icon: Calendar,
+      title: "Roadmap 90 días",
+      description: "Timeline visual con milestones y confetti",
+      color: "from-indigo-500 to-purple-600",
+      route: "/entrepreneur/roadmap",
+    },
+    {
+      id: 8,
+      icon: Beaker,
+      title: "Tracker de Experimentos",
+      description: "Hipótesis, costos, resultados, learnings",
+      color: "from-teal-500 to-cyan-600",
+      route: "/entrepreneur/experiments",
+    },
   ];
 
   return (
-    <>
-      <Navbar />
-      <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 py-12">
-        <div className="container max-w-7xl">
-          {/* Welcome Card */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-          >
-            <Card className="mb-8 border-2">
-              <CardHeader>
-                <CardTitle className="text-3xl">
-                  ¡Hola{profile?.full_name ? `, ${profile.full_name}` : ""}! 👋
-                </CardTitle>
-                <CardDescription className="text-lg">
-                  Bienvenido a tu espacio de emprendedor. Acá vas a encontrar todo lo que necesitás para validar y lanzar tu idea.
-                </CardDescription>
-              </CardHeader>
-            </Card>
-          </motion.div>
+    <div className="flex min-h-screen w-full bg-background">
+      {/* Sidebar */}
+      <EntrepreneurSidebar />
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {/* Main Content */}
-            <div className="md:col-span-2 space-y-8">
-              {/* Progress Card */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
-              >
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Tu Progreso</CardTitle>
-                    <CardDescription>
-                      Completá los pasos para validar tu idea
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-2">
-                      <div className="flex justify-between text-sm text-muted-foreground">
-                        <span>Progreso general</span>
-                        <span>0%</span>
-                      </div>
-                      <Progress value={0} className="h-2" />
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        {/* Hero Section */}
+        <section className="px-8 py-10 bg-gradient-to-br from-[hsl(var(--entrepreneur))]/5 via-background to-purple-500/5">
+          <div className="max-w-7xl mx-auto">
+            {/* Title */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <h1 className="text-4xl md:text-5xl font-bold mb-2">
+                Bienvenido de vuelta,{" "}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[hsl(var(--entrepreneur))] to-purple-600">
+                  {profile?.full_name || "Emprendedor"}
+                </span>
+              </h1>
+              <p className="text-muted-foreground text-lg mb-8">
+                Tu idea está en etapa de validación. Seguí estos pasos.
+              </p>
+            </motion.div>
 
-              {/* Tools Grid */}
-              <div>
-                <h2 className="text-2xl font-bold mb-6">Tus Herramientas</h2>
-                <div className="grid md:grid-cols-2 gap-6">
-                  {tools.map((tool, index) => {
-                    const Icon = tool.icon;
-                    return (
-                      <motion.div
-                        key={tool.title}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.2 + index * 0.1 }}
-                      >
-                        <Card className="hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer h-full">
-                          <CardHeader>
-                            <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${tool.color} flex items-center justify-center mb-4`}>
-                              <Icon className="w-7 h-7 text-white" />
-                            </div>
-                            <CardTitle className="text-xl">{tool.title}</CardTitle>
-                            <CardDescription>{tool.description}</CardDescription>
-                          </CardHeader>
-                          <CardContent>
-                            <Button 
-                              className="w-full" 
-                              variant="outline"
-                              onClick={() => navigate(tool.route)}
-                            >
-                              Abrir herramienta
-                              <ArrowRight className="ml-2 h-4 w-4" />
-                            </Button>
-                          </CardContent>
-                        </Card>
-                      </motion.div>
-                    );
-                  })}
-                </div>
-              </div>
+            {/* Stats Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <StatCard
+                icon={Target}
+                label="Validación"
+                value="65%"
+                trend="+12%"
+                trendPositive={true}
+                color="blue"
+                delay={0.1}
+              />
+              <StatCard
+                icon={DollarSign}
+                label="Presupuesto usado"
+                value="$2,500"
+                subtitle="de $5,000"
+                color="green"
+                delay={0.2}
+              />
+              <StatCard
+                icon={Users}
+                label="Encuestas completadas"
+                value="47"
+                subtitle="Meta: 100"
+                color="purple"
+                delay={0.3}
+              />
+              <StatCard
+                icon={Clock}
+                label="Días desde inicio"
+                value="23"
+                subtitle="Meta: MVP en 67 días"
+                color="orange"
+                delay={0.4}
+              />
             </div>
+          </div>
+        </section>
 
-            {/* Sidebar */}
-            <div className="space-y-6">
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.3 }}
-              >
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Próximos Pasos</CardTitle>
-                    <CardDescription>
-                      Seguí esta guía para avanzar
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      {nextSteps.map((step, index) => (
-                        <div key={index} className="flex items-start gap-3">
-                          {step.completed ? (
-                            <CheckCircle2 className="w-5 h-5 text-[hsl(var(--success))] flex-shrink-0 mt-0.5" />
-                          ) : (
-                            <div className="w-5 h-5 rounded-full border-2 border-muted flex-shrink-0 mt-0.5" />
-                          )}
-                          <span className={`text-sm ${step.completed ? "text-muted-foreground line-through" : ""}`}>
-                            {step.text}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
+        {/* Tools Grid */}
+        <div className="flex-1 overflow-y-auto px-8 py-10">
+          <div className="max-w-7xl mx-auto">
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+              className="text-3xl font-bold mb-8"
+            >
+              Tus Herramientas
+            </motion.h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {tools.map((tool, index) => (
+                <ToolCard
+                  key={tool.id}
+                  icon={tool.icon}
+                  title={tool.title}
+                  description={tool.description}
+                  badge={tool.badge}
+                  color={tool.color}
+                  route={tool.route}
+                  delay={0.6 + index * 0.05}
+                />
+              ))}
             </div>
           </div>
         </div>
+
+        {/* Quick Actions Bar */}
+        <QuickActionsBar />
       </div>
-    </>
+    </div>
   );
 }
