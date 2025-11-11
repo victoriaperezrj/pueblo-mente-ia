@@ -5,6 +5,7 @@ import { EntrepreneurSidebar } from "@/components/entrepreneur/EntrepreneurSideb
 import { StatCard } from "@/components/entrepreneur/StatCard";
 import { ToolCard } from "@/components/entrepreneur/ToolCard";
 import { QuickActionsBar } from "@/components/entrepreneur/QuickActionsBar";
+import { StageSwitcherDropdown } from "@/components/layout/StageSwitcherDropdown";
 
 export default function EntrepreneurDashboard() {
   const { profile } = useUser();
@@ -80,12 +81,23 @@ export default function EntrepreneurDashboard() {
   ];
 
   return (
-    <div className="flex min-h-screen w-full bg-background">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.3 }}
+      className="flex min-h-screen w-full bg-background"
+    >
       {/* Sidebar */}
       <EntrepreneurSidebar />
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
+        {/* Top bar with stage switcher */}
+        <div className="px-8 py-4 bg-background border-b border-border flex justify-end">
+          <StageSwitcherDropdown />
+        </div>
+
         {/* Hero Section */}
         <section className="px-8 py-10 bg-gradient-to-br from-[hsl(var(--entrepreneur))]/5 via-background to-purple-500/5">
           <div className="max-w-7xl mx-auto">
@@ -176,6 +188,6 @@ export default function EntrepreneurDashboard() {
         {/* Quick Actions Bar */}
         <QuickActionsBar />
       </div>
-    </div>
+    </motion.div>
   );
 }

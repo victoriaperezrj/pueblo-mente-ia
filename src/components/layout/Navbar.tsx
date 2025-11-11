@@ -19,7 +19,7 @@ export function Navbar({ onAuthClick }: NavbarProps) {
           Crear cuenta
         </button>
         
-        <button onClick={() => navigate('/demo/select-role')}>
+        <button onClick={() => navigate('/select-role')}>
           Ver Demo
         </button>
       </div>

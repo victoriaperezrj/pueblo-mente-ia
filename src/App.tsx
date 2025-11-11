@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from "react";
+import { lazy, Suspense } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -17,6 +17,18 @@ import SelectRole from "./pages/SelectRole";
 import DemoSelectRole from "./pages/DemoSelectRole";
 
 // Lazy-loaded pages
+const SignupFlow = lazy(() => import("./pages/auth/SignupFlow"));
+const NewOnboarding = lazy(() => import("./pages/NewOnboarding"));
+const EntrepreneurDashboardPage = lazy(() => import("./pages/dashboards/EntrepreneurDashboard"));
+const BusinessDashboardPage = lazy(() => import("./pages/dashboards/BusinessDashboard"));
+const PymeDashboardPage = lazy(() => import("./pages/dashboards/PymeDashboard"));
+const IdeaValidatorPage = lazy(() => import("./pages/tools/IdeaValidatorPage"));
+const CRMPage = lazy(() => import("./pages/business/CRM"));
+const AnalyticsPage = lazy(() => import("./pages/business/Analytics"));
+const ProfitabilityPage = lazy(() => import("./pages/business/Profitability"));
+const PriceOptimizerPage = lazy(() => import("./pages/business/PriceOptimizer"));
+const DemoBusinessDashboard = lazy(() => import("./pages/demo/BusinessDashboard"));
+const DemoCompanyDashboard = lazy(() => import("./pages/demo/CompanyDashboard"));
 const DemoStart = lazy(() => import("./pages/DemoStart"));
 const BusinessAIBot = lazy(() => import("./pages/BusinessAIBot"));
 const Onboarding = lazy(() => import("./pages/Onboarding"));
@@ -62,10 +74,10 @@ const DemoConfiguracion = lazy(() => import("./pages/demo/entrepreneur/Configura
 
 // Loading fallback component
 const PageLoader = () => (
-  <div className="flex items-center justify-center min-h-screen bg-black">
+  <div className="min-h-screen bg-gradient-to-br from-slate-900 to-purple-900 flex items-center justify-center">
     <div className="text-center">
-      <div className="w-16 h-16 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-      <p className="text-white font-semibold">Cargando...</p>
+      <div className="w-16 h-16 border-4 border-purple-500/30 border-t-purple-500 rounded-full animate-spin mx-auto mb-4"></div>
+      <p className="text-white font-semibold">Cargando experiencia...</p>
     </div>
   </div>
 );
@@ -86,11 +98,12 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/select-role" element={<SelectRole />} />
               <Route path="/demo/select-role" element={<DemoSelectRole />} />
-              <Route path="/onboarding-new" element={<Suspense fallback={<PageLoader />}>{React.createElement(lazy(() => import("./pages/NewOnboarding")))}</Suspense>} />
-              <Route path="/dashboard" element={<Suspense fallback={<PageLoader />}>{React.createElement(lazy(() => import("./pages/dashboards/EntrepreneurDashboard")))}</Suspense>} />
-              <Route path="/dashboard/business" element={<Suspense fallback={<PageLoader />}>{React.createElement(lazy(() => import("./pages/dashboards/BusinessDashboard")))}</Suspense>} />
-              <Route path="/dashboard/pyme" element={<Suspense fallback={<PageLoader />}>{React.createElement(lazy(() => import("./pages/dashboards/PymeDashboard")))}</Suspense>} />
-              <Route path="/tools/idea-validator" element={<Suspense fallback={<PageLoader />}>{React.createElement(lazy(() => import("./pages/tools/IdeaValidatorPage")))}</Suspense>} />
+              <Route path="/auth/signup" element={<SignupFlow />} />
+              <Route path="/onboarding-new" element={<NewOnboarding />} />
+              <Route path="/dashboard" element={<EntrepreneurDashboardPage />} />
+              <Route path="/dashboard/business" element={<BusinessDashboardPage />} />
+              <Route path="/dashboard/pyme" element={<PymeDashboardPage />} />
+              <Route path="/tools/idea-validator" element={<IdeaValidatorPage />} />
               <Route path="/auth" element={<ProtectedRoute requireAuth={false}><Auth /></ProtectedRoute>} />
                 <Route path="/business-ai-bot" element={<BusinessAIBot />} />
                 <Route path="/demo-start" element={<DemoStart />} />
@@ -113,11 +126,11 @@ const App = () => (
               <Route path="/pyme/dashboard" element={<ProtectedRoute><PymeDashboard /></ProtectedRoute>} />
               
               {/* Business ecosystem routes */}
-              <Route path="/business/crm" element={<ProtectedRoute><Suspense fallback={<PageLoader />}>{React.createElement(lazy(() => import("./pages/business/CRM")))}</Suspense></ProtectedRoute>} />
-              <Route path="/business/analytics" element={<ProtectedRoute><Suspense fallback={<PageLoader />}>{React.createElement(lazy(() => import("./pages/business/Analytics")))}</Suspense></ProtectedRoute>} />
+              <Route path="/business/crm" element={<ProtectedRoute><CRMPage /></ProtectedRoute>} />
+              <Route path="/business/analytics" element={<ProtectedRoute><AnalyticsPage /></ProtectedRoute>} />
               <Route path="/business/inventory" element={<ProtectedRoute><Inventory /></ProtectedRoute>} />
-              <Route path="/business/profitability" element={<ProtectedRoute><Suspense fallback={<PageLoader />}>{React.createElement(lazy(() => import("./pages/business/Profitability")))}</Suspense></ProtectedRoute>} />
-              <Route path="/business/price-optimizer" element={<ProtectedRoute><Suspense fallback={<PageLoader />}>{React.createElement(lazy(() => import("./pages/business/PriceOptimizer")))}</Suspense></ProtectedRoute>} />
+              <Route path="/business/profitability" element={<ProtectedRoute><ProfitabilityPage /></ProtectedRoute>} />
+              <Route path="/business/price-optimizer" element={<ProtectedRoute><PriceOptimizerPage /></ProtectedRoute>} />
               
               {/* Demo routes */}
               <Route path="/demo/intro" element={<DemoIntro />} />
@@ -138,8 +151,8 @@ const App = () => (
               <Route path="/demo/emprendedor/documentacion" element={<DemoEntrepreneurPlaceholder />} />
               
               {/* Demo Business/PYME routes */}
-              <Route path="/demo/business-dashboard" element={<Suspense fallback={<PageLoader />}>{React.createElement(lazy(() => import("./pages/demo/BusinessDashboard")))}</Suspense>} />
-              <Route path="/demo/company-dashboard" element={<Suspense fallback={<PageLoader />}>{React.createElement(lazy(() => import("./pages/demo/CompanyDashboard")))}</Suspense>} />
+              <Route path="/demo/business-dashboard" element={<DemoBusinessDashboard />} />
+              <Route path="/demo/company-dashboard" element={<DemoCompanyDashboard />} />
               <Route path="/demo/negocio/dashboard" element={<DemoEntrepreneurDashboard />} />
               <Route path="/demo/pyme/dashboard" element={<DemoEntrepreneurDashboard />} />
               
