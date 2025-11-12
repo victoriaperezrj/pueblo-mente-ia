@@ -27,15 +27,18 @@ export const ImprovedFloatingBot = () => {
 
   return (
     <>
-      {/* Botón del bot */}
+      {/* Botón del bot con BREATHING ANIMATION MÁS NOTORIA */}
       <motion.button
         initial={{ scale: 0, rotate: -180 }}
-        animate={{ scale: 1, rotate: 0 }}
+        animate={{ 
+          scale: [1, 1.08, 1],
+        }}
         transition={{
-          type: "spring",
-          stiffness: 260,
-          damping: 20,
-          delay: 1.5
+          scale: {
+            duration: 2,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }
         }}
         whileHover={{ 
           scale: 1.15, 
@@ -43,19 +46,19 @@ export const ImprovedFloatingBot = () => {
         }}
         whileTap={{ scale: 0.9 }}
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-8 right-8 z-50 w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 to-purple-700 shadow-2xl flex items-center justify-center cursor-pointer"
+        className="fixed bottom-8 right-8 z-50 w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center cursor-pointer"
         style={{
           boxShadow: isOpen 
-            ? "0 0 40px rgba(147, 51, 234, 0.6)" 
-            : "0 20px 40px rgba(0, 0, 0, 0.2)"
+            ? "0 20px 80px -12px rgba(139, 92, 246, 0.8)" 
+            : "0 20px 60px -12px rgba(139, 92, 246, 0.5)"
         }}
       >
-        {/* Animación de "breathing" */}
+        {/* Animación de "breathing" MEJORADA */}
         <motion.div
           className="absolute inset-0 rounded-full bg-purple-400"
           animate={{
-            scale: [1, 1.3, 1],
-            opacity: [0.5, 0, 0.5],
+            scale: [1, 1.4, 1],
+            opacity: [0.6, 0, 0.6],
           }}
           transition={{
             duration: 2,
@@ -64,7 +67,7 @@ export const ImprovedFloatingBot = () => {
           }}
         />
         
-        <MessageCircle className="w-7 h-7 text-white relative z-10" />
+        <MessageCircle className="w-8 h-8 text-white relative z-10" />
       </motion.button>
 
       {/* Chat expandido */}
