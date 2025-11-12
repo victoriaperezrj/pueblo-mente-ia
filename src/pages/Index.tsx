@@ -383,54 +383,35 @@ function ImprovedAnimatedHero({ onLoginClick }: { onLoginClick: () => void }) {
 
   return (
     <div className="text-center max-w-5xl mx-auto">
-      {/* Badge superior con GLASSMORPHISM POTENTE */}
+      {/* Badge superior */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7 }}
         className="inline-block mb-8"
       >
-        <div 
-          className="inline-flex items-center gap-2 px-6 py-3 rounded-full shadow-2xl"
-          style={{
-            background: 'rgba(255, 255, 255, 0.1)',
-            backdropFilter: 'blur(20px)',
-            border: '2px solid rgba(255, 255, 255, 0.3)',
-            boxShadow: '0 8px 32px 0 rgba(139, 92, 246, 0.37)'
-          }}
-        >
-          <Sparkles className="w-5 h-5 text-yellow-300" />
-          <span className="text-sm font-semibold text-white">IA que entiende Argentina</span>
+        <div className="px-6 py-2.5 rounded-full bg-gradient-to-r from-blue-500/10 via-cyan-500/10 to-emerald-500/10 
+                        border border-white/10 backdrop-blur-xl">
+          <div className="flex items-center gap-2 text-sm font-medium">
+            <Sparkles className="w-4 h-4 text-amber-400 animate-pulse" />
+            <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-emerald-400 bg-clip-text text-transparent font-semibold">
+              IA que entiende Argentina
+            </span>
+          </div>
         </div>
       </motion.div>
 
-      {/* Título principal con TEXT GLOW */}
+      {/* Título principal */}
       <motion.h1 
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
         className="text-5xl md:text-7xl lg:text-8xl font-extrabold mb-6 leading-tight"
       >
-        <span className="text-white/90">De la </span>
-        <span 
-          className="text-yellow-300"
-          style={{ 
-            textShadow: '0 0 40px rgba(252, 211, 77, 0.8), 0 0 80px rgba(252, 211, 77, 0.6), 0 0 120px rgba(252, 211, 77, 0.4)' 
-          }}
-        >
-          idea
+        <span className="text-white/90">Tomá decisiones inteligentes con </span>
+        <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-emerald-400 bg-clip-text text-transparent">
+          datos, no intuición
         </span>
-        <span className="text-white/90"> a los </span>
-        <span 
-          className="text-green-300"
-          style={{ 
-            textShadow: '0 0 40px rgba(134, 239, 172, 0.8), 0 0 80px rgba(134, 239, 172, 0.6), 0 0 120px rgba(134, 239, 172, 0.4)' 
-          }}
-        >
-          números
-        </span>
-        <br />
-        <span className="text-white/90">en días, no meses</span>
       </motion.h1>
 
       {/* Subtítulo */}

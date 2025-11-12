@@ -15,10 +15,10 @@ export default function EntrepreneurDashboard() {
       id: 1,
       icon: Lightbulb,
       title: "Validador de Ideas IA",
-      description: "Modo Shark Tank: IA te hace 4 preguntas difíciles",
+      description: "Modo Shark Tank: IA te hace 5 preguntas difíciles",
       badge: "Popular",
       color: "from-[hsl(var(--entrepreneur))] to-blue-600",
-      route: "/emprendedor/validador",
+      route: "/entrepreneur/validation",
     },
     {
       id: 2,
@@ -27,7 +27,7 @@ export default function EntrepreneurDashboard() {
       description: "Proyecciones en tiempo real con sliders interactivos",
       badge: "Nuevo",
       color: "from-green-500 to-emerald-600",
-      route: "/emprendedor/simulador",
+      route: "/entrepreneur/simulator",
     },
     {
       id: 3,
@@ -35,7 +35,7 @@ export default function EntrepreneurDashboard() {
       title: "Lean Canvas IA",
       description: "Canvas pre-llenado con sugerencias inteligentes",
       color: "from-purple-500 to-purple-600",
-      route: "/emprendedor/lean-canvas",
+      route: "/entrepreneur/lean-canvas",
     },
     {
       id: 4,
