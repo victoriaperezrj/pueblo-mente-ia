@@ -1,68 +1,82 @@
 import { motion } from 'framer-motion';
 
 export const FloatingOrbs = () => {
-  const orbs = [
-    { 
-      size: 600, 
-      color: 'rgba(102, 126, 234, 0.6)', 
-      x: '10%', 
-      y: '20%', 
-      delay: 0,
-      duration: 15 
-    },
-    { 
-      size: 550, 
-      color: 'rgba(237, 100, 166, 0.5)', 
-      x: '75%', 
-      y: '40%', 
-      delay: 2,
-      duration: 18
-    },
-    { 
-      size: 500, 
-      color: 'rgba(52, 211, 153, 0.5)', 
-      x: '45%', 
-      y: '65%', 
-      delay: 4,
-      duration: 20
-    },
-    { 
-      size: 450, 
-      color: 'rgba(168, 85, 247, 0.45)', 
-      x: '60%', 
-      y: '15%', 
-      delay: 6,
-      duration: 22
-    },
-  ];
-
   return (
-    <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-      {orbs.map((orb, i) => (
-        <motion.div
-          key={i}
-          className="absolute rounded-full"
-          style={{
-            width: orb.size,
-            height: orb.size,
-            background: `radial-gradient(circle, ${orb.color} 0%, transparent 70%)`,
-            left: orb.x,
-            top: orb.y,
-            filter: 'blur(60px)',
-          }}
-          animate={{
-            x: [0, 50, -30, 0],
-            y: [0, -40, 30, 0],
-            scale: [1, 1.2, 0.9, 1],
-          }}
-          transition={{
-            duration: orb.duration,
-            delay: orb.delay,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-        />
-      ))}
+    <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">
+      {/* Base gradient */}
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-blue-950 to-slate-950" />
+      
+      {/* ORB 1 - AZUL MÁS VISIBLE */}
+      <motion.div
+        className="absolute top-1/4 left-1/4 w-[700px] h-[700px] rounded-full"
+        style={{
+          background: 'radial-gradient(circle, rgba(59, 130, 246, 0.7) 0%, rgba(59, 130, 246, 0.3) 40%, transparent 70%)',
+          filter: 'blur(120px)',
+        }}
+        animate={{
+          x: [0, 80, 0],
+          y: [0, 50, 0],
+          scale: [1, 1.15, 1],
+          opacity: [0.6, 0.8, 0.6],
+        }}
+        transition={{
+          duration: 20,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+      />
+      
+      {/* ORB 2 - VERDE MÁS VISIBLE */}
+      <motion.div
+        className="absolute bottom-1/4 right-1/4 w-[650px] h-[650px] rounded-full"
+        style={{
+          background: 'radial-gradient(circle, rgba(16, 185, 129, 0.6) 0%, rgba(16, 185, 129, 0.3) 40%, transparent 70%)',
+          filter: 'blur(120px)',
+        }}
+        animate={{
+          x: [0, -60, 0],
+          y: [0, 60, 0],
+          scale: [1, 1.2, 1],
+          opacity: [0.5, 0.7, 0.5],
+        }}
+        transition={{
+          duration: 25,
+          repeat: Infinity,
+          ease: "easeInOut",
+          delay: 2,
+        }}
+      />
+      
+      {/* ORB 3 - MORADO MÁS VISIBLE */}
+      <motion.div
+        className="absolute top-1/2 left-1/2 w-[600px] h-[600px] rounded-full"
+        style={{
+          background: 'radial-gradient(circle, rgba(139, 92, 246, 0.6) 0%, rgba(139, 92, 246, 0.3) 40%, transparent 70%)',
+          filter: 'blur(120px)',
+        }}
+        animate={{
+          x: [0, -40, 0],
+          y: [0, 40, 0],
+          scale: [1, 1.12, 1],
+          opacity: [0.5, 0.7, 0.5],
+        }}
+        transition={{
+          duration: 24,
+          repeat: Infinity,
+          ease: "easeInOut",
+          delay: 4,
+        }}
+      />
+
+      {/* Grid pattern más visible */}
+      <div 
+        className="absolute inset-0 opacity-[0.03]"
+        style={{
+          backgroundImage: `linear-gradient(rgba(59, 130, 246, 0.4) 1px, transparent 1px),
+                           linear-gradient(90deg, rgba(59, 130, 246, 0.4) 1px, transparent 1px)`,
+          backgroundSize: '40px 40px',
+        }}
+      />
     </div>
   );
 };

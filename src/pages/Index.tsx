@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Navbar } from "@/components/layout/Navbar";
 import { AuthModal } from "@/components/auth/AuthModal";
+import { BenefitCard } from "@/components/BenefitCard";
 import {
   Building2,
   Menu,
@@ -406,11 +407,25 @@ function ImprovedAnimatedHero({ onLoginClick }: { onLoginClick: () => void }) {
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className="text-5xl md:text-7xl lg:text-8xl font-extrabold mb-6 leading-tight"
+        className="text-4xl md:text-6xl lg:text-8xl font-extrabold mb-6 leading-tight"
       >
         <span className="text-white/90">Tomá decisiones inteligentes con </span>
-        <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-emerald-400 bg-clip-text text-transparent">
-          datos, no intuición
+        <span 
+          className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-emerald-400"
+          style={{
+            filter: 'drop-shadow(0 0 40px rgba(59, 130, 246, 0.8)) drop-shadow(0 0 80px rgba(6, 182, 212, 0.6)) drop-shadow(0 0 120px rgba(16, 185, 129, 0.4))',
+          }}
+        >
+          datos
+        </span>
+        <span className="text-white/90">, no </span>
+        <span 
+          className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-emerald-300 to-teal-400"
+          style={{
+            filter: 'drop-shadow(0 0 40px rgba(6, 182, 212, 0.8)) drop-shadow(0 0 80px rgba(16, 185, 129, 0.6))',
+          }}
+        >
+          intuición
         </span>
       </motion.h1>
 
@@ -462,20 +477,20 @@ function ImprovedAnimatedHero({ onLoginClick }: { onLoginClick: () => void }) {
         transition={{ delay: 0.8, duration: 0.6 }}
         className="flex flex-col sm:flex-row gap-4 justify-center items-center"
       >
-        {/* Botón Iniciar Sesión - AZUL */}
+        {/* Botón Empezar gratis - ÚNICO */}
         <motion.button
-          onClick={onLoginClick}
+          onClick={() => navigate('/auth/signup')}
           whileHover={{ 
             scale: 1.08,
             boxShadow: '0 25px 70px rgba(59, 130, 246, 0.6)'
           }}
           whileTap={{ scale: 0.96 }}
-          className="group relative px-10 py-5 rounded-2xl overflow-hidden font-bold text-white text-lg
+          className="group relative w-full sm:w-auto px-10 py-5 rounded-2xl overflow-hidden font-bold text-white text-lg
                      shadow-2xl transition-all duration-300"
         >
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-cyan-600 to-blue-600" />
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600" />
           <motion.div
-            className="absolute inset-0 bg-gradient-to-r from-cyan-500 via-blue-500 to-cyan-500 opacity-0 
+            className="absolute inset-0 bg-gradient-to-r from-purple-500 via-blue-500 to-purple-500 opacity-0 
                        group-hover:opacity-100 transition-opacity duration-700"
             animate={{
               backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
@@ -488,44 +503,10 @@ function ImprovedAnimatedHero({ onLoginClick }: { onLoginClick: () => void }) {
             style={{ backgroundSize: '200% 100%' }}
           />
           <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 
-                          transition-opacity duration-300 blur-xl bg-gradient-to-r from-blue-400 to-cyan-400" />
+                          transition-opacity duration-300 blur-xl bg-gradient-to-r from-blue-400 to-purple-400" />
           <span className="relative z-10 flex items-center gap-3 drop-shadow-lg">
             <Rocket className="w-6 h-6 group-hover:scale-110 transition-transform" />
-            Iniciar Sesión
-            <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-          </span>
-        </motion.button>
-
-        {/* Botón Ver Demo - VERDE */}
-        <motion.button
-          onClick={() => navigate('/demo/intro')}
-          whileHover={{ 
-            scale: 1.08,
-            boxShadow: '0 25px 70px rgba(16, 185, 129, 0.6)'
-          }}
-          whileTap={{ scale: 0.96 }}
-          className="group relative px-10 py-5 rounded-2xl overflow-hidden font-bold text-white text-lg
-                     shadow-2xl transition-all duration-300"
-        >
-          <div className="absolute inset-0 bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600" />
-          <motion.div
-            className="absolute inset-0 bg-gradient-to-r from-teal-500 via-emerald-500 to-cyan-500 opacity-0 
-                       group-hover:opacity-100 transition-opacity duration-700"
-            animate={{
-              backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
-            }}
-            transition={{
-              duration: 3,
-              repeat: Infinity,
-              ease: "linear"
-            }}
-            style={{ backgroundSize: '200% 100%' }}
-          />
-          <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 
-                          transition-opacity duration-300 blur-xl bg-gradient-to-r from-emerald-400 to-teal-400" />
-          <span className="relative z-10 flex items-center gap-3 drop-shadow-lg">
-            <Sparkles className="w-6 h-6 group-hover:rotate-12 group-hover:scale-110 transition-transform" />
-            Ver Demo
+            Empezar gratis
             <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </span>
         </motion.button>
@@ -643,62 +624,102 @@ export default function Index() {
       {showLoginModal && <LoginModal onClose={() => setShowLoginModal(false)} />}
 
       <div className="min-h-screen">
-        {/* NAVIGATION */}
-        <nav className="fixed top-0 left-0 right-0 z-40 bg-white/80 backdrop-blur-md border-b border-gray-200 shadow-sm">
-          <div className="container mx-auto px-6 py-4">
+        {/* ══════════════════════════════════════════════════════════════════════
+            NAVBAR GLASSMORPHISM
+            ══════════════════════════════════════════════════════════════════════ */}
+        <motion.nav 
+          initial={{ y: -100, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.6 }}
+          className="fixed top-0 left-0 right-0 z-50"
+        >
+          <div className="absolute inset-0 bg-slate-900/70 backdrop-blur-2xl border-b border-white/20"></div>
+          
+          <div className="relative container mx-auto px-6 py-4">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <Building2 className="w-8 h-8 text-blue-600" />
-                <span className="text-xl font-bold text-gray-900">Proyecto Emprendedurismo</span>
-              </div>
-
-              <div className="hidden md:flex items-center gap-6">
-                <button
-                  onClick={() => navigate("/select-role")}
-                  className="text-gray-700 hover:text-blue-600 font-medium transition-colors"
-                >
-                  Ver Demo
-                </button>
-                <button
-                  onClick={() => setShowLoginModal(true)}
-                  className="px-6 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg font-semibold hover:opacity-90 transition-all shadow-md hover:scale-105"
-                >
-                  Iniciar Sesión
-                </button>
-              </div>
-
-              <button
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="md:hidden text-gray-700"
+              
+              {/* Logo con animación */}
+              <motion.div 
+                className="flex items-center gap-3"
+                whileHover={{ scale: 1.05 }}
               >
-                {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-              </button>
+                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                  <Building2 className="w-6 h-6 text-white" />
+                </div>
+                <span className="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                  PuebloHub
+                </span>
+                <span className="px-2 py-0.5 bg-blue-500/20 text-blue-400 text-xs font-bold rounded-full">
+                  BETA
+                </span>
+              </motion.div>
+
+              {/* Desktop Nav */}
+              <div className="hidden md:flex items-center gap-6">
+                <motion.a 
+                  href="#features"
+                  whileHover={{ scale: 1.05 }}
+                  className="text-gray-300 hover:text-blue-400 font-medium transition-colors"
+                >
+                  Features
+                </motion.a>
+                <motion.a 
+                  href="#how-it-works"
+                  whileHover={{ scale: 1.05 }}
+                  className="text-gray-300 hover:text-blue-400 font-medium transition-colors"
+                >
+                  Cómo funciona
+                </motion.a>
+                
+                <motion.button
+                  onClick={() => navigate('/auth/signup')}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="px-6 py-2.5 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all"
+                >
+                  Empezar gratis
+                </motion.button>
+              </div>
+
+              {/* Mobile menu button */}
+              <motion.button
+                whileTap={{ scale: 0.9 }}
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="md:hidden p-2 rounded-lg hover:bg-gray-800 transition-colors"
+              >
+                {mobileMenuOpen ? <X className="w-6 h-6 text-white" /> : <Menu className="w-6 h-6 text-white" />}
+              </motion.button>
             </div>
 
-            {mobileMenuOpen && (
-              <div className="md:hidden mt-4 pb-4 border-t border-gray-200 pt-4 space-y-3 animate-fade-in">
-                <button
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    navigate("/select-role");
-                  }}
-                  className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg font-medium"
+            {/* Mobile Menu */}
+            <AnimatePresence>
+              {mobileMenuOpen && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="md:hidden mt-4 pb-4 space-y-3"
                 >
-                  Ver Demo
-                </button>
-                <button
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    setShowLoginModal(true);
-                  }}
-                  className="block w-full px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg font-semibold text-center"
-                >
-                  Iniciar Sesión
-                </button>
-              </div>
-            )}
+                  <a href="#features" className="block px-4 py-2 text-gray-300 hover:bg-gray-800 rounded-lg transition-colors">
+                    Features
+                  </a>
+                  <a href="#how-it-works" className="block px-4 py-2 text-gray-300 hover:bg-gray-800 rounded-lg transition-colors">
+                    Cómo funciona
+                  </a>
+                  <button
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      navigate('/auth/signup');
+                    }}
+                    className="w-full px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold rounded-lg text-center"
+                  >
+                    Empezar gratis
+                  </button>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
-        </nav>
+        </motion.nav>
 
         {/* HERO SECTION */}
         <section className="pt-32 pb-20 md:pt-40 md:pb-32 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 relative overflow-hidden">
