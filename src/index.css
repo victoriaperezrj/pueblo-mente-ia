@@ -382,3 +382,30 @@ html {
     page-break-after: avoid;
   }
 }
+
+/* ══════════════════════════════════════════════════════════════════════
+   GPU ACCELERATION GLOBAL
+   ══════════════════════════════════════════════════════════════════════ */
+
+/* Acelerar animaciones críticas */
+.hero-section,
+.benefit-card,
+.floating-bot,
+.floating-orbs > div {
+  transform: translateZ(0);
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Optimizar scroll */
+html {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Smooth transitions globales */
+* {
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
