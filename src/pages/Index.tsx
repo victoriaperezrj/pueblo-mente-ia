@@ -470,28 +470,25 @@ function ImprovedAnimatedHero({ onLoginClick }: { onLoginClick: () => void }) {
         ))}
       </motion.div>
 
-      {/* BOTONES PRINCIPALES */}
+      {/* BOTÓN PRINCIPAL */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.8, duration: 0.6 }}
-        className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+        className="flex justify-center"
       >
-        {/* Botón Empezar gratis - ÚNICO */}
         <motion.button
           onClick={() => navigate('/auth/signup')}
           whileHover={{ 
             scale: 1.08,
-            boxShadow: '0 25px 70px rgba(59, 130, 246, 0.6)'
+            boxShadow: '0 30px 80px rgba(59, 130, 246, 0.7)'
           }}
           whileTap={{ scale: 0.96 }}
-          className="group relative w-full sm:w-auto px-10 py-5 rounded-2xl overflow-hidden font-bold text-white text-lg
-                     shadow-2xl transition-all duration-300"
+          className="group relative px-14 py-6 rounded-2xl overflow-hidden font-bold text-white text-xl shadow-2xl transition-all"
         >
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600" />
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600" />
           <motion.div
-            className="absolute inset-0 bg-gradient-to-r from-purple-500 via-blue-500 to-purple-500 opacity-0 
-                       group-hover:opacity-100 transition-opacity duration-700"
+            className="absolute inset-0 bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-700"
             animate={{
               backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
             }}
@@ -502,12 +499,10 @@ function ImprovedAnimatedHero({ onLoginClick }: { onLoginClick: () => void }) {
             }}
             style={{ backgroundSize: '200% 100%' }}
           />
-          <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 
-                          transition-opacity duration-300 blur-xl bg-gradient-to-r from-blue-400 to-purple-400" />
           <span className="relative z-10 flex items-center gap-3 drop-shadow-lg">
-            <Rocket className="w-6 h-6 group-hover:scale-110 transition-transform" />
+            <Rocket className="w-7 h-7 group-hover:scale-110 group-hover:rotate-12 transition-transform" />
             Empezar gratis
-            <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            <ChevronRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
           </span>
         </motion.button>
       </motion.div>
@@ -644,12 +639,9 @@ export default function Index() {
                 whileHover={{ scale: 1.05 }}
               >
                 <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
-                  <Building2 className="w-6 h-6 text-white" />
+                  <Zap className="w-6 h-6 text-white" />
                 </div>
-                <span className="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                  PuebloHub
-                </span>
-                <span className="px-2 py-0.5 bg-blue-500/20 text-blue-400 text-xs font-bold rounded-full">
+                <span className="px-3 py-1 bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/20 text-blue-600 dark:text-blue-400 text-xs font-bold rounded-full backdrop-blur-sm">
                   BETA
                 </span>
               </motion.div>
@@ -880,12 +872,25 @@ export default function Index() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.1, duration: 0.6 }}
-                whileHover={{ y: -8, scale: 1.02 }}
+                whileHover={{ 
+                  y: -12,
+                  scale: 1.03,
+                  rotateX: 5,
+                  rotateY: 5,
+                  boxShadow: '0 40px 80px -20px rgba(0, 0, 0, 0.4)'
+                }}
                 onClick={() => navigate("/demo/idea-capture")}
-                className="group relative bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 cursor-pointer"
+                className="group relative bg-white rounded-3xl p-10 shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 cursor-pointer"
+                style={{ transformStyle: 'preserve-3d' }}
               >
-                <div className="text-5xl mb-4">💡</div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                <motion.div 
+                  className="text-6xl mb-6"
+                  whileHover={{ scale: 1.2, rotate: 10 }}
+                  transition={{ type: "spring", stiffness: 400 }}
+                >
+                  💡
+                </motion.div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
                   Tengo una idea
                 </h3>
                 <p className="text-gray-600 leading-relaxed">
@@ -899,35 +904,61 @@ export default function Index() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.2, duration: 0.6 }}
-                whileHover={{ y: -8, scale: 1.02 }}
+                whileHover={{ 
+                  y: -12,
+                  scale: 1.03,
+                  rotateX: 5,
+                  rotateY: 5,
+                  boxShadow: '0 40px 80px -20px rgba(0, 0, 0, 0.4)'
+                }}
                 onClick={() => navigate("/demo/business-dashboard")}
-                className="group relative bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 cursor-pointer"
+                className="group relative bg-white rounded-3xl p-10 shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 cursor-pointer"
+                style={{ transformStyle: 'preserve-3d' }}
               >
-                <div className="text-5xl mb-4">🏪</div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                <motion.div 
+                  className="text-6xl mb-6"
+                  whileHover={{ scale: 1.2, rotate: 10 }}
+                  transition={{ type: "spring", stiffness: 400 }}
+                >
+                  📈
+                </motion.div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-purple-600 transition-colors">
                   Tengo un negocio
                 </h3>
                 <p className="text-gray-600 leading-relaxed">
-                  Optimizá, automatizá y conseguí más clientes. Herramientas para hacer crecer lo que ya funciona.
+                  Optimizá lo que ya funciona. Ventas, pricing, eficiencia. Escalá sin perder el control día a día.
                 </p>
               </motion.div>
 
-              {/* Card C - Tengo una PyME */}
+              {/* Card C - Soy PyME */}
               <motion.div
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.3, duration: 0.6 }}
-                whileHover={{ y: -8, scale: 1.02 }}
+                whileHover={{ 
+                  y: -12,
+                  scale: 1.03,
+                  rotateX: 5,
+                  rotateY: 5,
+                  boxShadow: '0 40px 80px -20px rgba(0, 0, 0, 0.4)'
+                }}
                 onClick={() => navigate("/demo/company-dashboard")}
-                className="group relative bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 cursor-pointer"
+                className="group relative bg-white rounded-3xl p-10 shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 cursor-pointer"
+                style={{ transformStyle: 'preserve-3d' }}
               >
-                <div className="text-5xl mb-4">🏢</div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-3">
-                  Tengo una PyME
+                <motion.div 
+                  className="text-6xl mb-6"
+                  whileHover={{ scale: 1.2, rotate: 10 }}
+                  transition={{ type: "spring", stiffness: 400 }}
+                >
+                  🏢
+                </motion.div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-emerald-600 transition-colors">
+                  Soy PyME
                 </h3>
                 <p className="text-gray-600 leading-relaxed">
-                  Estructura, datos y sistemas para escalar sin colapsar. Del caos a la organización.
+                  Estructurá tu operación. Multi-sucursales, equipos grandes, reportes avanzados. Herramientas para empresas serias.
                 </p>
               </motion.div>
             </div>
@@ -1122,20 +1153,22 @@ export default function Index() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7 }}
-              className="max-w-4xl mx-auto text-center"
+              className="max-w-3xl mx-auto text-center"
             >
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-100 text-amber-600 font-semibold text-sm mb-6">
-                🚀 En construcción con vos
+              <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-gradient-to-r from-blue-100 to-purple-100 border border-blue-200 mb-6">
+                <Sparkles className="w-4 h-4 text-blue-600" />
+                <span className="text-blue-600 font-semibold text-sm">
+                  Beta · Acceso anticipado
+                </span>
               </div>
+              
               <h3 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                Estamos creciendo juntos
+                Sé de los primeros
               </h3>
-              <p className="text-lg text-gray-600 leading-relaxed mb-6 max-w-3xl mx-auto">
-                Esta plataforma está en fase beta. Los primeros usuarios tienen acceso prioritario, influyen en las nuevas funcionalidades y pagan menos cuando lancemos precios oficiales.
+              
+              <p className="text-lg text-gray-600 leading-relaxed">
+                Los usuarios beta tienen acceso gratuito, influyen en nuevas funcionalidades y mantienen precios especiales cuando lancemos oficialmente.
               </p>
-              <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-emerald-100 text-emerald-700 font-semibold">
-                ✅ Sé de los primeros • Acceso anticipado
-              </div>
             </motion.div>
           </div>
         </section>
@@ -1286,9 +1319,10 @@ export default function Index() {
         {/* FOOTER */}
         <footer className="bg-slate-950 border-t border-slate-800 py-8">
           <div className="container mx-auto px-6">
-            <div className="text-center text-slate-400 text-sm">
-              <p>© 2025 Proyecto Emprendedurismo. Todos los derechos reservados.</p>
-              <p className="mt-2">Hecho con ❤️ en Buenos Aires</p>
+            <div className="text-center">
+              <p className="text-slate-400 text-sm">
+                © 2025 • Hecho con 💜 en Argentina
+              </p>
             </div>
           </div>
         </footer>
