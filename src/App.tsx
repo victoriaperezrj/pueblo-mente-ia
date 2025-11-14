@@ -55,6 +55,9 @@ const EntrepreneurResults = lazy(() => import("./pages/onboarding/EntrepreneurRe
 const EntrepreneurBusinessPlan = lazy(() => import("./pages/onboarding/EntrepreneurBusinessPlan"));
 const BusinessStage = lazy(() => import("./pages/onboarding/BusinessStage"));
 const EntrepreneurDashboard = lazy(() => import("./pages/entrepreneur/Dashboard"));
+const EntrepreneurIdeaValidator = lazy(() => import("./pages/entrepreneur/IdeaValidator"));
+const EntrepreneurFinancialSimulator = lazy(() => import("./pages/entrepreneur/FinancialSimulator"));
+const EntrepreneurLeanCanvas = lazy(() => import("./pages/entrepreneur/LeanCanvas"));
 const BusinessDashboard = lazy(() => import("./pages/business/Dashboard"));
 const PymeDashboard = lazy(() => import("./pages/pyme/Dashboard"));
 
@@ -120,6 +123,9 @@ const App = () => (
               
               {/* Role-specific dashboards - protected */}
               <Route path="/entrepreneur/dashboard" element={<ProtectedRoute><EntrepreneurDashboard /></ProtectedRoute>} />
+              <Route path="/entrepreneur/idea-validator" element={<ProtectedRoute><EntrepreneurIdeaValidator /></ProtectedRoute>} />
+              <Route path="/entrepreneur/financial-simulator" element={<ProtectedRoute><EntrepreneurFinancialSimulator /></ProtectedRoute>} />
+              <Route path="/entrepreneur/lean-canvas" element={<ProtectedRoute><EntrepreneurLeanCanvas /></ProtectedRoute>} />
               <Route path="/emprendedor/validacion" element={<ProtectedRoute><IdeaValidation /></ProtectedRoute>} />
               <Route path="/entrepreneur/validation" element={<ProtectedRoute><IdeaValidation /></ProtectedRoute>} />
               <Route path="/business/dashboard" element={<ProtectedRoute><BusinessDashboard /></ProtectedRoute>} />
