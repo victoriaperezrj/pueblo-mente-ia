@@ -27,6 +27,10 @@ const CRMPage = lazy(() => import("./pages/business/CRM"));
 const AnalyticsPage = lazy(() => import("./pages/business/Analytics"));
 const ProfitabilityPage = lazy(() => import("./pages/business/Profitability"));
 const PriceOptimizerPage = lazy(() => import("./pages/business/PriceOptimizer"));
+const MarketingAutomationPage = lazy(() => import("./pages/business/MarketingAutomation"));
+const PymeTeamManagement = lazy(() => import("./pages/pyme/TeamManagement"));
+const PymeStrategicPlanning = lazy(() => import("./pages/pyme/StrategicPlanning"));
+const PymeMarketAnalysis = lazy(() => import("./pages/pyme/MarketAnalysis"));
 const DemoBusinessDashboard = lazy(() => import("./pages/demo/BusinessDashboard"));
 const DemoCompanyDashboard = lazy(() => import("./pages/demo/CompanyDashboard"));
 const DemoStart = lazy(() => import("./pages/DemoStart"));
@@ -137,6 +141,12 @@ const App = () => (
               <Route path="/business/inventory" element={<ProtectedRoute><Inventory /></ProtectedRoute>} />
               <Route path="/business/profitability" element={<ProtectedRoute><ProfitabilityPage /></ProtectedRoute>} />
               <Route path="/business/price-optimizer" element={<ProtectedRoute><PriceOptimizerPage /></ProtectedRoute>} />
+              <Route path="/business/marketing-automation" element={<ProtectedRoute><MarketingAutomationPage /></ProtectedRoute>} />
+
+              {/* PYME ecosystem routes */}
+              <Route path="/pyme/team-management" element={<ProtectedRoute><PymeTeamManagement /></ProtectedRoute>} />
+              <Route path="/pyme/strategic-planning" element={<ProtectedRoute><PymeStrategicPlanning /></ProtectedRoute>} />
+              <Route path="/pyme/market-analysis" element={<ProtectedRoute><PymeMarketAnalysis /></ProtectedRoute>} />
               
               {/* Demo routes */}
               <Route path="/demo/intro" element={<DemoIntro />} />

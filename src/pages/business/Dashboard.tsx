@@ -94,9 +94,16 @@ export default function BusinessDashboard() {
       description: 'Reportes detallados'
     },
     {
+      title: 'Marketing Automation',
+      icon: TrendingUp,
+      color: 'from-purple-500 to-purple-600',
+      path: '/business/marketing-automation',
+      description: 'Campañas automatizadas'
+    },
+    {
       title: 'Inventario',
       icon: Package,
-      color: 'from-purple-500 to-purple-600',
+      color: 'from-teal-500 to-teal-600',
       path: '/business/inventory',
       description: 'Control de stock'
     },
