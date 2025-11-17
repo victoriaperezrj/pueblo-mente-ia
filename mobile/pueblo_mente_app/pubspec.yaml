@@ -1,0 +1,117 @@
+name: pueblo_mente_app
+description: Pueblo Mente IA - AI-powered entrepreneurship platform
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.2.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # UI & Design
+  cupertino_icons: ^1.0.6
+  google_fonts: ^6.1.0
+  flutter_svg: ^2.0.9
+  cached_network_image: ^3.3.1
+  shimmer: ^3.0.0
+  lottie: ^3.0.0
+
+  # State Management - BLoC Pattern
+  flutter_bloc: ^8.1.3
+  bloc: ^8.1.2
+  equatable: ^2.0.5
+  dartz: ^0.10.1
+
+  # Dependency Injection
+  get_it: ^7.6.4
+  injectable: ^2.3.2
+
+  # HTTP & API
+  dio: ^5.4.0
+  retrofit: ^4.0.3
+  pretty_dio_logger: ^1.3.1
+  json_annotation: ^4.8.1
+
+  # Local Storage
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  shared_preferences: ^2.2.2
+  path_provider: ^2.1.1
+
+  # Firebase
+  firebase_core: ^2.24.2
+  firebase_auth: ^4.15.3
+  firebase_analytics: ^10.7.4
+  firebase_crashlytics: ^3.4.8
+  firebase_messaging: ^14.7.9
+  cloud_firestore: ^4.13.6
+  firebase_storage: ^11.5.6
+
+  # Authentication
+  google_sign_in: ^6.2.1
+  sign_in_with_apple: ^5.0.0
+
+  # Utils
+  intl: ^0.19.0
+  logger: ^2.0.2+1
+  connectivity_plus: ^5.0.2
+  image_picker: ^1.0.7
+  url_launcher: ^6.2.2
+  share_plus: ^7.2.1
+
+  # Animations
+  animate_do: ^3.1.2
+
+  # Other
+  uuid: ^4.2.2
+  freezed_annotation: ^2.4.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.1
+
+  # Code Generation
+  build_runner: ^2.4.7
+  injectable_generator: ^2.4.1
+  retrofit_generator: ^8.0.6
+  json_serializable: ^6.7.1
+  hive_generator: ^2.0.1
+  freezed: ^2.4.6
+
+  # Testing
+  bloc_test: ^9.1.5
+  mocktail: ^1.0.2
+
+  # Icons
+  flutter_launcher_icons: ^0.13.1
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/images/logo/
+    - assets/lottie/
+
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-Regular.ttf
+        - asset: assets/fonts/Poppins-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Poppins-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Poppins-Bold.ttf
+          weight: 700
+
+# Launcher Icons Configuration
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/logo/app_icon.png"
+  min_sdk_android: 21
+  adaptive_icon_background: "#7C3AED"
+  adaptive_icon_foreground: "assets/images/logo/app_icon_foreground.png"
