@@ -14,6 +14,7 @@ volumes:
   zookeeper-data:
   prometheus-data:
   grafana-data:
+  redis-data:
 
 services:
   # ===== DATABASES =====
@@ -210,6 +211,49 @@ services:
     networks:
       - pueblo-mente-network
     restart: unless-stopped
+
+  # Market Intelligence Service (GPT-4 + Web Scraping + DALL-E)
+  market-intelligence:
+    build:
+      context: ./services/market-intelligence
+      dockerfile: Dockerfile
+    container_name: market-intelligence
+    environment:
+      PORT: "8004"
+      DATABASE_URL: postgresql://admin:admin123@postgresql:5432/pueblomente
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-your-openai-key-here}
+      OPENAI_MODEL: gpt-4-turbo-preview
+      PLAYWRIGHT_HEADLESS: "True"
+      ENABLE_WEB_SCRAPING: "True"
+      ENABLE_DALLE_GENERATION: "True"
+      ENABLE_CACHING: "True"
+    ports:
+      - "8004:8004"
+    depends_on:
+      - postgresql
+      - redis
+    networks:
+      - pueblo-mente-network
+    restart: unless-stopped
+
+  # Redis (Caching for Market Intelligence)
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    command: redis-server --appendonly yes
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - pueblo-mente-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   # Frontend (Next.js) - commented out, keeping Vite for now
   # frontend:
