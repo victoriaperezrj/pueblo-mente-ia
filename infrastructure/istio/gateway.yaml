@@ -1,0 +1,64 @@
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: pueblo-mente-gateway
+  namespace: pueblo-mente
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"
+    tls:
+      httpsRedirect: true
+  - port:
+      number: 443
+      name: https
+      protocol: HTTPS
+    tls:
+      mode: SIMPLE
+      credentialName: pueblo-mente-tls
+    hosts:
+    - "*.pueblo-mente-ia.com"
+    - "pueblo-mente-ia.com"
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: pueblo-mente-routes
+  namespace: pueblo-mente
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - pueblo-mente-gateway
+  http:
+  - match:
+    - uri:
+        prefix: "/api/v1/ai"
+    route:
+    - destination:
+        host: ai-service
+        port:
+          number: 8000
+    timeout: 30s
+    retries:
+      attempts: 3
+      perTryTimeout: 10s
+      retryOn: 5xx,reset,connect-failure,refused-stream
+  - match:
+    - uri:
+        prefix: "/api/v1"
+    route:
+    - destination:
+        host: api-gateway
+        port:
+          number: 8080
+    timeout: 15s
+    retries:
+      attempts: 3
+      perTryTimeout: 5s

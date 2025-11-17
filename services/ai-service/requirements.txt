@@ -1,0 +1,24 @@
+fastapi==0.109.0
+uvicorn[standard]==0.27.0
+pydantic==2.5.3
+python-dotenv==1.0.0
+httpx==0.26.0
+prometheus-fastapi-instrumentator==6.1.0
+
+# AI/ML Libraries
+openai==1.10.0
+langchain==0.1.0
+langchain-openai==0.0.2
+tiktoken==0.5.2
+
+# Vector Database
+pymilvus==2.3.5
+pinecone-client==3.0.2
+
+# Data Processing
+numpy==1.26.3
+pandas==2.1.4
+
+# Logging and Monitoring
+structlog==24.1.0
+sentry-sdk[fastapi]==1.40.0
