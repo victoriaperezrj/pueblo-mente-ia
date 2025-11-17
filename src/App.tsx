@@ -15,6 +15,7 @@ import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 import SelectRole from "./pages/SelectRole";
 import DemoSelectRole from "./pages/DemoSelectRole";
+import ValidationTools from "./pages/ValidationTools";
 
 // Lazy-loaded pages
 const SignupFlow = lazy(() => import("./pages/auth/SignupFlow"));
@@ -70,6 +71,11 @@ const FinancialIntelligence = lazy(() => import("./pages/global/FinancialIntelli
 const CRM360 = lazy(() => import("./pages/global/CRM360"));
 const SmartPricing = lazy(() => import("./pages/global/SmartPricing"));
 
+// Market Intelligence Tools (Validation Stage)
+const MarketTestExpress = lazy(() => import("./pages/validation/MarketTestExpress"));
+const BenchmarkAutomatico = lazy(() => import("./pages/validation/BenchmarkAutomatico"));
+const TargetAudienceGenerator = lazy(() => import("./pages/validation/TargetAudienceGenerator"));
+
 // Demo pages
 const DemoIntro = lazy(() => import("./pages/demo/DemoIntro"));
 const DemoIdeaCapture = lazy(() => import("./pages/demo/DemoIdeaCapture"));
@@ -108,6 +114,7 @@ const App = () => (
               <Suspense fallback={<PageLoader />}>
               <Routes>
               <Route path="/" element={<Index />} />
+              <Route path="/tools" element={<ValidationTools />} />
               <Route path="/select-role" element={<SelectRole />} />
               <Route path="/demo/select-role" element={<DemoSelectRole />} />
               <Route path="/auth/signup" element={<SignupFlow />} />
@@ -152,6 +159,11 @@ const App = () => (
               <Route path="/pyme/team-management" element={<ProtectedRoute><PymeTeamManagement /></ProtectedRoute>} />
               <Route path="/pyme/strategic-planning" element={<ProtectedRoute><PymeStrategicPlanning /></ProtectedRoute>} />
               <Route path="/pyme/market-analysis" element={<ProtectedRoute><PymeMarketAnalysis /></ProtectedRoute>} />
+
+              {/* Market Intelligence Tools - Validation Stage (NEW - AI-POWERED) */}
+              <Route path="/validation/market-test" element={<MarketTestExpress />} />
+              <Route path="/validation/benchmark" element={<BenchmarkAutomatico />} />
+              <Route path="/validation/target-audience" element={<TargetAudienceGenerator />} />
 
               {/* Global enterprise tools - accessible to all roles */}
               <Route path="/global/financial-intelligence" element={<ProtectedRoute><FinancialIntelligence /></ProtectedRoute>} />
