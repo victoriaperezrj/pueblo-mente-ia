@@ -65,6 +65,11 @@ const EntrepreneurLeanCanvas = lazy(() => import("./pages/entrepreneur/LeanCanva
 const BusinessDashboard = lazy(() => import("./pages/business/Dashboard"));
 const PymeDashboard = lazy(() => import("./pages/pyme/Dashboard"));
 
+// Global enterprise tools
+const FinancialIntelligence = lazy(() => import("./pages/global/FinancialIntelligence"));
+const CRM360 = lazy(() => import("./pages/global/CRM360"));
+const SmartPricing = lazy(() => import("./pages/global/SmartPricing"));
+
 // Demo pages
 const DemoIntro = lazy(() => import("./pages/demo/DemoIntro"));
 const DemoIdeaCapture = lazy(() => import("./pages/demo/DemoIdeaCapture"));
@@ -147,6 +152,11 @@ const App = () => (
               <Route path="/pyme/team-management" element={<ProtectedRoute><PymeTeamManagement /></ProtectedRoute>} />
               <Route path="/pyme/strategic-planning" element={<ProtectedRoute><PymeStrategicPlanning /></ProtectedRoute>} />
               <Route path="/pyme/market-analysis" element={<ProtectedRoute><PymeMarketAnalysis /></ProtectedRoute>} />
+
+              {/* Global enterprise tools - accessible to all roles */}
+              <Route path="/global/financial-intelligence" element={<ProtectedRoute><FinancialIntelligence /></ProtectedRoute>} />
+              <Route path="/global/crm-360" element={<ProtectedRoute><CRM360 /></ProtectedRoute>} />
+              <Route path="/global/smart-pricing" element={<ProtectedRoute><SmartPricing /></ProtectedRoute>} />
               
               {/* Demo routes */}
               <Route path="/demo/intro" element={<DemoIntro />} />

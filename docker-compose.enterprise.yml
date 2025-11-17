@@ -155,6 +155,62 @@ services:
       - pueblo-mente-network
     restart: unless-stopped
 
+  # ML Engine (Python - Advanced Analytics)
+  ml-engine:
+    build:
+      context: ./services/ml-engine
+      dockerfile: Dockerfile
+    container_name: ml-engine
+    environment:
+      PORT: "8001"
+      POSTGRES_HOST: postgresql
+      POSTGRES_PORT: "5432"
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: pueblomente
+    ports:
+      - "8001:8001"
+    depends_on:
+      - postgresql
+    networks:
+      - pueblo-mente-network
+    restart: unless-stopped
+
+  # Currency Service (Multi-Currency Support)
+  currency-service:
+    build:
+      context: ./services/currency-service
+      dockerfile: Dockerfile
+    container_name: currency-service
+    environment:
+      PORT: "8002"
+    ports:
+      - "8002:8002"
+    networks:
+      - pueblo-mente-network
+    restart: unless-stopped
+
+  # CRM Service (Customer Relationship Management)
+  crm-service:
+    build:
+      context: ./services/crm-service
+      dockerfile: Dockerfile
+    container_name: crm-service
+    environment:
+      PORT: "8003"
+      POSTGRES_HOST: postgresql
+      POSTGRES_PORT: "5432"
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: pueblomente
+    ports:
+      - "8003:8003"
+    depends_on:
+      - postgresql
+    networks:
+      - pueblo-mente-network
+    restart: unless-stopped
+
   # Frontend (Next.js) - commented out, keeping Vite for now
   # frontend:
   #   build:
