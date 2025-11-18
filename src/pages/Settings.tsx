@@ -6,14 +6,24 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { Settings as SettingsIcon, User, Building2, Bell, Shield, Palette } from "lucide-react";
+import { Settings as SettingsIcon, User, Building2, Bell, Shield, Palette, Code, Lightbulb, TrendingUp, Globe, FolderPlus, Trash2 } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useNavigate } from "react-router-dom";
+
+// Project/Business type for multi-project support
+interface Project {
+  id: string;
+  name: string;
+  stage: string;
+  createdAt: string;
+}
 
 const Settings = () => {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<any>(null);
   const [profile, setProfile] = useState<any>(null);
@@ -25,6 +35,135 @@ const Settings = () => {
   const [businessType, setBusinessType] = useState("");
   const [notifications, setNotifications] = useState(true);
   const [emailNotifications, setEmailNotifications] = useState(true);
+
+  // Testing/Developer mode states
+  const [testingMode, setTestingMode] = useState(() =>
+    localStorage.getItem('testingMode') === 'true'
+  );
+  const [currentStage, setCurrentStage] = useState(() =>
+    localStorage.getItem('currentStage') || 'emprendedor'
+  );
+
+  // Projects state (multi-business support)
+  const [projects, setProjects] = useState<Project[]>(() => {
+    const saved = localStorage.getItem('userProjects');
+    return saved ? JSON.parse(saved) : [
+      { id: '1', name: 'Mi Primer Proyecto', stage: 'emprendedor', createdAt: new Date().toISOString() }
+    ];
+  });
+  const [activeProjectId, setActiveProjectId] = useState(() =>
+    localStorage.getItem('activeProjectId') || '1'
+  );
+  const [newProjectName, setNewProjectName] = useState("");
+  const [newProjectStage, setNewProjectStage] = useState("emprendedor");
+
+  // Stage definitions
+  const stageOptions = [
+    { id: 'emprendedor', label: 'Emprendedor', subtitle: '0-1 año', icon: Lightbulb, route: '/entrepreneur/dashboard' },
+    { id: 'negocio', label: 'Negocio', subtitle: '1-3 años', icon: TrendingUp, route: '/business/dashboard' },
+    { id: 'empresa', label: 'Empresa', subtitle: '3-10 años', icon: Building2, route: '/pyme/dashboard' },
+    { id: 'global', label: 'Global', subtitle: '10+ años', icon: Globe, route: '/dashboard/global' },
+  ];
+
+  // Handle testing mode toggle
+  const handleTestingModeToggle = (enabled: boolean) => {
+    setTestingMode(enabled);
+    localStorage.setItem('testingMode', String(enabled));
+    toast({
+      title: enabled ? "Modo Testing activado" : "Modo Testing desactivado",
+      description: enabled
+        ? "Ahora podés cambiar de etapa libremente"
+        : "Volviste al modo normal",
+    });
+  };
+
+  // Handle stage change in testing mode
+  const handleStageChange = (stageId: string) => {
+    setCurrentStage(stageId);
+    localStorage.setItem('currentStage', stageId);
+    const stage = stageOptions.find(s => s.id === stageId);
+    if (stage) {
+      toast({
+        title: `Etapa cambiada a ${stage.label}`,
+        description: "Redirigiendo al dashboard...",
+      });
+      setTimeout(() => navigate(stage.route), 500);
+    }
+  };
+
+  // Handle project creation
+  const handleCreateProject = () => {
+    if (!newProjectName.trim()) {
+      toast({
+        title: "Error",
+        description: "El nombre del proyecto es requerido",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const newProject: Project = {
+      id: Date.now().toString(),
+      name: newProjectName,
+      stage: newProjectStage,
+      createdAt: new Date().toISOString(),
+    };
+
+    const updatedProjects = [...projects, newProject];
+    setProjects(updatedProjects);
+    localStorage.setItem('userProjects', JSON.stringify(updatedProjects));
+    setNewProjectName("");
+
+    toast({
+      title: "Proyecto creado",
+      description: `"${newProjectName}" agregado exitosamente`,
+    });
+  };
+
+  // Handle project switch
+  const handleSwitchProject = (projectId: string) => {
+    setActiveProjectId(projectId);
+    localStorage.setItem('activeProjectId', projectId);
+    const project = projects.find(p => p.id === projectId);
+    if (project) {
+      setCurrentStage(project.stage);
+      localStorage.setItem('currentStage', project.stage);
+      const stage = stageOptions.find(s => s.id === project.stage);
+      if (stage) {
+        toast({
+          title: `Cambiaste a "${project.name}"`,
+          description: `Etapa: ${stage.label}`,
+        });
+        setTimeout(() => navigate(stage.route), 500);
+      }
+    }
+  };
+
+  // Handle project deletion
+  const handleDeleteProject = (projectId: string) => {
+    if (projects.length <= 1) {
+      toast({
+        title: "Error",
+        description: "Debés tener al menos un proyecto",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const updatedProjects = projects.filter(p => p.id !== projectId);
+    setProjects(updatedProjects);
+    localStorage.setItem('userProjects', JSON.stringify(updatedProjects));
+
+    // If deleted active project, switch to first remaining
+    if (activeProjectId === projectId) {
+      handleSwitchProject(updatedProjects[0].id);
+    }
+
+    toast({
+      title: "Proyecto eliminado",
+      description: "El proyecto fue eliminado exitosamente",
+    });
+  };
 
   useEffect(() => {
     loadUserData();
@@ -134,10 +273,12 @@ const Settings = () => {
       </div>
 
       <Tabs defaultValue="profile" className="space-y-6">
-        <TabsList className="grid w-full max-w-md grid-cols-3">
+        <TabsList className="grid w-full max-w-2xl grid-cols-5">
           <TabsTrigger value="profile">Perfil</TabsTrigger>
+          <TabsTrigger value="projects">Proyectos</TabsTrigger>
           <TabsTrigger value="business">Negocio</TabsTrigger>
           <TabsTrigger value="notifications">Notificaciones</TabsTrigger>
+          <TabsTrigger value="developer">Developer</TabsTrigger>
         </TabsList>
 
         {/* Profile Tab */}
@@ -397,6 +538,221 @@ const Settings = () => {
               <div className="bg-muted/50 rounded-lg p-4">
                 <p className="text-sm text-muted-foreground">
                   💡 Las notificaciones te ayudan a estar al día con ventas, stock bajo, y citas programadas.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Projects Tab - Multi-business support */}
+        <TabsContent value="projects" className="space-y-6">
+          <Card className="border-2 overflow-hidden hover:border-blue-500/50 transition-all duration-300">
+            <div className="h-1 bg-gradient-to-r from-blue-500 to-purple-500" />
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <div className="bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg p-2">
+                  <FolderPlus className="h-5 w-5 text-white" />
+                </div>
+                Mis Proyectos
+              </CardTitle>
+              <CardDescription>
+                Gestioná múltiples negocios o ideas en diferentes etapas
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {/* Current Projects List */}
+              <div className="space-y-3">
+                <Label className="text-sm font-semibold">Proyectos Activos</Label>
+                {projects.map((project) => {
+                  const stage = stageOptions.find(s => s.id === project.stage);
+                  const StageIcon = stage?.icon || Lightbulb;
+                  const isActive = project.id === activeProjectId;
+
+                  return (
+                    <div
+                      key={project.id}
+                      className={`flex items-center justify-between p-4 border rounded-xl transition-all ${
+                        isActive
+                          ? 'border-blue-500 bg-blue-50 dark:bg-blue-950/30'
+                          : 'hover:border-gray-300'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className={`p-2 rounded-lg ${
+                          isActive
+                            ? 'bg-blue-500 text-white'
+                            : 'bg-gray-100 text-gray-600 dark:bg-gray-800'
+                        }`}>
+                          <StageIcon className="h-4 w-4" />
+                        </div>
+                        <div>
+                          <p className="font-medium">{project.name}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {stage?.label} • {stage?.subtitle}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {!isActive && (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => handleSwitchProject(project.id)}
+                          >
+                            Cambiar
+                          </Button>
+                        )}
+                        {isActive && (
+                          <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full dark:bg-blue-900 dark:text-blue-300">
+                            Activo
+                          </span>
+                        )}
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                          onClick={() => handleDeleteProject(project.id)}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <Separator />
+
+              {/* Create New Project */}
+              <div className="space-y-4">
+                <Label className="text-sm font-semibold">Crear Nuevo Proyecto</Label>
+                <div className="grid gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="newProjectName">Nombre del Proyecto</Label>
+                    <Input
+                      id="newProjectName"
+                      value={newProjectName}
+                      onChange={(e) => setNewProjectName(e.target.value)}
+                      placeholder="Ej: Mi nueva app, Tienda online..."
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="newProjectStage">Etapa del Proyecto</Label>
+                    <Select value={newProjectStage} onValueChange={setNewProjectStage}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Seleccionar etapa" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {stageOptions.map((stage) => (
+                          <SelectItem key={stage.id} value={stage.id}>
+                            {stage.label} ({stage.subtitle})
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <Button onClick={handleCreateProject} className="w-full">
+                    <FolderPlus className="h-4 w-4 mr-2" />
+                    Crear Proyecto
+                  </Button>
+                </div>
+              </div>
+
+              <div className="bg-blue-50 dark:bg-blue-950/30 rounded-lg p-4">
+                <p className="text-sm text-muted-foreground">
+                  💡 Cada proyecto tiene su propia etapa y data separada. Ideal para emprendedores con múltiples ventures.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Developer Tab - Testing Mode */}
+        <TabsContent value="developer" className="space-y-6">
+          <Card className="border-2 overflow-hidden hover:border-purple-500/50 transition-all duration-300">
+            <div className="h-1 bg-gradient-to-r from-purple-500 to-pink-500" />
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <div className="bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg p-2">
+                  <Code className="h-5 w-5 text-white" />
+                </div>
+                Modo Developer
+              </CardTitle>
+              <CardDescription>
+                Herramientas avanzadas para testing y desarrollo
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {/* Testing Mode Toggle */}
+              <div className="flex items-center justify-between p-4 border rounded-xl">
+                <div className="space-y-0.5">
+                  <Label className="text-base font-semibold">Modo Testing</Label>
+                  <p className="text-sm text-muted-foreground">
+                    Cambiá de etapa libremente sin restricciones
+                  </p>
+                </div>
+                <Switch
+                  checked={testingMode}
+                  onCheckedChange={handleTestingModeToggle}
+                />
+              </div>
+
+              {/* Stage Selector (only when testing mode is on) */}
+              {testingMode && (
+                <div className="space-y-4 p-4 border-2 border-dashed border-purple-300 rounded-xl bg-purple-50/50 dark:bg-purple-950/20">
+                  <Label className="text-sm font-semibold text-purple-700 dark:text-purple-300">
+                    Cambiar Etapa Actual
+                  </Label>
+                  <div className="grid grid-cols-2 gap-3">
+                    {stageOptions.map((stage) => {
+                      const StageIcon = stage.icon;
+                      const isActive = currentStage === stage.id;
+
+                      return (
+                        <button
+                          key={stage.id}
+                          onClick={() => handleStageChange(stage.id)}
+                          className={`flex items-center gap-3 p-3 border rounded-xl transition-all ${
+                            isActive
+                              ? 'border-purple-500 bg-purple-100 dark:bg-purple-900/50'
+                              : 'hover:border-purple-300 hover:bg-purple-50 dark:hover:bg-purple-950/30'
+                          }`}
+                        >
+                          <div className={`p-2 rounded-lg ${
+                            isActive
+                              ? 'bg-purple-500 text-white'
+                              : 'bg-gray-100 text-gray-600 dark:bg-gray-800'
+                          }`}>
+                            <StageIcon className="h-4 w-4" />
+                          </div>
+                          <div className="text-left">
+                            <p className="font-medium text-sm">{stage.label}</p>
+                            <p className="text-xs text-muted-foreground">{stage.subtitle}</p>
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              <Separator />
+
+              {/* Debug Info */}
+              <div className="space-y-3">
+                <Label className="text-sm font-semibold">Información de Debug</Label>
+                <div className="bg-muted rounded-lg p-4 font-mono text-xs space-y-1">
+                  <p><span className="text-muted-foreground">Testing Mode:</span> {testingMode ? 'ON' : 'OFF'}</p>
+                  <p><span className="text-muted-foreground">Current Stage:</span> {currentStage}</p>
+                  <p><span className="text-muted-foreground">Active Project:</span> {projects.find(p => p.id === activeProjectId)?.name}</p>
+                  <p><span className="text-muted-foreground">Total Projects:</span> {projects.length}</p>
+                  <p><span className="text-muted-foreground">User ID:</span> {user?.id || 'Not logged in'}</p>
+                </div>
+              </div>
+
+              <div className="bg-yellow-50 dark:bg-yellow-950/30 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
+                <p className="text-sm text-yellow-800 dark:text-yellow-200">
+                  ⚠️ El Modo Testing es solo para desarrollo. Los datos pueden no persistir correctamente entre sesiones.
                 </p>
               </div>
             </CardContent>

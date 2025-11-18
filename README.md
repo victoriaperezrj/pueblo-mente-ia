@@ -1,73 +1,228 @@
-# Welcome to your Lovable project
+# 🚀 Pueblo Mente IA - Plataforma de Gestión Empresarial con IA
 
-## Project info
+[![CI/CD](https://github.com/victoriaperezrj/pueblo-mente-ia/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/victoriaperezrj/pueblo-mente-ia/actions/workflows/ci-cd.yml)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/import/project?template=https://github.com/victoriaperezrj/pueblo-mente-ia)
 
-**URL**: https://lovable.dev/projects/3c13f383-2a92-453a-8b44-d3a534bd6578
+Plataforma integral de gestión empresarial con inteligencia artificial, diseñada para acompañar el crecimiento de negocios desde la idea inicial hasta la consolidación como PYME.
 
-## How can I edit this code?
+## ✨ Características Principales
 
-There are several ways of editing your application.
+### 🌱 Ecosistema Emprendedor (0-1 año)
+- **Validador de Ideas IA**: Modo Shark Tank con 4 preguntas clave
+- **Simulador Financiero**: Proyecciones interactivas con sliders en tiempo real
+- **Lean Canvas IA**: Canvas pre-llenado con sugerencias inteligentes
 
-**Use Lovable**
+### 🚀 Ecosistema Business (1-5 años)
+- **CRM Completo**: Gestión avanzada de clientes
+- **Analytics de Ventas**: Reportes detallados y métricas
+- **Marketing Automation**: Campañas multi-canal automatizadas
+- **Optimizador de Precios IA**: Algoritmos de pricing inteligente
+- **Gestión de Inventario**: Control en tiempo real
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/3c13f383-2a92-453a-8b44-d3a534bd6578) and start prompting.
+### 🏢 Ecosistema PYME (5+ años)
+- **Gestión de Equipo/RRHH**: Sistema completo de recursos humanos
+- **Planificación Estratégica**: OKRs y gestión de objetivos
+- **Análisis de Mercado IA**: Intelligence competitiva avanzada
+- **CRM Avanzado**: Herramientas enterprise
+- **Marketplace B2B**: Conexión con proveedores
 
-Changes made via Lovable will be committed automatically to this repo.
+## 🛠️ Stack Tecnológico
 
-**Use your preferred IDE**
+### Frontend
+- **React 18** - Librería UI
+- **TypeScript** - Type safety
+- **Vite** - Build tool y dev server
+- **Tailwind CSS** - Styling
+- **Framer Motion** - Animaciones
+- **Recharts** - Gráficos y visualizaciones
+- **React Router** - Navegación
+- **Radix UI** - Componentes accesibles
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Backend & Services
+- **Supabase** - Backend as a Service
+  - Authentication
+  - PostgreSQL Database
+  - Real-time subscriptions
+  - Storage
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### DevOps & Infrastructure
+- **Docker** - Containerización
+- **GitHub Actions** - CI/CD
+- **Vercel** - Hosting y deployment
+- **Nginx** - Web server (producción)
 
-Follow these steps:
+## 🚀 Inicio Rápido
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+### Prerrequisitos
+- Node.js 18+ ([Instalar con nvm](https://github.com/nvm-sh/nvm))
+- npm o yarn
+- Git
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+### Instalación Local
 
-# Step 3: Install the necessary dependencies.
-npm i
+```bash
+# 1. Clonar el repositorio
+git clone https://github.com/victoriaperezrj/pueblo-mente-ia.git
+cd pueblo-mente-ia
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# 2. Instalar dependencias
+npm install
+
+# 3. Configurar variables de entorno
+cp .env.example .env
+# Edita .env con tus credenciales de Supabase
+
+# 4. Iniciar servidor de desarrollo
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+La aplicación estará disponible en `http://localhost:5173`
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## 🐳 Uso con Docker
 
-**Use GitHub Codespaces**
+### Desarrollo
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+```bash
+# Iniciar con docker-compose
+docker-compose up app-dev
 
-## What technologies are used for this project?
+# La app estará en http://localhost:5173
+```
 
-This project is built with:
+### Producción
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+```bash
+# Build de imagen de producción
+docker build -t pueblo-mente-ia .
 
-## How can I deploy this project?
+# Ejecutar contenedor
+docker run -p 8080:80 pueblo-mente-ia
 
-Simply open [Lovable](https://lovable.dev/projects/3c13f383-2a92-453a-8b44-d3a534bd6578) and click on Share -> Publish.
+# O usar docker-compose
+docker-compose up app-prod
+```
 
-## Can I connect a custom domain to my Lovable project?
+## 📝 Scripts Disponibles
 
-Yes, you can!
+```bash
+npm run dev          # Iniciar servidor de desarrollo
+npm run build        # Build para producción
+npm run preview      # Preview del build de producción
+npm run lint         # Ejecutar ESLint
+npm run lint:fix     # Fix automático de errores ESLint
+```
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## 🌐 Deployment
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+### Vercel (Recomendado)
+
+1. Conecta tu repositorio en [Vercel](https://vercel.com)
+2. Configura las variables de entorno en Vercel Dashboard:
+   - `VITE_SUPABASE_PROJECT_ID`
+   - `VITE_SUPABASE_PUBLISHABLE_KEY`
+   - `VITE_SUPABASE_URL`
+3. Deploy automático en cada push a `main`
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/victoriaperezrj/pueblo-mente-ia)
+
+### Otros Providers
+
+- **Netlify**: Usa `npm run build` y publica la carpeta `dist/`
+- **AWS S3 + CloudFront**: Build estático compatible
+- **Google Cloud Platform**: Cloud Run con Dockerfile incluido
+
+## 🔐 Variables de Entorno
+
+Crea un archivo `.env` basado en `.env.example`:
+
+```env
+# Supabase (Requerido)
+VITE_SUPABASE_PROJECT_ID=tu_project_id
+VITE_SUPABASE_PUBLISHABLE_KEY=tu_publishable_key
+VITE_SUPABASE_URL=https://tu_project_id.supabase.co
+
+# Opcional: APIs de IA
+VITE_OPENAI_API_KEY=tu_openai_key
+VITE_GEMINI_API_KEY=tu_gemini_key
+
+# Environment
+VITE_ENV=development
+```
+
+## 🏗️ Arquitectura
+
+```
+pueblo-mente-ia/
+├── src/
+│   ├── components/          # Componentes reutilizables
+│   │   ├── ui/             # Componentes UI base
+│   │   └── ErrorBoundary.tsx
+│   ├── pages/              # Páginas/Rutas
+│   │   ├── entrepreneur/   # Ecosistema Emprendedor
+│   │   ├── business/       # Ecosistema Business
+│   │   ├── pyme/          # Ecosistema PYME
+│   │   └── demo/          # Demos públicos
+│   ├── contexts/          # React Contexts
+│   ├── hooks/             # Custom hooks
+│   ├── lib/               # Utilidades
+│   ├── integrations/      # Integraciones externas
+│   └── App.tsx            # App principal
+├── .github/
+│   └── workflows/         # GitHub Actions
+├── Dockerfile             # Docker producción
+├── Dockerfile.dev         # Docker desarrollo
+├── docker-compose.yml     # Orquestación Docker
+├── nginx.conf            # Config Nginx
+└── vercel.json           # Config Vercel
+```
+
+## 🧪 Testing (Próximamente)
+
+```bash
+npm run test              # Ejecutar tests
+npm run test:watch        # Tests en modo watch
+npm run test:coverage     # Coverage report
+```
+
+## 🤝 Contribución
+
+Las contribuciones son bienvenidas. Por favor:
+
+1. Fork el proyecto
+2. Crea una branch para tu feature (`git checkout -b feature/AmazingFeature`)
+3. Commit tus cambios (`git commit -m 'Add: AmazingFeature'`)
+4. Push a la branch (`git push origin feature/AmazingFeature`)
+5. Abre un Pull Request
+
+## 📄 Licencia
+
+Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) para más detalles.
+
+## 🌟 Roadmap
+
+- [ ] Integración con OpenAI GPT-4
+- [ ] Integración con Google Gemini
+- [ ] Sistema de notificaciones push
+- [ ] App móvil (React Native)
+- [ ] Exportación de reportes a PDF/Excel
+- [ ] Integración con Stripe/PayPal
+- [ ] Multi-idioma (i18n)
+- [ ] Modo offline (PWA)
+- [ ] Dashboard analytics avanzado
+- [ ] API pública REST/GraphQL
+
+## 📞 Soporte
+
+- **Email**: support@pueblo-mente-ia.com
+- **Issues**: [GitHub Issues](https://github.com/victoriaperezrj/pueblo-mente-ia/issues)
+- **Documentación**: [Ver docs completa](https://docs.pueblo-mente-ia.com)
+
+## 👥 Autores
+
+- **Victoria Perez** - *Desarrollo inicial* - [@victoriaperezrj](https://github.com/victoriaperezrj)
+
+---
+
+⭐️ Si te gusta este proyecto, dale una estrella en GitHub!
+
+Hecho con ❤️ por el equipo de Pueblo Mente IA
