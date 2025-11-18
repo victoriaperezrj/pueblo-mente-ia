@@ -85,22 +85,36 @@ export default function PymeDashboard() {
       title: 'Gestión de Equipo',
       icon: Users,
       color: 'from-blue-500 to-blue-600',
-      path: '/team',
-      description: 'Administrar personal'
+      path: '/pyme/team-management',
+      description: 'RRHH y gestión de personal'
+    },
+    {
+      title: 'Planificación Estratégica',
+      icon: Target,
+      color: 'from-green-500 to-green-600',
+      path: '/pyme/strategic-planning',
+      description: 'Objetivos y OKRs'
+    },
+    {
+      title: 'Análisis de Mercado IA',
+      icon: TrendingUp,
+      color: 'from-purple-500 to-purple-600',
+      path: '/pyme/market-analysis',
+      description: 'Insights de competencia'
     },
     {
       title: 'Marketplace B2B',
       icon: Building2,
-      color: 'from-purple-500 to-purple-600',
+      color: 'from-orange-500 to-orange-600',
       path: '/marketplace',
       description: 'Conectar con proveedores'
     },
     {
-      title: 'Planificación',
-      icon: Target,
-      color: 'from-green-500 to-green-600',
-      path: '/planning',
-      description: 'Objetivos y estrategias'
+      title: 'CRM Avanzado',
+      icon: Users,
+      color: 'from-teal-500 to-teal-600',
+      path: '/business/crm',
+      description: 'Gestión de clientes'
     }
   ];
 
