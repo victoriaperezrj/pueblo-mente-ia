@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Lightbulb, Target, DollarSign, Users, Clock, Calculator, Grid3x3, Rocket, Search, FileText, Calendar, Beaker } from "lucide-react";
+import { Lightbulb, Target, DollarSign, Users, Clock, Calculator, Grid3x3, Rocket, Search, FileText, Calendar, Beaker, Sparkles, TrendingUp, UserCircle } from "lucide-react";
 import { useUser } from "@/hooks/useUser";
 import { EntrepreneurSidebar } from "@/components/entrepreneur/EntrepreneurSidebar";
 import { StatCard } from "@/components/entrepreneur/StatCard";
@@ -13,6 +13,33 @@ export default function EntrepreneurDashboard() {
   const tools = [
     {
       id: 1,
+      icon: Sparkles,
+      title: "Market Test Express",
+      description: "Análisis de viabilidad con GPT-4 en segundos",
+      badge: "🔥 NEW AI",
+      color: "from-blue-600 to-purple-600",
+      route: "/validation/market-test",
+    },
+    {
+      id: 2,
+      icon: TrendingUp,
+      title: "Benchmark Automático",
+      description: "Inteligencia competitiva con web scraping + GPT-4",
+      badge: "AI",
+      color: "from-emerald-600 to-teal-600",
+      route: "/validation/benchmark",
+    },
+    {
+      id: 3,
+      icon: UserCircle,
+      title: "Generador de Público",
+      description: "Personas detalladas con avatares DALL-E 3",
+      badge: "AI",
+      color: "from-purple-600 to-pink-600",
+      route: "/validation/target-audience",
+    },
+    {
+      id: 4,
       icon: Lightbulb,
       title: "Validador de Ideas IA",
       description: "Modo Shark Tank: IA te hace 5 preguntas difíciles",
@@ -21,16 +48,15 @@ export default function EntrepreneurDashboard() {
       route: "/entrepreneur/validation",
     },
     {
-      id: 2,
+      id: 5,
       icon: Calculator,
       title: "Simulador Financiero",
       description: "Proyecciones en tiempo real con sliders interactivos",
-      badge: "Nuevo",
       color: "from-green-500 to-emerald-600",
       route: "/entrepreneur/simulator",
     },
     {
-      id: 3,
+      id: 6,
       icon: Grid3x3,
       title: "Lean Canvas IA",
       description: "Canvas pre-llenado con sugerencias inteligentes",
@@ -38,7 +64,7 @@ export default function EntrepreneurDashboard() {
       route: "/entrepreneur/lean-canvas",
     },
     {
-      id: 4,
+      id: 7,
       icon: Rocket,
       title: "Generador de MVP",
       description: "Qué construir primero + timeline de 4 semanas",
@@ -46,7 +72,7 @@ export default function EntrepreneurDashboard() {
       route: "/entrepreneur/mvp",
     },
     {
-      id: 5,
+      id: 8,
       icon: Search,
       title: "Detective de Mercado",
       description: "Tamaño, competidores, tendencias automáticas",
@@ -54,7 +80,7 @@ export default function EntrepreneurDashboard() {
       route: "/entrepreneur/market",
     },
     {
-      id: 6,
+      id: 9,
       icon: FileText,
       title: "Pitch Deck Generator",
       description: "10 slides profesionales en 5 minutos",
@@ -63,7 +89,7 @@ export default function EntrepreneurDashboard() {
       route: "/entrepreneur/pitch",
     },
     {
-      id: 7,
+      id: 10,
       icon: Calendar,
       title: "Roadmap 90 días",
       description: "Timeline visual con milestones y confetti",
@@ -71,7 +97,7 @@ export default function EntrepreneurDashboard() {
       route: "/entrepreneur/roadmap",
     },
     {
-      id: 8,
+      id: 11,
       icon: Beaker,
       title: "Tracker de Experimentos",
       description: "Hipótesis, costos, resultados, learnings",

@@ -164,6 +164,7 @@ const BusinessAIBot = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isNavigating, setIsNavigating] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = useCallback(() => {
@@ -277,8 +278,6 @@ const BusinessAIBot = () => {
   // SELECTOR DE ETAPA (cuando no hay mode seleccionado)
   // ══════════════════════════════════════════════════════════════════════
   if (!currentMode) {
-    const [isNavigating, setIsNavigating] = useState(false);
-    
     const handleNavigate = async (path: string) => {
       if (isNavigating) return; // Prevenir doble click
       setIsNavigating(true);

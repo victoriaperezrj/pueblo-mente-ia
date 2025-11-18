@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: pueblo-mente
+  labels:
+    name: pueblo-mente
+    istio-injection: enabled  # Enable Istio sidecar injection

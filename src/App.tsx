@@ -15,6 +15,7 @@ import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 import SelectRole from "./pages/SelectRole";
 import DemoSelectRole from "./pages/DemoSelectRole";
+import ValidationTools from "./pages/ValidationTools";
 
 // Lazy-loaded pages
 const SignupFlow = lazy(() => import("./pages/auth/SignupFlow"));
@@ -22,6 +23,7 @@ const NewOnboarding = lazy(() => import("./pages/NewOnboarding"));
 const EntrepreneurDashboardPage = lazy(() => import("./pages/dashboards/EntrepreneurDashboard"));
 const BusinessDashboardPage = lazy(() => import("./pages/dashboards/BusinessDashboard"));
 const PymeDashboardPage = lazy(() => import("./pages/dashboards/PymeDashboard"));
+const GlobalDashboardPage = lazy(() => import("./pages/dashboards/GlobalDashboard"));
 const IdeaValidatorPage = lazy(() => import("./pages/tools/IdeaValidatorPage"));
 const CRMPage = lazy(() => import("./pages/business/CRM"));
 const AnalyticsPage = lazy(() => import("./pages/business/Analytics"));
@@ -65,6 +67,16 @@ const EntrepreneurLeanCanvas = lazy(() => import("./pages/entrepreneur/LeanCanva
 const BusinessDashboard = lazy(() => import("./pages/business/Dashboard"));
 const PymeDashboard = lazy(() => import("./pages/pyme/Dashboard"));
 
+// Global enterprise tools
+const FinancialIntelligence = lazy(() => import("./pages/global/FinancialIntelligence"));
+const CRM360 = lazy(() => import("./pages/global/CRM360"));
+const SmartPricing = lazy(() => import("./pages/global/SmartPricing"));
+
+// Market Intelligence Tools (Validation Stage)
+const MarketTestExpress = lazy(() => import("./pages/validation/MarketTestExpress"));
+const BenchmarkAutomatico = lazy(() => import("./pages/validation/BenchmarkAutomatico"));
+const TargetAudienceGenerator = lazy(() => import("./pages/validation/TargetAudienceGenerator"));
+
 // Demo pages
 const DemoIntro = lazy(() => import("./pages/demo/DemoIntro"));
 const DemoIdeaCapture = lazy(() => import("./pages/demo/DemoIdeaCapture"));
@@ -103,6 +115,7 @@ const App = () => (
               <Suspense fallback={<PageLoader />}>
               <Routes>
               <Route path="/" element={<Index />} />
+              <Route path="/tools" element={<ValidationTools />} />
               <Route path="/select-role" element={<SelectRole />} />
               <Route path="/demo/select-role" element={<DemoSelectRole />} />
               <Route path="/auth/signup" element={<SignupFlow />} />
@@ -110,6 +123,7 @@ const App = () => (
               <Route path="/dashboard" element={<EntrepreneurDashboardPage />} />
               <Route path="/dashboard/business" element={<BusinessDashboardPage />} />
               <Route path="/dashboard/pyme" element={<PymeDashboardPage />} />
+              <Route path="/dashboard/global" element={<GlobalDashboardPage />} />
               <Route path="/tools/idea-validator" element={<IdeaValidatorPage />} />
               <Route path="/auth" element={<ProtectedRoute requireAuth={false}><Auth /></ProtectedRoute>} />
                 <Route path="/business-ai-bot" element={<BusinessAIBot />} />
@@ -147,6 +161,16 @@ const App = () => (
               <Route path="/pyme/team-management" element={<ProtectedRoute><PymeTeamManagement /></ProtectedRoute>} />
               <Route path="/pyme/strategic-planning" element={<ProtectedRoute><PymeStrategicPlanning /></ProtectedRoute>} />
               <Route path="/pyme/market-analysis" element={<ProtectedRoute><PymeMarketAnalysis /></ProtectedRoute>} />
+
+              {/* Market Intelligence Tools - Validation Stage (NEW - AI-POWERED) */}
+              <Route path="/validation/market-test" element={<MarketTestExpress />} />
+              <Route path="/validation/benchmark" element={<BenchmarkAutomatico />} />
+              <Route path="/validation/target-audience" element={<TargetAudienceGenerator />} />
+
+              {/* Global enterprise tools - accessible to all roles */}
+              <Route path="/global/financial-intelligence" element={<ProtectedRoute><FinancialIntelligence /></ProtectedRoute>} />
+              <Route path="/global/crm-360" element={<ProtectedRoute><CRM360 /></ProtectedRoute>} />
+              <Route path="/global/smart-pricing" element={<ProtectedRoute><SmartPricing /></ProtectedRoute>} />
               
               {/* Demo routes */}
               <Route path="/demo/intro" element={<DemoIntro />} />
