@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { DollarSign, Users, TrendingUp, Percent, ArrowRight, ArrowUp } from "lucide-react";
+import { DollarSign, Users, TrendingUp, Percent, ArrowRight, ArrowUp, Sparkles, UserCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "@/hooks/useUser";
 import { Navbar } from "@/components/layout/Navbar";
@@ -52,6 +52,27 @@ export default function BusinessDashboard() {
   ];
 
   const tools = [
+    {
+      title: "Market Test Express",
+      description: "Análisis de viabilidad con GPT-4",
+      route: "/validation/market-test",
+      color: "from-blue-600 to-purple-600",
+      badge: "🔥 AI",
+    },
+    {
+      title: "Benchmark Automático",
+      description: "Inteligencia competitiva con IA",
+      route: "/validation/benchmark",
+      color: "from-emerald-600 to-teal-600",
+      badge: "AI",
+    },
+    {
+      title: "Generador de Público",
+      description: "Personas con avatares DALL-E 3",
+      route: "/validation/target-audience",
+      color: "from-purple-600 to-pink-600",
+      badge: "AI",
+    },
     {
       title: "Optimizador de Precios",
       description: "Encuentra el precio ideal para tus productos",

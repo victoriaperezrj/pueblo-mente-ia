@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
-import { DollarSign, Users, Target, TrendingUp, ArrowRight, CheckCircle2 } from "lucide-react";
+import { DollarSign, Users, Target, TrendingUp, ArrowRight, CheckCircle2, Sparkles, UserCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "@/hooks/useUser";
 import { Navbar } from "@/components/layout/Navbar";
@@ -70,6 +70,24 @@ export default function PymeDashboard() {
   ];
 
   const tools = [
+    {
+      title: "Market Test Express",
+      description: "Análisis de viabilidad con GPT-4",
+      route: "/validation/market-test",
+      badge: "🔥 AI",
+    },
+    {
+      title: "Benchmark Automático",
+      description: "Inteligencia competitiva con IA",
+      route: "/validation/benchmark",
+      badge: "AI",
+    },
+    {
+      title: "Generador de Público",
+      description: "Personas con avatares DALL-E 3",
+      route: "/validation/target-audience",
+      badge: "AI",
+    },
     {
       title: "Dashboard en Tiempo Real",
       description: "Métricas actualizadas al instante",

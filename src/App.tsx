@@ -23,6 +23,7 @@ const NewOnboarding = lazy(() => import("./pages/NewOnboarding"));
 const EntrepreneurDashboardPage = lazy(() => import("./pages/dashboards/EntrepreneurDashboard"));
 const BusinessDashboardPage = lazy(() => import("./pages/dashboards/BusinessDashboard"));
 const PymeDashboardPage = lazy(() => import("./pages/dashboards/PymeDashboard"));
+const GlobalDashboardPage = lazy(() => import("./pages/dashboards/GlobalDashboard"));
 const IdeaValidatorPage = lazy(() => import("./pages/tools/IdeaValidatorPage"));
 const CRMPage = lazy(() => import("./pages/business/CRM"));
 const AnalyticsPage = lazy(() => import("./pages/business/Analytics"));
@@ -122,6 +123,7 @@ const App = () => (
               <Route path="/dashboard" element={<EntrepreneurDashboardPage />} />
               <Route path="/dashboard/business" element={<BusinessDashboardPage />} />
               <Route path="/dashboard/pyme" element={<PymeDashboardPage />} />
+              <Route path="/dashboard/global" element={<GlobalDashboardPage />} />
               <Route path="/tools/idea-validator" element={<IdeaValidatorPage />} />
               <Route path="/auth" element={<ProtectedRoute requireAuth={false}><Auth /></ProtectedRoute>} />
                 <Route path="/business-ai-bot" element={<BusinessAIBot />} />

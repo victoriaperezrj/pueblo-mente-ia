@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Lightbulb, TrendingUp, Building2, ChevronDown, Check } from 'lucide-react';
+import { Lightbulb, TrendingUp, Building2, Globe, ChevronDown, Check } from 'lucide-react';
 
 export function StageSwitcherDropdown() {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -10,6 +10,9 @@ export function StageSwitcherDropdown() {
 
   // Detect current stage from path
   const getCurrentStage = () => {
+    if (location.pathname.includes('global') || location.pathname.includes('multinacional')) {
+      return 'global';
+    }
     if (location.pathname.includes('emprendedor') || location.pathname.includes('entrepreneur')) {
       return 'emprendedor';
     }
@@ -25,29 +28,37 @@ export function StageSwitcherDropdown() {
   const currentStage = getCurrentStage();
 
   const stages = [
-    { 
-      id: 'emprendedor', 
-      icon: Lightbulb, 
-      label: 'Emprendedor', 
-      subtitle: '0-1 año', 
+    {
+      id: 'emprendedor',
+      icon: Lightbulb,
+      label: 'Emprendedor',
+      subtitle: '0-1 año',
       route: '/entrepreneur/dashboard',
       color: 'from-blue-500 to-blue-600'
     },
-    { 
-      id: 'negocio', 
-      icon: TrendingUp, 
-      label: 'Negocio', 
-      subtitle: '1-3 años', 
+    {
+      id: 'negocio',
+      icon: TrendingUp,
+      label: 'Negocio',
+      subtitle: '1-3 años',
       route: '/business/dashboard',
       color: 'from-purple-500 to-purple-600'
     },
-    { 
-      id: 'empresa', 
-      icon: Building2, 
-      label: 'Empresa', 
-      subtitle: '3+ años', 
+    {
+      id: 'empresa',
+      icon: Building2,
+      label: 'Empresa',
+      subtitle: '3-10 años',
       route: '/pyme/dashboard',
       color: 'from-green-500 to-green-600'
+    },
+    {
+      id: 'global',
+      icon: Globe,
+      label: 'Global',
+      subtitle: '10+ años / Multinacional',
+      route: '/dashboard/global',
+      color: 'from-violet-500 to-violet-600'
     }
   ];
 
