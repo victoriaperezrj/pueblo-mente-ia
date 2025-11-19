@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Rocket, TrendingUp, BarChart3, ArrowLeft, CheckCircle } from 'lucide-react';
+import { Rocket, TrendingUp, BarChart3, Globe, ArrowLeft, CheckCircle } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { assignUserRole } from '@/hooks/useUserRole';
 import { useCustomToast } from '@/hooks/use-custom-toast';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 
-type ProfileType = 'entrepreneur' | 'business' | 'pyme_enterprise';
+type ProfileType = 'entrepreneur' | 'business' | 'pyme_enterprise' | 'global';
 
 export default function OnboardingClassify() {
   const navigate = useNavigate();
@@ -56,6 +56,8 @@ export default function OnboardingClassify() {
           navigate('/demo/entrepreneur/dashboard');
         } else if (profile === 'business') {
           navigate('/demo/negocio/dashboard');
+        } else if (profile === 'global') {
+          navigate('/dashboard/global');
         } else {
           navigate('/demo/pyme/dashboard');
         }
@@ -88,6 +90,8 @@ export default function OnboardingClassify() {
         // Redirigir según el tipo de perfil
         if (profile === 'entrepreneur') {
           navigate('/entrepreneur/dashboard');
+        } else if (profile === 'global') {
+          navigate('/dashboard/global');
         } else {
           navigate('/dashboard');
         }
@@ -123,7 +127,7 @@ export default function OnboardingClassify() {
           </p>
         </div>
         
-        <div className="grid md:grid-cols-3 gap-6 mb-8">
+        <div className="grid md:grid-cols-4 gap-6 mb-8">
           <ProfileCard
             icon={Rocket}
             badge="DESDE CERO"
@@ -178,6 +182,24 @@ export default function OnboardingClassify() {
             onClick={() => handleSelectProfile('pyme_enterprise')}
             loading={loading}
           />
+
+          <ProfileCard
+            icon={Globe}
+            badge="10+ AÑOS"
+            title="Global"
+            subtitle="Multinacional"
+            description="Expansión internacional o múltiples mercados."
+            features={[
+              'Expansión global',
+              'Multi-moneda',
+              'Compliance internacional',
+              'Analytics avanzados'
+            ]}
+            buttonText="Expandir Global"
+            color="global"
+            onClick={() => handleSelectProfile('global')}
+            loading={loading}
+          />
         </div>
         
         <div className="text-center text-sm text-text-tertiary bg-business-50 border border-business-200 rounded-lg p-4">
@@ -198,7 +220,7 @@ interface ProfileCardProps {
   description: string;
   features: string[];
   buttonText: string;
-  color: 'entrepreneur' | 'business' | 'enterprise';
+  color: 'entrepreneur' | 'business' | 'enterprise' | 'global';
   onClick: () => void;
   popular?: boolean;
   loading?: boolean;
@@ -229,6 +251,14 @@ function ProfileCard({ icon: Icon, badge, title, subtitle, description, features
       badge: 'bg-enterprise-100 text-enterprise-700',
       button: 'bg-enterprise-500 hover:bg-enterprise-600 text-white',
       check: 'text-enterprise-500'
+    },
+    global: {
+      bg: 'from-violet-50 to-violet-100',
+      border: 'border-violet-300',
+      icon: 'from-violet-500 to-violet-600',
+      badge: 'bg-violet-100 text-violet-700',
+      button: 'bg-violet-500 hover:bg-violet-600 text-white',
+      check: 'text-violet-500'
     }
   };
   
