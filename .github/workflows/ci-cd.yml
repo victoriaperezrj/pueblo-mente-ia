@@ -28,7 +28,7 @@ jobs:
         run: npm ci
 
       - name: Run ESLint
-        run: npx eslint . --max-warnings=-1
+        run: npx eslint . --max-warnings=150
 
       - name: TypeScript type check
         run: npx tsc --noEmit
