@@ -1,9 +1,9 @@
 import { motion } from "framer-motion";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Lightbulb, Store, Building2, ArrowLeft } from "lucide-react";
+import { Lightbulb, Store, Building2, Globe, ArrowLeft } from "lucide-react";
 
-type Stage = "entrepreneur" | "business" | "pyme_enterprise";
+type Stage = "entrepreneur" | "business" | "pyme_enterprise" | "global";
 
 interface StageSelectionStepProps {
   onSelect: (stage: Stage) => void;
@@ -34,6 +34,13 @@ export function StageSelectionStep({ onSelect, onBack }: StageSelectionStepProps
       icon: Building2,
       color: "from-[hsl(var(--pyme))] to-purple-600",
     },
+    {
+      id: "global" as Stage,
+      title: "Global",
+      description: "Multinacional o en expansión",
+      icon: Globe,
+      color: "from-violet-500 to-violet-600",
+    },
   ];
 
   return (
@@ -55,7 +62,7 @@ export function StageSelectionStep({ onSelect, onBack }: StageSelectionStepProps
         <p className="text-xl text-white/80">Elegí la opción que mejor describe tu situación</p>
       </motion.div>
 
-      <div className="grid md:grid-cols-3 gap-6">
+      <div className="grid md:grid-cols-4 gap-6">
         {stages.map((stage, index) => {
           const Icon = stage.icon;
           return (

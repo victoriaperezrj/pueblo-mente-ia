@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Lightbulb, TrendingUp, Building2, ArrowLeft, ArrowRight, Check, Loader2 } from 'lucide-react';
+import { Lightbulb, TrendingUp, Building2, Globe, ArrowLeft, ArrowRight, Check, Loader2 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import confetti from 'canvas-confetti';
@@ -40,9 +40,17 @@ export default function SignupFlow() {
       id: 'pyme',
       icon: Building2,
       title: 'Empresa',
-      subtitle: '3+ años',
-      description: 'Empresa PYME o grande',
+      subtitle: '3-10 años',
+      description: 'Empresa PYME establecida',
       gradient: 'from-green-500 to-green-600'
+    },
+    {
+      id: 'global',
+      icon: Globe,
+      title: 'Global',
+      subtitle: '10+ años',
+      description: 'Multinacional o expansión',
+      gradient: 'from-violet-500 to-violet-600'
     }
   ];
 
@@ -74,8 +82,9 @@ export default function SignupFlow() {
       setStep(3);
       
       setTimeout(() => {
-        const dashboardRoute = userType === 'entrepreneur' ? '/entrepreneur/dashboard' : 
-                              userType === 'business' ? '/business/dashboard' : 
+        const dashboardRoute = userType === 'entrepreneur' ? '/entrepreneur/dashboard' :
+                              userType === 'business' ? '/business/dashboard' :
+                              userType === 'global' ? '/dashboard/global' :
                               '/pyme/dashboard';
         navigate(dashboardRoute);
       }, 3000);
