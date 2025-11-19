@@ -64,6 +64,15 @@ const EntrepreneurDashboard = lazy(() => import("./pages/entrepreneur/Dashboard"
 const EntrepreneurIdeaValidator = lazy(() => import("./pages/entrepreneur/IdeaValidator"));
 const EntrepreneurFinancialSimulator = lazy(() => import("./pages/entrepreneur/FinancialSimulator"));
 const EntrepreneurLeanCanvas = lazy(() => import("./pages/entrepreneur/LeanCanvas"));
+const MVPGenerator = lazy(() => import("./pages/entrepreneur/MVPGenerator"));
+const MarketDetective = lazy(() => import("./pages/entrepreneur/MarketDetective"));
+const PitchDeckGenerator = lazy(() => import("./pages/entrepreneur/PitchDeckGenerator"));
+const RoadmapPage = lazy(() => import("./pages/entrepreneur/Roadmap"));
+const ExperimentsTracker = lazy(() => import("./pages/entrepreneur/ExperimentsTracker"));
+const LandingGenerator = lazy(() => import("./pages/entrepreneur/LandingGenerator"));
+const PitchOneLiner = lazy(() => import("./pages/entrepreneur/PitchOneLiner"));
+const RunwayCalculator = lazy(() => import("./pages/entrepreneur/RunwayCalculator"));
+const LaunchStrategy = lazy(() => import("./pages/entrepreneur/LaunchStrategy"));
 const BusinessDashboard = lazy(() => import("./pages/business/Dashboard"));
 const PymeDashboard = lazy(() => import("./pages/pyme/Dashboard"));
 
@@ -146,6 +155,16 @@ const App = () => (
               <Route path="/entrepreneur/lean-canvas" element={<ProtectedRoute><EntrepreneurLeanCanvas /></ProtectedRoute>} />
               <Route path="/emprendedor/validacion" element={<ProtectedRoute><IdeaValidation /></ProtectedRoute>} />
               <Route path="/entrepreneur/validation" element={<ProtectedRoute><IdeaValidation /></ProtectedRoute>} />
+              <Route path="/entrepreneur/simulator" element={<ProtectedRoute><EntrepreneurFinancialSimulator /></ProtectedRoute>} />
+              <Route path="/entrepreneur/mvp" element={<MVPGenerator />} />
+              <Route path="/entrepreneur/market" element={<MarketDetective />} />
+              <Route path="/entrepreneur/pitch" element={<PitchDeckGenerator />} />
+              <Route path="/entrepreneur/roadmap" element={<RoadmapPage />} />
+              <Route path="/entrepreneur/experiments" element={<ExperimentsTracker />} />
+              <Route path="/entrepreneur/landing-generator" element={<LandingGenerator />} />
+              <Route path="/entrepreneur/pitch-oneliner" element={<PitchOneLiner />} />
+              <Route path="/entrepreneur/runway-calculator" element={<RunwayCalculator />} />
+              <Route path="/entrepreneur/launch-strategy" element={<LaunchStrategy />} />
               <Route path="/business/dashboard" element={<ProtectedRoute><BusinessDashboard /></ProtectedRoute>} />
               <Route path="/pyme/dashboard" element={<ProtectedRoute><PymeDashboard /></ProtectedRoute>} />
               

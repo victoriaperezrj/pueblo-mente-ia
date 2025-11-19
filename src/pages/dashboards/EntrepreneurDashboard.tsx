@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Lightbulb, Target, DollarSign, Users, Clock, Calculator, Grid3x3, Rocket, Search, FileText, Calendar, Beaker, Sparkles, TrendingUp, UserCircle } from "lucide-react";
+import { Lightbulb, Target, DollarSign, Users, Clock, Calculator, Grid3x3, Rocket, Search, FileText, Calendar, Beaker, Sparkles, TrendingUp, UserCircle, Megaphone, Globe, MessageSquare, BarChart3 } from "lucide-react";
 import { useUser } from "@/hooks/useUser";
 import { EntrepreneurSidebar } from "@/components/entrepreneur/EntrepreneurSidebar";
 import { StatCard } from "@/components/entrepreneur/StatCard";
@@ -103,6 +103,41 @@ export default function EntrepreneurDashboard() {
       description: "Hipótesis, costos, resultados, learnings",
       color: "from-teal-500 to-cyan-600",
       route: "/entrepreneur/experiments",
+    },
+    {
+      id: 12,
+      icon: Megaphone,
+      title: "Landing Page Generator",
+      description: "Genera copy y estructura de landing con IA",
+      badge: "AI",
+      color: "from-rose-500 to-pink-600",
+      route: "/entrepreneur/landing-generator",
+    },
+    {
+      id: 13,
+      icon: MessageSquare,
+      title: "Pitch One-Liner",
+      description: "Crea tu elevator pitch perfecto en segundos",
+      badge: "AI",
+      color: "from-amber-500 to-orange-600",
+      route: "/entrepreneur/pitch-oneliner",
+    },
+    {
+      id: 14,
+      icon: BarChart3,
+      title: "Calculadora de Runway",
+      description: "Calcula cuántos meses de vida tiene tu startup",
+      color: "from-blue-500 to-indigo-600",
+      route: "/entrepreneur/runway-calculator",
+    },
+    {
+      id: 15,
+      icon: Globe,
+      title: "Estrategia de Lanzamiento",
+      description: "Plan de go-to-market personalizado con IA",
+      badge: "AI",
+      color: "from-green-500 to-teal-600",
+      route: "/entrepreneur/launch-strategy",
     },
   ];
 
