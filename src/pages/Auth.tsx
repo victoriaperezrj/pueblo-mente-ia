@@ -422,7 +422,7 @@ export default function Auth() {
             </motion.button>
           </motion.div>
           
-          {/* Social (opcional) */}
+          {/* Social Login */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -434,6 +434,19 @@ export default function Auth() {
               whileHover={{ scale: 1.02, y: -2 }}
               whileTap={{ scale: 0.98 }}
               type="button"
+              onClick={async () => {
+                try {
+                  const { error } = await supabase.auth.signInWithOAuth({
+                    provider: 'google',
+                    options: {
+                      redirectTo: `${window.location.origin}/onboarding/classify`
+                    }
+                  });
+                  if (error) throw error;
+                } catch (error: any) {
+                  showToast(error.message || 'Error al conectar con Google', 'error');
+                }
+              }}
               className="relative w-full py-3 bg-white/10 backdrop-blur-sm border border-white/20 text-white font-semibold rounded-xl hover:bg-white/20 transition flex items-center justify-center gap-2 overflow-hidden group"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 via-blue-500/0 to-cyan-500/0 group-hover:from-purple-500/10 group-hover:via-blue-500/10 group-hover:to-cyan-500/10 transition-all duration-500" />

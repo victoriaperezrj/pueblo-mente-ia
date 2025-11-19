@@ -30,6 +30,7 @@ const AnalyticsPage = lazy(() => import("./pages/business/Analytics"));
 const ProfitabilityPage = lazy(() => import("./pages/business/Profitability"));
 const PriceOptimizerPage = lazy(() => import("./pages/business/PriceOptimizer"));
 const MarketingAutomationPage = lazy(() => import("./pages/business/MarketingAutomation"));
+const AdsAnalyticsPage = lazy(() => import("./pages/business/AdsAnalytics"));
 const PymeTeamManagement = lazy(() => import("./pages/pyme/TeamManagement"));
 const PymeStrategicPlanning = lazy(() => import("./pages/pyme/StrategicPlanning"));
 const PymeMarketAnalysis = lazy(() => import("./pages/pyme/MarketAnalysis"));
@@ -175,6 +176,7 @@ const App = () => (
               <Route path="/business/profitability" element={<ProtectedRoute><ProfitabilityPage /></ProtectedRoute>} />
               <Route path="/business/price-optimizer" element={<ProtectedRoute><PriceOptimizerPage /></ProtectedRoute>} />
               <Route path="/business/marketing-automation" element={<ProtectedRoute><MarketingAutomationPage /></ProtectedRoute>} />
+              <Route path="/business/ads-analytics" element={<ProtectedRoute><AdsAnalyticsPage /></ProtectedRoute>} />
 
               {/* PYME ecosystem routes */}
               <Route path="/pyme/team-management" element={<ProtectedRoute><PymeTeamManagement /></ProtectedRoute>} />
