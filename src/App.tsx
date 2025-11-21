@@ -33,6 +33,7 @@ const MarketingAutomationPage = lazy(() => import("./pages/business/MarketingAut
 const AdsAnalyticsPage = lazy(() => import("./pages/business/AdsAnalytics"));
 const AccountsReceivablePage = lazy(() => import("./pages/business/AccountsReceivable"));
 const StockControlPage = lazy(() => import("./pages/business/StockControl"));
+const TreasuryPage = lazy(() => import("./pages/business/Treasury"));
 const PymeTeamManagement = lazy(() => import("./pages/pyme/TeamManagement"));
 const PymeStrategicPlanning = lazy(() => import("./pages/pyme/StrategicPlanning"));
 const PymeMarketAnalysis = lazy(() => import("./pages/pyme/MarketAnalysis"));
@@ -181,10 +182,12 @@ const App = () => (
               <Route path="/business/ads-analytics" element={<ProtectedRoute><AdsAnalyticsPage /></ProtectedRoute>} />
               <Route path="/business/accounts-receivable" element={<ProtectedRoute><AccountsReceivablePage /></ProtectedRoute>} />
               <Route path="/business/stock-control" element={<ProtectedRoute><StockControlPage /></ProtectedRoute>} />
+              <Route path="/business/treasury" element={<ProtectedRoute><TreasuryPage /></ProtectedRoute>} />
 
               {/* PYME/Enterprise ecosystem routes - Full ERP modules */}
               <Route path="/pyme/accounts-receivable" element={<ProtectedRoute><AccountsReceivablePage /></ProtectedRoute>} />
               <Route path="/pyme/stock-control" element={<ProtectedRoute><StockControlPage /></ProtectedRoute>} />
+              <Route path="/pyme/treasury" element={<ProtectedRoute><TreasuryPage /></ProtectedRoute>} />
 
               {/* PYME ecosystem routes */}
               <Route path="/pyme/team-management" element={<ProtectedRoute><PymeTeamManagement /></ProtectedRoute>} />
