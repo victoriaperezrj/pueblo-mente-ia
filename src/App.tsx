@@ -34,6 +34,7 @@ const AdsAnalyticsPage = lazy(() => import("./pages/business/AdsAnalytics"));
 const AccountsReceivablePage = lazy(() => import("./pages/business/AccountsReceivable"));
 const StockControlPage = lazy(() => import("./pages/business/StockControl"));
 const TreasuryPage = lazy(() => import("./pages/business/Treasury"));
+const BusinessInsightsPage = lazy(() => import("./pages/business/BusinessInsights"));
 const PymeTeamManagement = lazy(() => import("./pages/pyme/TeamManagement"));
 const PymeStrategicPlanning = lazy(() => import("./pages/pyme/StrategicPlanning"));
 const PymeMarketAnalysis = lazy(() => import("./pages/pyme/MarketAnalysis"));
@@ -180,11 +181,13 @@ const App = () => (
               <Route path="/business/price-optimizer" element={<ProtectedRoute><PriceOptimizerPage /></ProtectedRoute>} />
               <Route path="/business/marketing-automation" element={<ProtectedRoute><MarketingAutomationPage /></ProtectedRoute>} />
               <Route path="/business/ads-analytics" element={<ProtectedRoute><AdsAnalyticsPage /></ProtectedRoute>} />
+              <Route path="/business/insights" element={<ProtectedRoute><BusinessInsightsPage /></ProtectedRoute>} />
               <Route path="/business/accounts-receivable" element={<ProtectedRoute><AccountsReceivablePage /></ProtectedRoute>} />
               <Route path="/business/stock-control" element={<ProtectedRoute><StockControlPage /></ProtectedRoute>} />
               <Route path="/business/treasury" element={<ProtectedRoute><TreasuryPage /></ProtectedRoute>} />
 
               {/* PYME/Enterprise ecosystem routes - Full ERP modules */}
+              <Route path="/pyme/insights" element={<ProtectedRoute><BusinessInsightsPage /></ProtectedRoute>} />
               <Route path="/pyme/accounts-receivable" element={<ProtectedRoute><AccountsReceivablePage /></ProtectedRoute>} />
               <Route path="/pyme/stock-control" element={<ProtectedRoute><StockControlPage /></ProtectedRoute>} />
               <Route path="/pyme/treasury" element={<ProtectedRoute><TreasuryPage /></ProtectedRoute>} />
