@@ -383,6 +383,168 @@ export const suppliersService = {
 };
 
 // =====================================================
+// TREASURY SERVICE
+// =====================================================
+
+export interface TreasuryAccount {
+  id: string;
+  user_id: string;
+  name: string;
+  account_type: string;
+  bank_name?: string;
+  account_number?: string;
+  cbu?: string;
+  currency: string;
+  current_balance: number;
+  is_active: boolean;
+  created_at: string;
+}
+
+export interface TreasuryMovement {
+  id: string;
+  user_id: string;
+  account_id: string;
+  movement_type: string;
+  amount: number;
+  balance_after: number;
+  movement_date: string;
+  category?: string;
+  subcategory?: string;
+  reference_type?: string;
+  reference_id?: string;
+  description?: string;
+  payee?: string;
+  created_at: string;
+}
+
+export const treasuryService = {
+  async getAllAccounts(): Promise<TreasuryAccount[]> {
+    const { data, error } = await supabase
+      .from('treasury_accounts')
+      .select('*')
+      .order('name');
+
+    if (error) throw error;
+    return data || [];
+  },
+
+  async getAccountById(id: string): Promise<TreasuryAccount | null> {
+    const { data, error } = await supabase
+      .from('treasury_accounts')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (error) throw error;
+    return data;
+  },
+
+  async createAccount(account: Partial<TreasuryAccount>): Promise<TreasuryAccount> {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) throw new Error('No authenticated user');
+
+    const { data, error } = await supabase
+      .from('treasury_accounts')
+      .insert({ ...account, user_id: user.id })
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data;
+  },
+
+  async updateAccount(id: string, account: Partial<TreasuryAccount>): Promise<TreasuryAccount> {
+    const { data, error } = await supabase
+      .from('treasury_accounts')
+      .update(account)
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data;
+  },
+
+  async deleteAccount(id: string): Promise<void> {
+    const { error } = await supabase
+      .from('treasury_accounts')
+      .delete()
+      .eq('id', id);
+
+    if (error) throw error;
+  },
+
+  async getMovements(accountId: string): Promise<TreasuryMovement[]> {
+    const { data, error } = await supabase
+      .from('treasury_movements')
+      .select('*')
+      .eq('account_id', accountId)
+      .order('movement_date', { ascending: false });
+
+    if (error) throw error;
+    return data || [];
+  },
+
+  async addMovement(movement: Partial<TreasuryMovement> & { account_id: string }): Promise<TreasuryMovement> {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) throw new Error('No authenticated user');
+
+    // Get current account balance
+    const account = await this.getAccountById(movement.account_id);
+    if (!account) throw new Error('Account not found');
+
+    const amount = movement.amount || 0;
+    const movementType = movement.movement_type || 'income';
+
+    let newBalance = account.current_balance;
+    if (movementType === 'income' || movementType === 'transfer_in') {
+      newBalance += amount;
+    } else if (movementType === 'expense' || movementType === 'transfer_out') {
+      newBalance -= amount;
+    }
+
+    // Insert movement
+    const { data, error } = await supabase
+      .from('treasury_movements')
+      .insert({
+        ...movement,
+        user_id: user.id,
+        balance_after: newBalance
+      })
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    // Update account balance
+    await this.updateAccount(movement.account_id, { current_balance: newBalance });
+
+    return data;
+  },
+
+  async getTotalBalance(): Promise<number> {
+    const { data, error } = await supabase
+      .from('treasury_accounts')
+      .select('current_balance')
+      .eq('is_active', true);
+
+    if (error) throw error;
+    return data?.reduce((sum, a) => sum + a.current_balance, 0) || 0;
+  },
+
+  async getBalanceByType(accountType: string): Promise<number> {
+    const { data, error } = await supabase
+      .from('treasury_accounts')
+      .select('current_balance')
+      .eq('account_type', accountType)
+      .eq('is_active', true);
+
+    if (error) throw error;
+    return data?.reduce((sum, a) => sum + a.current_balance, 0) || 0;
+  }
+};
+
+// =====================================================
 // DASHBOARD STATS
 // =====================================================
 

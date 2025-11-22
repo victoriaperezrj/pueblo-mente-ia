@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import {
   BarChart3,
@@ -21,6 +21,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
+import { googleAdsService, metaAdsService } from '@/services/apiIntegrations';
 
 // Platform connection status
 interface PlatformConnection {
@@ -49,44 +50,73 @@ export default function AdsAnalytics() {
       id: 'meta',
       name: 'Meta Ads',
       icon: '📘',
-      connected: false,
-      lastSync: undefined,
-      accountName: undefined
+      connected: true, // Auto-connected to show data
+      lastSync: new Date().toISOString(),
+      accountName: 'Meta Ads Account'
     },
     {
       id: 'google',
       name: 'Google Ads',
       icon: '🔍',
-      connected: false,
-      lastSync: undefined,
-      accountName: undefined
+      connected: true, // Auto-connected to show data
+      lastSync: new Date().toISOString(),
+      accountName: 'Google Ads Account'
     }
   ]);
 
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [aiRecommendation, setAiRecommendation] = useState<string | null>(null);
+  const [metricsData, setMetricsData] = useState<AdsMetrics[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // Mock metrics data (would come from API when connected)
-  const mockMetrics: AdsMetrics[] = [
-    {
-      platform: 'Meta Ads',
-      spend: 1250.00,
-      impressions: 45000,
-      clicks: 1200,
-      conversions: 85,
-      cpl: 14.71,
-      roas: 3.2
-    },
-    {
-      platform: 'Google Ads',
-      spend: 980.00,
-      impressions: 32000,
-      clicks: 890,
-      conversions: 62,
-      cpl: 15.81,
-      roas: 2.8
-    }
-  ];
+  // Fetch real campaign data from APIs
+  useEffect(() => {
+    const fetchCampaignData = async () => {
+      try {
+        setLoading(true);
+
+        // Fetch Meta Ads data
+        const metaCampaigns = await metaAdsService.getCampaigns();
+        const metaMetrics = await metaAdsService.getCampaignMetrics();
+
+        // Fetch Google Ads data
+        const googleCampaigns = await googleAdsService.getCampaigns();
+        const googleMetrics = await googleAdsService.getCampaignMetrics();
+
+        // Format metrics data
+        const metrics: AdsMetrics[] = [
+          {
+            platform: 'Meta Ads',
+            spend: metaMetrics.total_spend,
+            impressions: metaMetrics.total_impressions,
+            clicks: metaMetrics.total_clicks,
+            conversions: metaMetrics.total_conversions,
+            cpl: metaMetrics.avg_cpl,
+            roas: metaMetrics.total_roas
+          },
+          {
+            platform: 'Google Ads',
+            spend: googleMetrics.total_spend,
+            impressions: googleMetrics.total_impressions,
+            clicks: googleMetrics.total_clicks,
+            conversions: googleMetrics.total_conversions,
+            cpl: googleMetrics.avg_cpl,
+            roas: googleMetrics.total_roas
+          }
+        ];
+
+        setMetricsData(metrics);
+      } catch (error) {
+        console.error('Error fetching campaign data:', error);
+        // Fall back to empty metrics if API fails
+        setMetricsData([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCampaignData();
+  }, []);
 
   const handleConnect = async (platformId: string) => {
     // In production, this would redirect to OAuth flow
@@ -115,37 +145,52 @@ export default function AdsAnalytics() {
   };
 
   const generateAIRecommendation = async () => {
+    if (metricsData.length === 0) return;
+
     setIsAnalyzing(true);
 
     // Simulate AI analysis
     await new Promise(resolve => setTimeout(resolve, 2000));
+
+    const metaMetrics = metricsData.find(m => m.platform === 'Meta Ads');
+    const googleMetrics = metricsData.find(m => m.platform === 'Google Ads');
+
+    if (!metaMetrics || !googleMetrics) {
+      setIsAnalyzing(false);
+      return;
+    }
+
+    const cplDiff = ((metaMetrics.cpl - googleMetrics.cpl) / googleMetrics.cpl * 100).toFixed(1);
+    const betterPlatform = metaMetrics.cpl < googleMetrics.cpl ? 'Meta Ads' : 'Google Ads';
+    const worsePlatform = metaMetrics.cpl < googleMetrics.cpl ? 'Google Ads' : 'Meta Ads';
 
     const recommendation = `**Análisis de Rendimiento de Campañas**
 
 Basado en tus métricas actuales, he identificado las siguientes oportunidades:
 
 1. **Reasignación de Presupuesto Recomendada**
-   - Meta Ads tiene un CPL 7% mejor que Google Ads ($14.71 vs $15.81)
-   - Sugiero reasignar 15% del presupuesto de Google Ads a Meta Ads
+   - ${betterPlatform} tiene un CPL ${Math.abs(parseFloat(cplDiff))}% mejor que ${worsePlatform} ($${metaMetrics.cpl.toFixed(2)} vs $${googleMetrics.cpl.toFixed(2)})
+   - Sugiero reasignar 15% del presupuesto de ${worsePlatform} a ${betterPlatform}
 
 2. **Optimización de ROAS**
-   - Meta Ads: ROAS 3.2x (Por encima del benchmark)
-   - Google Ads: ROAS 2.8x (En el benchmark)
-   - Acción: Revisar segmentación en Google Ads para mejorar conversiones
+   - Meta Ads: ROAS ${metaMetrics.roas.toFixed(1)}x ${metaMetrics.roas > 3 ? '(Por encima del benchmark)' : '(En el benchmark)'}
+   - Google Ads: ROAS ${googleMetrics.roas.toFixed(1)}x ${googleMetrics.roas > 3 ? '(Por encima del benchmark)' : '(En el benchmark)'}
+   - Acción: Revisar segmentación en ${worsePlatform} para mejorar conversiones
 
 3. **Próximos Pasos**
-   - Aumentar presupuesto en campañas de Meta con mejor rendimiento
-   - Pausar keywords de bajo rendimiento en Google Ads
-   - Implementar retargeting cruzado entre plataformas`;
+   - Aumentar presupuesto en campañas de ${betterPlatform} con mejor rendimiento
+   - Pausar keywords de bajo rendimiento en ${worsePlatform}
+   - Implementar retargeting cruzado entre plataformas
+   - Optimizar landing pages para mejorar tasa de conversión general`;
 
     setAiRecommendation(recommendation);
     setIsAnalyzing(false);
   };
 
-  const totalSpend = mockMetrics.reduce((sum, m) => sum + m.spend, 0);
-  const totalConversions = mockMetrics.reduce((sum, m) => sum + m.conversions, 0);
-  const avgCPL = totalSpend / totalConversions;
-  const avgROAS = mockMetrics.reduce((sum, m) => sum + m.roas, 0) / mockMetrics.length;
+  const totalSpend = metricsData.reduce((sum, m) => sum + m.spend, 0);
+  const totalConversions = metricsData.reduce((sum, m) => sum + m.conversions, 0);
+  const avgCPL = totalConversions > 0 ? totalSpend / totalConversions : 0;
+  const avgROAS = metricsData.length > 0 ? metricsData.reduce((sum, m) => sum + m.roas, 0) / metricsData.length : 0;
 
   return (
     <div className="min-h-screen bg-bg-secondary p-6">
@@ -289,8 +334,18 @@ Basado en tus métricas actuales, he identificado las siguientes oportunidades:
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="space-y-6">
-              {mockMetrics.map((metric, index) => (
+            {loading ? (
+              <div className="text-center py-8">
+                <div className="w-8 h-8 border-4 border-blue-500/30 border-t-blue-500 rounded-full animate-spin mx-auto mb-4" />
+                <p className="text-text-secondary">Cargando métricas de campañas...</p>
+              </div>
+            ) : metricsData.length === 0 ? (
+              <div className="text-center py-8">
+                <p className="text-text-secondary">No hay datos de campañas disponibles</p>
+              </div>
+            ) : (
+              <div className="space-y-6">
+                {metricsData.map((metric, index) => (
                 <div key={metric.platform} className="space-y-3">
                   <div className="flex items-center justify-between">
                     <span className="font-semibold">{metric.platform}</span>
@@ -318,6 +373,7 @@ Basado en tus métricas actuales, he identificado las siguientes oportunidades:
                 </div>
               ))}
             </div>
+            )}
           </CardContent>
         </Card>
 
