@@ -12,7 +12,10 @@ import {
   ArrowUpRight,
   Calendar,
   Filter,
-  MoreVertical
+  MoreVertical,
+  FileDown,
+  FileText,
+  FileSpreadsheet
 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -34,7 +37,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { treasuryService, TreasuryAccount, TreasuryMovement } from '@/services/erpService';
+import { reportsService } from '@/services/reportsService';
 import { useCustomToast } from '@/hooks/use-custom-toast';
 
 export default function Treasury() {
@@ -185,13 +195,58 @@ export default function Treasury() {
       {ToastComponent}
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-text-primary mb-2">
-            Tesorería
-          </h1>
-          <p className="text-text-secondary">
-            Gestiona tus cuentas bancarias, cajas y movimientos de efectivo
-          </p>
+        <div className="mb-8 flex items-start justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-text-primary mb-2">
+              Tesorería
+            </h1>
+            <p className="text-text-secondary">
+              Gestiona tus cuentas bancarias, cajas y movimientos de efectivo
+            </p>
+          </div>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="gap-2">
+                <FileDown className="w-4 h-4" />
+                Exportar
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem
+                onClick={() => reportsService.exportTreasuryAccountsReport(accounts, 'excel')}
+                className="gap-2"
+              >
+                <FileSpreadsheet className="w-4 h-4" />
+                Exportar Cuentas a Excel
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => reportsService.exportTreasuryAccountsReport(accounts, 'pdf')}
+                className="gap-2"
+              >
+                <FileText className="w-4 h-4" />
+                Exportar Cuentas a PDF
+              </DropdownMenuItem>
+              {selectedAccount && movements.length > 0 && (
+                <>
+                  <DropdownMenuItem
+                    onClick={() => reportsService.exportTreasuryMovementsReport(movements, selectedAccount.name, 'excel')}
+                    className="gap-2"
+                  >
+                    <FileSpreadsheet className="w-4 h-4" />
+                    Exportar Movimientos a Excel
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => reportsService.exportTreasuryMovementsReport(movements, selectedAccount.name, 'pdf')}
+                    className="gap-2"
+                  >
+                    <FileText className="w-4 h-4" />
+                    Exportar Movimientos a PDF
+                  </DropdownMenuItem>
+                </>
+              )}
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
 
         {/* Stats Cards */}

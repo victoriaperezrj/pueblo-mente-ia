@@ -12,7 +12,10 @@ import {
   MoreVertical,
   Receipt,
   ArrowUpRight,
-  ArrowDownRight
+  ArrowDownRight,
+  FileDown,
+  FileText,
+  FileSpreadsheet
 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -27,7 +30,14 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { clientsService, Client } from '@/services/erpService';
+import { reportsService } from '@/services/reportsService';
 import { useCustomToast } from '@/hooks/use-custom-toast';
 
 export default function AccountsReceivable() {
@@ -86,13 +96,47 @@ export default function AccountsReceivable() {
       {ToastComponent}
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-text-primary mb-2">
-            Cuentas Corrientes - Clientes
-          </h1>
-          <p className="text-text-secondary">
-            Gestiona los saldos y movimientos de tus clientes
-          </p>
+        <div className="mb-8 flex items-start justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-text-primary mb-2">
+              Cuentas Corrientes - Clientes
+            </h1>
+            <p className="text-text-secondary">
+              Gestiona los saldos y movimientos de tus clientes
+            </p>
+          </div>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="gap-2">
+                <FileDown className="w-4 h-4" />
+                Exportar
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem
+                onClick={() => reportsService.exportClientsReport(filteredClients, 'excel')}
+                className="gap-2"
+              >
+                <FileSpreadsheet className="w-4 h-4" />
+                Exportar a Excel
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => reportsService.exportClientsReport(filteredClients, 'pdf')}
+                className="gap-2"
+              >
+                <FileText className="w-4 h-4" />
+                Exportar a PDF
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => reportsService.exportClientsReport(filteredClients, 'csv')}
+                className="gap-2"
+              >
+                <FileDown className="w-4 h-4" />
+                Exportar a CSV
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
 
         {/* Stats Cards */}
