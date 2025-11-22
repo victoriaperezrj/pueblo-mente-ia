@@ -65,12 +65,12 @@ jobs:
           path: dist/
           retention-days: 7
 
-  # Job 3: Deploy to Vercel (Production)
+  # Job 3: Deploy to Vercel (Production) - Optional
   deploy-production:
     name: Deploy to Vercel (Production)
     runs-on: ubuntu-latest
     needs: build
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    if: false  # Disabled - configure VERCEL_TOKEN secret to enable
     environment:
       name: production
       url: ${{ steps.deploy.outputs.url }}
@@ -87,12 +87,12 @@ jobs:
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           vercel-args: '--prod'
 
-  # Job 4: Deploy to Vercel (Preview)
+  # Job 4: Deploy to Vercel (Preview) - Optional
   deploy-preview:
     name: Deploy to Vercel (Preview)
     runs-on: ubuntu-latest
     needs: build
-    if: github.event_name == 'pull_request'
+    if: false  # Disabled - configure VERCEL_TOKEN secret to enable
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
